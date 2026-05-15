@@ -32,13 +32,16 @@ export default function Home() {
         setPrompts(enrichedApiPrompts);
       } catch (error) {
         console.error("Error fetching prompts:", error);
-        setPrompts([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchPrompts();
+    
+    // Auto-refresh every 30 seconds to show new admin uploads automatically
+    const interval = setInterval(fetchPrompts, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const visiblePrompts = prompts.filter((prompt) => {
