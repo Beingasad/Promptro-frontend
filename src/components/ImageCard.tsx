@@ -87,7 +87,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
     >
       <motion.img
-        src={prompt.image_url}
+        src={prompt.image_url || 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'}
         alt={prompt.title}
         onError={(e) => {
           const target = e.target as HTMLImageElement;

@@ -780,7 +780,11 @@ export default function Admin() {
                                 />
                                 {imagePreview ? (
                                   <div className="relative w-full h-full group/preview">
-                                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                    <img 
+                                      src={imagePreview || 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'} 
+                                      alt="Preview" 
+                                      className="w-full h-full object-cover" 
+                                    />
                                     <button 
                                       type="button"
                                       onClick={(e) => {
