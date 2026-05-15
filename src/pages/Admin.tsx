@@ -87,7 +87,7 @@ type PromptForm = {
 
 const API_URL = `${API_BASE_URL}/api/prompts`;
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
-const categories = ['Cinematic', 'Anime', 'Fantasy', 'Sci-Fi', 'Nature', 'Architecture', 'Luxury', 'Thumbnails'];
+const STATIC_CATEGORIES = ['Cinematic', 'Anime', 'Fantasy', 'Sci-Fi', 'Nature', 'Architecture', 'Luxury', 'Thumbnails'];
 const DEFAULT_MODEL = 'Promptro';
 
 const emptyForm: PromptForm = {
@@ -353,10 +353,14 @@ export default function Admin() {
 
     try {
       if (editingPrompt) {
-        await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData());
+        await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData(), {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         setMessage('Prompt updated successfully.');
       } else {
-        await axios.post(API_URL, buildFormData());
+        await axios.post(API_URL, buildFormData(), {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         setMessage('Prompt published successfully.');
       }
       resetForm();
@@ -419,10 +423,14 @@ export default function Admin() {
       if (bannerImageFile) data.append('image', bannerImageFile);
 
       if (editingBanner) {
-        await axios.put(`${API_BASE_URL}/api/banners/${editingBanner.id}`, data);
+        await axios.put(`${API_BASE_URL}/api/banners/${editingBanner.id}`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         setMessage('Banner updated successfully.');
       } else {
-        await axios.post(`${API_BASE_URL}/api/banners`, data);
+        await axios.post(`${API_BASE_URL}/api/banners`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         setMessage('Banner created successfully.');
       }
       setBannerForm(emptyBannerForm);
@@ -839,7 +847,9 @@ export default function Admin() {
                                   className="glass-input h-12 text-sm appearance-none pr-10"
                                 >
                                   <option value="">Select category</option>
-                                  {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                                  {(categories.length > 0 ? categories : STATIC_CATEGORIES.map((name, id) => ({ id, name }))).map((c: any) => (
+                                    <option key={c.id} value={c.name}>{c.name}</option>
+                                  ))}
                                 </select>
                                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#756d8d]" />
                               </div>
@@ -2153,41 +2163,55 @@ export default function Admin() {
                 <div className="mt-8 flex justify-end gap-4">
                     <button onClick={() => setShowBulkModal(false)} className="px-6 py-3 rounded-xl font-bold text-[#756d8d]">Cancel</button>
                     <button 
-                    onClick={() => {
+                    onClick={async () => {
                       const input = document.getElementById('bulk-json-input') as HTMLTextAreaElement;
                       try {
                         const data = JSON.parse(input.value);
                         if (Array.isArray(data)) {
                           setIsLaunching(true);
-                          const newPrompts = data.map((item: any) => ({
-                            id: Date.now() + Math.random(),
-                            title: item.title || 'Untitled Prompt',
-                            image_url: item.image_url || item.image || '',
-                            prompt_text: item.prompt_text || item.prompt || '',
-                            category: item.category || 'Uncategorized',
-                            generated_with: item.generated_with || item.tool || 'ChatGPT',
-                            tags: item.tags ? (Array.isArray(item.tags) ? item.tags : item.tags.split(',').map((t: string) => t.trim())) : [],
-                            visibility: item.visibility || 'public',
-                            is_featured: item.is_featured === true || item.is_featured === 'true' || item.featured === true,
-                            views: 0,
-                            likes: 0,
-                            time: 'Just now'
-                          }));
-                          setPrompts([...newPrompts, ...prompts]);
-                          setTimeout(() => {
-                            setIsLaunching(false);
-                            setShowBulkModal(false);
-                            setMessage(`Successfully published ${data.length} prompts!`);
-                            setTimeout(() => setMessage(''), 3000);
-                          }, 1500);
+                          let successCount = 0;
+                          
+                          for (const item of data) {
+                            try {
+                              const formData = new FormData();
+                              formData.append('title', item.title || 'Untitled');
+                              formData.append('category', item.category || 'Cinematic');
+                              formData.append('model', item.tool || item.model || 'Promptro');
+                              formData.append('prompt_text', item.prompt_text || item.prompt || '');
+                              formData.append('negative_prompt', item.negative_prompt || '');
+                              formData.append('tags', Array.isArray(item.tags) ? item.tags.join(',') : (item.tags || ''));
+                              formData.append('visibility', item.visibility || 'Public');
+                              
+                              // Note: Bulk import with URLs requires backend to support URL-based upload
+                              // or frontend to fetch and proxy. For now, we assume these are existing prompts
+                              // if they have an image_url, or we fail if no image.
+                              if (item.image_url) {
+                                formData.append('image_url', item.image_url);
+                              } else if (item.image) {
+                                formData.append('image_url', item.image);
+                              }
+
+                              await axios.post(API_URL, formData);
+                              successCount++;
+                            } catch (err) {
+                              console.error('Failed to import one prompt:', item.title, err);
+                            }
+                          }
+
+                          await fetchPrompts();
+                          setIsLaunching(false);
+                          setShowBulkModal(false);
+                          setMessage(`Successfully imported ${successCount} prompts to database!`);
+                          setTimeout(() => setMessage(''), 3000);
                         }
                       } catch (e) {
-                        alert('Invalid data format! Please check your CSV/JSON.');
+                        alert('Invalid JSON format!');
+                        setIsLaunching(false);
                       }
                     }}
                     className="px-8 py-3 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2"
                     >
-                      {isLaunching ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Publish All Prompts'}
+                      {isLaunching ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Persist to Database'}
                     </button>
                 </div>
               </div>

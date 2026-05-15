@@ -9,13 +9,13 @@ export default function Categories() {
   const { categories } = useCategories();
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-6">
+    <div className="min-h-screen pt-20 sm:pt-32 pb-32 sm:pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-16 text-center">
+        <header className="mb-8 sm:mb-16 text-center">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-6xl font-bold tracking-tight mb-4"
+            className="text-4xl sm:text-6xl font-bold tracking-tight mb-2 sm:mb-4"
           >
             Explore <span className="text-primary">Categories</span>
           </motion.h1>
@@ -23,7 +23,7 @@ export default function Categories() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[#756d8d] dark:text-[#afa6c8] text-xl font-medium"
+            className="text-[#756d8d] dark:text-[#afa6c8] text-base sm:text-xl font-medium max-w-xs sm:max-w-none mx-auto"
           >
             Browse high-quality prompts curated by the community.
           </motion.p>
