@@ -29,7 +29,7 @@ export default function Categories() {
           </motion.p>
         </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 px-0 sm:px-0">
           {categories.map((cat, i) => (
             <motion.div
               key={cat.id}
@@ -39,20 +39,20 @@ export default function Categories() {
             >
               <Link 
                 to={`/explore?category=${cat.name}`}
-                className="group relative block aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10"
+                className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10"
               >
                 <img 
                   src={cat.image_url || DEFAULT_IMAGE} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
                    <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="text-2xl font-bold text-white mb-1">{cat.name}</h3>
-                        <p className="text-white/60 text-sm font-medium">Browse Prompts</p>
+                        <h3 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{cat.name}</h3>
+                        <p className="text-white/60 text-[10px] sm:text-sm font-medium">Browse Prompts</p>
                       </div>
-                      <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all">
-                        <ArrowUpRight className="w-6 h-6" />
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all shrink-0">
+                        <ArrowUpRight className="w-4 h-4 sm:w-6 sm:h-6" />
                       </div>
                    </div>
                 </div>

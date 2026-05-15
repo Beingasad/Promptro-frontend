@@ -1,18 +1,49 @@
 import { useState, useEffect } from 'react';
-import { Search, Bell, Moon, Sun, ChevronDown, CheckCircle2, AlertCircle, LogOut, User, Settings as SettingsIcon } from 'lucide-react';
+import { Search, Bell, Moon, Sun, ChevronDown, CheckCircle2, AlertCircle, LogOut, User, Settings as SettingsIcon, MessageSquare } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 import { cn } from '../../utils/cn';
 
 export function AdminNavbar() {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [hasUnread, setHasUnread] = useState(true);
-  const [notifications] = useState([
-    { id: 1, text: 'New feedback from Rahul Sharma', time: '2m ago', type: 'feedback' },
-    { id: 2, text: 'New prompt suggestion received', time: '15m ago', type: 'info' },
-    { id: 3, text: 'Server usage hit 85%', time: '1h ago', type: 'warning' },
-  ]);
+  const [hasUnread, setHasUnread] = useState(false);
+  const [notifications, setNotifications] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/feedback`);
+        const recentFeedbacks = Array.isArray(response.data) ? response.data.slice(0, 5) : [];
+        
+        const mapped = recentFeedbacks.map((f: any) => ({
+          id: f.id,
+          text: `New feedback: ${f.subject}`,
+          time: new Date(f.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: 'feedback',
+          icon: MessageSquare
+        }));
+
+        if (mapped.length > 0) {
+          setNotifications(mapped);
+          setHasUnread(true);
+        } else {
+          // Fallback if no feedback exists
+          setNotifications([
+            { id: 'd1', text: 'Welcome to Promptro Admin', time: 'Just now', type: 'info', icon: CheckCircle2 }
+          ]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch notifications', err);
+      }
+    };
+
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 60000); // Refresh every minute
+    return () => clearInterval(interval);
+  }, []);
 
   const handleMarkAllRead = () => {
     setHasUnread(false);
@@ -97,9 +128,12 @@ export function AdminNavbar() {
                       <div key={n.id} className="p-4 flex items-start gap-3 hover:bg-[#f8f7fc] dark:hover:bg-white/5 transition-colors cursor-pointer border-b border-[#e9e2f3] dark:border-white/10 last:border-0">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                           n.type === 'warning' ? 'bg-amber-500/10 text-amber-500' : 
-                          n.type === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-primary/10 text-primary'
+                          n.type === 'feedback' ? 'bg-primary/10 text-primary' :
+                          n.type === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'
                         }`}>
-                          {n.type === 'warning' ? <AlertCircle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                          {n.type === 'warning' ? <AlertCircle className="w-4 h-4" /> : 
+                           n.type === 'feedback' ? <MessageSquare className="w-4 h-4" /> :
+                           <CheckCircle2 className="w-4 h-4" />}
                         </div>
                         <div>
                           <p className="text-xs font-bold text-[#171421] dark:text-white">{n.text}</p>

@@ -86,6 +86,7 @@ type PromptForm = {
 };
 
 const API_URL = `${API_BASE_URL}/api/prompts`;
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
 const categories = ['Cinematic', 'Anime', 'Fantasy', 'Sci-Fi', 'Nature', 'Architecture', 'Luxury', 'Thumbnails'];
 const DEFAULT_MODEL = 'Promptro';
 
@@ -153,11 +154,15 @@ export default function Admin() {
   const [isLaunching, setIsLaunching] = useState(false);
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
-  const [logs, setLogs] = useState([
-    { id: 1, action: 'Prompt Published', user: 'Asad', time: '2 mins ago', details: 'Cosmic Glass Observatory' },
-    { id: 2, action: 'User Login', user: 'Asad', time: '15 mins ago', details: 'Admin session started' },
-    { id: 3, action: 'Settings Updated', user: 'Asad', time: '1 hour ago', details: 'Dark mode enabled' },
-  ]);
+  const logs = useMemo(() => {
+    return prompts.slice(0, 5).map((p, i) => ({
+      id: i,
+      action: 'Prompt Published',
+      user: 'Admin',
+      time: new Date(p.created_at || Date.now()).toLocaleDateString(),
+      details: p.title
+    }));
+  }, [prompts]);
 
   const handleExcelImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -987,7 +992,16 @@ export default function Admin() {
                       >
                         <div className={cn("relative overflow-hidden w-full h-full", !cssRatio && "aspect-square")}>
                           {imagePreview ? (
-                            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                            <img 
+                              src={imagePreview} 
+                              alt="Preview" 
+                              className="w-full h-full object-cover" 
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null;
+                                target.src = FALLBACK_IMAGE;
+                              }}
+                            />
                           ) : (
                             <div className="w-full h-full bg-[#f8f7fc] dark:bg-white/5 flex flex-col items-center justify-center text-[#756d8d] p-6 text-center">
                               <ImagePlus className="w-12 h-12 mb-4 opacity-20" />
@@ -1145,7 +1159,16 @@ export default function Admin() {
                         className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[1.5rem] overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
                       >
                         <div className="aspect-square relative overflow-hidden">
-                          <img src={prompt.image_url} alt={prompt.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                          <img 
+                            src={prompt.image_url} 
+                            alt={prompt.title} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.onerror = null;
+                              target.src = FALLBACK_IMAGE;
+                            }}
+                          />
                           <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-white/80 dark:bg-black/60 backdrop-blur-md text-[9px] font-bold text-[#171421] dark:text-white uppercase">
                             {prompt.category}
                           </div>
@@ -1267,7 +1290,15 @@ export default function Admin() {
                     <div key={cat.id} className="relative bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-6 rounded-[2rem] flex flex-col group hover:border-primary/30 transition-all overflow-hidden">
                       {cat.image_url && (
                         <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity">
-                          <img src={cat.image_url} className="w-full h-full object-cover" />
+                          <img 
+                            src={cat.image_url} 
+                            className="w-full h-full object-cover" 
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.onerror = null;
+                              target.src = FALLBACK_IMAGE;
+                            }}
+                          />
                           <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#171421] to-transparent" />
                         </div>
                       )}
@@ -1339,7 +1370,15 @@ export default function Admin() {
                   {prompts.filter(p => p.featured).map((prompt) => (
                     <div key={prompt.id} className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2rem] overflow-hidden group">
                       <div className="aspect-[4/5] relative overflow-hidden">
-                        <img src={prompt.image_url} className="w-full h-full object-cover" />
+                        <img 
+                          src={prompt.image_url} 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = FALLBACK_IMAGE;
+                          }}
+                        />
                         <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center gap-1">
                           <Star className="w-3 h-3 fill-current" /> Featured
                         </div>
@@ -1473,7 +1512,15 @@ export default function Admin() {
                             <td className="py-4 pl-2">
                               <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0">
-                                  <img src={p.image_url} className="w-full h-full object-cover" />
+                                  <img 
+                                    src={p.image_url} 
+                                    className="w-full h-full object-cover" 
+                                    onError={(e) => {
+                                      const target = e.target as HTMLImageElement;
+                                      target.onerror = null;
+                                      target.src = FALLBACK_IMAGE;
+                                    }}
+                                  />
                                 </div>
                                 <span className="text-sm font-bold truncate max-w-[200px]">{p.title}</span>
                               </div>
@@ -1768,7 +1815,16 @@ export default function Admin() {
                   >
                     {imagePreview ? (
                       <div className="relative w-full h-full group/edit-preview">
-                        <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = FALLBACK_IMAGE;
+                          }}
+                        />
                         <button 
                           onClick={(e) => {
                             e.stopPropagation();

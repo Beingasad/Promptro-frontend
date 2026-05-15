@@ -70,7 +70,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
     saveUserActivity(auth?.currentUser).catch(() => undefined);
     const data = new FormData();
     data.append('liked', String(nextLiked));
-    axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/like`, data, { timeout: 900 }).then((response) => {
+    axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/like`, data, { timeout: 15000 }).then((response) => {
       if (typeof response.data?.likes === 'number') setLikes(response.data.likes);
     }).catch(() => undefined);
   };
@@ -89,6 +89,11 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       <motion.img
         src={prompt.image_url}
         alt={prompt.title}
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.onerror = null; // Prevent infinite loop
+          target.src = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
+        }}
         initial={{ opacity: 0, scale: 1.04 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, margin: '120px' }}

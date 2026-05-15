@@ -22,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/prompts?t=${Date.now()}`, { timeout: 900 });
+        const response = await axios.get(`${API_BASE_URL}/api/prompts?t=${Date.now()}`, { timeout: 15000 });
         const apiPrompts = Array.isArray(response.data) ? response.data : [];
         const enrichedApiPrompts = apiPrompts.map((prompt: Prompt) => ({
           ...prompt,
@@ -30,7 +30,8 @@ export default function Home() {
         }));
 
         setPrompts(enrichedApiPrompts);
-      } catch {
+      } catch (error) {
+        console.error("Error fetching prompts:", error);
         setPrompts([]);
       } finally {
         setLoading(false);
@@ -125,8 +126,12 @@ export default function Home() {
               <MasonryGrid prompts={visiblePrompts} />
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
-                <p className="text-lg font-bold text-[#171421]">No prompts found for "{searchQuery}"</p>
-                <p className="mt-2 text-sm text-[#6f6684]">Try searching for something else or browse categories.</p>
+                <p className="text-lg font-bold text-[#171421]">
+                  {searchQuery ? `No prompts found for "${searchQuery}"` : "No prompts found yet"}
+                </p>
+                <p className="mt-2 text-sm text-[#6f6684]">
+                  {searchQuery ? "Try searching for something else or browse categories." : "Check back later for new content!"}
+                </p>
               </div>
             )}
           </>

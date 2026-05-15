@@ -39,15 +39,16 @@ export default function ImageDetail() {
   useEffect(() => {
     const fetchPrompt = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/prompts/${id}`, { timeout: 900 });
+        const response = await axios.get(`${API_BASE_URL}/api/prompts/${id}`, { timeout: 15000 });
         const apiPrompt = response.data;
         setPrompt(apiPrompt);
         
         // Also fetch related prompts
-        const relatedRes = await axios.get(`${API_BASE_URL}/api/prompts`, { params: { category: apiPrompt.category, limit: 5 }, timeout: 900 });
+        const relatedRes = await axios.get(`${API_BASE_URL}/api/prompts`, { params: { category: apiPrompt.category, limit: 5 }, timeout: 15000 });
         const relatedPrompts = Array.isArray(relatedRes.data) ? relatedRes.data : [];
         setRelated(relatedPrompts.filter(p => p.id !== id));
-      } catch {
+      } catch (error) {
+        console.error("Error fetching prompt details:", error);
         setPrompt(null);
       } finally {
         setLoading(false);
