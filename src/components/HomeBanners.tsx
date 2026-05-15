@@ -28,6 +28,15 @@ const getIcon = (iconName: string | null) => {
   }
 };
 
+const getDarkGradient = (lightGrad: string = '') => {
+  if (lightGrad.includes('e0e7ff')) return 'dark:from-[#1e1b4b] dark:to-[#312e81]';
+  if (lightGrad.includes('ffedd5')) return 'dark:from-[#431407] dark:to-[#500724]';
+  if (lightGrad.includes('dcfce7')) return 'dark:from-[#064e3b] dark:to-[#1e3a8a]';
+  if (lightGrad.includes('primary/10')) return 'dark:from-primary/20 dark:to-secondary/20';
+  if (lightGrad.includes('1e1b4b')) return lightGrad; // Already dark
+  return 'dark:from-[#1c1a26] dark:to-[#12101b]';
+};
+
 export default function HomeBanners() {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
@@ -107,8 +116,9 @@ export default function HomeBanners() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
           className={cn(
-            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between border border-white/60 dark:border-white/5 shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br dark:from-[#1c1a26] dark:to-[#171421]",
-            banner.bg_gradient
+            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between border border-white/60 dark:border-white/5 shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br",
+            banner.bg_gradient,
+            getDarkGradient(banner.bg_gradient)
           )}
         >
           {/* Content side */}

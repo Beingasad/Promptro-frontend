@@ -18,6 +18,15 @@ interface Banner {
   bg_gradient?: string;
 }
 
+const getDarkGradient = (lightGrad: string = '') => {
+  if (lightGrad.includes('e0e7ff')) return 'dark:from-[#1e1b4b] dark:to-[#312e81]';
+  if (lightGrad.includes('ffedd5')) return 'dark:from-[#431407] dark:to-[#500724]';
+  if (lightGrad.includes('dcfce7')) return 'dark:from-[#064e3b] dark:to-[#1e3a8a]';
+  if (lightGrad.includes('primary/10')) return 'dark:from-primary/20 dark:to-secondary/20';
+  if (lightGrad.includes('1e1b4b')) return lightGrad; // Already dark
+  return 'dark:from-[#1c1a26] dark:to-[#12101b]';
+};
+
 export default function MobileHeroCarousel() {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -120,8 +129,9 @@ export default function MobileHeroCarousel() {
             <a 
               href={current.button_link}
               className={cn(
-                "relative flex w-full items-center justify-between p-5 rounded-2xl border border-white/60 dark:border-white/5 shadow-[0_15px_35px_rgba(0,0,0,0.05)] backdrop-blur-md overflow-hidden bg-gradient-to-br dark:from-[#1c1a26] dark:to-[#171421] min-h-[120px]",
-                current.bg_gradient
+                "relative flex w-full items-center justify-between p-5 rounded-2xl border border-white/60 dark:border-white/5 shadow-[0_15px_35px_rgba(0,0,0,0.05)] backdrop-blur-md overflow-hidden bg-gradient-to-br min-h-[120px]",
+                current.bg_gradient,
+                getDarkGradient(current.bg_gradient)
               )}
             >
               <div className="flex-1 min-w-0 pr-4">
