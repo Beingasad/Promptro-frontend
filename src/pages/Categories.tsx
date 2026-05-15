@@ -9,9 +9,9 @@ export default function Categories() {
   const { categories } = useCategories();
 
   return (
-    <div className="min-h-screen pt-20 sm:pt-32 pb-32 sm:pb-20 px-4 sm:px-6">
+    <div className="min-h-screen pb-32 sm:pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-8 sm:mb-16 text-center">
+        <header className="mb-6 sm:mb-16 text-center">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
