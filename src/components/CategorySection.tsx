@@ -1,0 +1,81 @@
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useCategories } from '../context/CategoryContext';
+
+interface CategorySectionProps {
+  activeCategory?: string;
+  onCategoryChange?: (category: string) => void;
+}
+
+export default function CategorySection({ activeCategory = 'All', onCategoryChange }: CategorySectionProps) {
+  const { categories: globalCategories } = useCategories();
+  const categoryNames = globalCategories.map(c => c.name);
+  const categories = ['All', ...categoryNames];
+  const [active, setActive] = useState(activeCategory);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const activeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    setActive(activeCategory);
+  }, [activeCategory]);
+
+  useEffect(() => {
+    let frame = 0;
+
+    const keepActiveCategoryVisible = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (!scrollerRef.current || !activeButtonRef.current) return;
+
+        if (active === 'All') {
+          scrollerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+          return;
+        }
+
+        activeButtonRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center',
+        });
+      });
+    };
+
+    window.addEventListener('scroll', keepActiveCategoryVisible, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', keepActiveCategoryVisible);
+    };
+  }, [active]);
+
+  return (
+    <div ref={scrollerRef} className="flex h-11 w-full items-center overflow-x-auto hide-scrollbar rounded-full border border-white/80 bg-white/70 px-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_16px_38px_rgba(80,67,120,0.12)] backdrop-blur-2xl dark:border-[#332a46] dark:bg-[#15111f] dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14 md:px-2">
+      <div className="flex w-max items-center gap-2.5 pr-1.5 md:pr-2">
+        {categories.map((category) => (
+          <button
+            key={category}
+            ref={active === category ? activeButtonRef : null}
+            onClick={() => {
+              setActive(category);
+              onCategoryChange?.(category);
+            }}
+            className={`relative h-8 px-4 rounded-full whitespace-nowrap text-[13px] font-medium tracking-normal transition-all duration-300 md:h-10 md:px-5 md:text-sm ${
+              active === category 
+                ? 'text-white shadow-[0_16px_34px_rgba(139,92,246,0.28)]' 
+                : 'bg-white/58 border border-white/70 text-[#5f5774] shadow-[0_10px_28px_rgba(80,67,120,0.08)] backdrop-blur-xl hover:text-[#171421] hover:bg-white/86 hover:shadow-[0_14px_32px_rgba(139,92,246,0.14)] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#c6bddb] dark:shadow-none dark:hover:bg-white/[0.07] dark:hover:text-white'
+            }`}
+          >
+            {active === category && (
+              <motion.span
+                layoutId="active-category-pill"
+                className="absolute inset-0 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d]"
+                transition={{ type: 'spring', stiffness: 450, damping: 34 }}
+              />
+            )}
+            <span className="relative z-10">{category}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
