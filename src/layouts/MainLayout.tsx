@@ -39,7 +39,7 @@ export default function MainLayout() {
             {showPageSearch ? (
               <SearchPill />
             ) : pagePillLabel ? (
-              <span className="rounded-full border border-white/80 bg-white/72 px-4 py-2 text-xs font-bold uppercase tracking-normal text-primary shadow-[0_14px_34px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/12 dark:bg-white/10">
+              <span className="rounded-full border border-white/80 bg-white/72 px-4 py-2 text-xs font-bold uppercase tracking-normal text-primary shadow-[0_14px_34px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#171421]/78 dark:text-primary dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_38px_rgba(0,0,0,0.28)]">
                 {pagePillLabel}
               </span>
             ) : null}
