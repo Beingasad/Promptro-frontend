@@ -46,6 +46,7 @@ export default function TopNavbar() {
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [localAvatar, setLocalAvatar] = useState('');
   const isLoggedIn = Boolean(currentUser);
   const displayName = currentUser?.displayName || (isLoggedIn ? 'Promptro Creator' : 'Guest Mode');
@@ -176,8 +177,15 @@ export default function TopNavbar() {
 
   useEffect(() => {
     setAppearanceMode(readThemeMode());
-
     setHasUnreadNotifications(localStorage.getItem('promptro:notifications-read') !== 'true');
+
+    // Fetch dynamic notifications
+    axios.get(`${API_BASE_URL}/api/notifications`).then(res => {
+      setNotifications(res.data);
+      if (res.data.length > 0 && localStorage.getItem('promptro:notifications-read') !== 'true') {
+        setHasUnreadNotifications(true);
+      }
+    }).catch(err => console.error('Error fetching notifications:', err));
   }, []);
 
   const handleDrawerAction = (action: string) => {
@@ -586,15 +594,36 @@ export default function TopNavbar() {
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </button>
-                <h3 className="flex-1 text-sm font-bold text-[#171421]">Notifications</h3>
-                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">3 new</span>
+                <h3 className="flex-1 text-sm font-bold text-[#171421] uppercase tracking-wider">Notifications</h3>
+                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">{notifications.length} NEW</span>
               </div>
-              {['Fantasy prompts are trending today', 'Your saved board is ready', 'New cinematic styles added'].map((text) => (
-                <button key={text} className="flex w-full items-center gap-3 rounded-2xl px-2 py-2.5 text-left transition-colors hover:bg-white">
-                  <CheckCircle2 className="h-5 w-5 shrink-0 text-[#ff6a3d]" />
-                  <span className="text-sm font-medium text-[#5f5774]">{text}</span>
-                </button>
-              ))}
+              <div className="flex flex-col gap-1">
+                {notifications.length > 0 ? (
+                  notifications.map((notif) => (
+                    <button 
+                      key={notif.id} 
+                      onClick={() => {
+                        navigate(notif.link);
+                        setNotificationsOpen(false);
+                      }}
+                      className="flex w-full items-start gap-3 rounded-2xl px-3 py-3 text-left transition-all hover:bg-primary/5 group"
+                    >
+                      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[13px] font-bold text-[#171421] dark:text-white leading-tight group-hover:text-primary transition-colors">{notif.text}</p>
+                        <p className="mt-1 text-[10px] font-medium text-[#756d8d] uppercase tracking-wider">Just now</p>
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="py-8 text-center">
+                    <Bell className="mx-auto h-8 w-8 text-[#afa6c8]/40 mb-3" />
+                    <p className="text-sm font-bold text-[#756d8d]">No new notifications</p>
+                  </div>
+                )}
+              </div>
             </motion.div>
           </>
         )}

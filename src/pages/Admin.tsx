@@ -765,18 +765,26 @@ export default function Admin() {
 
                           <div className="p-4 rounded-[2rem] border-2 border-dashed border-[#e9e2f3] dark:border-white/10 bg-[#f8f7fc]/50 dark:bg-white/5">
                             <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-8 items-center">
-                              <div 
-                                onClick={() => fileInputRef.current?.click()}
+                              <label 
                                 className={cn(
                                   "h-24 rounded-2xl border-2 border-white dark:border-white/10 shadow-xl shadow-primary/5 cursor-pointer group relative overflow-hidden flex flex-col items-center justify-center bg-white dark:bg-white/10 transition-all hover:scale-[1.02]",
                                   imagePreview ? "ring-2 ring-primary/20" : ""
                                 )}
                               >
+                                <input 
+                                  type="file" 
+                                  ref={fileInputRef} 
+                                  className="hidden" 
+                                  accept="image/*" 
+                                  onChange={(e) => selectImage(e.target.files?.[0] || null)} 
+                                />
                                 {imagePreview ? (
                                   <div className="relative w-full h-full group/preview">
                                     <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                                     <button 
+                                      type="button"
                                       onClick={(e) => {
+                                        e.preventDefault();
                                         e.stopPropagation();
                                         setImageFile(null);
                                         setImagePreview('');
@@ -784,7 +792,7 @@ export default function Admin() {
                                         setCssRatio('');
                                         if (fileInputRef.current) fileInputRef.current.value = '';
                                       }}
-                                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all shadow-lg hover:scale-110"
+                                      className="absolute top-1 right-1 z-30 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all shadow-lg hover:scale-110"
                                     >
                                       <X className="w-3 h-3" />
                                     </button>
@@ -798,8 +806,7 @@ export default function Admin() {
                                     <p className="text-[9px] font-medium text-[#756d8d] mt-1 uppercase">PNG, JPG up to 10MB</p>
                                   </div>
                                 )}
-                                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => selectImage(e.target.files?.[0] || null)} />
-                              </div>
+                              </label>
 
                               <div className="flex flex-col gap-4">
                                 <div>
