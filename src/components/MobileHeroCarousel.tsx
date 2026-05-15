@@ -106,13 +106,13 @@ export default function MobileHeroCarousel() {
         >
           {current.type === 'text' ? (
             <div className="flex flex-col w-full">
-              <p className="text-[15px] font-medium leading-6 text-[#6f6684]">{current.tag_text}</p>
+              <p className="text-[15px] font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8]">{current.tag_text}</p>
               <h1 className="mt-1 text-[8.5vw] sm:text-[44px] font-[900] leading-tight">
                 <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent">
                   {current.title}
                 </span>
               </h1>
-              <p className="mt-2 text-[14px] font-semibold text-[#6f6684] line-clamp-2 leading-relaxed opacity-90">
+              <p className="mt-2 text-[14px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90">
                 {current.subtitle}
               </p>
             </div>
@@ -120,19 +120,19 @@ export default function MobileHeroCarousel() {
             <a 
               href={current.button_link}
               className={cn(
-                "relative flex w-full items-center justify-between p-5 rounded-2xl border border-white/60 shadow-[0_15px_35px_rgba(0,0,0,0.05)] backdrop-blur-md overflow-hidden bg-gradient-to-br min-h-[120px]",
+                "relative flex w-full items-center justify-between p-5 rounded-2xl border border-white/60 dark:border-white/5 shadow-[0_15px_35px_rgba(0,0,0,0.05)] backdrop-blur-md overflow-hidden bg-gradient-to-br dark:from-[#1c1a26] dark:to-[#171421] min-h-[120px]",
                 current.bg_gradient
               )}
             >
               <div className="flex-1 min-w-0 pr-4">
                 <div className="flex items-center gap-1.5 mb-1.5">
                   <span className="text-[14px]">{current.tag_icon || '✨'}</span>
-                  <span className="text-[9px] font-black uppercase tracking-widest text-primary/80">{current.tag_text}</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-primary/80 dark:text-primary">{current.tag_text}</span>
                 </div>
-                <h3 className="text-[17px] font-[900] text-[#171421] leading-tight truncate">
+                <h3 className="text-[17px] font-[900] text-[#171421] dark:text-white leading-tight truncate">
                   {current.title}
                 </h3>
-                <p className="text-[12px] font-semibold text-[#6f6684] truncate opacity-90 mt-1">
+                <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] truncate opacity-90 mt-1">
                   {current.subtitle}
                 </p>
                 <div className="mt-2.5 flex items-center gap-1 text-[12px] font-black text-primary">

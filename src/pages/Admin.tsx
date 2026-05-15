@@ -270,6 +270,7 @@ export default function Admin() {
     setEditingPrompt(null);
     setDetectedRatio('Not Uploaded');
     setCssRatio('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const selectImage = (file: File | null) => {
@@ -335,7 +336,13 @@ export default function Admin() {
     data.append('trending', String(form.trending));
     data.append('visibility', form.visibility);
     if (cssRatio) data.append('aspectRatio', cssRatio);
-    if (imageFile) data.append('image', imageFile);
+    
+    if (imageFile) {
+      data.append('image', imageFile);
+    } else if (imagePreview && !imagePreview.startsWith('blob:')) {
+      data.append('image_url', imagePreview);
+    }
+    
     return data;
   };
 
@@ -353,14 +360,10 @@ export default function Admin() {
 
     try {
       if (editingPrompt) {
-        await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData(), {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData());
         setMessage('Prompt updated successfully.');
       } else {
-        await axios.post(API_URL, buildFormData(), {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        await axios.post(API_URL, buildFormData());
         setMessage('Prompt published successfully.');
       }
       resetForm();
@@ -423,14 +426,10 @@ export default function Admin() {
       if (bannerImageFile) data.append('image', bannerImageFile);
 
       if (editingBanner) {
-        await axios.put(`${API_BASE_URL}/api/banners/${editingBanner.id}`, data, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        await axios.put(`${API_BASE_URL}/api/banners/${editingBanner.id}`, data);
         setMessage('Banner updated successfully.');
       } else {
-        await axios.post(`${API_BASE_URL}/api/banners`, data, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        await axios.post(`${API_BASE_URL}/api/banners`, data);
         setMessage('Banner created successfully.');
       }
       setBannerForm(emptyBannerForm);
@@ -783,6 +782,7 @@ export default function Admin() {
                                         setImagePreview('');
                                         setDetectedRatio('Not Uploaded');
                                         setCssRatio('');
+                                        if (fileInputRef.current) fileInputRef.current.value = '';
                                       }}
                                       className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all shadow-lg hover:scale-110"
                                     >

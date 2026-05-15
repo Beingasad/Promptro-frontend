@@ -107,20 +107,20 @@ export default function HomeBanners() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
           className={cn(
-            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between border border-white/60 shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br",
+            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between border border-white/60 dark:border-white/5 shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br dark:from-[#1c1a26] dark:to-[#171421]",
             banner.bg_gradient
           )}
         >
           {/* Content side */}
           <div className="relative z-10 flex flex-col gap-2 max-w-[52%]">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/45 w-fit backdrop-blur-md shadow-sm border border-white/50">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/45 dark:bg-white/5 w-fit backdrop-blur-md shadow-sm border border-white/50 dark:border-white/10">
               <span className="text-primary">{banner.tag_icon ? banner.tag_icon : <Sparkles className="w-3.5 h-3.5" />}</span>
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary/90">{banner.tag_text}</span>
             </div>
-            <h3 className="text-[20px] sm:text-[22px] font-[900] text-[#171421] leading-[1.1] tracking-tight group-hover:text-primary transition-colors duration-300">
+            <h3 className="text-[20px] sm:text-[22px] font-[900] text-[#171421] dark:text-white leading-[1.1] tracking-tight group-hover:text-primary transition-colors duration-300">
               {banner.title}
             </h3>
-            <p className="text-[12px] font-semibold text-[#6f6684] line-clamp-2 leading-relaxed opacity-90">
+            <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90">
               {banner.subtitle}
             </p>
             <div className="mt-3 flex items-center gap-2 text-[13px] font-black text-primary group-hover:gap-3 transition-all duration-300">
