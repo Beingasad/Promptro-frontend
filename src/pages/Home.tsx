@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import CategorySection from '../components/CategorySection';
@@ -14,6 +15,7 @@ import { cn } from '../utils/cn';
 
 
 export default function Home() {
+  const navigate = useNavigate();
   const { searchQuery } = useSearch();
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [activeCategory, setActiveCategory] = useState('All');
@@ -120,7 +122,10 @@ export default function Home() {
                   {searchQuery ? 'Search Results' : 'Trending Now'}
                 </h2>
               </div>
-              <button className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-2 text-sm font-medium text-primary transition-colors hover:bg-white/70 md:px-3 md:text-base">
+              <button 
+                onClick={() => navigate('/explore')}
+                className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-2 text-sm font-medium text-primary transition-colors hover:bg-white/70 md:px-3 md:text-base"
+              >
                 View all
                 <ChevronRight className="h-5 w-5" />
               </button>

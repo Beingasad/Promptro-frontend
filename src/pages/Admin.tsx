@@ -476,7 +476,7 @@ export default function Admin() {
   return (
     <ErrorBoundary>
       <AdminLayout>
-        {(activeTab: AdminTab) => (
+        {(activeTab, setActiveTab) => (
           <div className="flex flex-col gap-8 pb-20">
             <AnimatePresence>
               {(message || error) && (
@@ -1513,7 +1513,12 @@ export default function Admin() {
                       <button className="p-2 rounded-xl bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 hover:text-primary transition-all">
                         <Download className="w-4 h-4" />
                       </button>
-                      <button className="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold shadow-lg shadow-primary/20">View All</button>
+                      <button 
+                        onClick={() => setActiveTab('Manage Prompts')}
+                        className="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold shadow-lg shadow-primary/20"
+                      >
+                        View All
+                      </button>
                     </div>
                   </div>
                   <div className="overflow-x-auto">
@@ -1834,6 +1839,13 @@ export default function Admin() {
                     onClick={() => fileInputRef.current?.click()}
                     className="aspect-video rounded-3xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative group"
                   >
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      className="hidden" 
+                      accept="image/*" 
+                      onChange={(e) => selectImage(e.target.files?.[0] || null)} 
+                    />
                     {imagePreview ? (
                       <div className="relative w-full h-full group/edit-preview">
                         <img 
@@ -1876,7 +1888,7 @@ export default function Admin() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-bold">Category</label>
                       <select 
@@ -1896,6 +1908,18 @@ export default function Admin() {
                       >
                         <option value="Public">Public</option>
                         <option value="Hidden">Hidden</option>
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-sm font-bold">Generated With</label>
+                      <select 
+                        value={form.tool || 'Other'}
+                        onChange={(e) => updateForm('tool', e.target.value)}
+                        className="glass-input h-12"
+                      >
+                        {['ChatGPT', 'Gemini', 'Grok', 'Claude', 'Midjourney', 'Midjourney v6', 'DALL-E 3', 'Stable Diffusion', 'SDXL', 'Niji Journey', 'Leonardo AI', 'Other'].map(t => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
                       </select>
                     </div>
                   </div>

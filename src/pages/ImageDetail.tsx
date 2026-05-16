@@ -299,7 +299,12 @@ export default function ImageDetail() {
             </span>
             <h2 className="text-[32px] font-bold leading-none text-[#171421] dark:text-white">More Like This</h2>
           </div>
-          <button className="rounded-full px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors">View all</button>
+          <button 
+            onClick={() => navigate(`/explore?category=${encodeURIComponent(prompt.category)}`)}
+            className="rounded-full px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
+          >
+            View all
+          </button>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {related.slice(0, 4).map((item) => (

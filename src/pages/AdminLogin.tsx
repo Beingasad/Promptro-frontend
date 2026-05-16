@@ -22,7 +22,7 @@ export default function AdminLogin() {
       if (username === 'asadtwinkle8318' && password === 'twinkleasad@87') {
         setSuccess(true);
         localStorage.setItem('adminAuth', 'true');
-        setTimeout(() => navigate('/admin'), 800);
+        setTimeout(() => navigate('/asad87'), 800);
       } else {
         setError('Invalid username or password. Please try again.');
         setLoading(false);

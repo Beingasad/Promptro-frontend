@@ -4,7 +4,7 @@ import { AdminNavbar } from '../components/admin/AdminNavbar';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
 
 interface AdminLayoutProps {
-  children: (activeTab: AdminTab) => ReactNode;
+  children: (activeTab: AdminTab, setActiveTab: (tab: AdminTab) => void) => ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
@@ -23,7 +23,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               </div>
             }>
-              {children(activeTab)}
+              {children(activeTab, setActiveTab)}
             </Suspense>
           </ErrorBoundary>
         </div>

@@ -15,7 +15,7 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 // Simple Protected Route Component
 const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem('adminAuth') === 'true';
-  return isAuthenticated ? <>{children}</> : <Navigate to="/admin/login" replace />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/asad87/login" replace />;
 };
 
 function App() {
@@ -33,9 +33,9 @@ function App() {
                 <Route path="prompt/:id" element={<ImageDetail />} />
                 <Route path="auth" element={<Auth />} />
               </Route>
-              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/asad87/login" element={<AdminLogin />} />
               <Route 
-                path="/admin" 
+                path="/asad87" 
                 element={
                   <AdminProtectedRoute>
                     <Admin />

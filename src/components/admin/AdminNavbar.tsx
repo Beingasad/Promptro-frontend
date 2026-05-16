@@ -52,7 +52,7 @@ export function AdminNavbar() {
 
   const handleSignOut = () => {
     localStorage.removeItem('adminAuth');
-    window.location.href = '/admin/login';
+    window.location.href = '/asad87/login';
   };
 
   useEffect(() => {

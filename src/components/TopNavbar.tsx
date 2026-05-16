@@ -455,26 +455,25 @@ export default function TopNavbar() {
             <motion.button
               type="button"
               aria-label="Close menu backdrop"
-              className="fixed inset-0 z-[80] bg-[#171421]/46 backdrop-blur-[7px]"
+              className="fixed inset-0 z-[80] bg-[#171421]/40 backdrop-blur-[4px]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.22 }}
+              transition={{ duration: 0.2 }}
               onClick={closePanels}
             />
             <motion.aside
-              initial={{ x: '-105%', opacity: 0.75 }}
+              initial={{ x: '-100%' }}
               animate={{
                 x: 0,
-                opacity: 1,
-                width: expandedView ? '100vw' : '56vw',
-                maxWidth: expandedView ? '100vw' : '19rem',
-                borderTopRightRadius: expandedView ? '0rem' : '1.65rem',
-                borderBottomRightRadius: expandedView ? '0rem' : '1.65rem',
+                width: expandedView ? '100vw' : '19.5rem',
               }}
-              exit={{ x: '-105%', opacity: 0.75 }}
-              transition={{ type: 'spring', stiffness: 420, damping: 38 }}
-              className="fixed bottom-0 left-0 top-0 z-[90] flex min-w-[230px] flex-col overflow-hidden border-r border-white/72 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-2xl dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)]"
+              exit={{ x: '-100%' }}
+              transition={{ 
+                duration: 0.35, 
+                ease: [0.32, 0.72, 0, 1] 
+              }}
+              className="fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/72 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform"
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
 
