@@ -152,6 +152,9 @@ export default function Admin() {
   const [campaignStep, setCampaignStep] = useState(1);
   const [selectedPromptsForCampaign, setSelectedPromptsForCampaign] = useState<string[]>([]);
   const [isLaunching, setIsLaunching] = useState(false);
+  const [uploadingCatId, setUploadingCatId] = useState<number | null>(null);
+  const [newCatImagePreview, setNewCatImagePreview] = useState<string>('');
+  const [newCatImageFile, setNewCatImageFile] = useState<File | null>(null);
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const logs = useMemo(() => {
@@ -1255,8 +1258,28 @@ export default function Admin() {
                     <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium">Manage prompt categories and taxonomy</p>
                   </div>
                   <div className="flex items-center gap-3 bg-white dark:bg-white/5 p-2 rounded-2xl border border-[#e9e2f3] dark:border-white/10 shadow-sm">
-                    <label className="flex items-center gap-2 cursor-pointer px-2 text-[#756d8d] hover:text-primary transition-colors">
-                      <ImageIcon className="w-5 h-5" />
+                    <label className="relative flex items-center justify-center cursor-pointer shrink-0">
+                      {newCatImagePreview ? (
+                        <div className="relative group w-10 h-10 rounded-xl overflow-hidden shadow-md">
+                          <img src={newCatImagePreview} alt="" className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setNewCatImageFile(null);
+                              setNewCatImagePreview('');
+                            }}
+                            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"
+                          >
+                            <X className="w-4 h-4 text-white" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-[#e9e2f3] dark:border-white/10 bg-[#fbf8ff] dark:bg-white/5 text-[#756d8d] hover:text-primary transition-colors">
+                          <ImageIcon className="w-5 h-5" />
+                        </div>
+                      )}
                       <input 
                         type="file" 
                         accept="image/*" 
@@ -1265,8 +1288,8 @@ export default function Admin() {
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            const label = e.currentTarget.parentElement;
-                            if (label) label.classList.add('text-primary');
+                            setNewCatImageFile(file);
+                            setNewCatImagePreview(URL.createObjectURL(file));
                           }
                         }}
                       />
@@ -1274,29 +1297,39 @@ export default function Admin() {
                     <input 
                       id="new-category-input"
                       placeholder="Category name..."
-                      className="bg-transparent border-none outline-none px-4 py-2 text-sm font-medium w-48"
-                      onKeyDown={(e) => {
+                      className="bg-transparent border-none outline-none px-4 py-2 text-sm font-medium w-48 text-[#171421] dark:text-white placeholder-[#8c84a6]"
+                      onKeyDown={async (e) => {
                         if (e.key === 'Enter') {
                           const input = e.currentTarget;
-                          const fileInput = document.getElementById('new-category-image') as HTMLInputElement;
                           if (input.value) {
-                            addCategory(input.value, fileInput.files?.[0]);
+                            const name = input.value;
                             input.value = '';
-                            fileInput.value = '';
-                            fileInput.parentElement?.classList.remove('text-primary');
+                            const file = newCatImageFile;
+                            setNewCatImageFile(null);
+                            setNewCatImagePreview('');
+                            try {
+                              await addCategory(name, file || undefined);
+                            } catch (err) {
+                              alert("Failed to create category");
+                            }
                           }
                         }
                       }}
                     />
                     <button 
-                      onClick={() => {
+                      onClick={async () => {
                         const input = document.getElementById('new-category-input') as HTMLInputElement;
-                        const fileInput = document.getElementById('new-category-image') as HTMLInputElement;
-                        if (input.value) {
-                          addCategory(input.value, fileInput.files?.[0]);
+                        if (input && input.value) {
+                          const name = input.value;
                           input.value = '';
-                          fileInput.value = '';
-                          fileInput.parentElement?.classList.remove('text-primary');
+                          const file = newCatImageFile;
+                          setNewCatImageFile(null);
+                          setNewCatImagePreview('');
+                          try {
+                            await addCategory(name, file || undefined);
+                          } catch (err) {
+                            alert("Failed to create category");
+                          }
                         }
                       }}
                       className="p-2.5 rounded-xl bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
@@ -1309,6 +1342,12 @@ export default function Admin() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {categories.map((cat) => (
                     <div key={cat.id} className="relative bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-6 rounded-[2rem] flex flex-col group hover:border-primary/30 transition-all overflow-hidden">
+                      {uploadingCatId === cat.id && (
+                        <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
+                          <Loader2 className="w-8 h-8 text-white animate-spin mb-2" />
+                          <span className="text-[10px] font-black uppercase tracking-wider text-white">Uploading Cover...</span>
+                        </div>
+                      )}
                       {cat.image_url && (
                         <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity">
                           <img 
@@ -1365,10 +1404,18 @@ export default function Admin() {
                             type="file" 
                             accept="image/*" 
                             className="hidden" 
-                            onChange={(e) => {
+                            disabled={uploadingCatId !== null}
+                            onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
-                                updateCategory(cat.id, cat.name, file);
+                                try {
+                                  setUploadingCatId(cat.id);
+                                  await updateCategory(cat.id, cat.name, file);
+                                } catch (err) {
+                                  alert("Failed to upload category cover image.");
+                                } finally {
+                                  setUploadingCatId(null);
+                                }
                               }
                             }}
                           />
