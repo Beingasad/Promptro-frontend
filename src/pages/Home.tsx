@@ -16,10 +16,15 @@ import { cn } from '../utils/cn';
 
 export default function Home() {
   const navigate = useNavigate();
-  const { searchQuery } = useSearch();
+  const { searchQuery, setSearchQuery } = useSearch();
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [activeCategory, setActiveCategory] = useState('All');
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setSearchQuery('');
+  }, [setSearchQuery]);
+
 
   useEffect(() => {
     const fetchPrompts = async () => {

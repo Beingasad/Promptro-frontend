@@ -412,7 +412,7 @@ export default function TopNavbar() {
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className="fixed top-0 w-full z-[100] px-4 py-3 md:px-8"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[118px] bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.18),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.16),transparent_42%),linear-gradient(180deg,#fff_0%,#fbf8ff_70%,rgba(251,248,255,0)_95%)] [mask-image:linear-gradient(to_bottom,#000_0%,#000_70%,transparent_95%)] dark:bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.22),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.15),transparent_42%),linear-gradient(180deg,#0d0b14_0%,#12101b_70%,rgba(18,16,27,0)_95%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[160px] md:h-[120px] bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.18),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.16),transparent_42%),linear-gradient(180deg,#fff_0%,#fbf8ff_70%,rgba(251,248,255,0)_95%)] [mask-image:linear-gradient(to_bottom,#000_0%,#000_70%,transparent_95%)] dark:bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.22),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.15),transparent_42%),linear-gradient(180deg,#0d0b14_0%,#0d0b14_50%,rgba(13,11,20,0.85)_75%,rgba(13,11,20,0)_100%)]" />
       <div className="relative z-10 mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-x-3 gap-y-2 md:glass-panel md:flex-nowrap md:rounded-full md:px-6 md:py-3">
         <div className="flex min-w-0 items-center gap-1 md:gap-2">
           <button
@@ -438,7 +438,7 @@ export default function TopNavbar() {
             )}
           </button>
 
-          <Link to="/" className="flex shrink-0 items-center gap-1.5 md:gap-2" aria-label="Promptro home">
+          <Link to="/" onClick={() => setSearchQuery('')} className="flex shrink-0 items-center gap-1.5 md:gap-2" aria-label="Promptro home">
             <img
               src="/brand/logo.png"
               alt=""
