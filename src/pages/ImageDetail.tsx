@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles } from 'lucide-react';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import ImageCard, { Prompt } from '../components/ImageCard';
 import { auth } from '../lib/firebase';
 import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt } from '../lib/activity';
+import { useSearch } from '../context/SearchContext';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -26,6 +27,7 @@ const formatCount = (value: number) => {
 export default function ImageDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { setSearchQuery } = useSearch();
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedNegative, setCopiedNegative] = useState(false);
   const [prompt, setPrompt] = useState<PromptDetail | null>(null);
@@ -33,6 +35,11 @@ export default function ImageDetail() {
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
+
+  const handleTagClick = (tag: string) => {
+    setSearchQuery(tag);
+    navigate('/explore');
+  };
 
   const [isPortrait, setIsPortrait] = useState(false);
 
@@ -222,6 +229,28 @@ export default function ImageDetail() {
           </div>
           <div className="rounded-[1.5rem] border border-[#ebe6f4] bg-white/60 dark:border-white/10 dark:bg-white/5 p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap">
             {negativePrompt}
+          </div>
+        </section>
+      )}
+
+      {prompt.tags && prompt.tags.length > 0 && (
+        <section className="shrink-0 flex flex-col gap-2 mt-5 border-t border-[#ebe6f4]/60 dark:border-white/5 pt-4">
+          <div className="flex items-center gap-2 px-1">
+            <Tag className="h-4 w-4 text-primary opacity-70" />
+            <h2 className="text-[11px] font-bold text-[#5f5774] dark:text-[#c4bed6] uppercase tracking-widest opacity-80">Tags</h2>
+          </div>
+          <div className="w-full flex flex-wrap items-center gap-x-3 gap-y-1.5 px-1 mt-1">
+            {[...prompt.tags]
+              .sort((a, b) => a.length - b.length)
+              .map((tag, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleTagClick(tag)}
+                  className="text-[10px] font-bold text-[#756d8d] dark:text-[#afa6c8] hover:text-primary dark:hover:text-primary transition-colors uppercase tracking-widest opacity-60 hover:opacity-100 cursor-pointer"
+                >
+                  #{tag.trim()}
+                </button>
+              ))}
           </div>
         </section>
       )}

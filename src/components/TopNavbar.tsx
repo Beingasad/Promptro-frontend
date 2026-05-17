@@ -49,6 +49,7 @@ export default function TopNavbar() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [localAvatar, setLocalAvatar] = useState('');
+  const [promptCount, setPromptCount] = useState<number>(0);
   const isLoggedIn = Boolean(currentUser);
   const displayName = currentUser?.displayName || (isLoggedIn ? 'Promptro Creator' : 'Guest Mode');
   const displayEmail = currentUser?.email || (isLoggedIn ? 'Signed in' : 'Login to sync your profile');
@@ -188,6 +189,11 @@ export default function TopNavbar() {
         setHasUnreadNotifications(true);
       }
     }).catch(err => console.error('Error fetching notifications:', err));
+
+    // Fetch live dynamic prompt count
+    axios.get(`${API_BASE_URL}/api/prompts/count`).then(res => {
+      setPromptCount(res.data.count);
+    }).catch(err => console.error('Error fetching prompts count:', err));
   }, []);
 
   const handleDrawerAction = (action: string) => {
@@ -309,25 +315,91 @@ export default function TopNavbar() {
       );
     }
 
+    const getSystemInfo = () => {
+      const ua = navigator.userAgent;
+      let os = "Web";
+      if (ua.indexOf("Android") !== -1) os = "Android";
+      else if (ua.indexOf("like Mac") !== -1) os = "iOS";
+      else if (ua.indexOf("Win") !== -1) os = "Windows";
+      else if (ua.indexOf("Mac") !== -1) os = "macOS";
+      else if (ua.indexOf("Linux") !== -1) os = "Linux";
+      
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      return `${os} • ${width}×${height}`;
+    };
+
+    const stats = [
+      { value: promptCount > 0 ? `${promptCount}` : '...', label: 'Live Prompts', color: 'from-[#8b5cf6] to-[#d946ef]' },
+      { value: '100%', label: 'Free Access', color: 'from-[#10b981] to-[#059669]' },
+    ];
+
     return (
-      <div className="flex flex-col gap-3 pb-6">
-        <div className="rounded-[1.45rem] border border-white/72 bg-white/64 p-5 text-center shadow-[0_18px_42px_rgba(72,56,118,0.12)]">
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-[1.25rem] bg-white shadow-[0_16px_34px_rgba(139,92,246,0.18)]">
-            <img src="/brand/logo.png" alt="" className="h-14 w-auto object-contain" />
+      <div className="flex flex-col gap-2 pb-2 px-1 flex-1">
+        {/* Main Brand Card */}
+        <div className="relative overflow-hidden rounded-[1.5rem] border border-white/70 dark:border-white/10 bg-white/60 dark:bg-white/5 p-4 text-center shadow-[0_12px_32px_rgba(72,56,118,0.06)] backdrop-blur-xl">
+          {/* Background Glow */}
+          <div className="absolute -right-12 -top-12 -z-10 h-32 w-32 rounded-full bg-primary/10 blur-2xl"></div>
+          <div className="absolute -left-12 -bottom-12 -z-10 h-32 w-32 rounded-full bg-[#ff6a3d]/10 blur-2xl"></div>
+
+          <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center overflow-hidden rounded-[1.15rem] bg-white dark:bg-white/10 p-1 shadow-[0_10px_24px_rgba(139,92,246,0.12)] dark:shadow-none hover:scale-105 transition-transform duration-300">
+            <img src="/brand/logo.png" alt="Promptro Logo" className="h-full w-auto object-contain" />
           </div>
-          <h3 className="text-xl font-bold text-[#171421]">Promptro</h3>
-          <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684]">
-            A premium AI prompt inspiration gallery for creators, designers, and visual storytellers.
+
+          <h3 className="text-lg font-black tracking-tight text-[#171421] dark:text-white bg-clip-text bg-gradient-to-r from-primary to-[#ff6a3d]">
+            Promptro Studio
+          </h3>
+          <p className="mt-1 text-[11px] font-medium leading-relaxed text-[#6f6684] dark:text-[#b2abc5]">
+            A premium, high-fidelity AI prompt ecosystem built to empower creators. Discover curated prompts and launch concepts instantly.
           </p>
         </div>
-        <div className="rounded-[1.25rem] border border-white/72 bg-white/62 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-          <p className="text-xs font-medium uppercase text-primary">Mission</p>
-          <p className="mt-2 text-sm font-medium leading-6 text-[#5f5774]">
-            Help creators discover beautiful prompt ideas faster and turn inspiration into polished AI visuals.
+
+        {/* Stats Grid - 2 Column */}
+        <div className="grid grid-cols-2 gap-2">
+          {stats.map((stat, i) => (
+            <div 
+              key={i} 
+              className="flex flex-col items-center justify-center rounded-[1.15rem] border border-white/70 dark:border-white/10 bg-white/60 dark:bg-white/5 p-2 text-center shadow-[0_8px_20px_rgba(72,56,118,0.03)] hover:shadow-md transition-all duration-300"
+            >
+              <span className={`bg-gradient-to-r ${stat.color} bg-clip-text text-transparent text-base font-black tracking-tight`}>
+                {stat.value}
+              </span>
+              <span className="mt-0.5 text-[8px] font-extrabold uppercase tracking-wider text-[#8a819d] dark:text-[#a59db5]">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Interactive / Helpful Tip */}
+        <div className="rounded-[1.15rem] border border-white/70 dark:border-white/10 bg-white/50 dark:bg-white/5 p-3 shadow-[0_8px_20px_rgba(72,56,118,0.03)]">
+          <p className="text-[9px] font-black uppercase tracking-widest text-primary dark:text-[#ff6a3d]">Pro Tip 💡</p>
+          <p className="mt-0.5 text-[10px] font-medium leading-relaxed text-[#6f6684] dark:text-[#afa6c8]">
+            Tap on any tag at the bottom of a prompt to filter the exploration grid instantly!
           </p>
         </div>
-        <div className="rounded-[1.25rem] border border-white/72 bg-white/62 p-4 text-sm font-medium text-[#6f6684] shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-          Version 1.0.0
+
+        {/* Call to Action Banner */}
+        <div className="relative overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-primary/95 to-[#9d66ff]/95 dark:from-primary/20 dark:to-purple-950/20 py-4.5 px-5 text-center shadow-[0_12px_26px_rgba(139,92,246,0.15)] border border-primary/20">
+          <h4 className="text-[13px] font-black uppercase tracking-wider text-white">Join the Community</h4>
+          <p className="mt-1 text-[10.5px] font-medium leading-relaxed text-white/90 dark:text-[#c4bed6]">
+            Sync saved boards & get notified of premium drops.
+          </p>
+          <Link
+            to="/auth"
+            onClick={closePanels}
+            className="mt-3 inline-flex h-9 items-center justify-center rounded-full bg-white px-5 text-[10px] font-black text-primary shadow hover:scale-[1.03] active:scale-95 transition-all"
+          >
+            Get Started Free
+          </Link>
+        </div>
+
+        {/* Footer Info */}
+        <div className="mt-auto rounded-[1.15rem] border border-white/70 dark:border-white/10 bg-white/40 dark:bg-white/5 py-2 px-4 text-center">
+          <span className="text-[8px] font-bold uppercase tracking-widest text-[#8a819d] dark:text-[#a098b0]">
+            v1.0.0 • {getSystemInfo()}
+          </span>
         </div>
       </div>
     );
@@ -509,12 +581,16 @@ export default function TopNavbar() {
                       >
                         <ArrowLeft className="h-5 w-5" />
                       </button>
-                      <h2 className="text-center text-lg font-bold text-[#171421]">{expandedTitle}</h2>
-                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_10px_24px_rgba(72,56,118,0.1)]">
-                        <img src="/brand/logo.png" alt="" className="h-9 w-auto object-contain" />
+                      <h2 className="text-center text-lg font-bold text-[#171421] dark:text-white">{expandedTitle}</h2>
+                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-white/10 shadow-[0_10px_24px_rgba(72,56,118,0.1)] dark:shadow-none border border-transparent dark:border-white/10">
+                        {expandedView === 'about' ? (
+                          <Info className="h-5 w-5 text-primary" />
+                        ) : (
+                          <img src="/brand/logo.png" alt="" className="h-9 w-auto object-contain" />
+                        )}
                       </div>
                     </div>
-                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar">
+                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col">
                       {renderExpandedContent()}
                     </div>
                   </motion.div>
