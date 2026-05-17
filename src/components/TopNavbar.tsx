@@ -303,7 +303,7 @@ export default function TopNavbar() {
             </button>
           </div>
           <div className="rounded-[1.25rem] border border-white/72 bg-white/62 p-4 text-sm font-medium text-[#6f6684] shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-            Support: feedback@promptro.ai
+            Support: Coming Soon
           </div>
         </div>
       );
@@ -542,7 +542,10 @@ export default function TopNavbar() {
                   <button
                     key={item.title}
                     type="button"
-                    onClick={() => handleDrawerAction(item.action)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDrawerAction(item.action);
+                    }}
                     className={`group flex w-full items-center gap-2.5 rounded-[1rem] border px-2.5 py-2.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${
                       item.action === 'delete-account'
                         ? 'border-[#ffd1e1] bg-[#fff4f8]/72 text-[#f23672] shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:border-[#f23672]/28 dark:bg-[#f23672]/12 dark:text-[#ff8fb4] dark:hover:bg-[#f23672]/18'
@@ -560,7 +563,9 @@ export default function TopNavbar() {
                         {item.action === 'appearance' ? `${item.description} (${appearanceMode})` : item.description}
                       </span>
                     </span>
-                    <ChevronRight className={`h-4 w-4 shrink-0 ${item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#80779a]'}`} />
+                    {item.action !== 'appearance' && item.action !== 'delete-account' && (
+                      <ChevronRight className="h-4 w-4 shrink-0 text-[#80779a]" />
+                    )}
                   </button>
                 ))}
               </div>
