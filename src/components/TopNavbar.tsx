@@ -41,7 +41,6 @@ export default function TopNavbar() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [isFullWidth, setIsFullWidth] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [appearanceMode, setAppearanceMode] = useState<ThemeMode>(() => readThemeMode());
   const [recentPrompts, setRecentPrompts] = useState<Prompt[]>([]);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
@@ -469,9 +468,9 @@ export default function TopNavbar() {
               initial={{ x: '-100%' }}
               animate={{
                 x: 0,
-                width: (expandedView || (isMobile && isFullWidth))
+                width: (expandedView || (window.innerWidth < 768 && isFullWidth))
                   ? '100vw' 
-                  : (isMobile ? '65vw' : '19.5rem'),
+                  : (window.innerWidth < 768 ? '65vw' : '19.5rem'),
               }}
               exit={{ x: '-100%' }}
               transition={{ 
@@ -479,7 +478,7 @@ export default function TopNavbar() {
                 ease: [0.32, 0.72, 0, 1] 
               }}
               onClick={() => {
-                if (isMobile) setIsFullWidth(true);
+                if (window.innerWidth < 768) setIsFullWidth(true);
               }}
               className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/72 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform cursor-pointer md:cursor-default transition-[border-radius] duration-300 ${
                 (expandedView || isFullWidth) ? 'rounded-none' : 'rounded-tr-[2.5rem]'
