@@ -48,7 +48,15 @@ export default function MainLayout() {
       ) : null}
 
       <main className={`flex-grow relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 ${
-        isAuth ? 'flex min-h-svh items-center py-3 sm:py-4' : isPromptDetail ? 'pt-5 pb-8' : isHome ? 'pt-28 pb-6 md:pt-24 md:pb-10' : 'pt-28 pb-6 md:pt-24 md:pb-10'
+        isAuth 
+          ? 'flex min-h-svh items-center py-3 sm:py-4' 
+          : isPromptDetail 
+            ? 'pt-5 pb-8' 
+            : isHome 
+              ? 'pt-28 pb-6 md:pt-24 md:pb-10' 
+              : location.pathname === '/categories'
+                ? 'pt-[78px] pb-6 md:pt-[72px] md:pb-10'
+                : 'pt-[90px] pb-6 md:pt-[84px] md:pb-10'
       }`}>
         <Outlet />
       </main>

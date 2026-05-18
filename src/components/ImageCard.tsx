@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Eye, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -40,6 +40,9 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(prompt.likes);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const { savedPrompts, likedPrompts } = readLocalActivity();
@@ -75,6 +78,12 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
     }).catch(() => undefined);
   };
 
+  const handleCategoryClick = (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    navigate(`/explore?category=${encodeURIComponent(prompt.category)}`);
+  };
+
   const stopCardNavigation = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -104,47 +113,102 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100"></div>
 
-      <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:-translate-y-0.5">
-        <button 
-          className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-white/26 backdrop-blur-2xl border border-white/30 flex items-center justify-center hover:bg-white/38 text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition-colors"
-          onClick={toggleSave}
-          aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
-        >
-          <Bookmark className="w-4 h-4 md:w-5 md:h-5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
-        </button>
-      </div>
+      {/* Top Right: Category Badge (ONLY ON MINIMAL EXPLORE/SAVED MODE) */}
+      {!isHome && (
+        <div className="absolute top-3 right-3 z-10 transition-transform duration-300 group-hover:-translate-y-0.5 max-w-[90%] whitespace-nowrap">
+          <span className="inline-block rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-white drop-shadow-md whitespace-nowrap truncate max-w-full md:px-3.5 md:py-1 md:text-[10px] shadow-[0_8px_16px_rgba(139,92,246,0.26)]">
+            {prompt.category}
+          </span>
+        </div>
+      )}
+
+      {/* Top Right: Bookmark Button (ONLY ON ORIGINAL HOME MODE) */}
+      {isHome && (
+        <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:-translate-y-0.5">
+          <button 
+            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-white/26 backdrop-blur-2xl border border-white/30 flex items-center justify-center hover:bg-white/38 text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition-colors"
+            onClick={toggleSave}
+            aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
+          >
+            <Bookmark className="w-4 h-4 md:w-5 md:h-5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
+          </button>
+        </div>
+      )}
 
       <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3">
-        <h3 className="mb-2 line-clamp-1 px-1.5 text-sm font-bold text-white drop-shadow-lg md:mb-2.5 md:text-base">
-          {prompt.title}
-        </h3>
-        <div className="flex min-h-10 items-center justify-between gap-1.5 rounded-[1rem] border border-white/24 bg-white/22 px-2 py-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:rounded-[1.35rem] md:px-3 md:py-2.5">
-          <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden md:gap-3">
+        {/* Title (ONLY ON ORIGINAL HOME MODE) */}
+        {isHome && (
+          <h3 className="mb-2 line-clamp-1 px-1.5 text-sm font-bold text-white drop-shadow-lg md:mb-2.5 md:text-base">
+            {prompt.title}
+          </h3>
+        )}
+
+        {isHome ? (
+          /* ORIGINAL HOME LAYOUT */
+          <div className="flex min-h-10 items-center justify-between w-full rounded-[1.2rem] border border-white/24 bg-white/22 px-2 py-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:rounded-[1.35rem] md:px-4 md:py-2.5">
             <button
-              className="flex shrink-0 items-center gap-1 text-[10px] font-medium tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-xs"
+              className="rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_rgba(139,92,246,0.25)] transition-transform active:scale-95 md:px-4 md:py-1.5 md:text-xs"
+              onClick={handleCategoryClick}
+              aria-label={`View category ${prompt.category}`}
+            >
+              {prompt.category}
+            </button>
+            <div className="flex items-center gap-2 md:gap-3.5">
+              <button
+                className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+                onClick={toggleLike}
+                aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
+              >
+                <Heart className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
+                <span className="ml-1">{formatCount(likes)}</span>
+              </button>
+              
+              <div className="h-3 w-px bg-white/20" />
+
+              <button
+                className="flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm"
+                onClick={stopCardNavigation}
+                aria-label={`${formatCount(prompt.views)} views`}
+              >
+                <Eye className="w-3.5 h-3.5 md:w-4.5 md:h-4.5" />
+                <span className="ml-1">{formatCount(prompt.views)}</span>
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* NEW MINIMAL EXPLORE / SAVED LAYOUT */
+          <div className="flex items-center justify-around w-full rounded-full border border-white/24 bg-white/22 px-2.5 py-1 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:px-4 md:py-1.5">
+            <button
+              className="flex items-center gap-1 text-[10px] font-extrabold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-xs"
               onClick={toggleLike}
               aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
             >
-              <Heart className="w-3.5 h-3.5 text-white md:w-4 md:h-4" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
-              <span>{formatCount(likes)}</span>
+              <Heart className="w-3 h-3 text-white md:w-3.5 md:h-3.5" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
+              <span className="ml-0.5">{formatCount(likes)}</span>
             </button>
+            
+            <div className="h-2.5 w-px bg-white/20" />
+
             <button
-              className="flex min-w-0 items-center gap-1 text-[10px] font-medium tracking-normal md:gap-1.5 md:text-xs"
+              className="flex items-center gap-1 text-[10px] font-extrabold tracking-normal md:gap-1.5 md:text-xs"
               onClick={stopCardNavigation}
               aria-label={`${formatCount(prompt.views)} views`}
             >
-              <Eye className="w-3.5 h-3.5 md:w-4 md:h-4" />
-              <span className="truncate">{formatCount(prompt.views)}</span>
+              <Eye className="w-3 h-3 md:w-3.5 md:h-3.5" />
+              <span className="ml-0.5">{formatCount(prompt.views)}</span>
+            </button>
+
+            <div className="h-2.5 w-px bg-white/20" />
+
+            <button
+              className="flex items-center gap-1 text-[10px] font-extrabold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-xs"
+              onClick={toggleSave}
+              aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
+            >
+              <Bookmark className="w-3 h-3 text-white md:w-3.5 md:h-3.5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
             </button>
           </div>
-          <button
-            className="max-w-[6.5rem] shrink-0 truncate rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2 py-0.5 text-[9px] font-medium tracking-normal shadow-[0_10px_24px_rgba(139,92,246,0.25)] md:max-w-[8.5rem] md:px-3 md:py-1 md:text-[11px]"
-            onClick={stopCardNavigation}
-            aria-label={`${prompt.category} category`}
-          >
-            {prompt.category}
-          </button>
-        </div>
+        )}
       </div>
     </Link>
   );

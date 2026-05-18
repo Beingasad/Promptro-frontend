@@ -11,11 +11,11 @@ export default function Categories() {
   return (
     <div className="min-h-screen pb-32 sm:pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-6 sm:mb-16 text-center">
+        <header className="mb-2 sm:mb-4 text-center">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl sm:text-6xl font-bold tracking-tight mb-2 sm:mb-4"
+            className="text-3xl sm:text-6xl font-black tracking-tight mb-2 sm:mb-4 whitespace-nowrap"
           >
             Explore <span className="text-primary">Categories</span>
           </motion.h1>
