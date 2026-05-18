@@ -29,7 +29,7 @@ export default function Categories() {
           </motion.p>
         </header>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 px-0 sm:px-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0">
           {categories.map((cat, i) => (
             <motion.div
               key={cat.id}

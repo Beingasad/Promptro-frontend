@@ -229,7 +229,7 @@ export default function Admin() {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.get(API_URL, { params: { limit: 100, t: Date.now() } });
+      const response = await axios.get(API_URL, { params: { t: Date.now() } });
       setPrompts(Array.isArray(response.data) ? response.data : []);
     } catch {
       setError('Backend is not reachable. Start the API server to manage prompts.');

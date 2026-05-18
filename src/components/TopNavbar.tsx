@@ -36,6 +36,13 @@ export default function TopNavbar() {
   const navigate = useNavigate();
   const { searchQuery, setSearchQuery } = useSearch();
   const [isFocused, setIsFocused] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const [menuOpen, setMenuOpen] = useState(false);
   const [expandedView, setExpandedView] = useState<DrawerView>(null);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -540,9 +547,9 @@ export default function TopNavbar() {
               initial={{ x: '-100%' }}
               animate={{
                 x: 0,
-                width: (expandedView || (window.innerWidth < 768 && isFullWidth))
-                  ? '100vw' 
-                  : (window.innerWidth < 768 ? '65vw' : '19.5rem'),
+                width: windowWidth < 768
+                  ? (expandedView || isFullWidth ? '100vw' : '65vw')
+                  : (expandedView ? '35rem' : '19.5rem'),
               }}
               exit={{ x: '-100%' }}
               transition={{ 
@@ -550,10 +557,10 @@ export default function TopNavbar() {
                 ease: [0.32, 0.72, 0, 1] 
               }}
               onClick={() => {
-                if (window.innerWidth < 768) setIsFullWidth(true);
+                if (windowWidth < 768) setIsFullWidth(true);
               }}
               className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/72 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform cursor-pointer md:cursor-default transition-[border-radius] duration-300 ${
-                (expandedView || isFullWidth) ? 'rounded-none' : 'rounded-tr-[2.5rem]'
+                (windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
               }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
