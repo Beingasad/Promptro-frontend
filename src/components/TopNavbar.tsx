@@ -17,8 +17,16 @@ import {
   Bookmark,
   Camera,
   CircleUserRound,
+  Sparkles,
+  Share2,
+  Download,
+  Instagram,
+  MessageCircle,
+  Copy,
+  Check,
+  ArrowUpRight,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import ImageCard, { Prompt } from './ImageCard';
@@ -64,6 +72,295 @@ export default function TopNavbar() {
   const profilePhoto = localAvatar || currentUser?.photoURL || '';
   const premiumLabel = isLoggedIn ? 'Signed In' : 'Free Guest';
 
+  // Showcase Creator Modal States
+  const [showShowcaseModal, setShowShowcaseModal] = useState(false);
+  const [showcaseStep, setShowcaseStep] = useState(1);
+  const [selectedPromptsForShowcase, setSelectedPromptsForShowcase] = useState<string[]>([]);
+  const [allPromptsForShowcase, setAllPromptsForShowcase] = useState<Prompt[]>([]);
+  const [isGeneratingShowcase, setIsGeneratingShowcase] = useState(false);
+
+  const selectedPrompts = useMemo(() => {
+    return allPromptsForShowcase.filter(p => selectedPromptsForShowcase.includes(p.id));
+  }, [allPromptsForShowcase, selectedPromptsForShowcase]);
+
+  const shareShowcaseToInstagram = () => {
+    navigator.clipboard.writeText('https://promptro.in/explore');
+    alert('Explore link copied! Opening Instagram so you can easily post your downloaded poster on your Story and paste the link!');
+    window.open('https://instagram.com', '_blank');
+  };
+
+  const shareShowcaseToWhatsApp = () => {
+    const text = encodeURIComponent(
+      `Check out my favorite AI prompts on Promptro! 🎨✨\n\nCreate your own stunning showcase story poster and share your prompt art!\n\n👉 Discover here: https://promptro.in/explore`
+    );
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  };
+
+  const copyShowcaseLink = () => {
+    navigator.clipboard.writeText('https://promptro.in/explore');
+    alert('Showcase link copied to clipboard! Share it on Instagram Stories or WhatsApp groups.');
+  };
+
+  const renderShowcaseCanvas = (): Promise<HTMLCanvasElement> => {
+    return new Promise((resolve, reject) => {
+      if (selectedPrompts.length < 1) {
+        reject(new Error("No prompts selected"));
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error("Could not get canvas context"));
+        return;
+      }
+
+      // 1. Draw Background Gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#181524');
+      gradient.addColorStop(0.5, '#0d0b13');
+      gradient.addColorStop(1, '#120f1b');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 2. Draw Glow Orbs
+      ctx.fillStyle = 'rgba(124, 58, 237, 0.15)';
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 700, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(236, 72, 153, 0.08)';
+      ctx.beginPath();
+      ctx.arc(100, 200, 400, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 3. Draw Branding Header
+      ctx.fillStyle = '#7c3aed';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(canvas.width / 2 - 180, 150, 360, 64, 32);
+      } else {
+        ctx.rect(canvas.width / 2 - 180, 150, 360, 64);
+      }
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('PROMPTRO', canvas.width / 2, 196);
+
+      ctx.fillStyle = '#8c84a6';
+      ctx.font = 'bold 24px sans-serif';
+      ctx.fillText('MY FAVORITE PICKS', canvas.width / 2, 265);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 58px sans-serif';
+      ctx.fillText('CREATIVE INSPIRATIONS', canvas.width / 2, 390);
+
+      // Draw line under heading
+      ctx.fillStyle = 'rgba(124, 58, 237, 0.4)';
+      ctx.fillRect(canvas.width / 2 - 100, 430, 200, 4);
+
+      // 4. Draw Selected Images dynamically based on count (Staggered Layout)
+      let loadedCount = 0;
+      const imagesToLoad = selectedPrompts.map(p => p.image_url);
+      const loadedImages: HTMLImageElement[] = [];
+
+      const onAllLoaded = () => {
+        const drawCard = (img: HTMLImageElement, cx: number, cy: number, cw: number, ch: number, angleDegrees: number, isCenter = false) => {
+          ctx.save();
+          ctx.translate(cx, cy);
+          if (angleDegrees !== 0) {
+            ctx.rotate(angleDegrees * Math.PI / 180);
+          }
+
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+          ctx.shadowBlur = isCenter ? 60 : 35;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = isCenter ? 25 : 15;
+
+          ctx.beginPath();
+          const rx = -cw / 2;
+          const ry = -ch / 2;
+          if (ctx.roundRect) {
+            ctx.roundRect(rx, ry, cw, ch, isCenter ? 48 : 36);
+          } else {
+            ctx.rect(rx, ry, cw, ch);
+          }
+          ctx.fillStyle = '#171421';
+          ctx.fill();
+
+          ctx.clip();
+          ctx.drawImage(img, rx, ry, cw, ch);
+          ctx.restore();
+        };
+
+        if (selectedPrompts.length === 1) {
+          // 1 Image: Large Center Card
+          if (loadedImages[0]) drawCard(loadedImages[0], 540, 900, 560, 760, 0, true);
+        } else if (selectedPrompts.length === 2) {
+          // 2 Images: Tilted side-by-side
+          if (loadedImages[0]) drawCard(loadedImages[0], 330, 900, 420, 580, -8);
+          if (loadedImages[1]) drawCard(loadedImages[1], 750, 900, 420, 580, 8, true);
+        } else if (selectedPrompts.length === 3) {
+          // 3 Images: Overlapping staggered collage
+          if (loadedImages[0]) drawCard(loadedImages[0], 290, 880, 420, 560, -12);
+          if (loadedImages[2]) drawCard(loadedImages[2], 790, 880, 420, 560, 12);
+          if (loadedImages[1]) drawCard(loadedImages[1], 540, 920, 480, 640, 0, true);
+        }
+
+        // 5. Draw Footer CTA Block
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 36px sans-serif';
+        ctx.fillText('DISCOVER TOP ART PROMPTS', canvas.width / 2, 1420);
+
+        ctx.fillStyle = '#8c84a6';
+        ctx.font = '500 24px sans-serif';
+        ctx.fillText('Explore high-quality AI prompt templates on Promptro.in', canvas.width / 2, 1475);
+
+        ctx.fillStyle = '#7c3aed';
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(canvas.width / 2 - 300, 1540, 600, 96, 48);
+        } else {
+          ctx.rect(canvas.width / 2 - 300, 1540, 600, 96);
+        }
+        ctx.fill();
+
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 32px sans-serif';
+        ctx.fillText('✨ DISCOVER ON PROMPTRO.IN', canvas.width / 2, 1600);
+
+        resolve(canvas);
+      };
+
+      imagesToLoad.forEach((src, idx) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          loadedImages[idx] = img;
+          loadedCount++;
+          if (loadedCount === imagesToLoad.length) onAllLoaded();
+        };
+        img.onerror = () => {
+          const canvasPlaceholder = document.createElement('canvas');
+          canvasPlaceholder.width = 420;
+          canvasPlaceholder.height = 560;
+          const pCtx = canvasPlaceholder.getContext('2d');
+          if (pCtx) {
+            pCtx.fillStyle = '#1c182d';
+            pCtx.fillRect(0, 0, 420, 560);
+            pCtx.fillStyle = '#ffffff';
+            pCtx.font = 'bold 24px sans-serif';
+            pCtx.textAlign = 'center';
+            pCtx.fillText('AI Prompt Art', 210, 280);
+          }
+          const placeholderImg = new Image();
+          placeholderImg.src = canvasPlaceholder.toDataURL();
+          placeholderImg.onload = () => {
+            loadedImages[idx] = placeholderImg;
+            loadedCount++;
+            if (loadedCount === imagesToLoad.length) onAllLoaded();
+          };
+        };
+        img.src = src;
+      });
+    });
+  };
+
+  const downloadShowcasePoster = async () => {
+    try {
+      const canvas = await renderShowcaseCanvas();
+      const link = document.createElement('a');
+      link.download = `Promptro-Showcase-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error) {
+      console.error("Error creating poster download:", error);
+      alert("Failed to render poster image. Please try again!");
+    }
+  };
+
+  const shareShowcaseNatively = async () => {
+    try {
+      const canvas = await renderShowcaseCanvas();
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          alert("Could not generate sharing file.");
+          return;
+        }
+        const file = new File([blob], `Promptro-Showcase-${Date.now()}.png`, { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'My Promptro Collection',
+            text: 'Check out my favorite AI prompts on Promptro.in! 🎨✨',
+          });
+        } else {
+          navigator.clipboard.writeText('https://promptro.in/explore');
+          alert("Native sharing is not supported by your browser or device. The Showcase Link has been copied to your clipboard, and you can download the image to share manually!");
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error("Error with native share:", error);
+      alert("Could not trigger sharing. Please download and share manually!");
+    }
+  };
+
+  const copyImageToClipboard = async () => {
+    try {
+      const canvas = await renderShowcaseCanvas();
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          alert("Could not copy poster image.");
+          return;
+        }
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({
+              [blob.type]: blob
+            })
+          ]);
+          alert("Poster image copied to clipboard successfully! You can now paste it directly into chats or documents.");
+        } catch (clipboardError) {
+          console.error("Clipboard copy failed:", clipboardError);
+          alert("Clipboard writing is blocked or not supported on this browser. Please download the image to save it!");
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error("Error copying image:", error);
+      alert("Failed to copy image. Please try downloading instead!");
+    }
+  };
+
+  const openShowcaseCreator = async () => {
+    const saved = readLocalActivity().savedPrompts || [];
+    let list = [...saved];
+    
+    try {
+      const res = await axios.get(`${API_BASE_URL}/api/prompts`);
+      const globalPrompts = Array.isArray(res.data) ? res.data : [];
+      const seen = new Set(saved.map(p => p.id));
+      globalPrompts.forEach((p: Prompt) => {
+        if (!seen.has(p.id)) list.push(p);
+      });
+    } catch (err) {
+      console.error("Error fetching global prompts for showcase:", err);
+    }
+    
+    setAllPromptsForShowcase(list);
+    setSelectedPromptsForShowcase([]);
+    setShowcaseStep(1);
+    setShowShowcaseModal(true);
+    closePanels();
+  };
+
   const closePanels = () => {
     setMenuOpen(false);
     setIsFullWidth(false);
@@ -78,6 +375,12 @@ export default function TopNavbar() {
       title: 'Saved Prompts',
       description: 'Open your saved prompt board',
       action: 'saved',
+    },
+    {
+      icon: Sparkles,
+      title: 'Showcase Creator',
+      description: 'Generate beautiful posters of your favorite prompts',
+      action: 'showcase',
     },
     {
       icon: Clock3,
@@ -207,6 +510,11 @@ export default function TopNavbar() {
     if (action === 'saved') {
       navigate('/saved');
       closePanels();
+      return;
+    }
+
+    if (action === 'showcase') {
+      openShowcaseCreator();
       return;
     }
 
@@ -809,6 +1117,257 @@ export default function TopNavbar() {
                   </Link>
                 </div>
               )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Showcase Creator Modal */}
+      <AnimatePresence>
+        {showShowcaseModal && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !isGeneratingShowcase && setShowShowcaseModal(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[80]"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full bg-white dark:bg-[#171421] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl z-[90] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[92vh] transition-all duration-300 ${
+                showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
+              }`}
+            >
+              <div className="p-5 md:p-8">
+                {showcaseStep === 1 && (
+                  <div className="flex flex-col gap-5 md:gap-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-lg md:text-xl font-bold text-[#171421] dark:text-white">Showcase Creator</h2>
+                        <p className="text-[11px] md:text-xs text-[#756d8d]">Select 1 to 3 prompts to build your story poster</p>
+                      </div>
+                      <div className="text-[10px] font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full whitespace-nowrap shrink-0">
+                        {selectedPromptsForShowcase.length} Selected
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[220px] md:max-h-[300px] overflow-y-auto pr-2">
+                      {allPromptsForShowcase.slice(0, 15).map((prompt) => (
+                        <div 
+                          key={prompt.id}
+                          onClick={() => {
+                            if (selectedPromptsForShowcase.includes(prompt.id)) {
+                              setSelectedPromptsForShowcase(prev => prev.filter(id => id !== prompt.id));
+                            } else {
+                              if (selectedPromptsForShowcase.length >= 3) {
+                                alert("You can select a maximum of 3 prompts. Please unselect one before selecting another!");
+                                return;
+                              }
+                              setSelectedPromptsForShowcase(prev => [...prev, prompt.id]);
+                            }
+                          }}
+                          className={`flex items-center gap-4 p-3 rounded-2xl border transition-all cursor-pointer ${
+                            selectedPromptsForShowcase.includes(prompt.id)
+                              ? "border-primary bg-primary/5"
+                              : "border-[#e9e2f3] dark:border-white/10"
+                          }`}
+                        >
+                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                            <img src={prompt.image_url} className="w-full h-full object-cover" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold truncate text-[#171421] dark:text-white">{prompt.title}</p>
+                            <p className="text-[10px] text-[#756d8d] mt-0.5 truncate">AI generated creative prompt</p>
+                          </div>
+                          <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                            selectedPromptsForShowcase.includes(prompt.id)
+                              ? "bg-primary border-primary text-white"
+                              : "border-[#e9e2f3] dark:border-white/10"
+                          }`}>
+                            {selectedPromptsForShowcase.includes(prompt.id) && <Check className="w-3 h-3" />}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-4 pt-4">
+                      <button 
+                        onClick={() => setShowShowcaseModal(false)}
+                        className="flex-1 h-12 rounded-2xl border border-[#e9e2f3] dark:border-white/10 font-bold text-sm text-[#171421] dark:text-white"
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        onClick={() => {
+                          if (selectedPromptsForShowcase.length < 1 || selectedPromptsForShowcase.length > 3) {
+                            alert("Please select between 1 and 3 prompts to build your showcase poster!");
+                            return;
+                          }
+                          setIsGeneratingShowcase(true);
+                          setTimeout(() => {
+                            setShowcaseStep(2);
+                            setIsGeneratingShowcase(false);
+                          }, 2000);
+                        }}
+                        className={`flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${
+                          selectedPromptsForShowcase.length >= 1
+                            ? "bg-primary text-white shadow-primary/20 hover:scale-105"
+                            : "bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] cursor-not-allowed"
+                        }`}
+                      >
+                        {isGeneratingShowcase ? <Sparkles className="w-5 h-5 animate-spin" /> : <><Share2 className="w-4 h-4" /> Create Poster</>}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {showcaseStep === 2 && (
+                  <div className="flex flex-col gap-3 md:gap-4">
+                    <div className="flex items-center justify-between border-b border-[#e9e2f3] dark:border-white/10 pb-3 md:pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg shadow-green-500/25">
+                          <Check className="w-5 h-5" strokeWidth={3} />
+                        </div>
+                        <div>
+                          <h2 className="text-xl font-bold text-[#171421] dark:text-white">Poster Created!</h2>
+                          <p className="text-[10px] font-bold text-green-500 uppercase tracking-wider">Ready to Download & Share</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => setShowShowcaseModal(false)}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#e9e2f3] bg-[#f8f7fc]/80 text-[#171421] shadow-sm backdrop-blur-2xl transition-transform hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-[#171421]/80 dark:text-[#f7f2ff] dark:hover:text-white"
+                        aria-label="Close"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-3.5 md:gap-4 w-full">
+                      {/* Header title */}
+                      <div className="text-center w-full -mt-1 md:-mt-2 mb-1">
+                        <h3 className="text-lg md:text-xl font-bold text-[#171421] dark:text-white">Share Your Showcase</h3>
+                        <p className="text-[11px] md:text-xs text-[#756d8d] mt-0.5">We've rendered your prompts into a premium story poster. Share it with friends or save to your device!</p>
+                      </div>
+
+                      {/* Centered Premium Poster Preview Card */}
+                      <div className="w-[200px] h-[356px] md:w-[260px] md:h-[462px] rounded-[1.5rem] md:rounded-[2rem] bg-gradient-to-b from-[#181524] via-[#0d0b13] to-[#120f1b] border border-primary/20 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col relative shrink-0">
+                        <div className="absolute -top-12 -left-12 w-28 h-28 rounded-full bg-primary/20 blur-2xl pointer-events-none" />
+                        <div className="absolute -bottom-12 -right-12 w-28 h-28 rounded-full bg-secondary/20 blur-2xl pointer-events-none" />
+
+                        {/* Top Watermark */}
+                        <div className="flex flex-col items-center pt-4 md:pt-6 gap-0.5 md:gap-1 relative z-10">
+                          <div className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.25em] text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">Promptro</div>
+                          <div className="text-[6px] md:text-[8px] font-bold text-[#8c84a6] uppercase tracking-[0.1em] mt-0.5 md:mt-1">Elevate Your Artistry</div>
+                        </div>
+
+                        {/* Center Poster Main Heading */}
+                        <div className="text-center mt-2.5 md:mt-4 relative z-10 px-4">
+                          <h4 className="text-[9px] md:text-xs font-black tracking-wide text-white uppercase bg-gradient-to-r from-white via-[#ece8ff] to-[#dfd5ff] bg-clip-text text-transparent">Creative Inspirations</h4>
+                          <div className="h-[1px] w-8 md:w-12 bg-primary/40 mx-auto mt-1.5 md:mt-2" />
+                        </div>
+
+                        {/* Dynamic prompt collage stack */}
+                        <div className="relative flex items-center justify-center h-36 md:h-48 w-full my-auto z-10">
+                          {selectedPrompts.length === 1 && (
+                            <div className="w-20 h-28 md:w-28 md:h-36 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.6)] z-20">
+                              <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
+                            </div>
+                          )}
+
+                          {selectedPrompts.length === 2 && (
+                            <div className="relative flex items-center justify-center w-full h-full">
+                              <div className="w-16 h-22 md:w-22 md:h-30 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 -rotate-[8deg] translate-x-3 shadow-xl opacity-80">
+                                <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
+                              </div>
+                              <div className="w-18 h-24 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 rotate-[8deg] -translate-x-3 shadow-[0_12px_28px_rgba(0,0,0,0.6)] z-20">
+                                <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
+                              </div>
+                            </div>
+                          )}
+
+                          {selectedPrompts.length === 3 && (
+                            <>
+                              <div className="absolute left-2.5 md:left-4 w-16 h-22 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 -rotate-12 translate-y-2 md:translate-y-3 shadow-xl scale-90 opacity-60">
+                                <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
+                              </div>
+                              
+                              <div className="absolute right-2.5 md:right-4 w-16 h-22 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 rotate-12 translate-y-2 md:translate-y-3 shadow-xl scale-90 opacity-60">
+                                <img src={selectedPrompts[2]?.image_url} className="w-full h-full object-cover" />
+                              </div>
+
+                              <div className="absolute w-20 h-26 md:w-28 md:h-36 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.6)] z-20">
+                                <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Bottom CTA Block on Poster */}
+                        <div className="flex flex-col items-center gap-1.5 md:gap-2 px-4 pb-4 md:pb-6 text-center mt-auto relative z-10">
+                          <h4 className="text-[7px] md:text-[9px] font-black tracking-wide text-white uppercase">My Favorites Collection</h4>
+                          <p className="text-[6px] md:text-[7px] font-bold text-[#8c84a6] max-w-[130px] md:max-w-[170px]">Explore these stunning prompt templates on Promptro</p>
+                          <div className="w-full py-1.5 md:py-2 rounded-lg md:rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-extrabold text-[7px] md:text-[8px] tracking-wider shadow-lg shadow-primary/25 border border-white/10 flex items-center justify-center gap-0.5 md:gap-1 mt-0.5 md:mt-1">
+                            <span>✨ DISCOVER ON PROMPTRO.IN</span>
+                            <ArrowUpRight className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bottom Core Actions Controls (Sleek Horizontal Bar of Icon Buttons under download) */}
+                      <div className="w-[200px] md:w-[260px] flex flex-col gap-3">
+                        {/* Premium 5-Button Symmetrical Action Row */}
+                        <div className="flex items-center justify-between px-0.5 w-full gap-2">
+                          <button 
+                            onClick={downloadShowcasePoster}
+                            title="Download Poster PNG"
+                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-primary/10 hover:border-primary/50 text-primary flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                          >
+                            <Download className="w-5 h-5" />
+                          </button>
+                          <button 
+                            onClick={copyImageToClipboard}
+                            title="Copy Image"
+                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-primary/10 hover:border-primary/50 text-primary flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                          >
+                            <Copy className="w-5 h-5" />
+                          </button>
+                          <button 
+                            onClick={shareShowcaseNatively}
+                            title="Share Poster"
+                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-green-50 dark:hover:bg-green-500/10 hover:border-green-500/50 text-green-500 flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                          >
+                            <Share2 className="w-5 h-5" />
+                          </button>
+                          <button 
+                            onClick={shareShowcaseToInstagram}
+                            title="Instagram Story"
+                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-[#e1306c]/10 hover:border-[#e1306c]/50 text-[#e1306c] flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                          >
+                            <Instagram className="w-5 h-5" />
+                          </button>
+                          <button 
+                            onClick={shareShowcaseToWhatsApp}
+                            title="WhatsApp Send"
+                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-green-50 dark:hover:bg-green-500/10 hover:border-green-500/50 text-green-500 flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                          >
+                            <MessageCircle className="w-5 h-5" />
+                          </button>
+                        </div>
+
+                        <button 
+                          onClick={copyShowcaseLink}
+                          className="w-full h-9 rounded-xl border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] hover:text-primary font-bold text-xs flex items-center justify-center gap-1.5"
+                        >
+                          <Copy className="w-3.5 h-3.5" /> Copy Showcase Link
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </motion.div>
           </>
         )}

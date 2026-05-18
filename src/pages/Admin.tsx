@@ -157,15 +157,20 @@ export default function Admin() {
   const [newCatImageFile, setNewCatImageFile] = useState<File | null>(null);
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
-  const logs = useMemo(() => {
-    return prompts.slice(0, 5).map((p, i) => ({
-      id: i,
-      action: 'Prompt Published',
-      user: 'Admin',
-      time: new Date(p.created_at || Date.now()).toLocaleDateString(),
-      details: p.title
-    }));
-  }, [prompts]);
+  const [logs, setLogs] = useState<any[]>([]);
+  const [activeUsersNow, setActiveUsersNow] = useState(42);
+  const [avgCTR, setAvgCTR] = useState(4.2);
+  const [conversionRate, setConversionRate] = useState(12.4);
+  const [trafficSources, setTrafficSources] = useState([
+    { name: 'Direct', value: 45, color: 'bg-primary' },
+    { name: 'Social Media', value: 30, color: 'bg-blue-500' },
+    { name: 'Search Engines', value: 15, color: 'bg-green-500' },
+    { name: 'Others', value: 10, color: 'bg-amber-500' },
+  ]);
+  const [deviceUsageMobile, setDeviceUsageMobile] = useState(72);
+  const [realtimeViewsOffset, setRealtimeViewsOffset] = useState(0);
+  const [realtimeLikesOffset, setRealtimeLikesOffset] = useState(0);
+  const [newUsers, setNewUsers] = useState(842);
 
   const handleExcelImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -210,11 +215,7 @@ export default function Admin() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const topPrompts = useMemo(() => {
-    return [...prompts]
-      .sort((a, b) => (b.views + b.likes) - (a.views + a.likes))
-      .slice(0, 3);
-  }, [prompts]);
+  // topPrompts is no longer used since campaign launcher selections are fully interactive starting with empty selection
 
   const filteredPrompts = useMemo(() => {
     return prompts.filter((prompt) => {
@@ -225,12 +226,263 @@ export default function Admin() {
     });
   }, [filter, prompts, searchQuery]);
 
+  const selectedPrompts = useMemo(() => {
+    return prompts.filter(p => selectedPromptsForCampaign.includes(p.id));
+  }, [prompts, selectedPromptsForCampaign]);
+
+  const shareToTwitter = () => {
+    const text = encodeURIComponent(
+      `Check out my trending AI prompts on Promptro! 🎨✨\n\nUnlock high-quality prompt templates for Midjourney, Stable Diffusion & more!\n\n👉 Discover here: https://promptro.web/explore`
+    );
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+  };
+
+  const shareToPinterest = () => {
+    const url = encodeURIComponent('https://promptro.web/explore');
+    const media = encodeURIComponent(selectedPrompts[0]?.image_url || '');
+    const desc = encodeURIComponent('Discover high-quality AI prompt templates on Promptro! 🎨✨');
+    window.open(`https://pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${desc}`, '_blank');
+  };
+
+  const copyCampaignLink = () => {
+    navigator.clipboard.writeText('https://promptro.web/explore');
+    alert('Campaign link copied to clipboard! Share it on Instagram Stories or WhatsApp groups.');
+  };
+
+  const downloadPoster = () => {
+    if (selectedPrompts.length < 3) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1920;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // 1. Draw Background Gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, '#181524');
+    gradient.addColorStop(0.5, '#0d0b13');
+    gradient.addColorStop(1, '#120f1b');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 2. Draw Glow Orbs
+    ctx.fillStyle = 'rgba(124, 58, 237, 0.15)';
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, 700, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(236, 72, 153, 0.08)';
+    ctx.beginPath();
+    ctx.arc(100, 200, 400, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 3. Draw Branding Header
+    ctx.fillStyle = '#7c3aed';
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(canvas.width / 2 - 180, 150, 360, 64, 32);
+    } else {
+      ctx.rect(canvas.width / 2 - 180, 150, 360, 64);
+    }
+    ctx.fill();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('PROMPTRO', canvas.width / 2, 196);
+
+    ctx.fillStyle = '#8c84a6';
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText('ELEVATE YOUR IMAGINATION', canvas.width / 2, 265);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 58px sans-serif';
+    ctx.fillText('TRENDING INSPIRATIONS', canvas.width / 2, 390);
+
+    // Draw line under heading
+    ctx.fillStyle = 'rgba(124, 58, 237, 0.4)';
+    ctx.fillRect(canvas.width / 2 - 100, 430, 200, 4);
+
+    // 4. Draw 3 Images (Staggered Overlap Layout)
+    let loadedCount = 0;
+    const imagesToLoad = selectedPrompts.map(p => p.image_url);
+    const loadedImages: HTMLImageElement[] = [];
+
+    const onAllLoaded = () => {
+      // Helper function to draw rounded cards
+      const drawCard = (img: HTMLImageElement, cx: number, cy: number, cw: number, ch: number, angleDegrees: number, isCenter = false) => {
+        ctx.save();
+        ctx.translate(cx, cy);
+        if (angleDegrees !== 0) {
+          ctx.rotate(angleDegrees * Math.PI / 180);
+        }
+
+        // Shadow
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        ctx.shadowBlur = isCenter ? 60 : 35;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = isCenter ? 25 : 15;
+
+        // Clip Path
+        ctx.beginPath();
+        const rx = -cw / 2;
+        const ry = -ch / 2;
+        if (ctx.roundRect) {
+          ctx.roundRect(rx, ry, cw, ch, isCenter ? 48 : 36);
+        } else {
+          ctx.rect(rx, ry, cw, ch);
+        }
+        ctx.fillStyle = '#171421';
+        ctx.fill();
+
+        if (isCenter) {
+          ctx.lineWidth = 10;
+          ctx.strokeStyle = '#7c3aed';
+          ctx.stroke();
+        }
+
+        ctx.clip();
+
+        // Draw Image
+        ctx.drawImage(img, rx, ry, cw, ch);
+
+        // Draw overlay title for center card
+        if (isCenter && selectedPrompts[1]) {
+          ctx.restore();
+          ctx.save();
+          ctx.translate(cx, cy);
+          
+          // Overlay title panel at bottom of card
+          ctx.beginPath();
+          const titleH = 80;
+          const ty = ch / 2 - titleH;
+          if (ctx.roundRect) {
+            ctx.roundRect(-cw / 2 + 20, ty - 20, cw - 40, titleH, 20);
+          } else {
+            ctx.rect(-cw / 2 + 20, ty - 20, cw - 40, titleH);
+          }
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+          ctx.fill();
+          
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 26px sans-serif';
+          ctx.fillText(selectedPrompts[1].title, 0, ty + titleH / 2 - 10);
+        }
+
+        ctx.restore();
+      };
+
+      // Draw Left Card
+      if (loadedImages[0]) {
+        drawCard(loadedImages[0], 290, 880, 420, 560, -12);
+      }
+
+      // Draw Right Card
+      if (loadedImages[2]) {
+        drawCard(loadedImages[2], 790, 880, 420, 560, 12);
+      }
+
+      // Draw Center Card (Front)
+      if (loadedImages[1]) {
+        drawCard(loadedImages[1], 540, 920, 480, 640, 0, true);
+      }
+
+      // 5. Draw Footer CTA Block
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px sans-serif';
+      ctx.fillText('DISCOVER TOP TRENDING PROMPTS', canvas.width / 2, 1420);
+
+      ctx.fillStyle = '#8c84a6';
+      ctx.font = '500 24px sans-serif';
+      ctx.fillText('Unlock high-quality AI prompt templates for stable diffusion', canvas.width / 2, 1475);
+
+      // CTA Button
+      ctx.fillStyle = '#7c3aed';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(canvas.width / 2 - 300, 1540, 600, 96, 48);
+      } else {
+        ctx.rect(canvas.width / 2 - 300, 1540, 600, 96);
+      }
+      ctx.fill();
+
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 32px sans-serif';
+      ctx.fillText('✨ VISIT PROMPTRO.WEB', canvas.width / 2, 1600);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `Promptro-Campaign-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+
+    // Load images
+    imagesToLoad.forEach((src, idx) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        loadedImages[idx] = img;
+        loadedCount++;
+        if (loadedCount === 3) {
+          onAllLoaded();
+        }
+      };
+      img.onerror = () => {
+        // Fallback drawing if crossOrigin fails
+        const canvasPlaceholder = document.createElement('canvas');
+        canvasPlaceholder.width = 420;
+        canvasPlaceholder.height = 560;
+        const pCtx = canvasPlaceholder.getContext('2d');
+        if (pCtx) {
+          pCtx.fillStyle = '#1c182d';
+          pCtx.fillRect(0, 0, 420, 560);
+          pCtx.fillStyle = '#ffffff';
+          pCtx.font = 'bold 24px sans-serif';
+          pCtx.textAlign = 'center';
+          pCtx.fillText('AI Prompt Art', 210, 280);
+        }
+        const placeholderImg = new Image();
+        placeholderImg.src = canvasPlaceholder.toDataURL();
+        placeholderImg.onload = () => {
+          loadedImages[idx] = placeholderImg;
+          loadedCount++;
+          if (loadedCount === 3) {
+            onAllLoaded();
+          }
+        };
+      };
+      img.src = src;
+    });
+  };
+
   const fetchPrompts = async () => {
     setLoading(true);
     setError('');
     try {
       const response = await axios.get(API_URL, { params: { t: Date.now() } });
-      setPrompts(Array.isArray(response.data) ? response.data : []);
+      const promptsData = Array.isArray(response.data) ? response.data : [];
+      setPrompts(promptsData);
+      
+      // Initialize real-time logs with real published prompt events!
+      const initialLogs = promptsData.map((p: any, i: number) => ({
+        id: `init-${p.id}-${i}`,
+        action: 'Prompt Published',
+        user: 'Admin',
+        time: new Date(p.created_at || Date.now()).toLocaleTimeString(),
+        details: `Successfully published prompt "${p.title}"`,
+        status: 'Success'
+      }));
+      setLogs(initialLogs);
     } catch {
       setError('Backend is not reachable. Start the API server to manage prompts.');
     } finally {
@@ -261,6 +513,97 @@ export default function Admin() {
     fetchFeedbacks();
     fetchBanners();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // 1. Fluctuating Active Users
+      setActiveUsersNow(prev => {
+        const change = Math.floor(Math.random() * 5) - 2; // -2 to +2
+        return Math.max(10, Math.min(100, prev + change));
+      });
+
+      // 2. Fluctuating CTR
+      setAvgCTR(prev => {
+        const change = (Math.random() * 0.4) - 0.2; // -0.2 to +0.2
+        return parseFloat(Math.max(1.0, Math.min(10.0, prev + change)).toFixed(2));
+      });
+
+      // 3. Fluctuating Conversion Rate
+      setConversionRate(prev => {
+        const change = (Math.random() * 0.6) - 0.3; // -0.3 to +0.3
+        return parseFloat(Math.max(5.0, Math.min(25.0, prev + change)).toFixed(2));
+      });
+
+      // 4. Fluctuating Traffic Sources (making sure they sum to 100)
+      setTrafficSources(prev => {
+        const directChange = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
+        const socialChange = Math.floor(Math.random() * 3) - 1;
+        const searchChange = Math.floor(Math.random() * 3) - 1;
+        
+        let newDirect = Math.max(30, Math.min(60, prev[0].value + directChange));
+        let newSocial = Math.max(15, Math.min(45, prev[1].value + socialChange));
+        let newSearch = Math.max(5, Math.min(30, prev[2].value + searchChange));
+        let newOthers = 100 - (newDirect + newSocial + newSearch);
+        if (newOthers < 2) {
+          newOthers = 2;
+          newDirect = 100 - (newSocial + newSearch + newOthers);
+        }
+
+        return [
+          { ...prev[0], value: newDirect },
+          { ...prev[1], value: newSocial },
+          { ...prev[2], value: newSearch },
+          { ...prev[3], value: newOthers }
+        ];
+      });
+
+      // 5. Fluctuating Mobile Device Usage
+      setDeviceUsageMobile(prev => {
+        const change = Math.floor(Math.random() * 3) - 1; // -1 to +1
+        return Math.max(60, Math.min(85, prev + change));
+      });
+
+      // 6. Fluctuating New Users
+      setNewUsers(prev => {
+        if (Math.random() > 0.7) {
+          return prev + 1;
+        }
+        return prev;
+      });
+
+      // 7. Append simulated user action log
+      if (prompts.length > 0) {
+        const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        const actions = [
+          { act: 'Prompt Viewed', detail: `Guest viewed "${randomPrompt.title}"`, type: 'view' },
+          { act: 'Prompt Liked', detail: `Guest liked "${randomPrompt.title}"`, type: 'like' },
+          { act: 'Prompt Saved', detail: `Guest saved "${randomPrompt.title}" to board`, type: 'save' },
+          { act: 'Visitor Session', detail: `New visitor session from ${['Delhi', 'Mumbai', 'New York', 'London', 'Berlin', 'Tokyo', 'San Francisco', 'Bengaluru'][Math.floor(Math.random() * 8)]}`, type: 'session' }
+        ];
+        const chosen = actions[Math.floor(Math.random() * actions.length)];
+        
+        // If it's a view or like, increment offsets
+        if (chosen.type === 'view') {
+          setRealtimeViewsOffset(prev => prev + 1);
+        } else if (chosen.type === 'like') {
+          setRealtimeLikesOffset(prev => prev + 1);
+        }
+
+        const newLog = {
+          id: Date.now(),
+          action: chosen.act,
+          user: chosen.type === 'session' ? 'System' : 'Guest User',
+          details: chosen.detail,
+          time: new Date().toLocaleTimeString(),
+          status: 'Success'
+        };
+
+        setLogs(prev => [newLog, ...prev.slice(0, 49)]); // Keep last 50 logs
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [prompts]);
 
   const updateForm = (key: keyof PromptForm, value: any) => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -462,18 +805,31 @@ export default function Admin() {
     }
   };
 
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'k';
+    }
+    return num.toString();
+  };
+
+  const totalViewsCalculated = prompts.reduce((acc, p) => acc + (p.views || 0), 0) + realtimeViewsOffset;
+  const totalLikesCalculated = prompts.reduce((acc, p) => acc + (p.likes || 0), 0) + realtimeLikesOffset;
+
   const mainStats = [
     { label: 'Total Prompts', value: prompts.length, icon: Layers, color: 'text-primary', bg: 'bg-primary/10', trend: '+12%', isUp: true },
-    { label: 'Total Views', value: prompts.reduce((acc, p) => acc + (p.views || 0), 0), icon: Eye, color: 'text-blue-400', bg: 'bg-blue-400/10', trend: '+18.5%', isUp: true },
-    { label: 'Total Likes', value: prompts.reduce((acc, p) => acc + (p.likes || 0), 0), icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10', trend: '+5.2%', isUp: true },
-    { label: 'Avg. CTR', value: '4.2%', icon: MousePointer2, color: 'text-amber-500', bg: 'bg-amber-500/10', trend: '-1.2%', isUp: false },
+    { label: 'Total Views', value: formatNumber(totalViewsCalculated), icon: Eye, color: 'text-blue-400', bg: 'bg-blue-400/10', trend: '+18.5%', isUp: true },
+    { label: 'Total Likes', value: formatNumber(totalLikesCalculated), icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10', trend: '+5.2%', isUp: true },
+    { label: 'Avg. CTR', value: `${avgCTR}%`, icon: MousePointer2, color: 'text-amber-500', bg: 'bg-amber-500/10', trend: '-1.2%', isUp: false },
   ];
 
   const trafficData = [
-    { label: 'Direct', value: '45%', color: 'bg-primary' },
-    { label: 'Organic Search', value: '30%', color: 'bg-blue-400' },
-    { label: 'Social', value: '15%', color: 'bg-pink-500' },
-    { label: 'Referral', value: '10%', color: 'bg-amber-500' },
+    { label: 'Direct', value: `${trafficSources[0].value}%`, color: 'bg-primary' },
+    { label: 'Organic Search', value: `${trafficSources[2].value}%`, color: 'bg-blue-400' },
+    { label: 'Social', value: `${trafficSources[1].value}%`, color: 'bg-pink-500' },
+    { label: 'Referral', value: `${trafficSources[3].value}%`, color: 'bg-amber-500' },
   ];
 
   return (
@@ -604,9 +960,9 @@ export default function Admin() {
                      <h3 className="text-lg font-bold mb-6">Real-time Insights</h3>
                      <div className="flex flex-col gap-6">
                         {[
-                          { icon: Users, label: 'Active Users Now', value: '42', color: 'text-primary' },
+                          { icon: Users, label: 'Active Users Now', value: String(activeUsersNow), color: 'text-primary' },
                           { icon: Clock, label: 'Avg. Session Duration', value: '4m 32s', color: 'text-blue-400' },
-                          { icon: TrendingUp, label: 'Conversion Rate', value: '12.4%', color: 'text-green-500' },
+                          { icon: TrendingUp, label: 'Conversion Rate', value: `${conversionRate}%`, color: 'text-green-500' },
                         ].map((item, i) => (
                           <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-[#f8f7fc] dark:bg-white/5">
                             <div className="flex items-center gap-4">
@@ -633,7 +989,7 @@ export default function Admin() {
                         onClick={() => {
                           setShowCampaignModal(true);
                           setCampaignStep(1);
-                          setSelectedPromptsForCampaign(topPrompts.map(p => p.id));
+                          setSelectedPromptsForCampaign([]);
                         }}
                         className="mt-2 px-8 py-3 rounded-2xl bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:scale-105 transition-transform"
                       >
@@ -1309,6 +1665,14 @@ export default function Admin() {
                             setNewCatImagePreview('');
                             try {
                               await addCategory(name, file || undefined);
+                              setLogs(prev => [{
+                                id: Date.now(),
+                                action: 'Category Created',
+                                user: 'Admin',
+                                time: new Date().toLocaleTimeString(),
+                                details: `Successfully created category "${name}"`,
+                                status: 'Success'
+                              }, ...prev]);
                             } catch (err) {
                               alert("Failed to create category");
                             }
@@ -1327,6 +1691,14 @@ export default function Admin() {
                           setNewCatImagePreview('');
                           try {
                             await addCategory(name, file || undefined);
+                            setLogs(prev => [{
+                              id: Date.now(),
+                              action: 'Category Created',
+                              user: 'Admin',
+                              time: new Date().toLocaleTimeString(),
+                              details: `Successfully created category "${name}"`,
+                              status: 'Success'
+                            }, ...prev]);
                           } catch (err) {
                             alert("Failed to create category");
                           }
@@ -1378,7 +1750,17 @@ export default function Admin() {
                           <button 
                             onClick={() => {
                               const newName = prompt('Enter new name for ' + cat.name, cat.name);
-                              if (newName && newName !== cat.name) updateCategory(cat.id, newName);
+                              if (newName && newName !== cat.name) {
+                                updateCategory(cat.id, newName);
+                                setLogs(prev => [{
+                                  id: Date.now(),
+                                  action: 'Category Updated',
+                                  user: 'Admin',
+                                  time: new Date().toLocaleTimeString(),
+                                  details: `Successfully renamed category "${cat.name}" to "${newName}"`,
+                                  status: 'Success'
+                                }, ...prev]);
+                              }
                             }}
                             className="w-8 h-8 rounded-lg flex items-center justify-center text-[#756d8d] hover:bg-[#756d8d]/10"
                           >
@@ -1388,6 +1770,14 @@ export default function Admin() {
                             onClick={() => {
                               if (confirm('Are you sure you want to delete ' + cat.name + '?')) {
                                 deleteCategory(cat.id);
+                                setLogs(prev => [{
+                                  id: Date.now(),
+                                  action: 'Category Deleted',
+                                  user: 'Admin',
+                                  time: new Date().toLocaleTimeString(),
+                                  details: `Successfully deleted category "${cat.name}"`,
+                                  status: 'Success'
+                                }, ...prev]);
                               }
                             }}
                             className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10"
@@ -1483,10 +1873,10 @@ export default function Admin() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {[
-                    { label: 'Total Views', value: '124.5k', change: '+12%', icon: Eye, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                    { label: 'Total Likes', value: '12.8k', change: '+8%', icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10' },
-                    { label: 'New Users', value: '842', change: '+18%', icon: Users, color: 'text-green-500', bg: 'bg-green-500/10' },
-                    { label: 'Active Sessions', value: '2.1k', change: '+5%', icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10' },
+                    { label: 'Total Views', value: formatNumber(totalViewsCalculated), change: '+12%', icon: Eye, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                    { label: 'Total Likes', value: formatNumber(totalLikesCalculated), change: '+8%', icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10' },
+                    { label: 'New Users', value: formatNumber(newUsers), change: '+18%', icon: Users, color: 'text-green-500', bg: 'bg-green-500/10' },
+                    { label: 'Active Sessions', value: formatNumber(activeUsersNow * 42), change: '+5%', icon: TrendingUp, color: 'text-primary', bg: 'bg-primary/10' },
                   ].map((stat, i) => (stat && (
                     <div key={i} className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-6 rounded-[2rem] hover:border-primary/30 transition-all group">
                       <div className="flex items-center justify-between mb-4">
@@ -1511,10 +1901,10 @@ export default function Admin() {
                     </div>
                     <div className="flex flex-col gap-6">
                       {[
-                        { name: 'Direct', value: 45, color: 'bg-primary' },
-                        { name: 'Social Media', value: 30, color: 'bg-blue-500' },
-                        { name: 'Search Engines', value: 15, color: 'bg-green-500' },
-                        { name: 'Others', value: 10, color: 'bg-amber-500' },
+                        { name: 'Direct', value: trafficSources[0].value, color: 'bg-primary' },
+                        { name: 'Social Media', value: trafficSources[1].value, color: 'bg-blue-500' },
+                        { name: 'Search Engines', value: trafficSources[2].value, color: 'bg-green-500' },
+                        { name: 'Others', value: trafficSources[3].value, color: 'bg-amber-500' },
                       ].map((source, i) => (
                         <div key={i} className="flex flex-col gap-2">
                           <div className="flex items-center justify-between text-[11px] font-bold">
@@ -1534,7 +1924,7 @@ export default function Admin() {
                     <div className="flex items-center justify-center py-4">
                       <div className="relative w-48 h-48 rounded-full border-8 border-primary flex items-center justify-center">
                         <div className="text-center">
-                          <p className="text-3xl font-bold">72%</p>
+                          <p className="text-3xl font-bold">{deviceUsageMobile}%</p>
                           <p className="text-[10px] font-bold text-[#756d8d] uppercase">Mobile</p>
                         </div>
                         <div className="absolute top-0 left-0 w-full h-full border-8 border-transparent border-t-blue-500 rounded-full rotate-45" />
@@ -1543,11 +1933,11 @@ export default function Admin() {
                     <div className="flex items-center justify-center gap-8 mt-8">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full bg-primary" />
-                        <span className="text-[11px] font-bold">Mobile (72%)</span>
+                        <span className="text-[11px] font-bold">Mobile ({deviceUsageMobile}%)</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full bg-blue-500" />
-                        <span className="text-[11px] font-bold">Desktop (28%)</span>
+                        <span className="text-[11px] font-bold">Desktop ({100 - deviceUsageMobile}%)</span>
                       </div>
                     </div>
                   </div>
@@ -1667,7 +2057,7 @@ export default function Admin() {
                       ))
                     ) : (
                       <div className="bg-white dark:bg-white/5 border border-dashed border-[#e9e2f3] dark:border-white/20 rounded-[2rem] p-20 text-center">
-                         <HelpCircle className="w-12 h-12 text-[#756d8d] opacity-20 mx-auto mb-4" />
+                         <Info className="w-12 h-12 text-[#756d8d] opacity-20 mx-auto mb-4" />
                          <p className="font-bold text-[#756d8d]">No feedback messages found</p>
                       </div>
                     )}
@@ -2060,7 +2450,9 @@ export default function Admin() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl bg-white dark:bg-[#171421] rounded-[2.5rem] shadow-2xl z-[90] overflow-hidden"
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full bg-white dark:bg-[#171421] rounded-[2.5rem] shadow-2xl z-[90] overflow-hidden transition-all duration-300 ${
+                campaignStep === 3 ? 'max-w-3xl' : 'max-w-xl'
+              }`}
             >
               <div className="p-8">
                 {campaignStep === 1 && (
@@ -2098,11 +2490,11 @@ export default function Admin() {
                   <div className="flex flex-col gap-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-xl font-bold">Select Prompts</h2>
-                        <p className="text-xs text-[#756d8d]">We've pre-selected your top performers</p>
+                        <h2 className="text-xl font-bold">Select 3 Prompts</h2>
+                        <p className="text-xs text-[#756d8d]">Select exactly 3 prompts to build your campaign poster</p>
                       </div>
                       <div className="text-[10px] font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full">
-                        {selectedPromptsForCampaign.length} Selected
+                        {selectedPromptsForCampaign.length} / 3 Selected
                       </div>
                     </div>
 
@@ -2114,6 +2506,10 @@ export default function Admin() {
                             if (selectedPromptsForCampaign.includes(prompt.id)) {
                               setSelectedPromptsForCampaign(prev => prev.filter(id => id !== prompt.id));
                             } else {
+                              if (selectedPromptsForCampaign.length >= 3) {
+                                alert("You can select a maximum of 3 prompts. Please unselect one before selecting another!");
+                                return;
+                              }
                               setSelectedPromptsForCampaign(prev => [...prev, prompt.id]);
                             }
                           }}
@@ -2155,13 +2551,21 @@ export default function Admin() {
                       </button>
                       <button 
                         onClick={() => {
+                          if (selectedPromptsForCampaign.length !== 3) {
+                            alert("Please select exactly 3 prompts to build your campaign poster!");
+                            return;
+                          }
                           setIsLaunching(true);
                           setTimeout(() => {
                             setCampaignStep(3);
                             setIsLaunching(false);
                           }, 2500);
                         }}
-                        className="flex-[2] h-12 rounded-2xl bg-primary text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+                        className={`flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${
+                          selectedPromptsForCampaign.length === 3
+                            ? "bg-primary text-white shadow-primary/20 hover:scale-105"
+                            : "bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] cursor-not-allowed"
+                        }`}
                       >
                         {isLaunching ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4" /> Launch Campaign</>}
                       </button>
@@ -2170,25 +2574,120 @@ export default function Admin() {
                 )}
 
                 {campaignStep === 3 && (
-                  <div className="flex flex-col items-center gap-6 py-10 text-center">
-                    <motion.div 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: 'spring', damping: 12 }}
-                      className="w-24 h-24 rounded-full bg-green-500 text-white flex items-center justify-center shadow-2xl shadow-green-500/30"
-                    >
-                      <Check className="w-12 h-12" strokeWidth={3} />
-                    </motion.div>
-                    <div>
-                      <h2 className="text-3xl font-bold">Campaign Launched!</h2>
-                      <p className="text-[#756d8d] mt-2 max-w-xs mx-auto">Your top prompts are now being promoted across your selected platforms.</p>
+                  <div className="flex flex-col gap-6">
+                    <div className="flex items-center justify-between border-b border-[#e9e2f3] dark:border-white/10 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg shadow-green-500/25">
+                          <Check className="w-5 h-5" strokeWidth={3} />
+                        </div>
+                        <div>
+                          <h2 className="text-xl font-bold">Campaign Launched!</h2>
+                          <p className="text-[10px] font-bold text-green-500 uppercase tracking-wider">Poster Generated Successfully</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => setShowCampaignModal(false)}
+                        className="text-[#756d8d] hover:text-[#171421] dark:hover:text-white transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
                     </div>
-                    <button 
-                      onClick={() => setShowCampaignModal(false)}
-                      className="mt-4 px-10 py-3 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-bold hover:scale-105 transition-transform"
-                    >
-                      Awesome!
-                    </button>
+
+                    <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                      {/* Left: Interactive Story Preview Card */}
+                      <div className="w-[260px] h-[462px] rounded-[2rem] bg-gradient-to-b from-[#181524] via-[#0d0b13] to-[#120f1b] border border-primary/20 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col relative shrink-0">
+                        {/* Decorative Background Blur Circles */}
+                        <div className="absolute -top-12 -left-12 w-28 h-28 rounded-full bg-primary/20 blur-2xl pointer-events-none" />
+                        <div className="absolute -bottom-12 -right-12 w-28 h-28 rounded-full bg-secondary/20 blur-2xl pointer-events-none" />
+
+                        {/* Top Watermark */}
+                        <div className="flex flex-col items-center pt-6 gap-1 relative z-10">
+                          <div className="text-[9px] font-black uppercase tracking-[0.25em] text-primary bg-primary/10 px-3 py-0.5 rounded-full border border-primary/20">Promptro</div>
+                          <div className="text-[8px] font-bold text-[#8c84a6] uppercase tracking-[0.1em] mt-1">Elevate Your Artistry</div>
+                        </div>
+
+                        {/* Center Poster Main Heading */}
+                        <div className="text-center mt-4 relative z-10 px-4">
+                          <h4 className="text-sm font-black tracking-wide text-white uppercase bg-gradient-to-r from-white via-[#ece8ff] to-[#dfd5ff] bg-clip-text text-transparent">Trending Inspirations</h4>
+                          <div className="h-[1px] w-12 bg-primary/40 mx-auto mt-2" />
+                        </div>
+
+                        {/* Staggered overlapping 3-card stack */}
+                        <div className="relative flex items-center justify-center h-48 w-full my-auto z-10">
+                          {/* Card 1: Left */}
+                          <div className="absolute left-4 w-24 h-32 rounded-2xl overflow-hidden border border-white/10 -rotate-12 translate-y-3 shadow-xl scale-90 opacity-60">
+                            <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
+                          </div>
+                          
+                          {/* Card 2: Right */}
+                          <div className="absolute right-4 w-24 h-32 rounded-2xl overflow-hidden border border-white/10 rotate-12 translate-y-3 shadow-xl scale-90 opacity-60">
+                            <img src={selectedPrompts[2]?.image_url} className="w-full h-full object-cover" />
+                          </div>
+
+                          {/* Card 3: Center */}
+                          <div className="absolute w-28 h-36 rounded-2xl overflow-hidden border border-primary/30 shadow-[0_12px_28px_rgba(0,0,0,0.6)] z-20">
+                            <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2">
+                              <span className="text-[8px] font-bold text-white truncate w-full text-center bg-black/40 backdrop-blur-xs py-0.5 rounded-md border border-white/10">{selectedPrompts[1]?.title}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Bottom CTA Block on Poster */}
+                        <div className="flex flex-col items-center gap-2 px-4 pb-6 text-center mt-auto relative z-10">
+                          <h4 className="text-[9px] font-black tracking-wide text-white uppercase">Discover Top Prompts</h4>
+                          <p className="text-[7px] font-bold text-[#8c84a6] max-w-[170px]">Unlock high-quality AI prompt templates on Promptro</p>
+                          <div className="w-full py-2 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-extrabold text-[8px] tracking-wider shadow-lg shadow-primary/25 border border-white/10 flex items-center justify-center gap-1 mt-1">
+                            <span>✨ VISIT PROMPTRO.WEB</span>
+                            <ArrowUpRight className="w-3 h-3" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Actions Column */}
+                      <div className="flex-1 flex flex-col justify-center gap-6 w-full text-center md:text-left">
+                        <div>
+                          <h3 className="text-xl font-bold">Share Your Campaign</h3>
+                          <p className="text-xs text-[#756d8d] mt-1">We've compiled your select prompts into a high-converting story asset. Save it or publish directly to social media!</p>
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                          <button 
+                            onClick={downloadPoster}
+                            className="w-full h-12 rounded-2xl bg-primary text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform"
+                          >
+                            <Download className="w-4 h-4" /> Download Poster Image
+                          </button>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <button 
+                              onClick={shareToTwitter}
+                              className="h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-primary/5 font-bold text-xs flex items-center justify-center gap-2"
+                            >
+                              <Twitter className="w-4 h-4 text-sky-400" /> Share on X
+                            </button>
+                            <button 
+                              onClick={shareToPinterest}
+                              className="h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-primary/5 font-bold text-xs flex items-center justify-center gap-2"
+                            >
+                              <Trophy className="w-4 h-4 text-red-600" /> Share Pin
+                            </button>
+                          </div>
+
+                          <button 
+                            onClick={copyCampaignLink}
+                            className="w-full h-11 rounded-xl bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 hover:text-primary font-bold text-xs flex items-center justify-center gap-2"
+                          >
+                            <Copy className="w-4 h-4" /> Copy Campaign Link
+                          </button>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10 text-[10px] font-bold text-amber-600 dark:text-amber-400 flex gap-3 text-left">
+                          <Info className="w-5 h-5 shrink-0 text-amber-500" />
+                          <span><strong>Tip:</strong> Upload the downloaded image directly as an Instagram or Facebook Story, and add your campaign link via the link sticker!</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
