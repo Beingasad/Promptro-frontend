@@ -172,6 +172,12 @@ export default function Admin() {
   const [realtimeLikesOffset, setRealtimeLikesOffset] = useState(0);
   const [newUsers, setNewUsers] = useState(842);
 
+  // States for manual notification management
+  const [adminNotifications, setAdminNotifications] = useState<any[]>([]);
+  const [newNotifText, setNewNotifText] = useState('');
+  const [newNotifType, setNewNotifType] = useState('info');
+  const [newNotifLink, setNewNotifLink] = useState('/explore');
+
   const handleExcelImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -508,10 +514,69 @@ export default function Admin() {
     }
   };
 
+  const fetchAdminNotifications = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/notifications-admin`);
+      setAdminNotifications(response.data);
+    } catch {
+      console.error('Failed to fetch admin notifications');
+    }
+  };
+
+  const handleSaveNotification = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!newNotifText) return;
+    setSaving(true);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/notifications`, {
+        text: newNotifText,
+        type: newNotifType,
+        link: newNotifLink
+      });
+      setAdminNotifications(prev => [response.data, ...prev]);
+      setNewNotifText('');
+      setMessage('Notification pushed successfully!');
+      setTimeout(() => setMessage(''), 3000);
+      
+      setLogs(prev => [{
+        id: Date.now(),
+        action: 'Notification Pushed',
+        user: 'Admin',
+        time: new Date().toLocaleTimeString(),
+        details: `Pushed manual notification: "${newNotifText}"`,
+        status: 'Success'
+      }, ...prev]);
+    } catch {
+      alert('Failed to push notification');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteNotification = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this notification?')) return;
+    try {
+      await axios.delete(`${API_BASE_URL}/api/notifications/${id}`);
+      setAdminNotifications(prev => prev.filter(n => n.id !== id));
+      
+      setLogs(prev => [{
+        id: Date.now(),
+        action: 'Notification Deleted',
+        user: 'Admin',
+        time: new Date().toLocaleTimeString(),
+        details: `Deleted notification ID: ${id}`,
+        status: 'Success'
+      }, ...prev]);
+    } catch {
+      alert('Failed to delete notification');
+    }
+  };
+
   useEffect(() => {
     fetchPrompts();
     fetchFeedbacks();
     fetchBanners();
+    fetchAdminNotifications();
   }, []);
 
   useEffect(() => {
@@ -1013,7 +1078,7 @@ export default function Admin() {
                       setEditingBanner(null);
                       setBannerImageFile(null);
                       setBannerImagePreview('');
-                      document.getElementById('banner-modal')?.showModal();
+                      (document.getElementById('banner-modal') as HTMLDialogElement)?.showModal();
                     }}
                     className="px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-transform"
                   >
@@ -1064,7 +1129,7 @@ export default function Admin() {
                                 is_active: banner.is_active
                               });
                               setBannerImagePreview(banner.image_url || '');
-                              document.getElementById('banner-modal')?.showModal();
+                              (document.getElementById('banner-modal') as HTMLDialogElement)?.showModal();
                             }}
                             className="w-10 h-10 rounded-full border border-[#e9e2f3] flex items-center justify-center hover:bg-[#f8f7fc] text-[#756d8d]"
                           >
@@ -1080,6 +1145,138 @@ export default function Admin() {
                       </div>
                     ))
                   )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'Notifications' && (
+              <div className="flex flex-col gap-8">
+                <div>
+                  <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">Push Notifications</h1>
+                  <p className="text-[13px] text-[#756d8d] dark:text-[#afa6c8] font-medium font-bold">
+                    Pushed notifications are saved persistently and synced globally to all active and new users.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-[450px_1fr] gap-8">
+                  {/* Left Column: Form to push new notification */}
+                  <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2.5rem] p-8 shadow-sm h-fit">
+                    <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-primary">
+                      <Send className="w-5 h-5" /> Push New Alert
+                    </h3>
+
+                    <form onSubmit={handleSaveNotification} className="flex flex-col gap-5">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs font-bold text-[#756d8d] uppercase tracking-wider">
+                          Notification Text
+                        </label>
+                        <textarea
+                          required
+                          value={newNotifText}
+                          onChange={e => setNewNotifText(e.target.value)}
+                          placeholder="e.g. ✨ Version 2.0 is live! Explore the all-new Glassmorphism editor."
+                          rows={4}
+                          className="w-full glass-input p-4 text-xs font-medium resize-none focus:ring-primary/20"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs font-bold text-[#756d8d] uppercase tracking-wider">
+                            Badge/Icon Type
+                          </label>
+                          <select
+                            value={newNotifType}
+                            onChange={e => setNewNotifType(e.target.value)}
+                            className="w-full glass-input text-xs"
+                          >
+                            <option value="info">ℹ️ System Info</option>
+                            <option value="new-feature">✨ New Feature</option>
+                            <option value="trending">🔥 Trending Now</option>
+                            <option value="update">🚀 App Update</option>
+                          </select>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label className="text-xs font-bold text-[#756d8d] uppercase tracking-wider">
+                            Destination Link
+                          </label>
+                          <input
+                            required
+                            type="text"
+                            value={newNotifLink}
+                            onChange={e => setNewNotifLink(e.target.value)}
+                            placeholder="e.g. /saved"
+                            className="w-full glass-input text-xs"
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={saving}
+                        className="mt-2 w-full h-12 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-xs shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-transform flex items-center justify-center gap-2"
+                      >
+                        {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                        Broadcast to Everyone
+                      </button>
+                    </form>
+                  </div>
+
+                  {/* Right Column: List of pushed notifications */}
+                  <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2.5rem] p-8 shadow-sm">
+                    <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[#756d8d]" /> Broadcast Logs
+                    </h3>
+
+                    <div className="flex flex-col gap-4 max-h-[600px] overflow-y-auto pr-2 hide-scrollbar">
+                      {adminNotifications.length === 0 ? (
+                        <div className="bg-[#f8f7fc] dark:bg-white/5 border border-dashed border-[#e9e2f3] dark:border-white/20 rounded-[2rem] p-20 text-center">
+                          <AlertCircle className="w-12 h-12 text-[#756d8d] opacity-20 mx-auto mb-4" />
+                          <p className="font-bold text-[#756d8d]">No manual notifications currently broadcasted.</p>
+                          <p className="text-xs text-[#756d8d] mt-1 font-medium">Automatic system-level events are still running.</p>
+                        </div>
+                      ) : (
+                        adminNotifications.map((notif) => (
+                          <div 
+                            key={notif.id}
+                            className="p-5 rounded-2xl border border-[#e9e2f3] dark:border-white/10 bg-[#f8f7fc] dark:bg-white/5 flex items-center justify-between gap-6 hover:border-primary/20 transition-all duration-300 group"
+                          >
+                            <div className="flex items-center gap-4 flex-1">
+                              <div className={cn(
+                                "w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 shadow-sm",
+                                notif.type === 'new-feature' ? "bg-purple-500/10 text-purple-500" :
+                                notif.type === 'trending' ? "bg-amber-500/10 text-amber-500" :
+                                notif.type === 'update' ? "bg-green-500/10 text-green-500" :
+                                "bg-blue-500/10 text-blue-500"
+                              )}>
+                                {notif.type === 'new-feature' ? '✨' :
+                                 notif.type === 'trending' ? '🔥' :
+                                 notif.type === 'update' ? '🚀' : 'ℹ️'}
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-xs font-bold text-[#171421] dark:text-white leading-relaxed">
+                                  {notif.text}
+                                </p>
+                                <div className="flex items-center gap-3 mt-1 text-[10px] font-bold text-[#756d8d] uppercase tracking-wider">
+                                  <span>Link: {notif.link}</span>
+                                  <span>•</span>
+                                  <span>{new Date(notif.created_at).toLocaleString()}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <button
+                              onClick={() => handleDeleteNotification(notif.id)}
+                              className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -2227,7 +2424,7 @@ export default function Admin() {
             )}
 
             {/* Default fallback for other tabs */}
-            {!['Dashboard', 'Upload Prompt', 'Manage Prompts', 'Categories', 'Featured Prompts', 'Analytics', 'Settings', 'System Logs'].includes(activeTab) && (
+            {!['Dashboard', 'Upload Prompt', 'Manage Prompts', 'Categories', 'Featured Prompts', 'Analytics', 'Settings', 'System Logs', 'Notifications'].includes(activeTab) && (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                  <div className="w-20 h-20 rounded-3xl bg-[#f8f7fc] dark:bg-white/5 flex items-center justify-center text-[#756d8d]">
                     <Layers className="w-10 h-10 opacity-20" />

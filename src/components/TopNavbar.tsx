@@ -73,27 +73,116 @@ export default function TopNavbar() {
   const premiumLabel = isLoggedIn ? 'Signed In' : 'Free Guest';
 
   // Showcase Creator Modal States
-  const [showShowcaseModal, setShowShowcaseModal] = useState(false);
-  const [showcaseStep, setShowcaseStep] = useState(1);
-  const [selectedPromptsForShowcase, setSelectedPromptsForShowcase] = useState<string[]>([]);
+  const [showShowcaseModal, setShowShowcaseModal] = useState<boolean>(() => {
+    return localStorage.getItem('showcase_modal_open') === 'true';
+  });
+  const [showcaseStep, setShowcaseStep] = useState<number>(() => {
+    return parseInt(localStorage.getItem('showcase_step') || '1');
+  });
+  const [selectedPromptsForShowcase, setSelectedPromptsForShowcase] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('showcase_selected_prompts') || '[]');
+    } catch {
+      return [];
+    }
+  });
   const [allPromptsForShowcase, setAllPromptsForShowcase] = useState<Prompt[]>([]);
   const [isGeneratingShowcase, setIsGeneratingShowcase] = useState(false);
+
+  // Sync Showcase State to localStorage
+  useEffect(() => {
+    localStorage.setItem('showcase_modal_open', showShowcaseModal ? 'true' : 'false');
+  }, [showShowcaseModal]);
+
+  useEffect(() => {
+    localStorage.setItem('showcase_step', showcaseStep.toString());
+  }, [showcaseStep]);
+
+  useEffect(() => {
+    localStorage.setItem('showcase_selected_prompts', JSON.stringify(selectedPromptsForShowcase));
+  }, [selectedPromptsForShowcase]);
+
+  // Load prompts automatically if restored on refresh
+  useEffect(() => {
+    if (showShowcaseModal && allPromptsForShowcase.length === 0) {
+      const loadPrompts = async () => {
+        const saved = readLocalActivity().savedPrompts || [];
+        let list = [...saved];
+        try {
+          const res = await axios.get(`${API_BASE_URL}/api/prompts`);
+          const globalPrompts = Array.isArray(res.data) ? res.data : [];
+          const seen = new Set(saved.map(p => p.id));
+          globalPrompts.forEach((p: Prompt) => {
+            if (!seen.has(p.id)) {
+              list.push(p);
+            }
+          });
+        } catch (e) {
+          console.error(e);
+        }
+        setAllPromptsForShowcase(list);
+      };
+      loadPrompts();
+    }
+  }, [showShowcaseModal, allPromptsForShowcase.length]);
 
   const selectedPrompts = useMemo(() => {
     return allPromptsForShowcase.filter(p => selectedPromptsForShowcase.includes(p.id));
   }, [allPromptsForShowcase, selectedPromptsForShowcase]);
 
-  const shareShowcaseToInstagram = () => {
-    navigator.clipboard.writeText('https://promptro.in/explore');
-    alert('Explore link copied! Opening Instagram so you can easily post your downloaded poster on your Story and paste the link!');
-    window.open('https://instagram.com', '_blank');
+  const shareShowcaseToInstagram = async () => {
+    try {
+      const canvas = await renderShowcaseCanvas();
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          alert("Could not generate poster file.");
+          return;
+        }
+        const file = new File([blob], `Promptro-Showcase-${Date.now()}.png`, { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'My Promptro Collection',
+            text: 'Check out my favorite AI prompts on Promptro.in! 🎨✨',
+          });
+        } else {
+          navigator.clipboard.writeText('https://promptro.in/explore');
+          alert('Explore link copied! Opening Instagram so you can easily post your downloaded poster on your Story and paste the link!');
+          window.open('https://instagram.com', '_blank');
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error("Error sharing to Instagram:", error);
+      alert("Could not open Instagram sharing. Please download and share manually!");
+    }
   };
 
-  const shareShowcaseToWhatsApp = () => {
-    const text = encodeURIComponent(
-      `Check out my favorite AI prompts on Promptro! 🎨✨\n\nCreate your own stunning showcase story poster and share your prompt art!\n\n👉 Discover here: https://promptro.in/explore`
-    );
-    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  const shareShowcaseToWhatsApp = async () => {
+    try {
+      const canvas = await renderShowcaseCanvas();
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          alert("Could not generate poster file.");
+          return;
+        }
+        const file = new File([blob], `Promptro-Showcase-${Date.now()}.png`, { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'My Promptro Collection',
+            text: 'Check out my favorite AI prompts on Promptro.in! 🎨✨',
+          });
+        } else {
+          const text = encodeURIComponent(
+            `Check out my favorite AI prompts on Promptro! 🎨✨\n\nCreate your own stunning showcase story poster and share your prompt art!\n\n👉 Discover here: https://promptro.in/explore`
+          );
+          window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error("Error sharing to WhatsApp:", error);
+      alert("Could not open WhatsApp sharing. Please download and share manually!");
+    }
   };
 
   const copyShowcaseLink = () => {
@@ -490,12 +579,12 @@ export default function TopNavbar() {
 
   useEffect(() => {
     setAppearanceMode(readThemeMode());
-    setHasUnreadNotifications(localStorage.getItem('promptro:notifications-read') !== 'true');
 
     // Fetch dynamic notifications
     axios.get(`${API_BASE_URL}/api/notifications`).then(res => {
       setNotifications(res.data);
-      if (res.data.length > 0 && localStorage.getItem('promptro:notifications-read') !== 'true') {
+      const lastReadCount = parseInt(localStorage.getItem('promptro:notifications-read-count') || '0');
+      if (res.data.length > lastReadCount) {
         setHasUnreadNotifications(true);
       }
     }).catch(err => console.error('Error fetching notifications:', err));
@@ -798,7 +887,7 @@ export default function TopNavbar() {
             onClick={() => {
               setNotificationsOpen((open) => !open);
               setHasUnreadNotifications(false);
-              localStorage.setItem('promptro:notifications-read', 'true');
+              localStorage.setItem('promptro:notifications-read-count', notifications.length.toString());
               setMenuOpen(false);
               setProfileOpen(false);
             }}
@@ -991,7 +1080,7 @@ export default function TopNavbar() {
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="fixed right-[3.6rem] top-[3.65rem] z-[25] w-[min(20rem,calc(100vw-1.5rem))] rounded-[1.45rem] border border-white/80 bg-white/88 p-3 shadow-[0_22px_54px_rgba(72,56,118,0.18)] backdrop-blur-2xl md:right-20 md:top-[5.1rem]"
+              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[25] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] border border-[#e9e2f3] dark:border-white/10 bg-white/95 dark:bg-[#171421]/95 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
             >
               <div className="mb-2 flex items-center justify-between gap-3">
                 <button
@@ -1002,7 +1091,7 @@ export default function TopNavbar() {
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </button>
-                <h3 className="flex-1 text-sm font-bold text-[#171421] uppercase tracking-wider">Notifications</h3>
+                <h3 className="flex-1 text-sm font-bold text-[#171421] dark:text-white uppercase tracking-wider">Notifications</h3>
                 <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">{notifications.length} NEW</span>
               </div>
               <div className="flex flex-col gap-1">

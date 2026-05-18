@@ -1,13 +1,14 @@
 import { LayoutDashboard, ImagePlus, Grid, Tag, Star, BarChart3, Settings, LogOut, Upload, Layers, Eye, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
-export type AdminTab = 'Dashboard' | 'Banners' | 'Upload Prompt' | 'Manage Prompts' | 'Categories' | 'Featured Prompts' | 'Analytics' | 'Settings' | 'System Logs' | 'Help & Feedback';
+export type AdminTab = 'Dashboard' | 'Banners' | 'Upload Prompt' | 'Manage Prompts' | 'Categories' | 'Featured Prompts' | 'Analytics' | 'Settings' | 'System Logs' | 'Help & Feedback' | 'Notifications';
 
-import { Megaphone } from 'lucide-react';
+import { Megaphone, Bell } from 'lucide-react';
 
 const contentItems = [
   { icon: LayoutDashboard, label: 'Dashboard' as AdminTab },
   { icon: Megaphone, label: 'Banners' as AdminTab },
+  { icon: Bell, label: 'Notifications' as AdminTab },
   { icon: Upload, label: 'Upload Prompt' as AdminTab },
   { icon: Grid, label: 'Manage Prompts' as AdminTab },
   { icon: Tag, label: 'Categories' as AdminTab },
