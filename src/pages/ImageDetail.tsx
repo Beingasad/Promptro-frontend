@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag } from 'lucide-react';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -8,6 +8,7 @@ import ImageCard, { Prompt } from '../components/ImageCard';
 import { auth } from '../lib/firebase';
 import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt } from '../lib/activity';
 import { useSearch } from '../context/SearchContext';
+import { useIsMobileDevice } from '../utils/device';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -28,6 +29,7 @@ export default function ImageDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { setSearchQuery } = useSearch();
+  const isMobile = useIsMobileDevice();
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedNegative, setCopiedNegative] = useState(false);
   const [prompt, setPrompt] = useState<PromptDetail | null>(null);
@@ -35,6 +37,34 @@ export default function ImageDetail() {
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  const handleShare = async () => {
+    if (!prompt) return;
+
+    const shareUrl = `${window.location.origin}/prompt/${prompt.id}`;
+    const shareText = `Check out this amazing AI prompt: "${prompt.title}" on Promptro! 🎨✨`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: prompt.title,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setShared(true);
+        setTimeout(() => setShared(false), 2000);
+      } catch (err) {
+        console.error("Failed to copy link:", err);
+      }
+    }
+  };
 
   const handleTagClick = (tag: string) => {
     setSearchQuery(tag);
@@ -153,36 +183,45 @@ export default function ImageDetail() {
       <div className="absolute left-4 right-4 top-4 z-10 flex items-center justify-between">
         <button
           onClick={() => navigate(-1)}
-          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/34 bg-white/28 text-white shadow-[0_14px_34px_rgba(0,0,0,0.18)] backdrop-blur-2xl transition-transform active:scale-95 md:h-14 md:w-14"
+          className="flex h-8 w-8 items-center justify-center rounded-2xl border border-white/12 bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10"
           aria-label="Go back"
         >
-          <ArrowLeft className="h-6 w-6 md:h-7 md:w-7" />
+          <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
         </button>
-        <button
-          onClick={toggleSave}
-          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/34 bg-white/28 text-white shadow-[0_14px_34px_rgba(0,0,0,0.18)] backdrop-blur-2xl transition-transform active:scale-95 md:h-14 md:w-14"
-          aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
-        >
-          <Bookmark className="h-6 w-6 md:h-7 md:w-7" fill={saved ? 'currentColor' : 'none'} />
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={handleShare}
+            className="flex h-8 w-8 items-center justify-center rounded-2xl border border-white/12 bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10"
+            aria-label="Share prompt"
+          >
+            {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
+          </button>
+          <button
+            onClick={toggleSave}
+            className="flex h-8 w-8 items-center justify-center rounded-2xl border border-white/12 bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10"
+            aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
+          >
+            <Bookmark className="h-4 w-4 md:h-5 md:w-5" fill={saved ? 'currentColor' : 'none'} />
+          </button>
+        </div>
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent pointer-events-none" />
       <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 flex flex-wrap items-center justify-between gap-2 md:gap-3">
-        <div className="flex items-center gap-1.5 md:gap-3 rounded-2xl bg-white/18 px-1 py-1 text-white shadow-[0_14px_34px_rgba(0,0,0,0.24)] backdrop-blur-2xl">
+        <div className="flex h-8 items-center gap-2 md:gap-3 rounded-full bg-white/18 px-3 text-white shadow-[0_14px_34px_rgba(0,0,0,0.24)] backdrop-blur-2xl md:h-10">
           <button 
             onClick={toggleLike}
-            className={`flex items-center gap-1.5 md:gap-2 text-xs md:text-sm font-medium px-2 py-1.5 md:px-3 md:py-2 rounded-xl transition-all ${liked ? 'bg-primary text-white' : 'hover:bg-white/10'}`}
+            className="flex items-center gap-1.5 text-xs md:text-sm font-bold transition-transform active:scale-95 hover:text-white/80"
           >
-            <Heart className={`h-4 w-4 md:h-5 md:w-5 transition-colors ${liked ? 'fill-current text-white' : ''}`} />
+            <Heart className={`h-4 w-4 md:h-5 md:w-5 transition-colors ${liked ? 'fill-current text-white' : 'text-white'}`} />
             {formatCount(prompt.likes)}
           </button>
-          <span className="h-4 md:h-6 w-px bg-white/22" />
-          <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm font-medium px-2 py-1.5 md:px-3 md:py-2">
+          <span className="h-3 md:h-3.5 w-px bg-white/22" />
+          <div className="flex items-center gap-1.5 text-xs md:text-sm font-bold">
             <Eye className="h-4 w-4 md:h-5 md:w-5" />
             {formatCount(prompt.views)}
           </div>
         </div>
-        <span className="shrink-0 whitespace-nowrap rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-bold tracking-normal text-white shadow-[0_12px_28px_rgba(139,92,246,0.26)]">
+        <span className="flex h-8 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-3 text-xs md:text-sm font-bold tracking-normal text-white shadow-[0_12px_28px_rgba(139,92,246,0.26)] md:h-10">
           {prompt.category}
         </span>
       </div>
@@ -335,7 +374,7 @@ export default function ImageDetail() {
             View all
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className={isMobile && window.innerWidth >= 768 ? "grid grid-cols-2 gap-3" : "grid grid-cols-2 gap-3 md:grid-cols-4"}>
           {related.slice(0, 4).map((item) => (
             <ImageCard key={item.id} prompt={item} />
           ))}
