@@ -144,16 +144,16 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
         )}
 
         {isHome ? (
-          /* ORIGINAL HOME LAYOUT WITH SEPARATE PILLS */
-          <div className="flex items-center justify-between w-full gap-2">
+          /* ORIGINAL HOME LAYOUT */
+          <div className="flex min-h-10 items-center justify-between w-full rounded-[1.2rem] border border-white/24 bg-white/22 px-2 py-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:rounded-[1.35rem] md:px-4 md:py-2.5">
             <button
-              className="rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-3.5 py-1.5 text-[9px] font-extrabold uppercase tracking-wider text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)] transition-transform active:scale-95 md:px-5 md:py-2 md:text-xs"
+              className="rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_rgba(139,92,246,0.25)] transition-transform active:scale-95 md:px-4 md:py-1.5 md:text-xs"
               onClick={handleCategoryClick}
               aria-label={`View category ${prompt.category}`}
             >
               {prompt.category}
             </button>
-            <div className="flex items-center gap-2 md:gap-3.5 rounded-full border border-white/24 bg-white/22 px-3.5 py-1.5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:px-4.5 md:py-2">
+            <div className="flex items-center gap-2 md:gap-3.5">
               <button
                 className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
                 onClick={toggleLike}

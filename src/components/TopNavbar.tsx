@@ -457,7 +457,7 @@ export default function TopNavbar() {
           </Link>
         </div>
 
-        <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[700px]">
+        <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px]">
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
             <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`}></div>
             <div className="relative flex h-11 w-full items-center overflow-hidden rounded-full border border-white/80 dark:border-white/10 bg-white/78 dark:bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14">
