@@ -1,7 +1,7 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import type { User } from 'firebase/auth';
 import type { Prompt } from '../components/ImageCard';
-import { db } from './firebase';
 
 const savedKey = 'promptro:saved-prompts';
 const likedKey = 'promptro:liked-prompts';
@@ -44,31 +44,31 @@ export function onActivityUpdated(callback: () => void) {
 }
 
 export async function syncUserActivity(user: User) {
-  if (!db) return;
+  try {
+    const localActivity = readLocalActivity();
+    const response = await axios.get(`${API_BASE_URL}/api/users/${user.uid}/activity`);
+    const cloudActivity = response.data ? normalizeActivity(response.data) : emptyActivity();
+    const mergedActivity = mergeActivity(cloudActivity, localActivity);
 
-  const ref = doc(db, 'users', user.uid);
-  const localActivity = readLocalActivity();
-  const snapshot = await getDoc(ref);
-  const cloudActivity = snapshot.exists() ? normalizeActivity(snapshot.data()) : emptyActivity();
-  const mergedActivity = mergeActivity(cloudActivity, localActivity);
-
-  writeLocalActivity(mergedActivity);
-  await saveUserActivity(user, mergedActivity);
+    writeLocalActivity(mergedActivity);
+    await saveUserActivity(user, mergedActivity);
+  } catch (error) {
+    console.error('Error syncing user activity from backend database:', error);
+  }
 }
 
 export async function saveUserActivity(user: User | null | undefined, activity = readLocalActivity()) {
-  if (!db || !user) return;
+  if (!user) return;
 
-  await setDoc(
-    doc(db, 'users', user.uid),
-    {
-      savedPrompts: activity.savedPrompts,
-      likedPrompts: activity.likedPrompts,
-      recentPrompts: activity.recentPrompts,
-      updatedAt: new Date().toISOString(),
-    },
-    { merge: true },
-  );
+  try {
+    await axios.post(`${API_BASE_URL}/api/users/${user.uid}/activity`, {
+      saved_prompts: activity.savedPrompts,
+      liked_prompts: activity.likedPrompts,
+      recent_prompts: activity.recentPrompts,
+    });
+  } catch (error) {
+    console.error('Error saving user activity to backend database:', error);
+  }
 }
 
 export function setSavedPrompt(prompt: Prompt, saved: boolean) {
@@ -111,9 +111,12 @@ function readJson<T>(key: string, fallback: T) {
 
 function normalizeActivity(data: Record<string, unknown>): UserActivity {
   return {
-    savedPrompts: Array.isArray(data.savedPrompts) ? (data.savedPrompts as Prompt[]) : [],
-    likedPrompts: Array.isArray(data.likedPrompts) ? (data.likedPrompts as string[]) : [],
-    recentPrompts: Array.isArray(data.recentPrompts) ? (data.recentPrompts as Prompt[]) : [],
+    savedPrompts: Array.isArray(data.savedPrompts) ? (data.savedPrompts as Prompt[]) : 
+                  (Array.isArray(data.saved_prompts) ? (data.saved_prompts as Prompt[]) : []),
+    likedPrompts: Array.isArray(data.likedPrompts) ? (data.likedPrompts as string[]) : 
+                  (Array.isArray(data.liked_prompts) ? (data.liked_prompts as string[]) : []),
+    recentPrompts: Array.isArray(data.recentPrompts) ? (data.recentPrompts as Prompt[]) : 
+                  (Array.isArray(data.recent_prompts) ? (data.recent_prompts as Prompt[]) : []),
   };
 }
 
