@@ -340,32 +340,32 @@ export default function TopNavbar() {
       ctx.font = "bold 22px 'Satoshi', 'Inter', sans-serif";
       ctx.letterSpacing = "6px";
       ctx.textAlign = 'center';
-      ctx.fillText('MY FAVORITE PICKS', canvas.width / 2, 260);
+      ctx.fillText('MY FAVORITE PICKS', canvas.width / 2, 308);
 
       // Accent lines on sides of subheading
       ctx.strokeStyle = isLight ? 'rgba(99, 34, 242, 0.22)' : 'rgba(129, 140, 248, 0.22)';
       ctx.lineWidth = 2.5;
       // Left Flank Line with Diamond Dot
       ctx.beginPath();
-      ctx.moveTo(canvas.width / 2 - 320, 260);
-      ctx.lineTo(canvas.width / 2 - 180, 260);
+      ctx.moveTo(canvas.width / 2 - 320, 308);
+      ctx.lineTo(canvas.width / 2 - 180, 308);
       ctx.stroke();
       ctx.fillStyle = isLight ? 'rgba(99, 34, 242, 0.6)' : 'rgba(129, 140, 248, 0.6)';
-      ctx.fillRect(canvas.width / 2 - 252, 257, 6, 6);
+      ctx.fillRect(canvas.width / 2 - 252, 305, 6, 6);
 
       // Right Flank Line with Diamond Dot
       ctx.beginPath();
-      ctx.moveTo(canvas.width / 2 + 180, 260);
-      ctx.lineTo(canvas.width / 2 + 320, 260);
+      ctx.moveTo(canvas.width / 2 + 180, 308);
+      ctx.lineTo(canvas.width / 2 + 320, 308);
       ctx.stroke();
-      ctx.fillRect(canvas.width / 2 + 246, 257, 6, 6);
+      ctx.fillRect(canvas.width / 2 + 246, 305, 6, 6);
 
       // 7. Redesigned Main Title Text
       // "CREATIVE" in slate/white
       ctx.fillStyle = isLight ? '#0F172A' : '#ffffff';
       ctx.font = "900 78px 'Satoshi', 'Inter', sans-serif";
       ctx.letterSpacing = "2px";
-      ctx.fillText('CREATIVE', canvas.width / 2, 345);
+      ctx.fillText('CREATIVE', canvas.width / 2, 435);
 
       // "INSPIRATIONS" in Purple-Pink Gradient
       const textGrad = ctx.createLinearGradient(300, 0, 780, 0);
@@ -374,11 +374,11 @@ export default function TopNavbar() {
       textGrad.addColorStop(1, '#ec4899');
       ctx.fillStyle = textGrad;
       ctx.font = "900 84px 'Satoshi', 'Inter', sans-serif";
-      ctx.fillText('INSPIRATIONS', canvas.width / 2, 430);
+      ctx.fillText('INSPIRATIONS', canvas.width / 2, 520);
 
       // Thick accent underline bar
       ctx.fillStyle = '#6322F2';
-      drawRoundedRect(ctx, canvas.width / 2 - 45, 475, 90, 8, 4);
+      drawRoundedRect(ctx, canvas.width / 2 - 45, 565, 90, 8, 4);
       ctx.fill();
 
       // 8. Load image assets asynchronously with CORS setup
@@ -401,14 +401,14 @@ export default function TopNavbar() {
           const textHeight = 60;
           const textWidth = textHeight * textAspectRatio;
 
-          const gap = 16;
+          const gap = 10;
 
           const totalWidth = logoWidth + gap + textWidth;
           const startX = canvas.width / 2 - totalWidth / 2;
 
           // Draw logo icon and text aligned vertically
-          ctx.drawImage(loadedImages[0], startX, 80, logoWidth, logoHeight);
-          ctx.drawImage(loadedImages[1], startX + logoWidth + gap, 110, textWidth, textHeight);
+          ctx.drawImage(loadedImages[0], startX, 130, logoWidth, logoHeight);
+          ctx.drawImage(loadedImages[1], startX + logoWidth + gap, 160, textWidth, textHeight);
         }
 
         const drawCollageCard = (
@@ -484,25 +484,25 @@ export default function TopNavbar() {
         // Render based on prompts count (loadedImages[0] is logo, loadedImages[1] is text, prompt images are shifted by 2)
         if (promptsForPoster.length === 1) {
           if (loadedImages[2]) {
-            drawCollageCard(loadedImages[2], 540, 930, 560, 840, 0, true, promptsForPoster[0]?.title);
+            drawCollageCard(loadedImages[2], 540, 960, 560, 840, 0, true, promptsForPoster[0]?.title);
           }
         } else if (promptsForPoster.length === 2) {
           if (loadedImages[2]) {
-            drawCollageCard(loadedImages[2], 310, 930, 420, 670, -8, false, promptsForPoster[0]?.title);
+            drawCollageCard(loadedImages[2], 310, 960, 420, 670, -8, false, promptsForPoster[0]?.title);
           }
           if (loadedImages[3]) {
-            drawCollageCard(loadedImages[3], 770, 930, 420, 670, 8, true, promptsForPoster[1]?.title);
+            drawCollageCard(loadedImages[3], 770, 960, 420, 670, 8, true, promptsForPoster[1]?.title);
           }
         } else {
           // Exactly matches the 3-image layout of the reference mock
           if (loadedImages[2]) { // Left Card
-            drawCollageCard(loadedImages[2], 280, 890, 330, 530, -9, false, promptsForPoster[0]?.title);
+            drawCollageCard(loadedImages[2], 280, 920, 330, 530, -9, false, promptsForPoster[0]?.title);
           }
           if (loadedImages[4]) { // Right Card
-            drawCollageCard(loadedImages[4], 800, 890, 330, 530, 9, false, promptsForPoster[2]?.title);
+            drawCollageCard(loadedImages[4], 800, 920, 330, 530, 9, false, promptsForPoster[2]?.title);
           }
           if (loadedImages[3]) { // Main Center overlapping card
-            drawCollageCard(loadedImages[3], 540, 930, 420, 610, 0, true, promptsForPoster[1]?.title);
+            drawCollageCard(loadedImages[3], 540, 960, 420, 610, 0, true, promptsForPoster[1]?.title);
           }
         }
 
@@ -513,16 +513,16 @@ export default function TopNavbar() {
         ctx.font = "900 42px 'Satoshi', 'Inter', sans-serif";
         ctx.textAlign = 'center';
         ctx.letterSpacing = "5px";
-        ctx.fillText('DISCOVER TOP ART PROMPTS', canvas.width / 2, 1380);
+        ctx.fillText('DISCOVER TOP ART PROMPTS', canvas.width / 2, 1440);
 
         ctx.fillStyle = isLight ? '#475569' : '#94A3B8';
         ctx.font = "600 28px 'Satoshi', sans-serif";
         ctx.letterSpacing = "0.5px";
-        ctx.fillText('Explore high-quality AI prompt templates on Promptro.in', canvas.width / 2, 1445);
+        ctx.fillText('Explore high-quality AI prompt templates on Promptro.in', canvas.width / 2, 1505);
 
         // 10. Premium High-Contrast Pill CTA Button
         const btnX = canvas.width / 2 - 380;
-        const btnY = 1530;
+        const btnY = 1590;
         const btnWidth = 760;
         const btnHeight = 104;
 
@@ -1677,16 +1677,16 @@ export default function TopNavbar() {
                         </div>
 
                         {/* Top Watermark Logo */}
-                        <div className="flex items-center justify-center pt-3.5 md:pt-5 gap-2 relative z-10 w-full">
+                        <div className="flex items-center justify-center pt-3.5 md:pt-5 gap-1 md:gap-1.5 relative z-10 w-full">
                           <img
                             src="/brand/logo.png"
                             alt="Logo"
-                            className="h-8 w-auto md:h-11 object-contain hover:scale-105 transition-transform duration-300"
+                            className="h-7 w-auto md:h-10 object-contain hover:scale-105 transition-transform duration-300"
                           />
                           <img
                             src={appearanceMode === 'Light' ? "/brand/text-light.png" : "/brand/text-dark.png"}
                             alt="Promptro"
-                            className="h-5 w-auto md:h-7 object-contain hover:scale-105 transition-transform duration-300"
+                            className="h-4 w-auto md:h-5 object-contain hover:scale-105 transition-transform duration-300"
                           />
                         </div>
 
@@ -1702,7 +1702,7 @@ export default function TopNavbar() {
                         </div>
 
                         {/* Redesigned Typography Titles */}
-                        <div className="text-center mt-3 md:mt-5.5 relative z-10 px-2 flex flex-col items-center">
+                        <div className="text-center mt-5 md:mt-8 relative z-10 px-2 flex flex-col items-center">
                           <h4 className="text-[16px] md:text-[21px] uppercase tracking-[0.06em] text-[#0F172A] dark:text-white leading-none" style={{ fontWeight: 950 }}>Creative</h4>
                           <h4 className="text-[17px] md:text-[23px] uppercase tracking-[0.02em] bg-gradient-to-r from-[#a855f7] via-[#6366f1] to-[#ec4899] bg-clip-text text-transparent leading-none mt-0.5" style={{ fontWeight: 950 }}>Inspirations</h4>
                           <div className="h-[3px] w-7 bg-[#6322F2] rounded-full mt-2.5" />
