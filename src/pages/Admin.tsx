@@ -597,6 +597,26 @@ export default function Admin() {
   };
 
   useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+      }, 5500);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  useEffect(() => {
+    if (error) {
+      if (error !== 'Backend is not reachable. Start the API server to manage prompts.') {
+        const timer = setTimeout(() => {
+          setError('');
+        }, 5500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [error]);
+
+  useEffect(() => {
     fetchPrompts();
     fetchFeedbacks();
     fetchBanners();
@@ -2499,46 +2519,48 @@ export default function Admin() {
             {activeTab === 'System Logs' && (
               <div className="flex flex-col gap-8">
                 <div>
-                  <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">System Logs</h1>
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#171421] dark:text-white bg-clip-text bg-gradient-to-r from-[#171421] via-primary to-[#ff6a3d] dark:from-white dark:to-[#afa6c8]">System Logs</h1>
                   <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium">Monitor all administrative actions and system events</p>
                 </div>
 
                 <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2.5rem] overflow-hidden">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-[#f8f7fc] dark:bg-white/5">
-                        <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Action</th>
-                        <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Admin</th>
-                        <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Details</th>
-                        <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Time</th>
-                        <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#e9e2f3] dark:divide-white/5">
-                      {logs.map((log) => (
-                        <tr key={log.id} className="hover:bg-primary/5 transition-colors group">
-                          <td className="px-8 py-5">
-                            <span className="text-sm font-bold text-[#171421] dark:text-white">{log.action}</span>
-                          </td>
-                          <td className="px-8 py-5">
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">A</div>
-                              <span className="text-sm font-medium">{log.user}</span>
-                            </div>
-                          </td>
-                          <td className="px-8 py-5">
-                            <span className="text-sm text-[#756d8d]">{log.details}</span>
-                          </td>
-                          <td className="px-8 py-5">
-                            <span className="text-xs font-medium text-[#756d8d]">{log.time}</span>
-                          </td>
-                          <td className="px-8 py-5">
-                            <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-[10px] font-bold">Success</span>
-                          </td>
+                  <div className="overflow-x-auto hide-scrollbar">
+                    <table className="w-full text-left border-collapse min-w-[800px]">
+                      <thead>
+                        <tr className="bg-[#f8f7fc] dark:bg-white/5">
+                          <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Action</th>
+                          <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Admin</th>
+                          <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Details</th>
+                          <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Time</th>
+                          <th className="px-8 py-5 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">Status</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-[#e9e2f3] dark:divide-white/5">
+                        {logs.map((log) => (
+                          <tr key={log.id} className="hover:bg-primary/5 transition-colors group">
+                            <td className="px-8 py-5">
+                              <span className="text-sm font-bold text-[#171421] dark:text-white">{log.action}</span>
+                            </td>
+                            <td className="px-8 py-5">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">A</div>
+                                <span className="text-sm font-medium">{log.user}</span>
+                              </div>
+                            </td>
+                            <td className="px-8 py-5">
+                              <span className="text-sm text-[#756d8d]">{log.details}</span>
+                            </td>
+                            <td className="px-8 py-5">
+                              <span className="text-xs font-medium text-[#756d8d]">{log.time}</span>
+                            </td>
+                            <td className="px-8 py-5">
+                              <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-[10px] font-bold">Success</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
