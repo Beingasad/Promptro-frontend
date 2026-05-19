@@ -177,9 +177,9 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
               setShowProfileMenu(!showProfileMenu);
               setShowNotifications(false);
             }}
-            className="flex items-center gap-3 p-1 pr-3 rounded-xl border border-[#e9e2f3] dark:border-white/10 bg-white dark:bg-white/5 transition-all group cursor-pointer"
+            className="flex items-center gap-1.5 sm:gap-3 p-0.5 sm:p-1 sm:pr-3 rounded-xl border border-transparent sm:border-[#e9e2f3] dark:border-transparent sm:dark:border-white/10 bg-transparent sm:bg-white sm:dark:bg-white/5 transition-all group cursor-pointer"
           >
-            <div className="w-9 h-9 rounded-lg overflow-hidden shadow-sm">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shadow-sm">
               <img 
                 src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&auto=format&fit=crop" 
                 alt="Admin" 
@@ -190,7 +190,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
               <p className="text-[13px] font-bold text-[#171421] dark:text-white">Asad</p>
               <p className="text-[10px] font-medium text-[#756d8d] mt-0.5">Super Admin</p>
             </div>
-            <ChevronDown className={cn("w-3.5 h-3.5 text-[#756d8d] transition-transform", showProfileMenu && "rotate-180")} />
+            <ChevronDown className={cn("w-3.5 h-3.5 text-[#756d8d] transition-transform hidden sm:block", showProfileMenu && "rotate-180")} />
           </div>
 
           <AnimatePresence>

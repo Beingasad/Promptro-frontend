@@ -1762,42 +1762,40 @@ export default function Admin() {
 
             {activeTab === 'Manage Prompts' && (
               <div className="flex flex-col gap-8">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                   <div>
-                    <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">Manage Prompts</h1>
-                    <p className="text-[13px] text-[#756d8d] dark:text-[#afa6c8] font-medium">View, edit and manage all uploaded prompts</p>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#171421] dark:text-white bg-clip-text bg-gradient-to-r from-[#171421] via-primary to-[#ff6a3d] dark:from-white dark:to-[#afa6c8]">Manage Prompts</h1>
+                    <p className="text-[13px] text-[#756d8d] dark:text-[#afa6c8] font-medium mt-1">View, edit and manage all uploaded prompts</p>
                   </div>
                   
-                  <div className="flex flex-wrap items-center gap-2">
-                    <div className="relative group">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
+                    <div className="relative group w-full sm:w-64">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#756d8d] group-focus-within:text-primary transition-colors" />
                       <input 
                         type="text"
                         placeholder="Search prompts..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="h-10 rounded-xl border border-[#e9e2f3] dark:border-white/10 bg-white dark:bg-white/5 pl-10 pr-4 text-[13px] font-bold outline-none focus:ring-2 focus:ring-primary/20 w-64"
+                        className="h-10 w-full rounded-xl border border-[#e9e2f3] dark:border-white/10 bg-white dark:bg-white/5 pl-10 pr-4 text-[13px] font-bold outline-none focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
-                    <select 
-                      value={filter} 
-                      onChange={(e) => setFilter(e.target.value)}
-                      className="h-10 px-4 rounded-xl border border-[#e9e2f3] dark:border-white/10 bg-white dark:bg-white/5 text-[13px] font-bold outline-none"
-                    >
-                      <option value="All">All Categories</option>
-                      {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                    </select>
-                    <button 
-                      onClick={() => setShowBulkModal(true)}
-                      className="h-10 px-5 rounded-xl bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] text-[13px] font-bold flex items-center gap-2 hover:bg-white hover:text-primary transition-all"
-                    >
-                      <Layers className="w-4 h-4" />
-                      Bulk Import
-                    </button>
-                    <button className="h-10 px-5 rounded-xl bg-primary text-white text-[13px] font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
-                      <Filter className="w-4 h-4" />
-                      Filter
-                    </button>
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <select 
+                        value={filter} 
+                        onChange={(e) => setFilter(e.target.value)}
+                        className="h-10 flex-1 sm:flex-none px-4 rounded-xl border border-[#e9e2f3] dark:border-white/10 bg-white dark:bg-white/5 text-[13px] font-bold outline-none cursor-pointer"
+                      >
+                        <option value="All">All Categories</option>
+                        {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                      </select>
+                      <button 
+                        onClick={() => setShowBulkModal(true)}
+                        className="h-10 px-4 rounded-xl bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] text-[13px] font-bold flex items-center justify-center gap-2 hover:bg-white hover:text-primary transition-all flex-1 sm:flex-none"
+                      >
+                        <Layers className="w-4 h-4" />
+                        Bulk
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -1886,12 +1884,12 @@ export default function Admin() {
 
             {activeTab === 'Categories' && (
               <div className="flex flex-col gap-8">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                   <div>
-                    <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">Categories</h1>
-                    <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium">Manage prompt categories and taxonomy</p>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#171421] dark:text-white bg-clip-text bg-gradient-to-r from-[#171421] via-primary to-[#ff6a3d] dark:from-white dark:to-[#afa6c8]">Categories</h1>
+                    <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium mt-1">Manage prompt categories and taxonomy</p>
                   </div>
-                  <div className="flex items-center gap-3 bg-white dark:bg-white/5 p-2 rounded-2xl border border-[#e9e2f3] dark:border-white/10 shadow-sm">
+                  <div className="flex items-center gap-3 bg-white dark:bg-white/5 p-2 rounded-2xl border border-[#e9e2f3] dark:border-white/10 shadow-sm w-full sm:w-auto justify-between sm:justify-start">
                     <label className="relative flex items-center justify-center cursor-pointer shrink-0">
                       {newCatImagePreview ? (
                         <div className="relative group w-10 h-10 rounded-xl overflow-hidden shadow-md">
@@ -1932,7 +1930,7 @@ export default function Admin() {
                       id="new-category-input"
                       placeholder={uploadingCatId === -1 ? uploadingCatText : "Category name..."}
                       disabled={uploadingCatId !== null}
-                      className="bg-transparent border-none outline-none px-4 py-2 text-sm font-medium w-48 text-[#171421] dark:text-white placeholder-[#8c84a6] disabled:opacity-50"
+                      className="bg-transparent border-none outline-none px-2 sm:px-4 py-2 text-sm font-medium flex-1 min-w-0 sm:w-48 text-[#171421] dark:text-white placeholder-[#8c84a6] disabled:opacity-50"
                       onKeyDown={async (e) => {
                         if (e.key === 'Enter') {
                           const input = e.currentTarget;
