@@ -34,13 +34,13 @@ function App() {
                 <Route path="auth" element={<Auth />} />
               </Route>
               <Route path="/asad87/login" element={<AdminLogin />} />
-              <Route 
-                path="/asad87" 
+              <Route
+                path="/asad87"
                 element={
                   <AdminProtectedRoute>
                     <Admin />
                   </AdminProtectedRoute>
-                } 
+                }
               />
             </Routes>
           </Router>
