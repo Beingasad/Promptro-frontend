@@ -339,6 +339,7 @@ export default function TopNavbar() {
       ctx.fillStyle = '#6322F2';
       ctx.font = "bold 22px 'Satoshi', 'Inter', sans-serif";
       ctx.letterSpacing = "6px";
+      ctx.textAlign = 'center';
       ctx.fillText('MY FAVORITE PICKS', canvas.width / 2, 260);
 
       // Accent lines on sides of subheading
@@ -384,20 +385,30 @@ export default function TopNavbar() {
       const loadedImages: HTMLImageElement[] = [];
 
       const buildRedesignedPosterLayout = () => {
-        // Draw dynamic brand logo and text side-by-side at the top center of canvas
+        // Draw dynamic brand logo and text side-by-side at the top center of canvas with perfect aspect ratio preservation
         if (loadedImages[0] && loadedImages[1]) {
-          const logoWidth = 90;
-          const logoHeight = 90;
-          const textWidth = 140;
-          const textHeight = 45;
-          const gap = 12;
+          const naturalLogoWidth = loadedImages[0].naturalWidth || 90;
+          const naturalLogoHeight = loadedImages[0].naturalHeight || 90;
+          const logoAspectRatio = naturalLogoWidth / naturalLogoHeight;
+
+          const logoHeight = 120;
+          const logoWidth = logoHeight * logoAspectRatio;
+
+          const naturalTextWidth = loadedImages[1].naturalWidth || 140;
+          const naturalTextHeight = loadedImages[1].naturalHeight || 45;
+          const textAspectRatio = naturalTextWidth / naturalTextHeight;
+
+          const textHeight = 60;
+          const textWidth = textHeight * textAspectRatio;
+
+          const gap = 16;
 
           const totalWidth = logoWidth + gap + textWidth;
           const startX = canvas.width / 2 - totalWidth / 2;
 
           // Draw logo icon and text aligned vertically
-          ctx.drawImage(loadedImages[0], startX, 100, logoWidth, logoHeight);
-          ctx.drawImage(loadedImages[1], startX + logoWidth + gap, 122, textWidth, textHeight);
+          ctx.drawImage(loadedImages[0], startX, 80, logoWidth, logoHeight);
+          ctx.drawImage(loadedImages[1], startX + logoWidth + gap, 110, textWidth, textHeight);
         }
 
         const drawCollageCard = (
@@ -437,6 +448,12 @@ export default function TopNavbar() {
           ctx.clip();
           ctx.drawImage(img, -cw / 2, -ch / 2, cw, ch);
           ctx.restore();
+
+          // Stroke thin elegant border on top of the image to perfectly replicate HTML preview
+          ctx.strokeStyle = isLight ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.15)';
+          ctx.lineWidth = isCenterCard ? 3.5 : 3;
+          drawRoundedRect(ctx, -cw / 2, -ch / 2, cw, ch, radius);
+          ctx.stroke();
 
           ctx.restore();
         };
@@ -1637,16 +1654,16 @@ export default function TopNavbar() {
                         </div>
 
                         {/* Top Watermark Logo */}
-                        <div className="flex items-center justify-center pt-3.5 md:pt-5 gap-1.5 relative z-10 w-full">
+                        <div className="flex items-center justify-center pt-3.5 md:pt-5 gap-2 relative z-10 w-full">
                           <img
                             src="/brand/logo.png"
                             alt="Logo"
-                            className="h-6 w-auto md:h-8 object-contain hover:scale-105 transition-transform duration-300"
+                            className="h-8 w-auto md:h-11 object-contain hover:scale-105 transition-transform duration-300"
                           />
                           <img
                             src={appearanceMode === 'Light' ? "/brand/text-light.png" : "/brand/text-dark.png"}
                             alt="Promptro"
-                            className="h-3.5 w-auto md:h-5 object-contain hover:scale-105 transition-transform duration-300"
+                            className="h-5 w-auto md:h-7 object-contain hover:scale-105 transition-transform duration-300"
                           />
                         </div>
 
@@ -1713,10 +1730,10 @@ export default function TopNavbar() {
                             <p className="text-[4.5px] md:text-[5.5px] font-semibold text-[#8c84a6] leading-none mt-0.5">Explore high-quality templates on Promptro.in</p>
                           </div>
 
-                          <div className="w-full py-2 md:py-2.5 rounded-full bg-gradient-to-r from-[#6322F2] to-[#4f46e5] text-white font-extrabold text-[7.5px] md:text-[9px] tracking-[0.12em] shadow-md shadow-primary/25 border border-white/10 flex items-center justify-between px-3 mt-1.5">
-                            <span>✨ DISCOVER ON PROMPTRO.IN</span>
-                            <div className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 rounded-full bg-white/20 flex items-center justify-center border border-white/25 scale-90">
-                              <ArrowRight className="w-2.5 h-2.5 text-white" />
+                          <div className="w-full py-1.5 md:py-2.5 rounded-full bg-gradient-to-r from-[#6322F2] to-[#4f46e5] text-white font-extrabold text-[6.5px] md:text-[9px] tracking-[0.08em] md:tracking-[0.12em] shadow-md shadow-primary/25 border border-white/10 flex items-center justify-between px-2.5 md:px-3 mt-1.5">
+                            <span className="whitespace-nowrap">✨ DISCOVER ON PROMPTRO.IN</span>
+                            <div className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 rounded-full bg-white/20 flex items-center justify-center border border-white/25 scale-90 shrink-0">
+                              <ArrowRight className="w-2 h-2 md:w-2.5 md:h-2.5 text-white" />
                             </div>
                           </div>
                         </div>
