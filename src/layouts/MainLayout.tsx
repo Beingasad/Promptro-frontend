@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import TopNavbar from '../components/TopNavbar';
 import BottomNav from '../components/BottomNav';
 import SearchPill from '../components/SearchPill';
@@ -7,6 +10,22 @@ import PageBackButton from '../components/PageBackButton';
 
 export default function MainLayout() {
   const location = useLocation();
+
+  useEffect(() => {
+    // Record page visit
+    const trackVisit = async () => {
+      try {
+        await axios.post(`${API_BASE_URL}/api/analytics/track`, {
+          path: location.pathname,
+          referrer: document.referrer || null
+        });
+      } catch (err) {
+        console.error('Error tracking page visit:', err);
+      }
+    };
+    trackVisit();
+  }, [location.pathname]);
+
   const isPromptDetail = location.pathname.startsWith('/prompt/');
   const isHome = location.pathname === '/';
   const isAuth = location.pathname === '/auth';

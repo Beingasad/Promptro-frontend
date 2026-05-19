@@ -9,14 +9,45 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [activeTab, setActiveTab] = useState<AdminTab>('Dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024;
+    }
+    return true;
+  });
 
   return (
-    <div className="h-screen overflow-hidden bg-[#f8f7fc] dark:bg-[#0d0b14] text-[#171421] dark:text-[#f7f2ff] flex">
-      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+    <div className="h-screen overflow-hidden bg-[#f8f7fc] dark:bg-[#0d0b14] text-[#171421] dark:text-[#f7f2ff] flex relative">
+      {/* Dim Overlay Backdrop for Mobile when Sidebar is Open */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)} 
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[150] lg:hidden transition-all duration-300"
+        />
+      )}
+
+      {/* Sidebar */}
+      <AdminSidebar 
+        activeTab={activeTab} 
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          // Auto-close sidebar on mobile after choosing a tab
+          if (window.innerWidth < 1024) {
+            setIsSidebarOpen(false);
+          }
+        }} 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
       
-      <main className="flex-1 h-full overflow-y-auto pl-8 pr-8 py-6">
+      {/* Main Content Area */}
+      <main className="flex-1 h-full overflow-y-auto px-4 sm:px-8 py-6 z-10">
         <div className="max-w-[1600px] mx-auto">
-          <AdminNavbar />
+          <AdminNavbar 
+            isSidebarOpen={isSidebarOpen} 
+            onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
+            activeTab={activeTab}
+          />
           <ErrorBoundary>
             <Suspense fallback={
               <div className="flex items-center justify-center py-20">

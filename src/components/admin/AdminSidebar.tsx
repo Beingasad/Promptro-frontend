@@ -1,4 +1,4 @@
-import { LayoutDashboard, ImagePlus, Grid, Tag, Star, BarChart3, Settings, LogOut, Upload, Layers, Eye, ChevronRight, HelpCircle } from 'lucide-react';
+import { LayoutDashboard, ImagePlus, Grid, Tag, Star, BarChart3, Settings, LogOut, Upload, Layers, Eye, ChevronRight, HelpCircle, X } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 export type AdminTab = 'Dashboard' | 'Banners' | 'Upload Prompt' | 'Manage Prompts' | 'Categories' | 'Featured Prompts' | 'Analytics' | 'Settings' | 'System Logs' | 'Help & Feedback' | 'Notifications';
@@ -24,12 +24,17 @@ const otherItems = [
 interface AdminSidebarProps {
   activeTab: AdminTab;
   onTabChange: (tab: AdminTab) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export function AdminSidebar({ activeTab, onTabChange }: AdminSidebarProps) {
+export function AdminSidebar({ activeTab, onTabChange, isOpen, onClose }: AdminSidebarProps) {
   return (
-    <aside className="w-72 h-full bg-white dark:bg-[#0d0b14] border-r border-[#e9e2f3] dark:border-white/5 flex flex-col p-5 z-50 overflow-y-auto hide-scrollbar shrink-0">
-      <div className="flex flex-col gap-1 mb-6">
+    <aside className={cn(
+      "fixed lg:static inset-y-0 left-0 w-72 h-full bg-white dark:bg-[#0d0b14] border-r border-[#e9e2f3] dark:border-white/5 flex flex-col p-5 z-[200] overflow-y-auto hide-scrollbar shrink-0 transition-transform duration-300 ease-in-out shadow-2xl lg:shadow-none",
+      isOpen ? "translate-x-0" : "-translate-x-full lg:hidden"
+    )}>
+      <div className="flex items-center justify-between gap-2 mb-6">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-white dark:bg-white/10 rounded-2xl flex items-center justify-center shadow-lg shadow-black/5">
             <img src="/brand/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
@@ -39,6 +44,14 @@ export function AdminSidebar({ activeTab, onTabChange }: AdminSidebarProps) {
             <span className="text-[9px] font-bold text-[#756d8d] uppercase tracking-widest block -mt-1">Admin Panel</span>
           </div>
         </div>
+
+        <button 
+          onClick={onClose}
+          className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#f8f7fc] dark:bg-white/5 hover:bg-primary/10 hover:text-primary transition-all text-[#756d8d] dark:text-[#afa6c8]"
+          title="Close Sidebar"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       <nav className="flex flex-col gap-6">

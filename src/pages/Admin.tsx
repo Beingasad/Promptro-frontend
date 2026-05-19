@@ -53,6 +53,7 @@ import AdminLayout from '../layouts/AdminLayout';
 import { AdminTab } from '../components/admin/AdminSidebar';
 import { cn } from '../utils/cn';
 import { API_BASE_URL } from '../config';
+import { compressImage } from '../utils/imageCompressor';
 
 type AdminPrompt = {
   id: string;
@@ -142,6 +143,8 @@ export default function Admin() {
   const [editingPrompt, setEditingPrompt] = useState<AdminPrompt | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [savingText, setSavingText] = useState('');
+  const [uploadingCatText, setUploadingCatText] = useState('Uploading Cover...');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('All');
@@ -171,6 +174,17 @@ export default function Admin() {
   const [deviceUsageMobile, setDeviceUsageMobile] = useState(72);
   const [realtimeViewsOffset, setRealtimeViewsOffset] = useState(0);
   const [realtimeLikesOffset, setRealtimeLikesOffset] = useState(0);
+  const [realAnalytics, setRealAnalytics] = useState<any>({
+    totalVisits: 0,
+    uniqueVisitors: 0,
+    dailyVisits: [0, 0, 0, 0, 0, 0, 0],
+    trafficSources: [
+      { label: 'Direct', value: '0%', color: 'bg-primary' },
+      { label: 'Organic Search', value: '0%', color: 'bg-blue-400' },
+      { label: 'Social', value: '0%', color: 'bg-pink-500' },
+      { label: 'Referral', value: '0%', color: 'bg-amber-500' }
+    ]
+  });
   const [newUsers, setNewUsers] = useState(842);
 
   // States for manual notification management
@@ -524,6 +538,15 @@ export default function Admin() {
     }
   };
 
+  const fetchAnalytics = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/analytics/summary`);
+      setRealAnalytics(response.data);
+    } catch {
+      console.error('Failed to fetch analytics');
+    }
+  };
+
   const handleSaveNotification = async (e: FormEvent) => {
     e.preventDefault();
     if (!newNotifText) return;
@@ -578,6 +601,7 @@ export default function Admin() {
     fetchFeedbacks();
     fetchBanners();
     fetchAdminNotifications();
+    fetchAnalytics();
   }, []);
 
   useEffect(() => {
@@ -736,7 +760,7 @@ export default function Admin() {
     // Removed window.scrollTo since we use a side panel now
   };
 
-  const buildFormData = () => {
+  const buildFormData = (overrideImageFile?: File | null) => {
     const data = new FormData();
     data.append('title', form.title.trim());
     data.append('category', form.category);
@@ -749,8 +773,9 @@ export default function Admin() {
     data.append('visibility', form.visibility);
     if (cssRatio) data.append('aspectRatio', cssRatio);
     
-    if (imageFile) {
-      data.append('image', imageFile);
+    const fileToUse = overrideImageFile !== undefined ? overrideImageFile : imageFile;
+    if (fileToUse) {
+      data.append('image', fileToUse);
     } else if (imagePreview && !imagePreview.startsWith('blob:')) {
       data.append('image_url', imagePreview);
     }
@@ -771,11 +796,29 @@ export default function Admin() {
     }
 
     try {
+      let finalImageFile = imageFile;
+      if (imageFile) {
+        setSavingText('Optimizing image...');
+        try {
+          finalImageFile = await compressImage(imageFile);
+        } catch (compressErr: any) {
+          setSaving(false);
+          setError(compressErr.message || 'Image compression failed.');
+          return;
+        }
+      }
+
+      setSavingText('Uploading...');
+      
+      const axiosConfig = {
+        timeout: 120000 // 120 seconds upload timeout
+      };
+
       if (editingPrompt) {
-        await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData());
+        await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData(finalImageFile), axiosConfig);
         setMessage('Prompt updated successfully.');
       } else {
-        await axios.post(API_URL, buildFormData());
+        await axios.post(API_URL, buildFormData(finalImageFile), axiosConfig);
         setMessage('Prompt published successfully.');
       }
       resetForm();
@@ -785,6 +828,7 @@ export default function Admin() {
       setError(errorMsg);
     } finally {
       setSaving(false);
+      setSavingText('');
     }
   };
 
@@ -831,17 +875,36 @@ export default function Admin() {
     setMessage('');
 
     try {
+      let finalBannerImage = bannerImageFile;
+      if (bannerImageFile) {
+        setSavingText('Optimizing banner...');
+        try {
+          finalBannerImage = await compressImage(bannerImageFile);
+        } catch (compressErr: any) {
+          setSaving(false);
+          setError(compressErr.message || 'Banner image optimization failed.');
+          return;
+        }
+      }
+
+      setSavingText('Uploading...');
+
       const data = new FormData();
       Object.entries(bannerForm).forEach(([k, v]) => {
         data.append(k, String(v));
       });
-      if (bannerImageFile) data.append('image', bannerImageFile);
+      if (finalBannerImage) data.append('image', finalBannerImage);
+
+      const axiosConfig = {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 120000 // 120 seconds upload timeout
+      };
 
       if (editingBanner) {
-        await axios.put(`${API_BASE_URL}/api/banners/${editingBanner.id}`, data);
+        await axios.put(`${API_BASE_URL}/api/banners/${editingBanner.id}`, data, axiosConfig);
         setMessage('Banner updated successfully.');
       } else {
-        await axios.post(`${API_BASE_URL}/api/banners`, data);
+        await axios.post(`${API_BASE_URL}/api/banners`, data, axiosConfig);
         setMessage('Banner created successfully.');
       }
       setBannerForm(emptyBannerForm);
@@ -853,6 +916,7 @@ export default function Admin() {
       setError('Could not save this banner.');
     } finally {
       setSaving(false);
+      setSavingText('');
     }
   };
 
@@ -884,19 +948,23 @@ export default function Admin() {
   const totalViewsCalculated = prompts.reduce((acc, p) => acc + (p.views || 0), 0) + realtimeViewsOffset;
   const totalLikesCalculated = prompts.reduce((acc, p) => acc + (p.likes || 0), 0) + realtimeLikesOffset;
 
+  const totalVisits = realAnalytics.totalVisits;
+  const uniqueVisitors = realAnalytics.uniqueVisitors;
+
+  const dailyVisits = realAnalytics.dailyVisits;
+  const maxDailyVisit = Math.max(...dailyVisits);
+  const barHeights = dailyVisits.map((v: number) => maxDailyVisit > 0 ? (v / maxDailyVisit) * 90 : 0);
+
   const mainStats = [
     { label: 'Total Prompts', value: prompts.length, icon: Layers, color: 'text-primary', bg: 'bg-primary/10', trend: '+12%', isUp: true },
     { label: 'Total Views', value: formatNumber(totalViewsCalculated), icon: Eye, color: 'text-blue-400', bg: 'bg-blue-400/10', trend: '+18.5%', isUp: true },
     { label: 'Total Likes', value: formatNumber(totalLikesCalculated), icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10', trend: '+5.2%', isUp: true },
+    { label: 'Total Visits', value: formatNumber(totalVisits), icon: Globe, color: 'text-primary', bg: 'bg-primary/10', trend: '+14.2%', isUp: true },
+    { label: 'Unique Visitors', value: formatNumber(uniqueVisitors), icon: Users, color: 'text-[#8b5cf6]', bg: 'bg-[#8b5cf6]/10', trend: '+11.8%', isUp: true },
     { label: 'Avg. CTR', value: `${avgCTR}%`, icon: MousePointer2, color: 'text-amber-500', bg: 'bg-amber-500/10', trend: '-1.2%', isUp: false },
   ];
 
-  const trafficData = [
-    { label: 'Direct', value: `${trafficSources[0].value}%`, color: 'bg-primary' },
-    { label: 'Organic Search', value: `${trafficSources[2].value}%`, color: 'bg-blue-400' },
-    { label: 'Social', value: `${trafficSources[1].value}%`, color: 'bg-pink-500' },
-    { label: 'Referral', value: `${trafficSources[3].value}%`, color: 'bg-amber-500' },
-  ];
+  const trafficData = realAnalytics.trafficSources;
 
   return (
     <ErrorBoundary>
@@ -930,7 +998,7 @@ export default function Admin() {
                   <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium">Here's what's happening with your platform today.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-6">
                   {mainStats.map((stat, i) => (
                     <div key={i} className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-6 rounded-3xl flex flex-col gap-4 group hover:shadow-xl hover:shadow-primary/5 transition-all">
                       <div className="flex items-center justify-between">
@@ -964,22 +1032,25 @@ export default function Admin() {
                     </div>
 
                     <div className="h-64 flex items-end justify-between gap-2 px-2">
-                       {[65, 45, 75, 55, 90, 70, 85].map((h, i) => (
-                         <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
-                           <div className="w-full relative">
-                              <motion.div 
-                                initial={{ height: 0 }}
-                                animate={{ height: `${h}%` }}
-                                className="w-full max-w-[40px] mx-auto bg-gradient-to-t from-primary/40 to-primary rounded-t-xl group-hover:to-secondary transition-all cursor-pointer relative"
-                              >
-                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#171421] text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                  {Math.floor(h * 123)} visits
-                                </div>
-                              </motion.div>
+                       {dailyVisits.map((v, i) => {
+                         const h = barHeights[i];
+                         return (
+                           <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
+                             <div className="w-full h-48 relative flex items-end">
+                               <motion.div 
+                                 initial={{ height: 0 }}
+                                 animate={{ height: `${h}%` }}
+                                 className="w-full max-w-[40px] mx-auto bg-gradient-to-t from-primary/40 to-primary rounded-t-xl group-hover:to-secondary transition-all cursor-pointer relative"
+                               >
+                                 <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#171421] text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 shadow-md">
+                                   {formatNumber(v)} visits
+                                 </div>
+                               </motion.div>
+                             </div>
+                             <span className="text-[10px] font-bold text-[#756d8d] uppercase">{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}</span>
                            </div>
-                           <span className="text-[10px] font-bold text-[#756d8d] uppercase">{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}</span>
-                         </div>
-                       ))}
+                         );
+                       })}
                     </div>
                   </div>
 
@@ -1548,8 +1619,17 @@ export default function Admin() {
                               disabled={saving}
                               className="flex-[2] h-12 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                             >
-                              {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-4 h-4" />}
-                              {editingPrompt ? 'Update Changes' : 'Publish Prompt'}
+                              {saving ? (
+                                <>
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                  {savingText || (editingPrompt ? 'Update Changes' : 'Publish Prompt')}
+                                </>
+                              ) : (
+                                <>
+                                  <Upload className="w-4 h-4" />
+                                  {editingPrompt ? 'Update Changes' : 'Publish Prompt'}
+                                </>
+                              )}
                             </button>
                           </div>
                         </form>
@@ -1850,18 +1930,31 @@ export default function Admin() {
                     </label>
                     <input 
                       id="new-category-input"
-                      placeholder="Category name..."
-                      className="bg-transparent border-none outline-none px-4 py-2 text-sm font-medium w-48 text-[#171421] dark:text-white placeholder-[#8c84a6]"
+                      placeholder={uploadingCatId === -1 ? uploadingCatText : "Category name..."}
+                      disabled={uploadingCatId !== null}
+                      className="bg-transparent border-none outline-none px-4 py-2 text-sm font-medium w-48 text-[#171421] dark:text-white placeholder-[#8c84a6] disabled:opacity-50"
                       onKeyDown={async (e) => {
                         if (e.key === 'Enter') {
                           const input = e.currentTarget;
                           if (input.value) {
                             const name = input.value;
                             input.value = '';
-                            const file = newCatImageFile;
+                            let file = newCatImageFile;
                             setNewCatImageFile(null);
                             setNewCatImagePreview('');
                             try {
+                              if (file) {
+                                setUploadingCatId(-1);
+                                setUploadingCatText('Optimizing...');
+                                try {
+                                  file = await compressImage(file);
+                                } catch (compressErr: any) {
+                                  alert(compressErr.message || 'Image optimization failed.');
+                                  setUploadingCatId(null);
+                                  return;
+                                }
+                                setUploadingCatText('Uploading...');
+                              }
                               await addCategory(name, file || undefined);
                               setLogs(prev => [{
                                 id: Date.now(),
@@ -1873,6 +1966,8 @@ export default function Admin() {
                               }, ...prev]);
                             } catch (err) {
                               alert("Failed to create category");
+                            } finally {
+                              setUploadingCatId(null);
                             }
                           }
                         }
@@ -1884,10 +1979,22 @@ export default function Admin() {
                         if (input && input.value) {
                           const name = input.value;
                           input.value = '';
-                          const file = newCatImageFile;
+                          let file = newCatImageFile;
                           setNewCatImageFile(null);
                           setNewCatImagePreview('');
                           try {
+                            if (file) {
+                              setUploadingCatId(-1);
+                              setUploadingCatText('Optimizing...');
+                              try {
+                                file = await compressImage(file);
+                              } catch (compressErr: any) {
+                                alert(compressErr.message || 'Image optimization failed.');
+                                setUploadingCatId(null);
+                                return;
+                              }
+                              setUploadingCatText('Uploading...');
+                            }
                             await addCategory(name, file || undefined);
                             setLogs(prev => [{
                               id: Date.now(),
@@ -1899,12 +2006,15 @@ export default function Admin() {
                             }, ...prev]);
                           } catch (err) {
                             alert("Failed to create category");
+                          } finally {
+                            setUploadingCatId(null);
                           }
                         }
                       }}
-                      className="p-2.5 rounded-xl bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
+                      disabled={uploadingCatId !== null}
+                      className="p-2.5 rounded-xl bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105 transition-transform disabled:opacity-50"
                     >
-                      <Plus className="w-5 h-5" />
+                      {uploadingCatId === -1 ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
@@ -1915,7 +2025,7 @@ export default function Admin() {
                       {uploadingCatId === cat.id && (
                         <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
                           <Loader2 className="w-8 h-8 text-white animate-spin mb-2" />
-                          <span className="text-[10px] font-black uppercase tracking-wider text-white">Uploading Cover...</span>
+                          <span className="text-[10px] font-black uppercase tracking-wider text-white">{uploadingCatText}</span>
                         </div>
                       )}
                       {cat.image_url && (
@@ -1998,11 +2108,22 @@ export default function Admin() {
                               if (file) {
                                 try {
                                   setUploadingCatId(cat.id);
-                                  await updateCategory(cat.id, cat.name, file);
+                                  setUploadingCatText('Optimizing cover...');
+                                  let compressedFile = file;
+                                  try {
+                                    compressedFile = await compressImage(file);
+                                  } catch (compressErr: any) {
+                                    alert(compressErr.message || 'Image optimization failed.');
+                                    setUploadingCatId(null);
+                                    return;
+                                  }
+                                  setUploadingCatText('Uploading...');
+                                  await updateCategory(cat.id, cat.name, compressedFile);
                                 } catch (err) {
                                   alert("Failed to upload category cover image.");
                                 } finally {
                                   setUploadingCatId(null);
+                                  setUploadingCatText('Uploading Cover...');
                                 }
                               }
                             }}
@@ -2613,10 +2734,19 @@ export default function Admin() {
                     <button 
                       type="submit"
                       disabled={saving}
-                      className="flex-1 h-14 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                      className="flex-1 h-14 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-50"
                     >
-                      {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                      Update Changes
+                      {saving ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          {savingText || 'Update Changes'}
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-5 h-5" />
+                          Update Changes
+                        </>
+                      )}
                     </button>
                     <button 
                       type="button"
@@ -3083,7 +3213,7 @@ export default function Admin() {
           <div className="mt-4 flex justify-end gap-3 pt-6 border-t border-[#e9e2f3] dark:border-white/10">
             <button type="button" onClick={() => document.getElementById('banner-modal')?.closest('dialog')?.close()} className="px-6 py-2.5 rounded-full font-bold text-[#756d8d] hover:bg-[#f8f7fc] transition-colors">Cancel</button>
             <button type="submit" disabled={saving} className="px-8 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform disabled:opacity-50">
-              {saving ? 'Saving...' : 'Save Banner'}
+              {saving ? (savingText || 'Saving...') : 'Save Banner'}
             </button>
           </div>
         </form>

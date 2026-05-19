@@ -140,65 +140,65 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
           /* ORIGINAL HOME LAYOUT */
           <div className="flex min-h-10 items-center justify-between w-full rounded-[1.2rem] border border-white/15 bg-black/20 px-2 py-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:rounded-[1.35rem] md:px-4 md:py-2.5">
             <button
-              className="rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_rgba(139,92,246,0.25)] transition-transform active:scale-95 md:px-4 md:py-1.5 md:text-xs"
+              className="rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_rgba(139,92,246,0.25)] transition-transform active:scale-95 md:px-3 md:py-1 md:text-[10px] md:whitespace-nowrap md:overflow-hidden md:text-ellipsis md:max-w-[180px]"
               onClick={handleCategoryClick}
               aria-label={`View category ${prompt.category}`}
             >
               {prompt.category}
             </button>
-            <div className="flex items-center gap-2 md:gap-3.5">
+             <div className="flex items-center gap-2.5 md:gap-4 pr-1 md:pr-2.5">
               <button
-                className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+                className="flex items-center gap-1.5 text-xs font-bold tracking-normal transition-transform active:scale-90 md:gap-2 md:text-[15px]"
                 onClick={toggleLike}
                 aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
               >
-                <Heart className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
+                <Heart className="w-4 h-4 text-white md:w-[22px] md:h-[22px]" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
                 <span className="ml-1">{formatCount(likes)}</span>
               </button>
               
-              <div className="h-3 w-px bg-white/20" />
+              <div className="h-3.5 w-px bg-white/20" />
 
               <button
-                className="flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm"
+                className="flex items-center gap-1.5 text-xs font-bold tracking-normal md:gap-2 md:text-[15px]"
                 onClick={stopCardNavigation}
                 aria-label={`${formatCount(prompt.views)} views`}
               >
-                <Eye className="w-3.5 h-3.5 md:w-4.5 md:h-4.5" />
+                <Eye className="w-4 h-4 md:w-[22px] md:h-[22px]" />
                 <span className="ml-1">{formatCount(prompt.views)}</span>
               </button>
             </div>
           </div>
         ) : (
           /* NEW MINIMAL EXPLORE / SAVED LAYOUT */
-          <div className="flex items-center justify-around w-full rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:px-4 md:py-1.5">
+          <div className="flex items-center justify-around w-full rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:px-4 md:py-2.5">
             <button
-              className="flex items-center gap-1 text-[10px] font-medium tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-[11px]"
+              className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
               onClick={toggleLike}
               aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
             >
-              <Heart className="w-3 h-3 text-white md:w-3.5 md:h-3.5" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
-              <span className="ml-0.5">{formatCount(likes)}</span>
+              <Heart className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
+              <span className="ml-1">{formatCount(likes)}</span>
             </button>
             
-            <div className="h-2.5 w-px bg-white/20" />
+            <div className="h-3 w-px bg-white/20" />
 
             <button
-              className="flex items-center gap-1 text-[10px] font-medium tracking-normal md:gap-1.5 md:text-[11px]"
+              className="flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm"
               onClick={stopCardNavigation}
               aria-label={`${formatCount(prompt.views)} views`}
             >
-              <Eye className="w-3 h-3 md:w-3.5 md:h-3.5" />
-              <span className="ml-0.5">{formatCount(prompt.views)}</span>
+              <Eye className="w-3.5 h-3.5 md:w-4.5 md:h-4.5" />
+              <span className="ml-1">{formatCount(prompt.views)}</span>
             </button>
 
-            <div className="h-2.5 w-px bg-white/20" />
+            <div className="h-3 w-px bg-white/20" />
 
             <button
-              className="flex items-center gap-1 text-[10px] font-medium tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-[11px]"
+              className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
               onClick={toggleSave}
               aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
             >
-              <Bookmark className="w-3 h-3 text-white md:w-3.5 md:h-3.5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
+              <Bookmark className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
             </button>
           </div>
         )}

@@ -43,7 +43,8 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       if (image) formData.append('image', image);
 
       await axios.post(API_URL, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 120000
       });
       fetchCategories();
     } catch (error) {
@@ -69,7 +70,8 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       if (image) formData.append('image', image);
 
       await axios.put(`${API_URL}/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 120000
       });
       fetchCategories();
     } catch (error) {

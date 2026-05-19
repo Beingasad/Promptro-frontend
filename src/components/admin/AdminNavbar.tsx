@@ -1,12 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Search, Bell, Moon, Sun, ChevronDown, CheckCircle2, AlertCircle, LogOut, User, Settings as SettingsIcon, MessageSquare } from 'lucide-react';
+import { Search, Bell, Moon, Sun, ChevronDown, CheckCircle2, AlertCircle, LogOut, User, Settings as SettingsIcon, MessageSquare, Menu } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../../config';
 import { cn } from '../../utils/cn';
 
-export function AdminNavbar() {
-  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+interface AdminNavbarProps {
+  isSidebarOpen: boolean;
+  onToggleSidebar: () => void;
+  activeTab: string;
+}
+
+export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: AdminNavbarProps) {
+  const [isDark, setIsDark] = useState(() => {
+    const localTheme = localStorage.getItem('promptro:theme');
+    if (localTheme) return localTheme === 'Dark';
+    return document.documentElement.classList.contains('dark') || 
+           document.documentElement.dataset.theme === 'dark';
+  });
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
@@ -58,24 +69,36 @@ export function AdminNavbar() {
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
+      document.documentElement.dataset.theme = 'dark';
+      document.body.setAttribute('data-theme', 'dark');
+      localStorage.setItem('promptro:theme', 'Dark');
       localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.dataset.theme = 'light';
+      document.body.setAttribute('data-theme', 'light');
+      localStorage.setItem('promptro:theme', 'Light');
       localStorage.setItem('theme', 'light');
     }
+    window.dispatchEvent(new Event('storage'));
   }, [isDark]);
 
   return (
     <header className="h-16 flex items-center justify-between px-2 mb-8 mt-2 relative z-50">
-      <div className="relative w-96 group">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#756d8d] group-focus-within:text-primary transition-colors" />
-        <input 
-          type="text" 
-          placeholder="Search prompts, categories, analytics..." 
-          className="w-full bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/10 transition-all"
-        />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded-md bg-white dark:bg-white/10 border border-[#e9e2f3] dark:border-white/10 text-[10px] font-bold text-[#756d8d]">
-          ⌘ K
+      <div className="flex items-center gap-3">
+        <button 
+          onClick={onToggleSidebar}
+          className={cn(
+            "w-10 h-10 rounded-xl flex items-center justify-center bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] dark:text-[#afa6c8] hover:bg-primary/10 hover:text-primary transition-all shadow-sm",
+            isSidebarOpen ? "lg:hidden" : "lg:flex"
+          )}
+          title="Toggle Sidebar"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        <div>
+          <h2 className="text-xl font-bold text-[#171421] dark:text-white tracking-tight hidden sm:block">{activeTab}</h2>
+          <span className="text-[11px] font-bold text-primary uppercase tracking-wider block sm:hidden">{activeTab}</span>
         </div>
       </div>
 
