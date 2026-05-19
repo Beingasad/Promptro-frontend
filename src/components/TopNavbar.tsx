@@ -845,11 +845,11 @@ export default function TopNavbar() {
 
     // Fetch dynamic notifications
     axios.get(`${API_BASE_URL}/api/notifications`).then(res => {
-      setNotifications(res.data);
-      const lastReadCount = parseInt(localStorage.getItem('promptro:notifications-read-count') || '0');
-      if (res.data.length > lastReadCount) {
-        setHasUnreadNotifications(true);
-      }
+      const fetched = Array.isArray(res.data) ? res.data : [];
+      setNotifications(fetched);
+      const readIds: string[] = JSON.parse(localStorage.getItem('promptro:read-notification-ids') || '[]');
+      const hasUnread = fetched.some((notif: any) => !readIds.includes(String(notif.id)));
+      setHasUnreadNotifications(fetched.length > 0 ? hasUnread : false);
     }).catch(err => console.error('Error fetching notifications:', err));
 
     // Fetch live dynamic prompt count
@@ -1203,7 +1203,8 @@ export default function TopNavbar() {
             onClick={() => {
               setNotificationsOpen((open) => !open);
               setHasUnreadNotifications(false);
-              localStorage.setItem('promptro:notifications-read-count', notifications.length.toString());
+              const currentIds = notifications.map((n: any) => String(n.id));
+              localStorage.setItem('promptro:read-notification-ids', JSON.stringify(currentIds));
               setMenuOpen(false);
               setProfileOpen(false);
             }}
@@ -1380,7 +1381,7 @@ export default function TopNavbar() {
             <motion.button
               type="button"
               aria-label="Close notifications"
-              className="fixed inset-0 z-[15] cursor-default bg-transparent"
+              className="fixed inset-0 z-[110] cursor-default bg-transparent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -1390,7 +1391,7 @@ export default function TopNavbar() {
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[25] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] border border-[#e9e2f3] dark:border-white/10 bg-white/95 dark:bg-[#171421]/95 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
+              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] border border-[#e9e2f3] dark:border-white/10 bg-white/95 dark:bg-[#171421]/95 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
             >
               <div className="mb-2 flex items-center justify-between gap-3">
                 <button
@@ -1446,7 +1447,7 @@ export default function TopNavbar() {
             <motion.button
               type="button"
               aria-label="Close profile"
-              className="fixed inset-0 z-[15] cursor-default bg-transparent"
+              className="fixed inset-0 z-[110] cursor-default bg-transparent"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -1456,7 +1457,7 @@ export default function TopNavbar() {
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="fixed right-3 top-[3.65rem] z-[25] w-[min(18rem,calc(100vw-1.5rem))] overflow-hidden rounded-[1.6rem] border border-white/80 bg-white/90 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] backdrop-blur-2xl md:right-8 md:top-[5.1rem]"
+              className="fixed right-3 top-[3.65rem] z-[120] w-[min(18rem,calc(100vw-1.5rem))] overflow-hidden rounded-[1.6rem] border border-white/80 bg-white/90 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] backdrop-blur-2xl md:right-8 md:top-[5.1rem]"
             >
               <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_20%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_88%_6%,rgba(255,106,61,0.14),transparent_42%)]" />
               <div className="relative mb-3 flex items-center justify-between">
