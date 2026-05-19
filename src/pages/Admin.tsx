@@ -1355,21 +1355,21 @@ export default function Admin() {
 
             {activeTab === 'Upload Prompt' && (
               <div className="flex flex-col gap-8">
-                <div className="flex items-end justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                   <div>
-                    <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">Upload New Prompt</h1>
-                    <p className="text-[#756d8d] dark:text-[#afa6c8] mt-1 font-medium">Add a new prompt with image to the platform</p>
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#171421] dark:text-white bg-clip-text bg-gradient-to-r from-[#171421] via-primary to-[#ff6a3d] dark:from-white dark:to-[#afa6c8] whitespace-nowrap">Upload New Prompt</h1>
+                    <p className="text-[13px] text-[#756d8d] dark:text-[#afa6c8] mt-1 font-medium">Add a new prompt with image to the platform</p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
                     <button 
                       onClick={() => setShowBulkModal(true)}
-                      className="glass-button px-6 py-2.5 font-bold text-sm text-[#171421] dark:text-white"
+                      className="glass-button flex-1 sm:flex-none px-6 py-2.5 font-bold text-sm text-[#171421] dark:text-white text-center"
                     >
                       Import Bulk
                     </button>
                     <button 
                       onClick={resetForm}
-                      className="px-6 py-2.5 rounded-full bg-[#171421] dark:bg-white text-white dark:text-[#171421] font-bold text-sm shadow-xl shadow-black/10 hover:scale-105 transition-transform"
+                      className="flex-1 sm:flex-none px-6 py-2.5 rounded-full bg-[#171421] dark:bg-white text-white dark:text-[#171421] font-bold text-sm shadow-xl shadow-black/10 hover:scale-105 transition-transform text-center"
                     >
                       Reset Form
                     </button>

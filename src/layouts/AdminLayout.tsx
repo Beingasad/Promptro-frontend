@@ -41,7 +41,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       />
       
       {/* Main Content Area */}
-      <main className="flex-1 h-full overflow-y-auto px-4 sm:px-8 py-6 z-10">
+      <main className="flex-1 h-full overflow-y-auto px-4 sm:px-8 pt-2 sm:pt-6 pb-6 z-10">
         <div className="max-w-[1600px] mx-auto">
           <AdminNavbar 
             isSidebarOpen={isSidebarOpen} 

@@ -195,6 +195,12 @@
     box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34) !important;
   }
 
+  [data-theme="dark"] input,
+  [data-theme="dark"] textarea,
+  [data-theme="dark"] select,
+  [data-theme="dark"] .glass-input {
+    color: #f7f2ff !important;
+  }
 }
 
 /* Global utility classes outside of Tailwind layers to ensure they are never stripped */

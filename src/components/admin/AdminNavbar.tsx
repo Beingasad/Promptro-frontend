@@ -84,7 +84,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
   }, [isDark]);
 
   return (
-    <header className="h-16 flex items-center justify-between px-2 mb-8 mt-2 relative z-50">
+    <header className="h-16 flex items-center justify-between px-2 mb-8 mt-0 relative z-50">
       <div className="flex items-center gap-3">
         <button 
           onClick={onToggleSidebar}
@@ -181,7 +181,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
           >
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shadow-sm">
               <img 
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&auto=format&fit=crop" 
+                src="/admin_profile.jpg" 
                 alt="Admin" 
                 className="w-full h-full object-cover"
               />
