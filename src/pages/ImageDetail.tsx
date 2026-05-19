@@ -71,6 +71,14 @@ export default function ImageDetail() {
     navigate('/explore');
   };
 
+  const handleBack = () => {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   const [isPortrait, setIsPortrait] = useState(false);
 
   useEffect(() => {
@@ -182,7 +190,7 @@ export default function ImageDetail() {
     <>
       <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-center justify-between">
         <button
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="flex h-8 w-8 items-center justify-center rounded-[14px] border border-white/12 bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
           aria-label="Go back"
         >

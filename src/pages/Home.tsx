@@ -1,25 +1,40 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import CategorySection from '../components/CategorySection';
 import MasonryGrid from '../components/MasonryGrid';
 import { Prompt } from '../components/ImageCard';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Flame, ChevronRight } from 'lucide-react';
 import { useSearch } from '../context/SearchContext';
 import HomeBanners from '../components/HomeBanners';
 import MobileHeroCarousel from '../components/MobileHeroCarousel';
-import { cn } from '../utils/cn';
-
-
+import { useCategories } from '../context/CategoryContext';
 
 export default function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { searchQuery, setSearchQuery } = useSearch();
+  const { categories: globalCategories } = useCategories();
+  const categoryNames = globalCategories.map(c => c.name);
+  const filterCategories = ['All', ...categoryNames];
+
+  const selectedCategory = new URLSearchParams(location.search).get('category');
+  const [activeCategory, setActiveCategory] = useState(() => (
+    selectedCategory && filterCategories.includes(selectedCategory) ? selectedCategory : 'All'
+  ));
   const [prompts, setPrompts] = useState<Prompt[]>([]);
-  const [activeCategory, setActiveCategory] = useState('All');
   const [loading, setLoading] = useState(true);
+
+  // Sync category state from URL query parameter
+  useEffect(() => {
+    const category = new URLSearchParams(location.search).get('category');
+    if (category && filterCategories.includes(category)) {
+      setActiveCategory(category);
+    } else {
+      setActiveCategory('All');
+    }
+  }, [location.search, globalCategories]);
 
   useEffect(() => {
     setSearchQuery('');
@@ -106,10 +121,6 @@ export default function Home() {
 
         <HomeBanners />
       </section>
-
-      <div className="sticky top-[132px] z-40 -mx-4 px-4 pb-2 pt-1 md:top-[6.8rem] sm:-mx-6 sm:px-10 lg:-mx-8 lg:px-14">
-        <CategorySection activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
-      </div>
 
       <div className="w-full">
         {loading ? (

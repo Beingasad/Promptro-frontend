@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   ArrowLeft,
   Search,
@@ -25,6 +25,7 @@ import {
   Copy,
   Check,
   ArrowUpRight,
+  LayoutGrid,
 } from 'lucide-react';
 import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -37,13 +38,31 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
 import { useSearch } from '../context/SearchContext';
+import { useCategories } from '../context/CategoryContext';
 
 type DrawerView = 'recent' | 'help' | 'about' | null;
 
 export default function TopNavbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { searchQuery, setSearchQuery } = useSearch();
+  const { categories: globalCategories } = useCategories();
   const [isFocused, setIsFocused] = useState(false);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+
+  const categories = ['All', ...globalCategories.map((c) => c.name)];
+  const currentCategory = new URLSearchParams(location.search).get('category') || 'All';
+
+  const handleSelectCategory = (category: string) => {
+    const params = new URLSearchParams(location.search);
+    if (category === 'All') {
+      params.delete('category');
+    } else {
+      params.set('category', category);
+    }
+    navigate(`/?${params.toString()}`);
+    setCategoryDropdownOpen(false);
+  };
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -190,7 +209,13 @@ export default function TopNavbar() {
     alert('Showcase link copied to clipboard! Share it on Instagram Stories or WhatsApp groups.');
   };
 
-  const renderShowcaseCanvas = (): Promise<HTMLCanvasElement> => {
+  const renderShowcaseCanvas = async (): Promise<HTMLCanvasElement> => {
+    try {
+      await document.fonts.ready;
+    } catch (e) {
+      console.error("Failed to load fonts for showcase:", e);
+    }
+
     return new Promise((resolve, reject) => {
       if (selectedPrompts.length < 1) {
         reject(new Error("No prompts selected"));
@@ -206,21 +231,23 @@ export default function TopNavbar() {
         return;
       }
 
+      const isLight = appearanceMode === 'Light';
+
       // 1. Draw Background Gradient
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, '#181524');
-      gradient.addColorStop(0.5, '#0d0b13');
-      gradient.addColorStop(1, '#120f1b');
+      gradient.addColorStop(0, isLight ? '#f9f8fc' : '#181524');
+      gradient.addColorStop(0.5, isLight ? '#f5f0ff' : '#0d0b13');
+      gradient.addColorStop(1, isLight ? '#f9f5fa' : '#120f1b');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // 2. Draw Glow Orbs
-      ctx.fillStyle = 'rgba(124, 58, 237, 0.15)';
+      ctx.fillStyle = isLight ? 'rgba(139, 92, 246, 0.08)' : 'rgba(124, 58, 237, 0.15)';
       ctx.beginPath();
       ctx.arc(canvas.width / 2, canvas.height / 2, 700, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = 'rgba(236, 72, 153, 0.08)';
+      ctx.fillStyle = isLight ? 'rgba(255, 106, 61, 0.05)' : 'rgba(236, 72, 153, 0.08)';
       ctx.beginPath();
       ctx.arc(100, 200, 400, 0, Math.PI * 2);
       ctx.fill();
@@ -236,16 +263,16 @@ export default function TopNavbar() {
       ctx.fill();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 36px sans-serif';
+      ctx.font = "bold 36px 'Satoshi', sans-serif";
       ctx.textAlign = 'center';
       ctx.fillText('PROMPTRO', canvas.width / 2, 196);
 
       ctx.fillStyle = '#8c84a6';
-      ctx.font = 'bold 24px sans-serif';
+      ctx.font = "bold 24px 'Satoshi', sans-serif";
       ctx.fillText('MY FAVORITE PICKS', canvas.width / 2, 265);
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '900 58px sans-serif';
+      ctx.font = "900 58px 'Satoshi', sans-serif";
       ctx.fillText('CREATIVE INSPIRATIONS', canvas.width / 2, 390);
 
       // Draw line under heading
@@ -265,7 +292,7 @@ export default function TopNavbar() {
             ctx.rotate(angleDegrees * Math.PI / 180);
           }
 
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+          ctx.shadowColor = isLight ? 'rgba(72, 56, 118, 0.14)' : 'rgba(0, 0, 0, 0.6)';
           ctx.shadowBlur = isCenter ? 60 : 35;
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = isCenter ? 25 : 15;
@@ -278,7 +305,7 @@ export default function TopNavbar() {
           } else {
             ctx.rect(rx, ry, cw, ch);
           }
-          ctx.fillStyle = '#171421';
+          ctx.fillStyle = isLight ? '#ffffff' : '#171421';
           ctx.fill();
 
           ctx.clip();
@@ -302,11 +329,11 @@ export default function TopNavbar() {
 
         // 5. Draw Footer CTA Block
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 36px sans-serif';
+        ctx.font = "bold 36px 'Satoshi', sans-serif";
         ctx.fillText('DISCOVER TOP ART PROMPTS', canvas.width / 2, 1420);
 
         ctx.fillStyle = '#8c84a6';
-        ctx.font = '500 24px sans-serif';
+        ctx.font = "500 24px 'Satoshi', sans-serif";
         ctx.fillText('Explore high-quality AI prompt templates on Promptro.in', canvas.width / 2, 1475);
 
         ctx.fillStyle = '#7c3aed';
@@ -323,7 +350,7 @@ export default function TopNavbar() {
         ctx.stroke();
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 32px sans-serif';
+        ctx.font = "bold 32px 'Satoshi', sans-serif";
         ctx.fillText('✨ DISCOVER ON PROMPTRO.IN', canvas.width / 2, 1600);
 
         resolve(canvas);
@@ -346,7 +373,7 @@ export default function TopNavbar() {
             pCtx.fillStyle = '#1c182d';
             pCtx.fillRect(0, 0, 420, 560);
             pCtx.fillStyle = '#ffffff';
-            pCtx.font = 'bold 24px sans-serif';
+            pCtx.font = "bold 24px 'Satoshi', sans-serif";
             pCtx.textAlign = 'center';
             pCtx.fillText('AI Prompt Art', 210, 280);
           }
@@ -861,24 +888,79 @@ export default function TopNavbar() {
           </Link>
         </div>
 
-        <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px]">
+        {categoryDropdownOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-transparent"
+            onClick={() => setCategoryDropdownOpen(false)}
+          />
+        )}
+
+        <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px] relative">
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
             <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`}></div>
-            <div className="relative flex h-11 w-full items-center overflow-hidden rounded-full border border-white/80 dark:border-white/10 bg-white/78 dark:bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14">
-              <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
-                <Search className="w-5 h-5 md:w-5.5 md:h-5.5" />
+            <div className="relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full border border-white/80 dark:border-white/10 bg-white/78 dark:bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14">
+              <div className="flex flex-grow items-center h-full min-w-0">
+                <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
+                  <Search className="w-5 h-5 md:w-5.5 md:h-5.5" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search prompts, styles, themes..."
+                  className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] dark:text-white placeholder-[#8c84a6] dark:placeholder-[#afa6c8]/60 focus:outline-none md:text-base"
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
-              <input
-                type="text"
-                placeholder="Search prompts, styles, themes..."
-                className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] dark:text-white placeholder-[#8c84a6] dark:placeholder-[#afa6c8]/60 focus:outline-none md:text-base"
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+
+              {/* Category Dropdown Trigger */}
+              <div className="flex items-center pr-2 md:pr-3 shrink-0 relative z-50">
+                <button
+                  type="button"
+                  onClick={() => setCategoryDropdownOpen(prev => !prev)}
+                  title="Select Category"
+                  className={`flex items-center justify-center transition-all duration-300 cursor-pointer p-1.5 hover:scale-105 active:scale-95 ${
+                    categoryDropdownOpen || currentCategory !== 'All'
+                      ? 'text-primary'
+                      : 'text-[#81789e] hover:text-[#171421] dark:text-[#afa6c8]/60 dark:hover:text-white'
+                  }`}
+                >
+                  <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5" />
+                </button>
+              </div>
             </div>
           </div>
+
+          <AnimatePresence>
+            {categoryDropdownOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto hide-scrollbar rounded-2xl border border-white/80 bg-white/94 p-2.5 shadow-[0_24px_50px_rgba(72,56,118,0.24)] backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/94"
+              >
+                <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#8c84a6]">Categories</p>
+                <div className="mt-1.5 flex flex-col gap-0.5">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => handleSelectCategory(category)}
+                      className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${
+                        currentCategory === category
+                          ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
+                          : 'text-[#4e4566] hover:bg-black/5 dark:text-[#c6bddb] dark:hover:bg-white/5'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <div className="flex shrink-0 items-center gap-2 md:gap-3">
@@ -953,10 +1035,7 @@ export default function TopNavbar() {
                 duration: 0.35, 
                 ease: [0.32, 0.72, 0, 1] 
               }}
-              onClick={() => {
-                if (windowWidth < 768) setIsFullWidth(true);
-              }}
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/72 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform cursor-pointer md:cursor-default transition-[border-radius] duration-300 ${
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/72 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform cursor-default transition-[border-radius] duration-300 ${
                 (windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
               }`}
             >
@@ -1342,36 +1421,66 @@ export default function TopNavbar() {
                       </div>
 
                       {/* Centered Premium Poster Preview Card */}
-                      <div className="w-[200px] h-[356px] md:w-[260px] md:h-[462px] rounded-[1.5rem] md:rounded-[2rem] bg-gradient-to-b from-[#181524] via-[#0d0b13] to-[#120f1b] border border-primary/20 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col relative shrink-0">
-                        <div className="absolute -top-12 -left-12 w-28 h-28 rounded-full bg-primary/20 blur-2xl pointer-events-none" />
-                        <div className="absolute -bottom-12 -right-12 w-28 h-28 rounded-full bg-secondary/20 blur-2xl pointer-events-none" />
+                      <div className={`w-[200px] h-[356px] md:w-[260px] md:h-[462px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden flex flex-col relative shrink-0 border transition-all duration-300 ${
+                        appearanceMode === 'Light'
+                          ? 'bg-gradient-to-b from-[#f9f8fc] via-[#f5f0ff] to-[#f9f5fa] border-primary/10 shadow-[0_24px_50px_-12px_rgba(72,56,118,0.15)]'
+                          : 'bg-gradient-to-b from-[#181524] via-[#0d0b13] to-[#120f1b] border-primary/20 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.5)]'
+                      }`}>
+                        <div className={`absolute -top-12 -left-12 w-28 h-28 rounded-full blur-2xl pointer-events-none transition-all duration-300 ${
+                          appearanceMode === 'Light' ? 'bg-primary/10' : 'bg-primary/20'
+                        }`} />
+                        <div className={`absolute -bottom-12 -right-12 w-28 h-28 rounded-full blur-2xl pointer-events-none transition-all duration-300 ${
+                          appearanceMode === 'Light' ? 'bg-secondary/10' : 'bg-secondary/20'
+                        }`} />
 
                         {/* Top Watermark */}
                         <div className="flex flex-col items-center pt-4 md:pt-6 gap-0.5 md:gap-1 relative z-10">
-                          <div className="text-[7px] md:text-[9px] font-black uppercase tracking-[0.25em] text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">Promptro</div>
-                          <div className="text-[6px] md:text-[8px] font-bold text-[#8c84a6] uppercase tracking-[0.1em] mt-0.5 md:mt-1">Elevate Your Artistry</div>
+                          <div className={`text-[7px] md:text-[9px] font-black uppercase tracking-[0.25em] px-2.5 py-0.5 rounded-full border transition-all duration-300 ${
+                            appearanceMode === 'Light'
+                              ? 'text-primary bg-primary/5 border-primary/10'
+                              : 'text-primary bg-primary/10 border border-primary/20'
+                          }`}>Promptro</div>
+                          <div className={`text-[6px] md:text-[8px] font-bold uppercase tracking-[0.1em] mt-0.5 md:mt-1 transition-colors duration-300 ${
+                            appearanceMode === 'Light' ? 'text-[#6f6684]' : 'text-[#8c84a6]'
+                          }`}>Elevate Your Artistry</div>
                         </div>
 
                         {/* Center Poster Main Heading */}
                         <div className="text-center mt-2.5 md:mt-4 relative z-10 px-4">
-                          <h4 className="text-[9px] md:text-xs font-black tracking-wide text-white uppercase bg-gradient-to-r from-white via-[#ece8ff] to-[#dfd5ff] bg-clip-text text-transparent">Creative Inspirations</h4>
+                          <h4 className={`text-[9px] md:text-xs font-black tracking-wide uppercase transition-all duration-300 ${
+                            appearanceMode === 'Light'
+                              ? 'text-[#171421]'
+                              : 'text-white bg-gradient-to-r from-white via-[#ece8ff] to-[#dfd5ff] bg-clip-text text-transparent'
+                          }`}>Creative Inspirations</h4>
                           <div className="h-[1px] w-8 md:w-12 bg-primary/40 mx-auto mt-1.5 md:mt-2" />
                         </div>
 
                         {/* Dynamic prompt collage stack */}
                         <div className="relative flex items-center justify-center h-36 md:h-48 w-full my-auto z-10">
                           {selectedPrompts.length === 1 && (
-                            <div className="w-20 h-28 md:w-28 md:h-36 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.6)] z-20">
+                            <div className={`w-20 h-28 md:w-28 md:h-36 rounded-xl md:rounded-2xl overflow-hidden border z-20 transition-all duration-300 ${
+                              appearanceMode === 'Light'
+                                ? 'border-black/5 shadow-[0_12px_28px_rgba(72,56,118,0.15)] bg-white'
+                                : 'border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.6)] bg-[#171421]'
+                            }`}>
                               <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                             </div>
                           )}
 
                           {selectedPrompts.length === 2 && (
                             <div className="relative flex items-center justify-center w-full h-full">
-                              <div className="w-16 h-22 md:w-22 md:h-30 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 -rotate-[8deg] translate-x-3 shadow-xl opacity-80">
+                              <div className={`w-16 h-22 md:w-22 md:h-30 rounded-xl md:rounded-2xl overflow-hidden border -rotate-[8deg] translate-x-3 opacity-80 transition-all duration-300 ${
+                                appearanceMode === 'Light'
+                                  ? 'border-black/5 shadow-md bg-white'
+                                  : 'border-white/10 shadow-xl bg-[#171421]'
+                              }`}>
                                 <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                               </div>
-                              <div className="w-18 h-24 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 rotate-[8deg] -translate-x-3 shadow-[0_12px_28px_rgba(0,0,0,0.6)] z-20">
+                              <div className={`w-18 h-24 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border rotate-[8deg] -translate-x-3 z-20 transition-all duration-300 ${
+                                appearanceMode === 'Light'
+                                  ? 'border-black/5 shadow-[0_12px_28px_rgba(72,56,118,0.15)] bg-white'
+                                  : 'border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.6)] bg-[#171421]'
+                              }`}>
                                 <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
                               </div>
                             </div>
@@ -1379,15 +1488,23 @@ export default function TopNavbar() {
 
                           {selectedPrompts.length === 3 && (
                             <>
-                              <div className="absolute left-2.5 md:left-4 w-16 h-22 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 -rotate-12 translate-y-2 md:translate-y-3 shadow-xl scale-90 opacity-60">
+                              <div className={`absolute left-2.5 md:left-4 w-16 h-22 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border -rotate-12 translate-y-2 md:translate-y-3 scale-90 opacity-60 transition-all duration-300 ${
+                                appearanceMode === 'Light' ? 'border-black/5 shadow-md bg-white' : 'border-white/10 shadow-xl bg-[#171421]'
+                              }`}>
                                 <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                               </div>
                               
-                              <div className="absolute right-2.5 md:right-4 w-16 h-22 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 rotate-12 translate-y-2 md:translate-y-3 shadow-xl scale-90 opacity-60">
+                              <div className={`absolute right-2.5 md:right-4 w-16 h-22 md:w-24 md:h-32 rounded-xl md:rounded-2xl overflow-hidden border rotate-12 translate-y-2 md:translate-y-3 scale-90 opacity-60 transition-all duration-300 ${
+                                appearanceMode === 'Light' ? 'border-black/5 shadow-md bg-white' : 'border-white/10 shadow-xl bg-[#171421]'
+                              }`}>
                                 <img src={selectedPrompts[2]?.image_url} className="w-full h-full object-cover" />
                               </div>
 
-                              <div className="absolute w-20 h-26 md:w-28 md:h-36 rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.6)] z-20">
+                              <div className={`absolute w-20 h-26 md:w-28 md:h-36 rounded-xl md:rounded-2xl overflow-hidden border z-20 transition-all duration-300 ${
+                                appearanceMode === 'Light'
+                                  ? 'border-black/5 shadow-[0_12px_28px_rgba(72,56,118,0.15)] bg-white'
+                                  : 'border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.6)] bg-[#171421]'
+                              }`}>
                                 <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
                               </div>
                             </>
@@ -1396,8 +1513,12 @@ export default function TopNavbar() {
 
                         {/* Bottom CTA Block on Poster */}
                         <div className="flex flex-col items-center gap-1.5 md:gap-2 px-4 pb-4 md:pb-6 text-center mt-auto relative z-10">
-                          <h4 className="text-[7px] md:text-[9px] font-black tracking-wide text-white uppercase">My Favorites Collection</h4>
-                          <p className="text-[6px] md:text-[7px] font-bold text-[#8c84a6] max-w-[130px] md:max-w-[170px]">Explore these stunning prompt templates on Promptro</p>
+                          <h4 className={`text-[7px] md:text-[9px] font-black tracking-wide uppercase transition-colors duration-300 ${
+                            appearanceMode === 'Light' ? 'text-[#171421]' : 'text-white'
+                          }`}>My Favorites Collection</h4>
+                          <p className={`text-[6px] md:text-[7px] font-bold max-w-[130px] md:max-w-[170px] transition-colors duration-300 ${
+                            appearanceMode === 'Light' ? 'text-[#6f6684]' : 'text-[#8c84a6]'
+                          }`}>Explore these stunning prompt templates on Promptro</p>
                           <div className="w-full py-1.5 md:py-2 rounded-lg md:rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-extrabold text-[7px] md:text-[8px] tracking-wider shadow-lg shadow-primary/25 border border-white/10 flex items-center justify-center gap-0.5 md:gap-1 mt-0.5 md:mt-1">
                             <span>✨ DISCOVER ON PROMPTRO.IN</span>
                             <ArrowUpRight className="w-2.5 h-2.5 md:w-3 md:h-3" />
