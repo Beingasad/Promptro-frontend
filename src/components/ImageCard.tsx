@@ -126,7 +126,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       {isHome && (
         <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:-translate-y-0.5">
           <button 
-            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-white/26 backdrop-blur-2xl border border-white/30 flex items-center justify-center hover:bg-white/38 text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition-colors"
+            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl border border-white/15 flex items-center justify-center hover:bg-black/35 text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition-colors"
             onClick={toggleSave}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
@@ -145,7 +145,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
 
         {isHome ? (
           /* ORIGINAL HOME LAYOUT */
-          <div className="flex min-h-10 items-center justify-between w-full rounded-[1.2rem] border border-white/24 bg-white/22 px-2 py-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:rounded-[1.35rem] md:px-4 md:py-2.5">
+          <div className="flex min-h-10 items-center justify-between w-full rounded-[1.2rem] border border-white/15 bg-black/20 px-2 py-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:rounded-[1.35rem] md:px-4 md:py-2.5">
             <button
               className="rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white shadow-[0_10px_24px_rgba(139,92,246,0.25)] transition-transform active:scale-95 md:px-4 md:py-1.5 md:text-xs"
               onClick={handleCategoryClick}
@@ -177,7 +177,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
           </div>
         ) : (
           /* NEW MINIMAL EXPLORE / SAVED LAYOUT */
-          <div className="flex items-center justify-around w-full rounded-full border border-white/24 bg-white/22 px-2.5 py-1 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:px-4 md:py-1.5">
+          <div className="flex items-center justify-around w-full rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:px-4 md:py-1.5">
             <button
               className="flex items-center gap-1 text-[10px] font-extrabold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-xs"
               onClick={toggleLike}
