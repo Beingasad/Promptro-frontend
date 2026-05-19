@@ -1556,8 +1556,8 @@ export default function TopNavbar() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[220px] md:max-h-[300px] overflow-y-auto pr-2">
-                      {allPromptsForShowcase.slice(0, 15).map((prompt) => (
+                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[340px] md:max-h-[420px] overflow-y-auto pr-2 pb-4">
+                      {allPromptsForShowcase.map((prompt) => (
                         <div
                           key={prompt.id}
                           onClick={() => {
