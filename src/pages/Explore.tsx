@@ -124,7 +124,7 @@ export default function Explore() {
         description="Explore high-quality AI prompts, cinematic prompts, portrait prompts, and creative templates in the Explore Studio."
         keywords="AI prompts, explore AI prompts, Midjourney prompts, ChatGPT prompts, Promptro"
       />
-      <section className="mb-2">
+      <section className="mb-6 md:mb-8">
         <p className="flex items-center gap-2 text-sm font-medium uppercase text-primary">
           <Compass className="h-4 w-4" />
           Prompt library

@@ -113,14 +113,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100"></div>
 
-      {/* Top Right: Category Badge (ONLY ON MINIMAL EXPLORE/SAVED MODE) */}
-      {!isHome && (
-        <div className="absolute top-3 right-3 z-10 transition-transform duration-300 group-hover:-translate-y-0.5 max-w-[90%] whitespace-nowrap">
-          <span className="inline-block rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-white drop-shadow-md whitespace-nowrap truncate max-w-full md:px-3.5 md:py-1 md:text-[10px] shadow-[0_8px_16px_rgba(139,92,246,0.26)]">
-            {prompt.category}
-          </span>
-        </div>
-      )}
+      {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
       {/* Top Right: Bookmark Button (ONLY ON ORIGINAL HOME MODE) */}
       {isHome && (
@@ -179,7 +172,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
           /* NEW MINIMAL EXPLORE / SAVED LAYOUT */
           <div className="flex items-center justify-around w-full rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:px-4 md:py-1.5">
             <button
-              className="flex items-center gap-1 text-[10px] font-extrabold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-xs"
+              className="flex items-center gap-1 text-[10px] font-medium tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-[11px]"
               onClick={toggleLike}
               aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
             >
@@ -190,7 +183,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
             <div className="h-2.5 w-px bg-white/20" />
 
             <button
-              className="flex items-center gap-1 text-[10px] font-extrabold tracking-normal md:gap-1.5 md:text-xs"
+              className="flex items-center gap-1 text-[10px] font-medium tracking-normal md:gap-1.5 md:text-[11px]"
               onClick={stopCardNavigation}
               aria-label={`${formatCount(prompt.views)} views`}
             >
@@ -201,7 +194,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
             <div className="h-2.5 w-px bg-white/20" />
 
             <button
-              className="flex items-center gap-1 text-[10px] font-extrabold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-xs"
+              className="flex items-center gap-1 text-[10px] font-medium tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-[11px]"
               onClick={toggleSave}
               aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
             >

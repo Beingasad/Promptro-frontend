@@ -1,33 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.promptro.in/</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://promptro.in/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.promptro.in/explore</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://promptro.in/explore</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.promptro.in/categories</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://promptro.in/categories</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.promptro.in/saved</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://promptro.in/prompt/6eedec91-ee52-4064-a13d-cad26b493cba</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.promptro.in/admin</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://promptro.in/prompt/2cecbe50-52f5-40b2-a3a5-da93a7675352</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://promptro.in/prompt/a76b998b-ce3e-4e03-b2c6-ffe4fbefea58</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://promptro.in/prompt/558b2ba8-b6ed-4cf3-8934-1dd1d5a81aeb</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://promptro.in/prompt/9839c28b-a56a-4c5e-8350-21356180a469</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://promptro.in/prompt/ae025f6c-9840-486c-8992-ba1dd3d0d533</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://promptro.in/prompt/f064fbf4-bad9-4a46-a00f-7f24a168e2a7</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>

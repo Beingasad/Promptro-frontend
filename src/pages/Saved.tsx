@@ -22,7 +22,7 @@ export default function Saved() {
         description="View your saved AI image prompts and creative templates."
         robots="noindex, nofollow"
       />
-      <section className="mb-2 flex items-end justify-between gap-4">
+      <section className="mb-6 md:mb-8 flex items-end justify-between gap-4">
         <div>
           <span className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1">
             <Bookmark className="h-3.5 w-3.5" />

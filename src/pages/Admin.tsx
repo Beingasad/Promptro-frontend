@@ -3089,7 +3089,5 @@ export default function Admin() {
         </form>
       </dialog>
     </ErrorBoundary>
-      </AnimatePresence>
-    </AdminLayout>
   );
 }

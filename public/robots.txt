@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /auth
+Disallow: /saved
+Disallow: /asad87
 
-Sitemap: https://www.promptro.in/sitemap.xml
+Sitemap: https://promptro.in/sitemap.xml
