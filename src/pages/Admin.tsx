@@ -162,6 +162,31 @@ export default function Admin() {
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [logs, setLogs] = useState<any[]>([]);
+
+  const addLog = (action: string, user: string, details: string, status: 'Success' | 'Failed' = 'Success') => {
+    const formattedTime = new Date().toLocaleString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: 'numeric',
+      month: 'short',
+      hour12: true
+    });
+    const newLog = {
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      action,
+      user,
+      details,
+      time: formattedTime,
+      status
+    };
+    setLogs(prev => {
+      const updated = [newLog, ...prev].slice(0, 100);
+      localStorage.setItem('promptro:system_logs', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   const [activeUsersNow, setActiveUsersNow] = useState(42);
   const [avgCTR, setAvgCTR] = useState(4.2);
   const [conversionRate, setConversionRate] = useState(12.4);
@@ -230,6 +255,7 @@ export default function Admin() {
       localStorage.setItem('siteSettings', JSON.stringify(settingsForm));
       setIsLaunching(false);
       setMessage('Settings saved successfully!');
+      addLog('Settings Saved', 'Admin', 'Successfully updated global site settings', 'Success');
       setTimeout(() => setMessage(''), 3000);
     }, 1000);
   };
@@ -494,16 +520,30 @@ export default function Admin() {
       const promptsData = Array.isArray(response.data) ? response.data : [];
       setPrompts(promptsData);
       
-      // Initialize real-time logs with real published prompt events!
-      const initialLogs = promptsData.map((p: any, i: number) => ({
-        id: `init-${p.id}-${i}`,
-        action: 'Prompt Published',
-        user: 'Admin',
-        time: new Date(p.created_at || Date.now()).toLocaleTimeString(),
-        details: `Successfully published prompt "${p.title}"`,
-        status: 'Success'
-      }));
-      setLogs(initialLogs);
+      // Try loading from localStorage
+      const savedLogs = localStorage.getItem('promptro:system_logs');
+      if (savedLogs) {
+        setLogs(JSON.parse(savedLogs));
+      } else {
+        // Initialize real-time logs with real published prompt events!
+        const initialLogs = promptsData.map((p: any, i: number) => ({
+          id: `init-${p.id}-${i}`,
+          action: 'Prompt Published',
+          user: 'Admin',
+          time: new Date(p.created_at || Date.now()).toLocaleString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            day: 'numeric',
+            month: 'short',
+            hour12: true
+          }),
+          details: `Successfully published prompt "${p.title}"`,
+          status: 'Success'
+        }));
+        localStorage.setItem('promptro:system_logs', JSON.stringify(initialLogs));
+        setLogs(initialLogs);
+      }
     } catch {
       setError('Backend is not reachable. Start the API server to manage prompts.');
     } finally {
@@ -558,19 +598,12 @@ export default function Admin() {
         link: newNotifLink
       });
       setAdminNotifications(prev => [response.data, ...prev]);
+      addLog('Notification Pushed', 'Admin', `Pushed manual notification: "${newNotifText}"`, 'Success');
       setNewNotifText('');
       setMessage('Notification pushed successfully!');
       setTimeout(() => setMessage(''), 3000);
-      
-      setLogs(prev => [{
-        id: Date.now(),
-        action: 'Notification Pushed',
-        user: 'Admin',
-        time: new Date().toLocaleTimeString(),
-        details: `Pushed manual notification: "${newNotifText}"`,
-        status: 'Success'
-      }, ...prev]);
     } catch {
+      addLog('Notification Push Failed', 'Admin', 'Failed to push manual notification', 'Failed');
       alert('Failed to push notification');
     } finally {
       setSaving(false);
@@ -582,16 +615,9 @@ export default function Admin() {
     try {
       await axios.delete(`${API_BASE_URL}/api/notifications/${id}`);
       setAdminNotifications(prev => prev.filter(n => n.id !== id));
-      
-      setLogs(prev => [{
-        id: Date.now(),
-        action: 'Notification Deleted',
-        user: 'Admin',
-        time: new Date().toLocaleTimeString(),
-        details: `Deleted notification ID: ${id}`,
-        status: 'Success'
-      }, ...prev]);
+      addLog('Notification Deleted', 'Admin', `Deleted notification ID: ${id}`, 'Success');
     } catch {
+      addLog('Notification Deletion Failed', 'Admin', `Failed to delete notification ID: ${id}`, 'Failed');
       alert('Failed to delete notification');
     }
   };
@@ -699,16 +725,7 @@ export default function Admin() {
           setRealtimeLikesOffset(prev => prev + 1);
         }
 
-        const newLog = {
-          id: Date.now(),
-          action: chosen.act,
-          user: chosen.type === 'session' ? 'System' : 'Guest User',
-          details: chosen.detail,
-          time: new Date().toLocaleTimeString(),
-          status: 'Success'
-        };
-
-        setLogs(prev => [newLog, ...prev.slice(0, 49)]); // Keep last 50 logs
+        addLog(chosen.act, chosen.type === 'session' ? 'System' : 'Guest User', chosen.detail, 'Success');
       }
     }, 4000);
 
@@ -836,15 +853,18 @@ export default function Admin() {
 
       if (editingPrompt) {
         await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData(finalImageFile), axiosConfig);
+        addLog('Prompt Updated', 'Admin', `Successfully updated prompt "${form.title}"`, 'Success');
         setMessage('Prompt updated successfully.');
       } else {
         await axios.post(API_URL, buildFormData(finalImageFile), axiosConfig);
+        addLog('Prompt Published', 'Admin', `Successfully published prompt "${form.title}"`, 'Success');
         setMessage('Prompt published successfully.');
       }
       resetForm();
       await fetchPrompts();
     } catch (err: any) {
       const errorMsg = err.response?.data?.detail || 'Could not save this prompt.';
+      addLog(editingPrompt ? 'Prompt Update Failed' : 'Prompt Publish Failed', 'Admin', errorMsg, 'Failed');
       setError(errorMsg);
     } finally {
       setSaving(false);
@@ -856,10 +876,12 @@ export default function Admin() {
     if (!window.confirm(`Delete "${prompt.title}" permanently?`)) return;
     try {
       await axios.delete(`${API_URL}/${prompt.id}`);
+      addLog('Prompt Deleted', 'Admin', `Successfully deleted prompt "${prompt.title}"`, 'Success');
       setMessage('Prompt deleted.');
       if (editingPrompt?.id === prompt.id) resetForm();
       await fetchPrompts();
     } catch {
+      addLog('Prompt Deletion Failed', 'Admin', `Failed to delete prompt "${prompt.title}"`, 'Failed');
       setError('Could not delete this prompt.');
     }
   };
@@ -870,8 +892,10 @@ export default function Admin() {
 
     try {
       await axios.put(`${API_URL}/${prompt.id}`, data);
+      addLog(prompt.featured ? 'Prompt Unfeatured' : 'Prompt Featured', 'Admin', `Successfully updated featured status for prompt "${prompt.title}"`, 'Success');
       await fetchPrompts();
     } catch {
+      addLog('Featured Update Failed', 'Admin', `Failed to update featured status for "${prompt.title}"`, 'Failed');
       setError('Could not update featured status.');
     }
   };
@@ -882,8 +906,10 @@ export default function Admin() {
 
     try {
       await axios.put(`${API_URL}/${prompt.id}`, data);
+      addLog(prompt.trending ? 'Prompt Untrending' : 'Prompt Trending', 'Admin', `Successfully updated trending status for prompt "${prompt.title}"`, 'Success');
       await fetchPrompts();
     } catch {
+      addLog('Trending Update Failed', 'Admin', `Failed to update trending status for "${prompt.title}"`, 'Failed');
       setError('Could not update trending status.');
     }
   };
@@ -922,9 +948,11 @@ export default function Admin() {
 
       if (editingBanner) {
         await axios.put(`${API_BASE_URL}/api/banners/${editingBanner.id}`, data, axiosConfig);
+        addLog('Banner Updated', 'Admin', `Successfully updated banner "${bannerForm.title}"`, 'Success');
         setMessage('Banner updated successfully.');
       } else {
         await axios.post(`${API_BASE_URL}/api/banners`, data, axiosConfig);
+        addLog('Banner Created', 'Admin', `Successfully created banner "${bannerForm.title}"`, 'Success');
         setMessage('Banner created successfully.');
       }
       setBannerForm(emptyBannerForm);
@@ -933,6 +961,7 @@ export default function Admin() {
       setEditingBanner(null);
       await fetchBanners();
     } catch (err: any) {
+      addLog(editingBanner ? 'Banner Update Failed' : 'Banner Creation Failed', 'Admin', 'Failed to save banner', 'Failed');
       setError('Could not save this banner.');
     } finally {
       setSaving(false);
@@ -944,6 +973,7 @@ export default function Admin() {
     if (!window.confirm(`Delete "${banner.title}" permanently?`)) return;
     try {
       await axios.delete(`${API_BASE_URL}/api/banners/${banner.id}`);
+      addLog('Banner Deleted', 'Admin', `Successfully deleted banner "${banner.title}"`, 'Success');
       setMessage('Banner deleted.');
       if (editingBanner?.id === banner.id) {
         setBannerForm(emptyBannerForm);
@@ -951,6 +981,7 @@ export default function Admin() {
       }
       await fetchBanners();
     } catch {
+      addLog('Banner Deletion Failed', 'Admin', `Failed to delete banner "${banner.title}"`, 'Failed');
       setError('Could not delete banner.');
     }
   };
@@ -1974,15 +2005,9 @@ export default function Admin() {
                                 setUploadingCatText('Uploading...');
                               }
                               await addCategory(name, file || undefined);
-                              setLogs(prev => [{
-                                id: Date.now(),
-                                action: 'Category Created',
-                                user: 'Admin',
-                                time: new Date().toLocaleTimeString(),
-                                details: `Successfully created category "${name}"`,
-                                status: 'Success'
-                              }, ...prev]);
+                              addLog('Category Created', 'Admin', `Successfully created category "${name}"`, 'Success');
                             } catch (err) {
+                              addLog('Category Creation Failed', 'Admin', `Failed to create category "${name}"`, 'Failed');
                               alert("Failed to create category");
                             } finally {
                               setUploadingCatId(null);
@@ -2014,15 +2039,9 @@ export default function Admin() {
                               setUploadingCatText('Uploading...');
                             }
                             await addCategory(name, file || undefined);
-                            setLogs(prev => [{
-                              id: Date.now(),
-                              action: 'Category Created',
-                              user: 'Admin',
-                              time: new Date().toLocaleTimeString(),
-                              details: `Successfully created category "${name}"`,
-                              status: 'Success'
-                            }, ...prev]);
+                            addLog('Category Created', 'Admin', `Successfully created category "${name}"`, 'Success');
                           } catch (err) {
+                            addLog('Category Creation Failed', 'Admin', `Failed to create category "${name}"`, 'Failed');
                             alert("Failed to create category");
                           } finally {
                             setUploadingCatId(null);
@@ -2078,14 +2097,7 @@ export default function Admin() {
                               const newName = prompt('Enter new name for ' + cat.name, cat.name);
                               if (newName && newName !== cat.name) {
                                 updateCategory(cat.id, newName);
-                                setLogs(prev => [{
-                                  id: Date.now(),
-                                  action: 'Category Updated',
-                                  user: 'Admin',
-                                  time: new Date().toLocaleTimeString(),
-                                  details: `Successfully renamed category "${cat.name}" to "${newName}"`,
-                                  status: 'Success'
-                                }, ...prev]);
+                                addLog('Category Renamed', 'Admin', `Successfully renamed category "${cat.name}" to "${newName}"`, 'Success');
                               }
                             }}
                             className="w-8 h-8 rounded-lg flex items-center justify-center text-[#756d8d] hover:bg-[#756d8d]/10"
@@ -2096,14 +2108,7 @@ export default function Admin() {
                             onClick={() => {
                               if (confirm('Are you sure you want to delete ' + cat.name + '?')) {
                                 deleteCategory(cat.id);
-                                setLogs(prev => [{
-                                  id: Date.now(),
-                                  action: 'Category Deleted',
-                                  user: 'Admin',
-                                  time: new Date().toLocaleTimeString(),
-                                  details: `Successfully deleted category "${cat.name}"`,
-                                  status: 'Success'
-                                }, ...prev]);
+                                addLog('Category Deleted', 'Admin', `Successfully deleted category "${cat.name}"`, 'Success');
                               }
                             }}
                             className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10"
@@ -2137,7 +2142,9 @@ export default function Admin() {
                                   }
                                   setUploadingCatText('Uploading...');
                                   await updateCategory(cat.id, cat.name, compressedFile);
+                                  addLog('Category Cover Updated', 'Admin', `Successfully updated cover for category "${cat.name}"`, 'Success');
                                 } catch (err) {
+                                  addLog('Category Cover Update Failed', 'Admin', `Failed to update cover for category "${cat.name}"`, 'Failed');
                                   alert("Failed to upload category cover image.");
                                 } finally {
                                   setUploadingCatId(null);
@@ -2381,7 +2388,9 @@ export default function Admin() {
                                 try {
                                   await axios.delete(`${API_BASE_URL}/api/feedback/${item.id}`);
                                   setFeedbacks(feedbacks.filter(f => f.id !== item.id));
+                                  addLog('Feedback Archived', 'Admin', `Successfully archived feedback from "${item.user}"`, 'Success');
                                 } catch {
+                                  addLog('Feedback Archive Failed', 'Admin', `Failed to archive feedback from "${item.user}"`, 'Failed');
                                   alert('Failed to archive feedback');
                                 }
                               }}
@@ -2554,7 +2563,14 @@ export default function Admin() {
                               <span className="text-xs font-medium text-[#756d8d]">{log.time}</span>
                             </td>
                             <td className="px-8 py-5">
-                              <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-[10px] font-bold">Success</span>
+                              <span className={cn(
+                                "px-3 py-1 rounded-full text-[10px] font-bold",
+                                log.status === 'Failed' 
+                                  ? "bg-red-500/10 text-red-500" 
+                                  : "bg-green-500/10 text-green-500"
+                              )}>
+                                {log.status || 'Success'}
+                              </span>
                             </td>
                           </tr>
                         ))}
