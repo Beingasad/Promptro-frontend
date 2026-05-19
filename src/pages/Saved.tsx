@@ -3,6 +3,7 @@ import { Bookmark } from 'lucide-react';
 import MasonryGrid from '../components/MasonryGrid';
 import { Prompt } from '../components/ImageCard';
 import { onActivityUpdated, readLocalActivity } from '../lib/activity';
+import SEOMeta from '../components/common/SEOMeta';
 
 export default function Saved() {
   const [savedPrompts, setSavedPrompts] = useState<Prompt[]>([]);
@@ -16,6 +17,11 @@ export default function Saved() {
 
   return (
     <div className="w-full flex flex-col gap-1">
+      <SEOMeta
+        title="Saved Prompts | Promptro"
+        description="View your saved AI image prompts and creative templates."
+        robots="noindex, nofollow"
+      />
       <section className="mb-2 flex items-end justify-between gap-4">
         <div>
           <span className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1">

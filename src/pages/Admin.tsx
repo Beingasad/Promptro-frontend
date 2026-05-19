@@ -47,6 +47,7 @@ import {
   Settings,
 } from 'lucide-react';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import SEOMeta from '../components/common/SEOMeta';
 import { useCategories } from '../context/CategoryContext';
 import AdminLayout from '../layouts/AdminLayout';
 import { AdminTab } from '../components/admin/AdminSidebar';
@@ -3088,5 +3089,7 @@ export default function Admin() {
         </form>
       </dialog>
     </ErrorBoundary>
+      </AnimatePresence>
+    </AdminLayout>
   );
 }

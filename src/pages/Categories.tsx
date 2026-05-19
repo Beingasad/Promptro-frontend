@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, Grid } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCategories } from '../context/CategoryContext';
+import SEOMeta from '../components/common/SEOMeta';
 
 const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=900&auto=format&fit=crop';
 
@@ -10,6 +11,11 @@ export default function Categories() {
 
   return (
     <div className="min-h-screen pb-32 sm:pb-20 px-4 sm:px-6">
+      <SEOMeta
+        title="Prompt Categories - Browse AI Prompts | Promptro"
+        description="Browse thousands of AI image prompts categorized by style, including cinematic, 3D CGI, portrait, nature, and more."
+        keywords="AI prompt categories, prompt styles, Midjourney styles, ChatGPT templates, cinematic prompts, Promptro"
+      />
       <div className="max-w-7xl mx-auto">
         <header className="mb-2 sm:mb-4 text-center">
           <motion.h1 

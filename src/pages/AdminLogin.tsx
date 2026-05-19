@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, User, ArrowRight, Loader2, AlertCircle, Sparkles } from 'lucide-react';
 import { cn } from '../utils/cn';
+import SEOMeta from '../components/common/SEOMeta';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -32,6 +33,11 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen w-full bg-[#f8f7fc] dark:bg-[#0a0a0b] flex items-center justify-center p-6 relative overflow-hidden">
+      <SEOMeta
+        title="Admin Login | Promptro"
+        description="Promptro administration login."
+        robots="noindex, nofollow"
+      />
       {/* Background Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full animate-pulse" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '1s' }} />

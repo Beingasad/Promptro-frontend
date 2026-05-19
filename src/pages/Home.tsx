@@ -10,6 +10,7 @@ import { useSearch } from '../context/SearchContext';
 import HomeBanners from '../components/HomeBanners';
 import MobileHeroCarousel from '../components/MobileHeroCarousel';
 import { useCategories } from '../context/CategoryContext';
+import SEOMeta from '../components/common/SEOMeta';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -84,6 +85,11 @@ export default function Home() {
       transition={{ duration: 0.5 }}
       className="w-full flex flex-col gap-4 md:gap-9"
     >
+      <SEOMeta
+        title="Promptro - AI Image Prompts & Creative Templates"
+        description="Discover trending AI prompts, cinematic styles, portrait prompts and creative templates."
+        keywords="AI prompts, ChatGPT prompts, image prompts, cinematic prompts, portrait prompts, Promptro"
+      />
 
       <section className="mt-5 sm:mt-6 px-2 sm:px-4 md:px-6 pt-1 md:mt-4 md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-[140px] sm:min-h-[160px] lg:min-h-0">
         {/* Desktop View (Always visible on lg) */}

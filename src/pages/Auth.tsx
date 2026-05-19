@@ -21,6 +21,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
+import SEOMeta from '../components/common/SEOMeta';
 
 type AuthMode = 'login' | 'signup';
 
@@ -115,6 +116,11 @@ export default function Auth() {
 
   return (
     <div className="mx-auto flex w-full max-w-6xl items-center justify-center">
+      <SEOMeta
+        title="Login | Promptro"
+        description="Login to Promptro to save prompts and access your boards."
+        robots="noindex, nofollow"
+      />
       <motion.section
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}

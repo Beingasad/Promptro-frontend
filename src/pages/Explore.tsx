@@ -8,6 +8,7 @@ import { useCategories } from '../context/CategoryContext';
 import { useSearch } from '../context/SearchContext';
 import MasonryGrid from '../components/MasonryGrid';
 import type { Prompt } from '../components/ImageCard';
+import SEOMeta from '../components/common/SEOMeta';
 
 
 
@@ -118,6 +119,11 @@ export default function Explore() {
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       className="w-full"
     >
+      <SEOMeta
+        title="Explore Studio - Discover AI Prompts | Promptro"
+        description="Explore high-quality AI prompts, cinematic prompts, portrait prompts, and creative templates in the Explore Studio."
+        keywords="AI prompts, explore AI prompts, Midjourney prompts, ChatGPT prompts, Promptro"
+      />
       <section className="mb-2">
         <p className="flex items-center gap-2 text-sm font-medium uppercase text-primary">
           <Compass className="h-4 w-4" />

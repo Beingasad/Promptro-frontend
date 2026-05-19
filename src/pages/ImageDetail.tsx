@@ -9,6 +9,7 @@ import { auth } from '../lib/firebase';
 import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt } from '../lib/activity';
 import { useSearch } from '../context/SearchContext';
 import { useIsMobileDevice } from '../utils/device';
+import SEOMeta from '../components/common/SEOMeta';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -311,6 +312,13 @@ export default function ImageDetail() {
       exit={{ opacity: 0 }}
       className={`mx-auto flex w-full flex-col ${isPortrait ? 'max-w-[1440px] gap-6 md:gap-10' : 'max-w-4xl gap-5'}`}
     >
+      <SEOMeta
+        title={`${prompt.title} Prompt | Promptro`}
+        description={`Copy and explore ${prompt.title} ${prompt.category} AI image prompt. Generated with ${prompt.model}.`}
+        keywords={`${prompt.title}, ${prompt.category} prompt, AI image prompt, ${prompt.model} prompt, Promptro`}
+        ogImage={prompt.image_url}
+        ogType="article"
+      />
       {isPortrait ? (
         <div className="flex flex-col md:flex-row gap-5 md:gap-10 lg:gap-12 md:h-[calc(100vh-100px)] md:min-h-[500px]">
           {/* Left Column: Image */}
