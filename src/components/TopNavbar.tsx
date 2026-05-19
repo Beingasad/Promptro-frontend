@@ -442,11 +442,34 @@ export default function TopNavbar() {
           ctx.shadowBlur = 0;
           ctx.shadowOffsetY = 0;
 
-          // Image Clipping Mask
+          // Image Clipping Mask with CSS "object-fit: cover" equivalent calculations
           ctx.save();
           drawRoundedRect(ctx, -cw / 2, -ch / 2, cw, ch, radius);
           ctx.clip();
-          ctx.drawImage(img, -cw / 2, -ch / 2, cw, ch);
+
+          const imgWidth = img.naturalWidth || img.width;
+          const imgHeight = img.naturalHeight || img.height;
+          const imgRatio = imgWidth / imgHeight;
+          const targetRatio = cw / ch;
+
+          let drawWidth = cw;
+          let drawHeight = ch;
+          let offsetX = 0;
+          let offsetY = 0;
+
+          if (imgRatio > targetRatio) {
+            const scale = ch / imgHeight;
+            drawWidth = imgWidth * scale;
+            drawHeight = ch;
+            offsetX = (cw - drawWidth) / 2;
+          } else {
+            const scale = cw / imgWidth;
+            drawWidth = cw;
+            drawHeight = imgHeight * scale;
+            offsetY = (ch - drawHeight) / 2;
+          }
+
+          ctx.drawImage(img, -cw / 2 + offsetX, -ch / 2 + offsetY, drawWidth, drawHeight);
           ctx.restore();
 
           // Stroke thin elegant border on top of the image to perfectly replicate HTML preview
@@ -461,25 +484,25 @@ export default function TopNavbar() {
         // Render based on prompts count (loadedImages[0] is logo, loadedImages[1] is text, prompt images are shifted by 2)
         if (promptsForPoster.length === 1) {
           if (loadedImages[2]) {
-            drawCollageCard(loadedImages[2], 540, 930, 560, 760, 0, true, promptsForPoster[0]?.title);
+            drawCollageCard(loadedImages[2], 540, 930, 560, 840, 0, true, promptsForPoster[0]?.title);
           }
         } else if (promptsForPoster.length === 2) {
           if (loadedImages[2]) {
-            drawCollageCard(loadedImages[2], 310, 930, 420, 600, -8, false, promptsForPoster[0]?.title);
+            drawCollageCard(loadedImages[2], 310, 930, 420, 670, -8, false, promptsForPoster[0]?.title);
           }
           if (loadedImages[3]) {
-            drawCollageCard(loadedImages[3], 770, 930, 420, 600, 8, true, promptsForPoster[1]?.title);
+            drawCollageCard(loadedImages[3], 770, 930, 420, 670, 8, true, promptsForPoster[1]?.title);
           }
         } else {
           // Exactly matches the 3-image layout of the reference mock
           if (loadedImages[2]) { // Left Card
-            drawCollageCard(loadedImages[2], 280, 890, 330, 470, -9, false, promptsForPoster[0]?.title);
+            drawCollageCard(loadedImages[2], 280, 890, 330, 530, -9, false, promptsForPoster[0]?.title);
           }
           if (loadedImages[4]) { // Right Card
-            drawCollageCard(loadedImages[4], 800, 890, 330, 470, 9, false, promptsForPoster[2]?.title);
+            drawCollageCard(loadedImages[4], 800, 890, 330, 530, 9, false, promptsForPoster[2]?.title);
           }
           if (loadedImages[3]) { // Main Center overlapping card
-            drawCollageCard(loadedImages[3], 540, 930, 420, 550, 0, true, promptsForPoster[1]?.title);
+            drawCollageCard(loadedImages[3], 540, 930, 420, 610, 0, true, promptsForPoster[1]?.title);
           }
         }
 
@@ -487,14 +510,14 @@ export default function TopNavbar() {
 
 
         ctx.fillStyle = isLight ? '#0F172A' : '#ffffff';
-        ctx.font = "900 32px 'Satoshi', 'Inter', sans-serif";
+        ctx.font = "900 42px 'Satoshi', 'Inter', sans-serif";
         ctx.textAlign = 'center';
-        ctx.letterSpacing = "4px";
+        ctx.letterSpacing = "5px";
         ctx.fillText('DISCOVER TOP ART PROMPTS', canvas.width / 2, 1380);
 
-        ctx.fillStyle = '#8c84a6';
-        ctx.font = "500 24px 'Satoshi', sans-serif";
-        ctx.letterSpacing = "0px";
+        ctx.fillStyle = isLight ? '#475569' : '#94A3B8';
+        ctx.font = "600 28px 'Satoshi', sans-serif";
+        ctx.letterSpacing = "0.5px";
         ctx.fillText('Explore high-quality AI prompt templates on Promptro.in', canvas.width / 2, 1445);
 
         // 10. Premium High-Contrast Pill CTA Button
@@ -1687,19 +1710,19 @@ export default function TopNavbar() {
 
 
                         {/* Dynamic prompt collage stack */}
-                        <div className="relative flex items-center justify-center h-40 md:h-52 w-full my-auto z-10">
+                        <div className="relative flex items-center justify-center h-44 md:h-58 w-full my-auto z-10">
                           {selectedPrompts.length === 1 && (
-                            <div className="w-24 h-32 md:w-30 md:h-42 rounded-2xl overflow-hidden border border-white dark:border-white/10 z-20 shadow-[0_12px_28px_rgba(99,34,242,0.18)] bg-white dark:bg-[#0B0914]">
+                            <div className="w-24 h-36 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white dark:border-white/10 z-20 shadow-[0_12px_28px_rgba(99,34,242,0.18)] bg-white dark:bg-[#0B0914]">
                               <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                             </div>
                           )}
 
                           {selectedPrompts.length === 2 && (
                             <div className="relative flex items-center justify-center w-full h-full">
-                              <div className="w-20 h-28 md:w-26 md:h-36 rounded-xl overflow-hidden border border-white/80 dark:border-white/10 -rotate-[8deg] translate-x-3 opacity-80 shadow-md bg-white dark:bg-[#0B0914]">
+                              <div className="w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/10 -rotate-[8deg] translate-x-3 opacity-80 shadow-md bg-white dark:bg-[#0B0914]">
                                 <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                               </div>
-                              <div className="w-22 h-30 md:w-28 md:h-40 rounded-xl overflow-hidden border border-white dark:border-white/15 rotate-[8deg] -translate-x-3 z-20 shadow-lg bg-white dark:bg-[#0B0914]">
+                              <div className="w-22 h-34 md:w-28 md:h-46 rounded-xl overflow-hidden border border-white dark:border-white/15 rotate-[8deg] -translate-x-3 z-20 shadow-lg bg-white dark:bg-[#0B0914]">
                                 <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
                               </div>
                             </div>
@@ -1707,15 +1730,15 @@ export default function TopNavbar() {
 
                           {selectedPrompts.length === 3 && (
                             <>
-                              <div className="absolute left-3 md:left-5 w-20 h-28 md:w-26 md:h-36 rounded-xl overflow-hidden border border-white/80 dark:border-white/10 -rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
+                              <div className="absolute left-3 md:left-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/10 -rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
                                 <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                               </div>
 
-                              <div className="absolute right-3 md:right-5 w-20 h-28 md:w-26 md:h-36 rounded-xl overflow-hidden border border-white/80 dark:border-white/10 rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
+                              <div className="absolute right-3 md:right-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/10 rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
                                 <img src={selectedPrompts[2]?.image_url} className="w-full h-full object-cover" />
                               </div>
 
-                              <div className="absolute w-24 h-32 md:w-30 md:h-42 rounded-2xl overflow-hidden border border-white dark:border-white/15 z-20 shadow-[0_20px_45px_rgba(99,34,242,0.25)] bg-white dark:bg-[#0B0914] -translate-y-1">
+                              <div className="absolute w-24 h-37 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white dark:border-white/15 z-20 shadow-[0_20px_45px_rgba(99,34,242,0.25)] bg-white dark:bg-[#0B0914] -translate-y-1">
                                 <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
                               </div>
                             </>
@@ -1726,8 +1749,8 @@ export default function TopNavbar() {
                         <div className="flex flex-col items-center gap-1.5 px-3 pb-3 mt-auto relative z-10 w-full">
                           {/* Discover text */}
                           <div className="text-center">
-                            <h4 className="text-[6.5px] md:text-[8px] font-black tracking-[0.1em] uppercase text-[#0F172A] dark:text-white leading-none">Discover Top Art Prompts</h4>
-                            <p className="text-[4.5px] md:text-[5.5px] font-semibold text-[#8c84a6] leading-none mt-0.5">Explore high-quality templates on Promptro.in</p>
+                            <h4 className="text-[9px] md:text-[11.5px] font-extrabold tracking-[0.06em] uppercase text-[#0F172A] dark:text-white leading-none">Discover Top Art Prompts</h4>
+                            <p className="text-[6.5px] md:text-[8px] font-semibold text-[#475569] dark:text-[#94A3B8] leading-none mt-1">Explore high-quality templates on Promptro.in</p>
                           </div>
 
                           <div className="w-full py-1.5 md:py-2.5 rounded-full bg-gradient-to-r from-[#6322F2] to-[#4f46e5] text-white font-extrabold text-[6.5px] md:text-[9px] tracking-[0.08em] md:tracking-[0.12em] shadow-md shadow-primary/25 border border-white/10 flex items-center justify-between px-2.5 md:px-3 mt-1.5">
