@@ -1179,7 +1179,11 @@ export default function TopNavbar() {
                     <button 
                       key={notif.id} 
                       onClick={() => {
-                        navigate(notif.link);
+                        if (notif.id === 'showcase-feature-announcement' || notif.link === '#showcase') {
+                          openShowcaseCreator();
+                        } else {
+                          navigate(notif.link);
+                        }
                         setNotificationsOpen(false);
                       }}
                       className="flex w-full items-start gap-3 rounded-2xl px-3 py-3 text-left transition-all hover:bg-primary/5 group"
