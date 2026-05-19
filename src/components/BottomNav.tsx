@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, Compass, Bookmark, Grid } from 'lucide-react';
 import { cn } from '../utils/cn';
@@ -10,9 +11,37 @@ export default function BottomNav() {
     { icon: Grid, label: 'Categories', path: '/categories' },
   ];
 
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark' || 
+                          document.body.getAttribute('data-theme') === 'dark';
+      setIsDark(isDarkTheme);
+    };
+
+    checkTheme();
+
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="fixed bottom-5 md:bottom-8 left-1/2 -translate-x-1/2 z-50 w-[86%] max-w-[410px] md:max-w-[520px]">
-      <div className="glass-nav rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between">
+      <div 
+        className="glass-nav rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between"
+        style={{
+          backgroundColor: isDark ? 'rgba(23, 20, 33, 0.90)' : 'rgba(255, 255, 255, 0.88)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.70)',
+          boxShadow: isDark ? '0 18px 46px rgba(0, 0, 0, 0.35)' : '0 18px 46px rgba(72, 56, 118, 0.16)',
+          transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
+        }}
+      >
         {navItems.map((item) => (
           <NavLink
             key={item.path}
