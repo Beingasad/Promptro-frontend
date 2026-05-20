@@ -213,6 +213,47 @@ export default function Admin() {
   });
   const [newUsers, setNewUsers] = useState(842);
 
+  // States for custom confirmation modal
+  const [confirmConfig, setConfirmConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    confirmText?: string;
+    cancelText?: string;
+    type?: 'danger' | 'warning' | 'info';
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+    confirmText: 'Delete',
+    cancelText: 'Cancel',
+    type: 'danger'
+  });
+
+  const triggerConfirm = (config: {
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    confirmText?: string;
+    cancelText?: string;
+    type?: 'danger' | 'warning' | 'info';
+  }) => {
+    setConfirmConfig({
+      isOpen: true,
+      title: config.title,
+      message: config.message,
+      onConfirm: () => {
+        config.onConfirm();
+        setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+      },
+      confirmText: config.confirmText || 'Delete',
+      cancelText: config.cancelText || 'Cancel',
+      type: config.type || 'danger'
+    });
+  };
+
   // States for manual notification management
   const [adminNotifications, setAdminNotifications] = useState<any[]>([]);
   const [newNotifText, setNewNotifText] = useState('');
@@ -612,15 +653,21 @@ export default function Admin() {
   };
 
   const handleDeleteNotification = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this notification?')) return;
-    try {
-      await axios.delete(`${API_BASE_URL}/api/notifications/${id}`);
-      setAdminNotifications(prev => prev.filter(n => n.id !== id));
-      addLog('Notification Deleted', 'Admin', `Deleted notification ID: ${id}`, 'Success');
-    } catch {
-      addLog('Notification Deletion Failed', 'Admin', `Failed to delete notification ID: ${id}`, 'Failed');
-      alert('Failed to delete notification');
-    }
+    triggerConfirm({
+      title: 'Delete Notification',
+      message: 'Are you sure you want to delete this notification?',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          await axios.delete(`${API_BASE_URL}/api/notifications/${id}`);
+          setAdminNotifications(prev => prev.filter(n => n.id !== id));
+          addLog('Notification Deleted', 'Admin', `Deleted notification ID: ${id}`, 'Success');
+        } catch {
+          addLog('Notification Deletion Failed', 'Admin', `Failed to delete notification ID: ${id}`, 'Failed');
+          alert('Failed to delete notification');
+        }
+      }
+    });
   };
 
   useEffect(() => {
@@ -874,17 +921,23 @@ export default function Admin() {
   };
 
   const deletePrompt = async (prompt: AdminPrompt) => {
-    if (!window.confirm(`Delete "${prompt.title}" permanently?`)) return;
-    try {
-      await axios.delete(`${API_URL}/${prompt.id}`);
-      addLog('Prompt Deleted', 'Admin', `Successfully deleted prompt "${prompt.title}"`, 'Success');
-      setMessage('Prompt deleted.');
-      if (editingPrompt?.id === prompt.id) resetForm();
-      await fetchPrompts();
-    } catch {
-      addLog('Prompt Deletion Failed', 'Admin', `Failed to delete prompt "${prompt.title}"`, 'Failed');
-      setError('Could not delete this prompt.');
-    }
+    triggerConfirm({
+      title: 'Delete Prompt',
+      message: `Delete "${prompt.title}" permanently?`,
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          await axios.delete(`${API_URL}/${prompt.id}`);
+          addLog('Prompt Deleted', 'Admin', `Successfully deleted prompt "${prompt.title}"`, 'Success');
+          setMessage('Prompt deleted.');
+          if (editingPrompt?.id === prompt.id) resetForm();
+          await fetchPrompts();
+        } catch {
+          addLog('Prompt Deletion Failed', 'Admin', `Failed to delete prompt "${prompt.title}"`, 'Failed');
+          setError('Could not delete this prompt.');
+        }
+      }
+    });
   };
 
   const toggleFeatured = async (prompt: AdminPrompt) => {
@@ -971,20 +1024,26 @@ export default function Admin() {
   };
 
   const deleteBanner = async (banner: AdminBanner) => {
-    if (!window.confirm(`Delete "${banner.title}" permanently?`)) return;
-    try {
-      await axios.delete(`${API_BASE_URL}/api/banners/${banner.id}`);
-      addLog('Banner Deleted', 'Admin', `Successfully deleted banner "${banner.title}"`, 'Success');
-      setMessage('Banner deleted.');
-      if (editingBanner?.id === banner.id) {
-        setBannerForm(emptyBannerForm);
-        setEditingBanner(null);
+    triggerConfirm({
+      title: 'Delete Banner',
+      message: `Delete "${banner.title}" permanently?`,
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          await axios.delete(`${API_BASE_URL}/api/banners/${banner.id}`);
+          addLog('Banner Deleted', 'Admin', `Successfully deleted banner "${banner.title}"`, 'Success');
+          setMessage('Banner deleted.');
+          if (editingBanner?.id === banner.id) {
+            setBannerForm(emptyBannerForm);
+            setEditingBanner(null);
+          }
+          await fetchBanners();
+        } catch {
+          addLog('Banner Deletion Failed', 'Admin', `Failed to delete banner "${banner.title}"`, 'Failed');
+          setError('Could not delete banner.');
+        }
       }
-      await fetchBanners();
-    } catch {
-      addLog('Banner Deletion Failed', 'Admin', `Failed to delete banner "${banner.title}"`, 'Failed');
-      setError('Could not delete banner.');
-    }
+    });
   };
 
   const formatNumber = (num: number) => {
@@ -2107,10 +2166,19 @@ export default function Admin() {
                           </button>
                           <button 
                             onClick={() => {
-                              if (confirm('Are you sure you want to delete ' + cat.name + '?')) {
-                                deleteCategory(cat.id);
-                                addLog('Category Deleted', 'Admin', `Successfully deleted category "${cat.name}"`, 'Success');
-                              }
+                              triggerConfirm({
+                                title: 'Delete Category',
+                                message: `Are you sure you want to delete "${cat.name}" category permanently?`,
+                                type: 'danger',
+                                onConfirm: async () => {
+                                  try {
+                                    await deleteCategory(cat.id);
+                                    addLog('Category Deleted', 'Admin', `Successfully deleted category "${cat.name}"`, 'Success');
+                                  } catch {
+                                    addLog('Category Deletion Failed', 'Admin', `Failed to delete category "${cat.name}"`, 'Failed');
+                                  }
+                                }
+                              });
                             }}
                             className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10"
                           >
@@ -3160,6 +3228,69 @@ export default function Admin() {
                       {isLaunching ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Persist to Database'}
                     </button>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {confirmConfig.isOpen && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.4 }}
+              className="bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col p-8 relative"
+            >
+              <button 
+                onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                className="absolute top-6 right-6 w-9 h-9 rounded-xl bg-[#f8f7fc] dark:bg-white/5 flex items-center justify-center hover:scale-105 transition-transform text-[#756d8d] dark:text-[#a09bb5] hover:text-[#171421] dark:hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="flex flex-col items-center text-center mt-4">
+                <div className={cn(
+                  "w-16 h-16 rounded-[1.5rem] flex items-center justify-center mb-6",
+                  confirmConfig.type === 'danger' && "bg-red-500/10 text-red-500 shadow-lg shadow-red-500/5",
+                  confirmConfig.type === 'warning' && "bg-amber-500/10 text-amber-500 shadow-lg shadow-amber-500/5",
+                  confirmConfig.type === 'info' && "bg-primary/10 text-primary shadow-lg shadow-primary/5"
+                )}>
+                  {confirmConfig.type === 'danger' ? (
+                    <Trash2 className="w-8 h-8" />
+                  ) : confirmConfig.type === 'warning' ? (
+                    <AlertCircle className="w-8 h-8" />
+                  ) : (
+                    <Info className="w-8 h-8" />
+                  )}
+                </div>
+
+                <h3 className="text-xl font-bold text-[#171421] dark:text-white mb-2">
+                  {confirmConfig.title}
+                </h3>
+                <p className="text-sm text-[#756d8d] dark:text-[#a09bb5] font-medium leading-relaxed max-w-[280px]">
+                  {confirmConfig.message}
+                </p>
+              </div>
+
+              <div className="mt-8 flex gap-3 w-full">
+                <button
+                  onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                  className="flex-1 py-3.5 rounded-2xl border border-[#e9e2f3] dark:border-white/10 font-bold text-[#756d8d] dark:text-[#a09bb5] hover:bg-[#f8f7fc] dark:hover:bg-white/5 transition-all text-sm"
+                >
+                  {confirmConfig.cancelText || 'Cancel'}
+                </button>
+                <button
+                  onClick={confirmConfig.onConfirm}
+                  className={cn(
+                    "flex-1 py-3.5 rounded-2xl text-white font-bold transition-all text-sm hover:scale-[1.02] active:scale-[0.98]",
+                    confirmConfig.type === 'danger' && "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20",
+                    confirmConfig.type === 'warning' && "bg-amber-500 hover:bg-amber-600 shadow-lg shadow-amber-500/20",
+                    confirmConfig.type === 'info' && "bg-primary hover:bg-primary/95 shadow-lg shadow-primary/20"
+                  )}
+                >
+                  {confirmConfig.confirmText || 'Confirm'}
+                </button>
               </div>
             </motion.div>
           </div>
