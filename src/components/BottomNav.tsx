@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Bookmark, Grid } from 'lucide-react';
+import { Home, Compass, Bookmark, LayoutGrid } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export default function BottomNav() {
@@ -8,7 +8,7 @@ export default function BottomNav() {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Compass, label: 'Explore', path: '/explore' },
     { icon: Bookmark, label: 'Saved', path: '/saved' },
-    { icon: Grid, label: 'Categories', path: '/categories' },
+    { icon: LayoutGrid, label: 'Categories', path: '/categories' },
   ];
 
   const [isDark, setIsDark] = useState(false);
