@@ -208,7 +208,8 @@ export default function Admin() {
       { label: 'Organic Search', value: '0%', color: 'bg-blue-400' },
       { label: 'Social', value: '0%', color: 'bg-pink-500' },
       { label: 'Referral', value: '0%', color: 'bg-amber-500' }
-    ]
+    ],
+    topLocation: 'Calculating...'
   });
   const [newUsers, setNewUsers] = useState(842);
 
@@ -1136,7 +1137,7 @@ export default function Admin() {
                          </div>
                          <div>
                             <p className="text-xs font-bold text-[#756d8d] uppercase tracking-wider">Top Location</p>
-                            <p className="text-lg font-bold">United States (34%)</p>
+                            <p className="text-lg font-bold">{realAnalytics.topLocation || "Calculating..."}</p>
                          </div>
                        </div>
                     </div>
