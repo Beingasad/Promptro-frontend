@@ -93,12 +93,12 @@ export default function Home() {
 
       <section className="mt-5 sm:mt-6 px-2 sm:px-4 md:px-6 pt-1 md:mt-4 md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-[140px] sm:min-h-[160px] lg:min-h-0">
         {/* Desktop View (Always visible on lg) */}
-        <div className="hidden lg:block lg:max-w-[40%]">
+        <div className="hidden lg:block lg:max-w-[52%]">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05, duration: 0.45 }}
-            className="text-[15px] font-medium leading-6 text-[#6f6684] md:text-lg"
+            className="text-[14px] font-medium leading-6 text-[#6f6684] md:text-[16px]"
           >
             Discover, Copy & Create
           </motion.p>
@@ -106,19 +106,19 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.55 }}
-            className="mt-2 max-w-5xl whitespace-nowrap text-[8.5vw] sm:text-[44px] md:text-5xl font-bold leading-tight tracking-normal"
+            className="mt-2 max-w-5xl whitespace-nowrap text-[36px] xl:text-[44px] font-bold leading-tight tracking-normal"
           >
             <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent drop-shadow-[0_18px_34px_rgba(139,92,246,0.12)]">
-              AI Image Prompts
+              Discover AI Image Prompts
             </span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18, duration: 0.55 }}
-            className="mt-3 max-w-lg text-[16px] font-medium leading-[1.62] text-[#6f6684] md:mt-5 md:text-lg md:leading-8"
+            className="mt-3 max-w-lg text-[14px] font-medium leading-relaxed text-[#6f6684] md:mt-4 md:text-[16px] md:leading-7"
           >
-            Explore thousands of AI-generated images and copy the perfect prompt to create your own masterpiece.
+            Explore thousands of cinematic, aesthetic and creative AI prompts to create stunning images instantly.
           </motion.p>
         </div>
 

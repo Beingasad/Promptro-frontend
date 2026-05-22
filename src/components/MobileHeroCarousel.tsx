@@ -51,8 +51,8 @@ export default function MobileHeroCarousel() {
           {
             id: 'hero-text',
             type: 'text',
-            title: 'AI Image Prompts',
-            subtitle: 'Explore thousands of AI-generated images and copy the perfect prompt to create your own masterpiece.',
+            title: 'Discover AI Image Prompts',
+            subtitle: 'Explore thousands of cinematic, aesthetic and creative AI prompts to create stunning images instantly.',
             tag_text: 'Discover, Copy & Create'
           }
         ];
@@ -115,13 +115,13 @@ export default function MobileHeroCarousel() {
         >
           {current.type === 'text' ? (
             <div className="flex flex-col w-full">
-              <p className="text-[15px] font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8]">{current.tag_text}</p>
-              <h1 className="mt-1 text-[8.5vw] sm:text-[44px] font-[900] leading-tight">
+              <p className="text-[13px] font-medium leading-5 text-[#6f6684] dark:text-[#afa6c8]">{current.tag_text}</p>
+              <h1 className="mt-1 text-[6.2vw] sm:text-[28px] font-[900] leading-tight whitespace-nowrap">
                 <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent">
                   {current.title}
                 </span>
               </h1>
-              <p className="mt-2 text-[14px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90">
+              <p className="mt-1.5 text-[12.5px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90">
                 {current.subtitle}
               </p>
             </div>
