@@ -12,7 +12,7 @@ export default function BottomNav() {
 
   return (
     <div className="fixed bottom-5 md:bottom-8 left-1/2 -translate-x-1/2 z-50 w-[86%] max-w-[410px] md:max-w-[520px]">
-      <div className="glass-navbar rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between">
+      <div className="glass-panel rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between bg-white/90 border-white/70 shadow-[0_18px_46px_rgba(72,56,118,0.16)]">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
