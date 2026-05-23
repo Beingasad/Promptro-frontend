@@ -327,7 +327,7 @@
     bottom: 1.25rem !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    z-index: 9999 !important;
+    z-index: 50 !important;
     isolation: isolate !important;
     
     backdrop-filter: blur(24px) saturate(190%) !important;
