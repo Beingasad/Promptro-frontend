@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Bookmark, LayoutGrid } from 'lucide-react';
+import { Home, Compass, Bookmark, Grid } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export default function BottomNav() {
@@ -8,30 +7,12 @@ export default function BottomNav() {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Compass, label: 'Explore', path: '/explore' },
     { icon: Bookmark, label: 'Saved', path: '/saved' },
-    { icon: LayoutGrid, label: 'Categories', path: '/categories' },
+    { icon: Grid, label: 'Categories', path: '/categories' },
   ];
-
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const checkTheme = () => {
-      const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark' || 
-                          document.body.getAttribute('data-theme') === 'dark';
-      setIsDark(isDarkTheme);
-    };
-
-    checkTheme();
-
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div className="fixed bottom-5 md:bottom-8 left-1/2 -translate-x-1/2 z-50 w-[86%] max-w-[410px] md:max-w-[520px]">
-      <div className="glass-nav rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between">
+      <div className="glass-panel rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between bg-white/58 shadow-[0_18px_46px_rgba(72,56,118,0.16)]">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
@@ -41,7 +22,7 @@ export default function BottomNav() {
             className={({ isActive }) =>
               cn(
                 "flex flex-col items-center justify-center gap-1 md:gap-1.5 relative rounded-full min-w-14 md:min-w-20 px-2.5 py-1.5 md:px-4 md:py-2 transition-all duration-300",
-                isActive ? "text-primary font-bold" : "text-[#6f6684] hover:text-[#171421] dark:text-white/60 dark:hover:text-white"
+                isActive ? "text-primary" : "text-[#6f6684] hover:text-[#171421]"
               )
             }
           >
