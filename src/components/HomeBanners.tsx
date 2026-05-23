@@ -116,7 +116,7 @@ export default function HomeBanners() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
           className={cn(
-            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br glass-shine hover-glass-glow",
+            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br glass-shine hover-glass-glow border border-primary/10 dark:border-white/10",
             banner.bg_gradient,
             getDarkGradient(banner.bg_gradient)
           )}

@@ -81,6 +81,9 @@ export default function TopNavbar() {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [localAvatar, setLocalAvatar] = useState('');
@@ -803,24 +806,24 @@ export default function TopNavbar() {
     closePanels();
   };
 
-  const handleDeleteAccount = async () => {
+  const executeDeleteAccount = async () => {
     if (!currentUser) return;
-
-    const confirmed = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
-    if (!confirmed) return;
-
+    setIsDeletingAccount(true);
+    setDeleteError(null);
     try {
       await currentUser.delete();
       clearLocalActivity();
+      setShowDeleteConfirm(false);
       closePanels();
-      alert("Account deleted successfully.");
     } catch (err: any) {
       if (err.code === 'auth/requires-recent-login') {
-        alert("Please logout and login again to delete your account for security reasons.");
+        setDeleteError("For security, you must log out and log back in before deleting your account.");
       } else {
         console.error("Error deleting account:", err);
-        alert("Failed to delete account. Please try again later.");
+        setDeleteError("Failed to delete account. Please try again later.");
       }
+    } finally {
+      setIsDeletingAccount(false);
     }
   };
 
@@ -892,7 +895,8 @@ export default function TopNavbar() {
     }
 
     if (action === 'delete-account') {
-      handleDeleteAccount();
+      setDeleteError(null);
+      setShowDeleteConfirm(true);
       return;
     }
   };
@@ -1813,6 +1817,70 @@ export default function TopNavbar() {
                     </div>
                   </div>
                 )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Account Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !isDeletingAccount && setShowDeleteConfirm(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[99998]"
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md bg-white dark:bg-[#171421] rounded-[2rem] border border-[#ff6a3d]/20 dark:border-white/10 shadow-[0_30px_70px_rgba(255,106,61,0.14)] z-[99999] overflow-hidden"
+            >
+              <div className="p-6 md:p-8 flex flex-col gap-6 items-center text-center">
+                {/* Warning Icon Container */}
+                <div className="w-16 h-16 rounded-full bg-[#ff6a3d]/10 dark:bg-[#ff6a3d]/15 flex items-center justify-center text-[#ff6a3d] animate-pulse">
+                  <UserX className="w-8 h-8" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-xl font-[900] text-[#171421] dark:text-white leading-tight">
+                    Delete Account
+                  </h3>
+                  <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] leading-relaxed opacity-90">
+                    Are you sure you want to delete your account? This action is permanent and cannot be undone. All your saved prompts, activity, and custom creations will be lost forever.
+                  </p>
+                </div>
+
+                {deleteError ? (
+                  <div className="w-full p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-bold leading-normal">
+                    {deleteError}
+                  </div>
+                ) : null}
+
+                <div className="flex w-full gap-3 mt-2">
+                  <button
+                    onClick={() => setShowDeleteConfirm(false)}
+                    disabled={isDeletingAccount}
+                    className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 text-xs font-black text-[#756d8d] hover:bg-gray-50 dark:hover:bg-white/5 active:scale-95 transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={executeDeleteAccount}
+                    disabled={isDeletingAccount}
+                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-red-500 to-[#ff6a3d] hover:shadow-lg hover:shadow-red-500/15 text-xs font-black text-white hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
+                  >
+                    {isDeletingAccount ? (
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      "Yes, Delete"
+                    )}
+                  </button>
+                </div>
               </div>
             </motion.div>
           </>
