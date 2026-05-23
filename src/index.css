@@ -117,7 +117,8 @@
 
 @layer components {
   .glass-panel {
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.22) 100%) !important;
+    background-color: rgba(255, 255, 255, 0.62) !important;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.04) 100%) !important;
     backdrop-filter: blur(28px) saturate(190%) !important;
     -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
     border: 1px solid rgba(255, 255, 255, 0.68) !important;
@@ -128,7 +129,20 @@
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
-    will-change: transform, filter;
+    will-change: backdrop-filter;
+  }
+
+  /* Dedicated bottom navbar glass — uses flat rgba to guarantee blur works in production */
+  .glass-navbar {
+    background-color: rgba(255, 255, 255, 0.78) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    box-shadow: 0 18px 46px rgba(72, 56, 118, 0.16) !important;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    will-change: backdrop-filter;
+    isolation: isolate;
   }
 
   .glass-nav {
@@ -220,12 +234,19 @@
   }
 
   [data-theme="dark"] .glass-panel {
-    background-image: linear-gradient(135deg, rgba(24, 20, 37, 0.72) 0%, rgba(12, 9, 20, 0.42) 100%) !important;
+    background-color: rgba(24, 20, 37, 0.72) !important;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
     box-shadow: 
       inset 0 1.5px 0 0 rgba(255, 255, 255, 0.08),
       inset 0 -1.5px 0 0 rgba(0, 0, 0, 0.4),
       0 22px 52px rgba(0, 0, 0, 0.38) !important;
+  }
+
+  [data-theme="dark"] .glass-navbar {
+    background-color: rgba(22, 18, 34, 0.88) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 18px 46px rgba(0, 0, 0, 0.32) !important;
   }
 
   [data-theme="dark"] .glass-nav {
