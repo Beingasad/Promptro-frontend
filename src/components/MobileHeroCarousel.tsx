@@ -112,6 +112,7 @@ export default function MobileHeroCarousel() {
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0 w-full h-full flex items-center"
+          style={{ willChange: 'transform, opacity' }}
         >
           {current.type === 'text' ? (
             <div className="flex flex-col w-full">
@@ -129,7 +130,7 @@ export default function MobileHeroCarousel() {
             <a 
               href={current.button_link}
               className={cn(
-                "relative flex w-full items-center justify-between p-5 rounded-2xl border border-white/60 dark:border-white/5 shadow-[0_15px_35px_rgba(0,0,0,0.05)] backdrop-blur-md overflow-hidden bg-gradient-to-br min-h-[120px]",
+                "relative flex w-full items-center justify-between p-5 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.05)] backdrop-blur-md overflow-hidden bg-gradient-to-br min-h-[120px] border-none",
                 current.bg_gradient,
                 getDarkGradient(current.bg_gradient)
               )}
@@ -151,7 +152,7 @@ export default function MobileHeroCarousel() {
               </div>
 
               {current.image_url && (
-                <div className="w-16 h-24 rounded-2xl overflow-hidden shadow-xl border border-white/20 shrink-0">
+                <div className="w-16 h-24 rounded-2xl overflow-hidden shadow-xl shrink-0 border-none">
                   <img src={current.image_url} alt="" className="w-full h-full object-cover" />
                 </div>
               )}
@@ -162,3 +163,4 @@ export default function MobileHeroCarousel() {
     </div>
   );
 }
+

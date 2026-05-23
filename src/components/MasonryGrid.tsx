@@ -27,3 +27,4 @@ export default function MasonryGrid({ prompts, isTwoColumns }: MasonryGridProps)
   );
 }
 
+

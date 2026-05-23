@@ -45,7 +45,7 @@ export default function Categories() {
             >
               <Link 
                 to={`/explore?category=${cat.name}`}
-                className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10"
+                className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5"
               >
                 <img 
                   src={cat.image_url || DEFAULT_IMAGE} 
@@ -57,7 +57,7 @@ export default function Categories() {
                         <h3 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{cat.name}</h3>
                         <p className="text-white/60 text-[10px] sm:text-sm font-medium">Browse Prompts</p>
                       </div>
-                      <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all shrink-0">
+                      <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all shrink-0">
                         <ArrowUpRight className="w-4 h-4 sm:w-6 sm:h-6" />
                       </div>
                    </div>
@@ -70,3 +70,4 @@ export default function Categories() {
     </div>
   );
 }
+

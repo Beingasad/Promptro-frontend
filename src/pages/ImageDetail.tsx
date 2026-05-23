@@ -192,7 +192,7 @@ export default function ImageDetail() {
       <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-center justify-between">
         <button
           onClick={handleBack}
-          className="flex h-8 w-8 items-center justify-center rounded-[14px] border border-white/12 bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+          className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
           aria-label="Go back"
         >
           <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
@@ -200,14 +200,14 @@ export default function ImageDetail() {
         <div className="flex items-center gap-1.5">
           <button
             onClick={handleShare}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] border border-white/12 bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Share prompt"
           >
             {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
           </button>
           <button
             onClick={toggleSave}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] border border-white/12 bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
             <Bookmark className="h-4 w-4 md:h-5 md:w-5" fill={saved ? 'currentColor' : 'none'} />
@@ -230,7 +230,7 @@ export default function ImageDetail() {
             {formatCount(prompt.views)}
           </div>
         </div>
-        <span className="flex h-8 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-3 text-xs md:text-sm font-bold tracking-normal text-white shadow-[0_12px_28px_rgba(139,92,246,0.26)] md:h-10">
+        <span className="flex h-8 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-[#6d4dec] to-[#ff6a3d] px-3 text-xs md:text-sm font-bold tracking-normal text-white shadow-[0_12px_28px_rgba(109,77,236,0.26)] md:h-10">
           {prompt.category}
         </span>
       </div>
@@ -247,13 +247,13 @@ export default function ImageDetail() {
           </div>
           <button
             onClick={() => copyText(promptText, 'prompt')}
-            className="flex items-center gap-2 rounded-full border border-[#e8e2f5] bg-white/70 dark:border-white/10 dark:bg-white/10 px-4 py-2 text-sm font-medium text-primary shadow-[0_10px_26px_rgba(139,92,246,0.1)] transition-colors hover:bg-white dark:hover:bg-white/20"
+            className="flex items-center gap-2 rounded-full bg-white/70 dark:bg-white/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-white dark:hover:bg-white/20"
           >
             {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
             {copiedPrompt ? 'Copied' : 'Copy'}
           </button>
         </div>
-        <div className="rounded-[1.5rem] border border-[#ebe6f4] bg-white/60 dark:border-white/10 dark:bg-white/5 p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap">
+        <div className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap">
           {promptText}
         </div>
       </section>
@@ -269,20 +269,20 @@ export default function ImageDetail() {
             </div>
             <button
               onClick={() => copyText(negativePrompt, 'negative')}
-              className="flex items-center gap-2 rounded-full border border-[#e8e2f5] bg-white/70 dark:border-white/10 dark:bg-white/10 px-4 py-2 text-sm font-medium text-primary shadow-[0_10px_26px_rgba(139,92,246,0.1)] transition-colors hover:bg-white dark:hover:bg-white/20"
+              className="flex items-center gap-2 rounded-full bg-white/70 dark:bg-white/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-white dark:hover:bg-white/20"
             >
               {copiedNegative ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
               {copiedNegative ? 'Copied' : 'Copy'}
             </button>
           </div>
-          <div className="rounded-[1.5rem] border border-[#ebe6f4] bg-white/60 dark:border-white/10 dark:bg-white/5 p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap">
+          <div className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap">
             {negativePrompt}
           </div>
         </section>
       )}
 
       {prompt.tags && prompt.tags.length > 0 && (
-        <section className="shrink-0 flex flex-col gap-2 mt-5 border-t border-[#ebe6f4]/60 dark:border-white/5 pt-4">
+        <section className="shrink-0 flex flex-col gap-2 mt-5 pt-4">
           <div className="flex items-center gap-2 px-1">
             <Tag className="h-4 w-4 text-primary opacity-70" />
             <h2 className="text-[11px] font-bold text-[#5f5774] dark:text-[#c4bed6] uppercase tracking-widest opacity-80">Tags</h2>
@@ -323,7 +323,7 @@ export default function ImageDetail() {
         <div className="flex flex-col md:flex-row gap-5 md:gap-10 lg:gap-12 md:h-[calc(100vh-100px)] md:min-h-[500px]">
           {/* Left Column: Image */}
           <div className="w-full md:w-auto md:max-w-[55%] flex-shrink-0 md:h-full min-h-0 min-w-0 flex items-center justify-center md:justify-start">
-            <section className="relative w-full overflow-hidden rounded-[1.75rem] bg-[#f8f7fc] dark:bg-[#1c1a26] shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem] md:w-fit md:h-fit max-w-full md:max-h-full">
+            <section className="relative w-full overflow-hidden rounded-[1.75rem] bg-transparent shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem] md:w-fit md:h-fit max-w-full md:max-h-full">
               <img
                 src={prompt.image_url}
                 alt={prompt.title}
@@ -351,7 +351,7 @@ export default function ImageDetail() {
         </div>
       ) : (
         <>
-          <section className="relative overflow-hidden rounded-[1.75rem] bg-[#f8f7fc] dark:bg-[#1c1a26] shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem]">
+          <section className="relative overflow-hidden rounded-[1.75rem] bg-transparent shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem]">
             <img
               src={prompt.image_url}
               alt={prompt.title}
@@ -399,3 +399,4 @@ export default function ImageDetail() {
     </motion.div>
   );
 }
+

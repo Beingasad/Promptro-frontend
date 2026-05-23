@@ -49,7 +49,7 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
   }, [active]);
 
   return (
-    <div ref={scrollerRef} className="flex h-11 w-full items-center overflow-x-auto hide-scrollbar rounded-full border border-white/80 bg-white/70 px-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_16px_38px_rgba(80,67,120,0.12)] backdrop-blur-2xl dark:border-[#332a46] dark:bg-[#15111f] dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14 md:px-2">
+    <div ref={scrollerRef} className="flex h-11 w-full items-center overflow-x-auto hide-scrollbar rounded-full bg-white/70 px-1.5 shadow-[0_16px_38px_rgba(80,67,120,0.12)] backdrop-blur-2xl dark:bg-[#15111f] dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14 md:px-2">
       <div className="flex w-max items-center gap-2.5 pr-1.5 md:pr-2">
         {categories.map((category) => (
           <button
@@ -62,7 +62,7 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
             className={`relative h-8 px-4 rounded-full whitespace-nowrap text-[13px] font-medium tracking-normal transition-all duration-300 md:h-10 md:px-5 md:text-sm ${
               active === category 
                 ? 'text-white shadow-[0_16px_34px_rgba(139,92,246,0.28)]' 
-                : 'bg-white/58 border border-white/70 text-[#5f5774] shadow-[0_10px_28px_rgba(80,67,120,0.08)] backdrop-blur-xl hover:text-[#171421] hover:bg-white/86 hover:shadow-[0_14px_32px_rgba(139,92,246,0.14)] dark:border-white/10 dark:bg-white/[0.03] dark:text-[#c6bddb] dark:shadow-none dark:hover:bg-white/[0.07] dark:hover:text-white'
+                : 'bg-white/58 text-[#5f5774] backdrop-blur-xl hover:text-[#171421] hover:bg-white/86 dark:bg-white/[0.03] dark:text-[#c6bddb] dark:hover:bg-white/[0.07] dark:hover:text-white'
             }`}
           >
             {active === category && (

@@ -935,7 +935,7 @@ export default function TopNavbar() {
               </div>
             ))
           ) : (
-            <div className="break-inside-avoid rounded-[1.35rem] border border-white/70 bg-white/62 p-4 text-sm font-medium leading-6 text-[#6f6684] shadow-[0_16px_34px_rgba(72,56,118,0.1)]">
+            <div className="break-inside-avoid rounded-[1.35rem] bg-white/62 p-4 text-sm font-medium leading-6 text-[#6f6684] shadow-[0_16px_34px_rgba(72,56,118,0.1)]">
               Open a prompt detail page and it will appear here.
             </div>
           )}
@@ -953,15 +953,15 @@ export default function TopNavbar() {
       return (
         <div className="flex flex-col gap-3 pb-6">
           {faqs.map(([question, answer]) => (
-            <div key={question} className="rounded-[1.25rem] border border-white/72 bg-white/62 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
+            <div key={question} className="rounded-[1.25rem] bg-white/62 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
               <h3 className="text-sm font-bold text-[#171421]">{question}</h3>
               <p className="mt-1 text-xs font-medium leading-5 text-[#756d8d]">{answer}</p>
             </div>
           ))}
-          <div className="rounded-[1.25rem] border border-white/72 bg-white/62 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
+          <div className="rounded-[1.25rem] bg-white/62 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
             <h3 className="text-sm font-bold text-[#171421]">Report an issue</h3>
             <textarea
-              className="mt-3 h-24 w-full resize-none rounded-2xl border border-[#ebe6f4] bg-white/72 p-3 text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa] disabled:opacity-60"
+              className="mt-3 h-24 w-full resize-none rounded-2xl bg-white/72 p-3 text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa] disabled:opacity-60"
               placeholder="Tell us what happened..."
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
@@ -975,7 +975,7 @@ export default function TopNavbar() {
               {feedbackStatus === 'sending' ? 'Sending...' : feedbackStatus === 'sent' ? 'Sent successfully!' : 'Send feedback'}
             </button>
           </div>
-          <div className="rounded-[1.25rem] border border-white/72 bg-white/62 p-4 text-sm font-medium text-[#6f6684] shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
+          <div className="rounded-[1.25rem] bg-white/62 p-4 text-sm font-medium text-[#6f6684] shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
             Support: Coming Soon
           </div>
         </div>
@@ -1005,11 +1005,11 @@ export default function TopNavbar() {
     return (
       <div className="flex flex-col gap-2 pb-2 px-1 flex-1">
         {/* Main Brand Card */}
-        <div className="relative overflow-hidden rounded-[1.5rem] border border-white/70 dark:border-white/10 bg-white/60 dark:bg-white/5 p-4 text-center shadow-[0_12px_32px_rgba(72,56,118,0.06)] backdrop-blur-xl">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-white/60 dark:bg-white/5 p-4 text-center shadow-[0_12px_32px_rgba(72,56,118,0.06)] backdrop-blur-xl">
           {/* Background Glow */}
           <div className="absolute -right-12 -top-12 -z-10 h-32 w-32 rounded-full bg-primary/10 blur-2xl"></div>
           <div className="absolute -left-12 -bottom-12 -z-10 h-32 w-32 rounded-full bg-[#ff6a3d]/10 blur-2xl"></div>
-
+          
           <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center overflow-hidden rounded-[1.15rem] bg-white dark:bg-white/10 p-1 shadow-[0_10px_24px_rgba(139,92,246,0.12)] dark:shadow-none hover:scale-105 transition-transform duration-300">
             <img src="/brand/logo.png" alt="Promptro Logo" className="h-full w-auto object-contain" />
           </div>
@@ -1027,7 +1027,7 @@ export default function TopNavbar() {
           {stats.map((stat, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center rounded-[1.15rem] border border-white/70 dark:border-white/10 bg-white/60 dark:bg-white/5 p-2 text-center shadow-[0_8px_20px_rgba(72,56,118,0.03)] hover:shadow-md transition-all duration-300"
+              className="flex flex-col items-center justify-center rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-2 text-center shadow-[0_8px_20px_rgba(72,56,118,0.03)] hover:shadow-md transition-all duration-300"
             >
               <span className={`bg-gradient-to-r ${stat.color} bg-clip-text text-transparent text-base font-black tracking-tight`}>
                 {stat.value}
@@ -1040,7 +1040,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Interactive / Helpful Tip */}
-        <div className="rounded-[1.15rem] border border-white/70 dark:border-white/10 bg-white/50 dark:bg-white/5 p-3 shadow-[0_8px_20px_rgba(72,56,118,0.03)]">
+        <div className="rounded-[1.15rem] bg-white/50 dark:bg-white/5 p-3 shadow-[0_8px_20px_rgba(72,56,118,0.03)]">
           <p className="text-[9px] font-black uppercase tracking-widest text-primary dark:text-[#ff6a3d]">Pro Tip 💡</p>
           <p className="mt-0.5 text-[10px] font-medium leading-relaxed text-[#6f6684] dark:text-[#afa6c8]">
             Tap on any tag at the bottom of a prompt to filter the exploration grid instantly!
@@ -1048,7 +1048,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Call to Action Banner */}
-        <div className="relative overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-primary/95 to-[#9d66ff]/95 dark:from-primary/20 dark:to-purple-950/20 py-4.5 px-5 text-center shadow-[0_12px_26px_rgba(139,92,246,0.15)] border border-primary/20">
+        <div className="relative overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-primary/95 to-[#9d66ff]/95 dark:from-primary/20 dark:to-purple-950/20 py-4.5 px-5 text-center shadow-[0_12px_26px_rgba(139,92,246,0.15)]">
           <h4 className="text-[13px] font-black uppercase tracking-wider text-white">Join the Community</h4>
           <p className="mt-1 text-[10.5px] font-medium leading-relaxed text-white/90 dark:text-[#c4bed6]">
             Sync saved boards & get notified of premium drops.
@@ -1063,7 +1063,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Footer Info */}
-        <div className="mt-auto rounded-[1.15rem] border border-white/70 dark:border-white/10 bg-white/40 dark:bg-white/5 py-2 px-4 text-center">
+        <div className="mt-auto rounded-[1.15rem] bg-white/40 dark:bg-white/5 py-2 px-4 text-center">
           <span className="text-[8px] font-bold uppercase tracking-widest text-[#8a819d] dark:text-[#a098b0]">
             v1.0.0 • {getSystemInfo()}
           </span>
@@ -1134,7 +1134,7 @@ export default function TopNavbar() {
         <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px] relative">
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
             <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`}></div>
-            <div className="relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full border border-white/80 dark:border-white/10 bg-white/78 dark:bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14">
+            <div className="relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14">
               <div className="flex flex-grow items-center h-full min-w-0">
                 <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
                   <Search className="w-5 h-5 md:w-5.5 md:h-5.5" />
@@ -1270,7 +1270,7 @@ export default function TopNavbar() {
                 duration: 0.35,
                 ease: [0.32, 0.72, 0, 1]
               }}
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/72 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:border-white/12 dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
                 }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
@@ -1299,7 +1299,7 @@ export default function TopNavbar() {
                         <ArrowLeft className="h-5 w-5" />
                       </button>
                       <h2 className="text-center text-lg font-bold text-[#171421] dark:text-white">{expandedTitle}</h2>
-                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-white/10 shadow-[0_10px_24px_rgba(72,56,118,0.1)] dark:shadow-none border border-transparent dark:border-white/10">
+                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-white/10 shadow-[0_10px_24px_rgba(72,56,118,0.1)] dark:shadow-none">
                         {expandedView === 'about' ? (
                           <Info className="h-5 w-5 text-primary" />
                         ) : (
@@ -1320,7 +1320,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="mb-3 shrink-0 rounded-[1.15rem] border border-white/78 bg-white/62 p-3 shadow-[0_14px_34px_rgba(139,92,246,0.1)] backdrop-blur-2xl">
+                    <div className="mb-3 shrink-0 rounded-[1.15rem] bg-white/62 p-3 shadow-[0_14px_34px_rgba(139,92,246,0.1)] backdrop-blur-2xl">
                       <div className="flex items-start gap-2">
                         <div className="min-w-0">
                           <p className="text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
@@ -1339,12 +1339,12 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] border px-2.5 py-2.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${item.action === 'delete-account'
-                              ? 'border-[#ffd1e1] bg-[#fff4f8]/72 text-[#f23672] shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:border-[#f23672]/28 dark:bg-[#f23672]/12 dark:text-[#ff8fb4] dark:hover:bg-[#f23672]/18'
-                              : 'border-white/64 bg-white/62 text-[#242033] shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
+                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-2.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${item.action === 'delete-account'
+                              ? 'bg-[#fff4f8]/72 text-[#f23672] shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:text-[#ff8fb4] dark:hover:bg-[#f23672]/18'
+                              : 'bg-white/62 text-[#242033] shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
                             }`}
                         >
-                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl shadow-[0_0_18px_rgba(139,92,246,0.13)] transition-transform duration-300 group-hover:scale-105 ${item.action === 'delete-account' ? 'bg-[#ffe5ef] text-[#f23672] dark:bg-[#f23672]/16 dark:text-[#ff8fb4]' : 'bg-primary/10 text-primary'
+                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${item.action === 'delete-account' ? 'bg-[#ffe5ef] text-[#f23672] dark:bg-[#f23672]/16 dark:text-[#ff8fb4]' : 'bg-primary/10 text-primary'
                             }`}>
                             <item.icon className="h-4 w-4" />
                           </span>
@@ -1361,7 +1361,7 @@ export default function TopNavbar() {
                       ))}
                     </div>
 
-                    <div className="mt-auto shrink-0 border-t border-[#ded8ee] pt-3 text-center">
+                    <div className="mt-auto shrink-0 pt-3 text-center">
                       <div className="flex items-center justify-center gap-1 text-[10px] font-medium text-[#8a819d]">
                         Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                       </div>

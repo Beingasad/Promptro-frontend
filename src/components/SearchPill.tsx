@@ -56,7 +56,7 @@ export default function SearchPill() {
 
       <div className={`relative flex items-center transition-all duration-300 ${isFocused ? 'scale-[1.01]' : 'scale-100'}`}>
         <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`} />
-        <div className="relative flex h-12 w-full items-center justify-between overflow-hidden rounded-full border border-white/80 bg-white/78 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_16px_38px_rgba(80,67,120,0.14)] backdrop-blur-2xl dark:border-white/12 dark:bg-[#171421]/78 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_38px_rgba(0,0,0,0.28)] md:h-14">
+        <div className="relative flex h-12 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 shadow-[0_16px_38px_rgba(80,67,120,0.14)] backdrop-blur-2xl dark:bg-[#171421]/78 dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14">
           <div className="flex flex-grow items-center h-full min-w-0">
             <div className="pl-4 pr-2.5 text-[#81789e] md:pl-5 shrink-0">
               <Search className="h-5 w-5" />
@@ -79,10 +79,10 @@ export default function SearchPill() {
                 type="button"
                 onClick={() => setActiveDropdown(prev => prev === 'category' ? null : 'category')}
                 title="Select Category"
-                className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border transition-all duration-300 cursor-pointer ${
+                className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                   activeDropdown === 'category' || currentCategory !== 'All'
-                    ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white border-transparent shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
-                    : 'bg-white/60 border-white/70 text-[#5f5774] hover:bg-white/90 dark:border-white/10 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
+                    ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
+                    : 'bg-white/60 text-[#5f5774] hover:bg-white/90 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
                 }`}
               >
                 <LayoutGrid className="h-4 w-4 md:h-4.5 md:w-4.5" />
@@ -94,10 +94,10 @@ export default function SearchPill() {
                   type="button"
                   onClick={() => setActiveDropdown(prev => prev === 'sort' ? null : 'sort')}
                   title="Sort Options"
-                  className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border transition-all duration-300 cursor-pointer ${
+                  className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                     activeDropdown === 'sort' || currentSort !== 'All'
-                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white border-transparent shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
-                      : 'bg-white/60 border-white/70 text-[#5f5774] hover:bg-white/90 dark:border-white/10 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
+                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
+                      : 'bg-white/60 text-[#5f5774] hover:bg-white/90 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
                 }`}
               >
                 <SlidersHorizontal className="h-4 w-4 md:h-4.5 md:w-4.5" />

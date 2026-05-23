@@ -46,6 +46,9 @@ export default function MainLayout() {
         <div className="absolute -left-28 top-32 h-72 w-72 rounded-full bg-[#8b5cf6]/10 blur-[70px] dark:bg-[#8b5cf6]/16"></div>
         <div className="absolute -right-20 top-20 h-80 w-80 rounded-full bg-[#ff6a3d]/10 blur-[76px] dark:bg-[#ff6a3d]/14"></div>
         <div className="absolute left-1/3 top-[45%] h-64 w-64 rounded-full bg-[#d94bcb]/8 blur-[82px] dark:bg-[#d94bcb]/12"></div>
+        {/* Premium Drifting Background Orbs for Dynamic Glass Refraction - Optimized: Hidden on Mobile to prevent GPU lag */}
+        <div className="hidden md:block absolute left-[8%] top-[18%] h-96 w-96 rounded-full bg-gradient-to-tr from-[#8b5cf6]/12 to-[#d94bcb]/8 blur-[80px] dark:from-[#8b5cf6]/18 dark:to-[#d94bcb]/12 animate-drift-blob-1 pointer-events-none" />
+        <div className="hidden md:block absolute right-[10%] top-[42%] h-[26rem] w-[26rem] rounded-full bg-gradient-to-br from-[#ff6a3d]/10 to-[#8b5cf6]/10 blur-[90px] dark:from-[#ff6a3d]/14 dark:to-[#8b5cf6]/14 animate-drift-blob-2 pointer-events-none" />
       </div>
 
       {isHome && <TopNavbar />}
@@ -58,7 +61,7 @@ export default function MainLayout() {
             {showPageSearch ? (
               <SearchPill />
             ) : pagePillLabel ? (
-              <span className="rounded-full border border-white/80 bg-white/72 px-4 py-2 text-xs font-bold uppercase tracking-normal text-primary shadow-[0_14px_34px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#171421]/78 dark:text-primary dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_38px_rgba(0,0,0,0.28)]">
+              <span className="rounded-full bg-white/72 px-4 py-2 text-xs font-bold uppercase tracking-normal text-primary shadow-[0_14px_34px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:bg-[#171421]/78 dark:text-primary dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)]">
                 {pagePillLabel}
               </span>
             ) : null}

@@ -168,7 +168,7 @@ export default function Home() {
             transition={{ delay: 0.12, duration: 0.55 }}
             className="mt-2 max-w-5xl whitespace-nowrap text-[8.5vw] sm:text-[44px] md:text-5xl font-bold leading-tight tracking-normal"
           >
-            <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent drop-shadow-[0_18px_34px_rgba(139,92,246,0.12)]">
+            <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent drop-shadow-[0_18px_34px_rgba(109,77,236,0.12)]">
               Trending AI Prompts
             </span>
           </motion.h1>
@@ -230,3 +230,4 @@ export default function Home() {
     </motion.div>
   );
 }
+
