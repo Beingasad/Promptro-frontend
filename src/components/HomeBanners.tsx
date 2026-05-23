@@ -115,11 +115,7 @@ export default function HomeBanners() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
-          className={cn(
-            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br glass-shine hover-glass-glow border border-[#70639d]/25 dark:border-white/20",
-            banner.bg_gradient,
-            getDarkGradient(banner.bg_gradient)
-          )}
+          className="glass-panel group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.08)] transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 glass-shine hover-glass-glow"
         >
           {/* Content side */}
           <div className="relative z-10 flex flex-col gap-2 max-w-[52%]">
