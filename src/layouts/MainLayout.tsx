@@ -75,7 +75,7 @@ export default function MainLayout() {
           : isPromptDetail 
             ? 'pt-5 pb-8' 
             : isHome 
-              ? 'pt-28 pb-6 md:pt-24 md:pb-10' 
+              ? 'pt-[110px] pb-6 md:pt-[84px] md:pb-10' 
               : location.pathname === '/categories'
                 ? 'pt-[78px] pb-6 md:pt-[72px] md:pb-10'
                 : 'pt-[90px] pb-6 md:pt-[84px] md:pb-10'

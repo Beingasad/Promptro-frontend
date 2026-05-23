@@ -151,7 +151,7 @@ export default function Home() {
         keywords="AI prompts, ChatGPT prompts, image prompts, cinematic prompts, portrait prompts, Promptro"
       />
 
-      <section className="mt-[26px] px-2 sm:px-4 md:px-6 pt-1 md:mt-5 md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-[140px] sm:min-h-[160px] lg:min-h-0">
+      <section className="mt-3 px-2 sm:px-4 md:px-6 pt-1 md:mt-2 md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-[140px] sm:min-h-[160px] lg:min-h-0">
         {/* Desktop View (Always visible on lg) */}
         <div className="hidden lg:block lg:max-w-[40%]">
           <motion.p
