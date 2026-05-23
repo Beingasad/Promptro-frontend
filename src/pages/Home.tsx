@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useNavigationType } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import MasonryGrid from '../components/MasonryGrid';
@@ -15,6 +15,7 @@ import SEOMeta from '../components/common/SEOMeta';
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
+  const navigationType = useNavigationType();
   const { searchQuery, setSearchQuery } = useSearch();
   const { categories: globalCategories } = useCategories();
   const categoryNames = globalCategories.map(c => c.name);
@@ -24,8 +25,24 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState(() => (
     selectedCategory && filterCategories.includes(selectedCategory) ? selectedCategory : 'All'
   ));
-  const [prompts, setPrompts] = useState<Prompt[]>([]);
-  const [loading, setLoading] = useState(true);
+  
+  // Cache prompts in sessionStorage for instant load and scroll restoration
+  const [prompts, setPrompts] = useState<Prompt[]>(() => {
+    try {
+      const cached = sessionStorage.getItem('promptro_home_prompts');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem('promptro_home_prompts');
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
 
   // Sync category state from URL query parameter
   useEffect(() => {
@@ -41,6 +58,44 @@ export default function Home() {
     setSearchQuery('');
   }, [setSearchQuery]);
 
+  // Save scroll position continuously when user scrolls (to avoid browser back/page-transition zeroing window.scrollY)
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScroll > 0) {
+        sessionStorage.setItem('promptro_home_scroll_y', currentScroll.toString());
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Restore scroll position when navigation type is POP
+  useEffect(() => {
+    if (navigationType === 'POP') {
+      if (!loading && prompts.length > 0) {
+        const savedScrollY = sessionStorage.getItem('promptro_home_scroll_y');
+        if (savedScrollY) {
+          const scrollY = parseInt(savedScrollY, 10);
+          if (!isNaN(scrollY) && scrollY > 0) {
+            // Scroll immediately
+            window.scrollTo(0, scrollY);
+            
+            // Re-apply after a short delay to account for React grid rendering / layout calculation
+            const timer = setTimeout(() => {
+              window.scrollTo(0, scrollY);
+            }, 80);
+            return () => clearTimeout(timer);
+          }
+        }
+      }
+    } else {
+      // Clear saved scroll position if it's a new navigation to home page
+      sessionStorage.removeItem('promptro_home_scroll_y');
+    }
+  }, [loading, prompts, navigationType]);
 
   useEffect(() => {
     const fetchPrompts = async () => {
@@ -53,6 +108,11 @@ export default function Home() {
         }));
 
         setPrompts(enrichedApiPrompts);
+        try {
+          sessionStorage.setItem('promptro_home_prompts', JSON.stringify(enrichedApiPrompts));
+        } catch (e) {
+          console.warn('sessionStorage error:', e);
+        }
       } catch (error) {
         console.error("Error fetching prompts:", error);
       } finally {
@@ -93,12 +153,12 @@ export default function Home() {
 
       <section className="mt-5 sm:mt-6 px-2 sm:px-4 md:px-6 pt-1 md:mt-4 md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-[140px] sm:min-h-[160px] lg:min-h-0">
         {/* Desktop View (Always visible on lg) */}
-        <div className="hidden lg:block lg:max-w-[52%]">
+        <div className="hidden lg:block lg:max-w-[40%]">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05, duration: 0.45 }}
-            className="text-[14px] font-medium leading-6 text-[#6f6684] md:text-[16px]"
+            className="text-[15px] font-medium leading-6 text-[#6f6684] md:text-lg"
           >
             Discover, Copy & Create
           </motion.p>
@@ -106,17 +166,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12, duration: 0.55 }}
-            className="mt-2 max-w-5xl whitespace-nowrap text-[36px] xl:text-[44px] font-bold leading-tight tracking-normal"
+            className="mt-2 max-w-5xl whitespace-nowrap text-[8.5vw] sm:text-[44px] md:text-5xl font-bold leading-tight tracking-normal"
           >
             <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent drop-shadow-[0_18px_34px_rgba(139,92,246,0.12)]">
-              Discover AI Image Prompts
+              Trending AI Prompts
             </span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18, duration: 0.55 }}
-            className="mt-3 max-w-lg text-[14px] font-medium leading-relaxed text-[#6f6684] md:mt-4 md:text-[16px] md:leading-7"
+            className="mt-3 max-w-lg text-[16px] font-medium leading-[1.62] text-[#6f6684] md:mt-5 md:text-lg md:leading-8"
           >
             Explore thousands of cinematic, aesthetic and creative AI prompts to create stunning images instantly.
           </motion.p>

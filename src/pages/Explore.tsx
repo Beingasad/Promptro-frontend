@@ -3,37 +3,90 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { Compass } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigationType } from 'react-router-dom';
 import { useCategories } from '../context/CategoryContext';
 import { useSearch } from '../context/SearchContext';
 import MasonryGrid from '../components/MasonryGrid';
 import type { Prompt } from '../components/ImageCard';
 import SEOMeta from '../components/common/SEOMeta';
 
-
-
 const sortOptions = ['All', 'Popular', 'New Updates', 'Trending', 'Most viewed'] as const;
 type SortOption = typeof sortOptions[number];
-
 
 export default function Explore() {
   const { categories: globalCategories } = useCategories();
   const categoryNames = globalCategories.map(c => c.name);
   const filterCategories = ['All', ...categoryNames];
   const location = useLocation();
+  const navigationType = useNavigationType();
   const { searchQuery } = useSearch();
   const selectedCategory = new URLSearchParams(location.search).get('category');
   const selectedFilter = new URLSearchParams(location.search).get('filter') as SortOption | null;
-  const [prompts, setPrompts] = useState<Prompt[]>([]);
+
+  // Cache prompts in sessionStorage for instant load and scroll restoration
+  const [prompts, setPrompts] = useState<Prompt[]>(() => {
+    try {
+      const cached = sessionStorage.getItem('promptro_explore_prompts');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [activeCategory, setActiveCategory] = useState(() => (
     selectedCategory && filterCategories.includes(selectedCategory) ? selectedCategory : 'All'
   ));
   const [sortBy, setSortBy] = useState<SortOption>(() => (
     selectedFilter && sortOptions.includes(selectedFilter) ? selectedFilter : 'All'
   ));
-  const [loading, setLoading] = useState(true);
 
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = sessionStorage.getItem('promptro_explore_prompts');
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
 
+  // Save scroll position continuously when user scrolls (to avoid browser back/page-transition zeroing window.scrollY)
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScroll > 0) {
+        sessionStorage.setItem('promptro_explore_scroll_y', currentScroll.toString());
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Restore scroll position when navigation type is POP
+  useEffect(() => {
+    if (navigationType === 'POP') {
+      if (!loading && prompts.length > 0) {
+        const savedScrollY = sessionStorage.getItem('promptro_explore_scroll_y');
+        if (savedScrollY) {
+          const scrollY = parseInt(savedScrollY, 10);
+          if (!isNaN(scrollY) && scrollY > 0) {
+            // Scroll immediately
+            window.scrollTo(0, scrollY);
+            
+            // Re-apply after a short delay to account for React grid rendering / layout calculation
+            const timer = setTimeout(() => {
+              window.scrollTo(0, scrollY);
+            }, 80);
+            return () => clearTimeout(timer);
+          }
+        }
+      }
+    } else {
+      // Clear saved scroll position if it's a new navigation to explore page
+      sessionStorage.removeItem('promptro_explore_scroll_y');
+    }
+  }, [loading, prompts, navigationType]);
 
   useEffect(() => {
     const fetchPrompts = async () => {
@@ -46,6 +99,11 @@ export default function Explore() {
         }));
 
         setPrompts(enrichedApiPrompts);
+        try {
+          sessionStorage.setItem('promptro_explore_prompts', JSON.stringify(enrichedApiPrompts));
+        } catch (e) {
+          console.warn('sessionStorage error:', e);
+        }
       } catch (error) {
         console.error("Error fetching prompts:", error);
       } finally {
