@@ -54,7 +54,7 @@ export default function MainLayout() {
       {isHome && <TopNavbar />}
       
       {showPageSearch || showPageBack ? (
-        <div className="fixed top-0 w-full z-[100] px-4 pt-0.5 pb-3 md:py-3 md:px-8">
+        <div className="fixed top-0 w-full z-[100] px-4 pt-3.5 pb-3 md:py-3 md:px-8">
           <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[118px] bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.18),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.16),transparent_42%),linear-gradient(180deg,#f8f7fc_0%,#f8f7fc_15%,rgba(248,247,252,0.8)_35%,rgba(248,247,252,0.3)_60%,rgba(248,247,252,0)_100%)] [mask-image:linear-gradient(to_bottom,#000_0%,#000_15%,rgba(0,0,0,0.8)_35%,rgba(0,0,0,0.3)_60%,rgba(0,0,0,0.05)_80%,transparent_100%)] dark:bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.22),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.15),transparent_42%),linear-gradient(180deg,#0d0b14_0%,#0d0b14_15%,rgba(13,11,20,0.8)_35%,rgba(13,11,20,0.3)_60%,rgba(13,11,20,0)_100%)]" />
           <div className="relative z-10 mx-auto flex max-w-[1600px] items-center gap-3">
             {showPageBack && <PageBackButton />}
@@ -77,8 +77,8 @@ export default function MainLayout() {
             : isHome 
               ? 'pt-[110px] pb-6 md:pt-[84px] md:pb-10' 
               : location.pathname === '/categories'
-                ? 'pt-[78px] pb-6 md:pt-[72px] md:pb-10'
-                : 'pt-[90px] pb-6 md:pt-[84px] md:pb-10'
+                ? 'pt-[96px] pb-6 md:pt-[72px] md:pb-10'
+                : 'pt-[108px] pb-6 md:pt-[84px] md:pb-10'
       }`}>
         <Outlet />
       </main>
