@@ -1134,15 +1134,15 @@ export default function TopNavbar() {
         <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px] relative">
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
             <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`}></div>
-            <div className="relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14">
+            <div className="relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/76 shadow-[0_16px_38px_rgba(72,56,118,0.08)] dark:bg-black/32 dark:shadow-[0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-3xl md:h-14">
               <div className="flex flex-grow items-center h-full min-w-0">
-                <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
+                <div className="pl-4 md:pl-5 pr-2.5 text-[#6f6684] dark:text-white/60">
                   <Search className="w-5 h-5 md:w-5.5 md:h-5.5" />
                 </div>
                 <input
                   type="text"
                   placeholder="Search prompts, styles, themes..."
-                  className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] dark:text-white placeholder-[#8c84a6] dark:placeholder-[#afa6c8]/60 focus:outline-none md:text-base"
+                  className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] placeholder-[#8c84a6] dark:text-white dark:placeholder-white/35 focus:outline-none md:text-base"
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                   value={searchQuery}
@@ -1158,7 +1158,7 @@ export default function TopNavbar() {
                   title="Select Category"
                   className={`flex items-center justify-center transition-all duration-300 cursor-pointer p-1.5 hover:scale-105 active:scale-95 ${categoryDropdownOpen || currentCategory !== 'All'
                       ? 'text-primary'
-                      : 'text-[#81789e] hover:text-[#171421] dark:text-[#afa6c8]/60 dark:hover:text-white'
+                      : 'text-[#6f6684] hover:text-[#171421] dark:text-white/70 dark:hover:text-white'
                     }`}
                 >
                   <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5" />

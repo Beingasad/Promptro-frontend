@@ -56,15 +56,15 @@ export default function SearchPill() {
 
       <div className={`relative flex items-center transition-all duration-300 ${isFocused ? 'scale-[1.01]' : 'scale-100'}`}>
         <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`} />
-        <div className="relative flex h-12 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 shadow-[0_16px_38px_rgba(80,67,120,0.14)] backdrop-blur-2xl dark:bg-[#171421]/78 dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14">
+        <div className="relative flex h-12 w-full items-center justify-between overflow-hidden rounded-full bg-white/76 shadow-[0_16px_38px_rgba(72,56,118,0.08)] dark:bg-black/32 dark:shadow-[0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-3xl md:h-14">
           <div className="flex flex-grow items-center h-full min-w-0">
-            <div className="pl-4 pr-2.5 text-[#81789e] md:pl-5 shrink-0">
+            <div className="pl-4 pr-2.5 text-[#6f6684] dark:text-white/60 md:pl-5 shrink-0">
               <Search className="h-5 w-5" />
             </div>
             <input
               type="text"
               placeholder="Search prompts, styles, themes..."
-              className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] placeholder-[#8c84a6] outline-none dark:text-[#f7f2ff] dark:placeholder-[#8f85a8] md:text-base"
+              className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] placeholder-[#8c84a6] dark:text-white dark:placeholder-white/35 outline-none md:text-base"
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               value={searchQuery}
@@ -82,7 +82,7 @@ export default function SearchPill() {
                 className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                   activeDropdown === 'category' || currentCategory !== 'All'
                     ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
-                    : 'bg-white/60 text-[#5f5774] hover:bg-white/90 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
+                    : 'bg-[#70639d]/8 text-[#6f6684] hover:bg-[#70639d]/15 hover:text-[#171421] dark:bg-white/10 dark:text-white/70 dark:hover:bg-white/20 dark:hover:text-white'
                 }`}
               >
                 <LayoutGrid className="h-4 w-4 md:h-4.5 md:w-4.5" />
@@ -97,7 +97,7 @@ export default function SearchPill() {
                   className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                     activeDropdown === 'sort' || currentSort !== 'All'
                       ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
-                      : 'bg-white/60 text-[#5f5774] hover:bg-white/90 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
+                      : 'bg-[#70639d]/8 text-[#6f6684] hover:bg-[#70639d]/15 hover:text-[#171421] dark:bg-white/10 dark:text-white/70 dark:hover:bg-white/20 dark:hover:text-white'
                 }`}
               >
                 <SlidersHorizontal className="h-4 w-4 md:h-4.5 md:w-4.5" />

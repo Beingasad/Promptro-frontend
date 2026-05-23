@@ -41,7 +41,7 @@ export default function BottomNav() {
             className={({ isActive }) =>
               cn(
                 "flex flex-col items-center justify-center gap-1 md:gap-1.5 relative rounded-full min-w-14 md:min-w-20 px-2.5 py-1.5 md:px-4 md:py-2 transition-all duration-300",
-                isActive ? "text-primary" : "text-[#6f6684] hover:text-[#171421]"
+                isActive ? "text-primary font-bold" : "text-[#6f6684] hover:text-[#171421] dark:text-white/60 dark:hover:text-white"
               )
             }
           >
