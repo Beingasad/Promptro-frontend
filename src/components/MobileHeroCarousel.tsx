@@ -129,7 +129,11 @@ export default function MobileHeroCarousel() {
           ) : (
             <a 
               href={current.button_link}
-              className="glass-panel relative flex w-full items-center justify-between p-5 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.05)] overflow-hidden min-h-[120px]"
+              className={cn(
+                "relative flex w-full items-center justify-between p-5 rounded-2xl shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-2xl overflow-hidden bg-gradient-to-br min-h-[120px] border border-[#70639d]/22 dark:border-white/10 transition-all duration-300",
+                current.bg_gradient,
+                getDarkGradient(current.bg_gradient)
+              )}
             >
               <div className="flex-1 min-w-0 pr-4">
                 <div className="flex items-center gap-1.5 mb-1.5">
