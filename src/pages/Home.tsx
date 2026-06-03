@@ -146,9 +146,10 @@ export default function Home() {
       className="w-full flex flex-col gap-4 md:gap-9"
     >
       <SEOMeta
-        title="Promptro - AI Image Prompts & Creative Templates"
-        description="Discover trending AI prompts, cinematic styles, portrait prompts and creative templates."
-        keywords="AI prompts, ChatGPT prompts, image prompts, cinematic prompts, portrait prompts, Promptro"
+        title="Promptro | AI Image Prompts Library"
+        description="Discover trending AI image prompts, cinematic prompts, creative templates and inspiration on Promptro."
+        keywords="AI image prompts, trending AI prompts, Midjourney prompts, DALL-E prompts, cinematic prompts, creative AI templates, Promptro"
+        canonical="https://promptro.in"
       />
 
       <section className="mt-3 px-2 sm:px-4 md:px-6 pt-1 md:mt-2 md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-[140px] sm:min-h-[160px] lg:min-h-0">

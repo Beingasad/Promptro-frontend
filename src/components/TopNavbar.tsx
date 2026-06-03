@@ -27,6 +27,8 @@ import {
   ArrowUpRight,
   ArrowRight,
   LayoutGrid,
+  Shield,
+  BookOpen,
 } from 'lucide-react';
 import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -41,7 +43,7 @@ import { API_BASE_URL } from '../config';
 import { useSearch } from '../context/SearchContext';
 import { useCategories } from '../context/CategoryContext';
 
-type DrawerView = 'recent' | 'help' | 'about' | null;
+type DrawerView = 'recent' | 'help' | 'about' | 'legal' | null;
 
 export default function TopNavbar() {
   const navigate = useNavigate();
@@ -724,17 +726,11 @@ export default function TopNavbar() {
     setProfileOpen(false);
   };
 
-  const drawerItems = [
-    {
-      icon: Bookmark,
-      title: 'Saved Prompts',
-      description: 'Open your saved prompt board',
-      action: 'saved',
-    },
+  const mainDrawerItems = [
     {
       icon: Sparkles,
       title: 'Showcase Creator',
-      description: 'Generate beautiful posters of your favorite prompts',
+      description: 'Generate beautiful posters of your favourite prompts',
       action: 'showcase',
     },
     {
@@ -752,14 +748,26 @@ export default function TopNavbar() {
     {
       icon: CircleHelp,
       title: 'Help & Feedback',
-      description: 'Report issues or send suggestions',
+      description: 'Report bugs, request features, contact us',
       action: 'help',
     },
     {
       icon: Info,
       title: 'About Promptro',
-      description: 'Learn more about the platform',
+      description: 'Platform info, mission & founder',
       action: 'about',
+    },
+    {
+      icon: BookOpen,
+      title: 'Insights & Tutorials',
+      description: 'Guides, tips & AI prompt tutorials',
+      action: 'blog',
+    },
+    {
+      icon: Shield,
+      title: 'Legal',
+      description: 'Privacy Policy & Terms of Service',
+      action: 'legal',
     },
     ...(isLoggedIn ? [{
       icon: UserX,
@@ -768,6 +776,10 @@ export default function TopNavbar() {
       action: 'delete-account',
     }] : []),
   ];
+
+  // Keep for compatibility
+  const drawerItems = mainDrawerItems;
+  const moreDrawerItems: typeof mainDrawerItems = [];
 
   useEffect(() => {
     if (!auth) return;
@@ -862,12 +874,6 @@ export default function TopNavbar() {
   }, []);
 
   const handleDrawerAction = (action: string) => {
-    if (action === 'saved') {
-      navigate('/saved');
-      closePanels();
-      return;
-    }
-
     if (action === 'showcase') {
       openShowcaseCreator();
       return;
@@ -882,6 +888,29 @@ export default function TopNavbar() {
       const nextMode = appearanceMode === 'Light' ? 'Dark' : 'Light';
       setAppearanceMode(nextMode);
       applyThemeMode(nextMode);
+    }
+
+    if (action === 'legal') {
+      setExpandedView('legal');
+      return;
+    }
+
+    if (action === 'blog') {
+      navigate('/blog');
+      closePanels();
+      return;
+    }
+
+    if (action === 'privacy') {
+      navigate('/privacy-policy', { state: { from: 'legal' } });
+      closePanels();
+      return;
+    }
+
+    if (action === 'terms') {
+      navigate('/terms', { state: { from: 'legal' } });
+      closePanels();
+      return;
     }
 
     if (action === 'help') {
@@ -926,7 +955,9 @@ export default function TopNavbar() {
       ? 'Recently Viewed'
       : expandedView === 'help'
         ? 'Help & Feedback'
-        : 'About Promptro';
+        : expandedView === 'legal'
+          ? 'Legal'
+          : 'About Promptro';
 
   const renderExpandedContent = () => {
     if (expandedView === 'recent') {
@@ -947,129 +978,249 @@ export default function TopNavbar() {
       );
     }
 
-    if (expandedView === 'help') {
-      const faqs = [
-        ['How do I save prompts?', 'Tap the bookmark button on any image card.'],
-        ['Where are my saves stored?', 'Guest saves are stored locally on this device.'],
-        ['Can I share feedback?', 'Use the form below and our team will review it.'],
+    if (expandedView === 'legal') {
+      const legalLinks = [
+        {
+          title: 'Privacy Policy',
+          desc: 'How Promptro collects, uses and protects your data.',
+          href: '/privacy-policy',
+          icon: Shield,
+          color: 'from-[#3b82f6] to-[#8b5cf6]',
+        },
+        {
+          title: 'Terms of Service',
+          desc: 'Rules and conditions for using the Promptro platform.',
+          href: '/terms',
+          icon: ArrowRight,
+          color: 'from-[#10b981] to-[#059669]',
+        },
       ];
-
       return (
         <div className="flex flex-col gap-3 pb-6">
-          {faqs.map(([question, answer]) => (
-            <div key={question} className="rounded-[1.25rem] bg-white/62 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-              <h3 className="text-sm font-bold text-[#171421]">{question}</h3>
-              <p className="mt-1 text-xs font-medium leading-5 text-[#756d8d]">{answer}</p>
-            </div>
-          ))}
-          <div className="rounded-[1.25rem] bg-white/62 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-            <h3 className="text-sm font-bold text-[#171421]">Report an issue</h3>
-            <textarea
-              className="mt-3 h-24 w-full resize-none rounded-2xl bg-white/72 p-3 text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa] disabled:opacity-60"
-              placeholder="Tell us what happened..."
-              value={feedbackText}
-              onChange={(e) => setFeedbackText(e.target.value)}
-              disabled={feedbackStatus === 'sending' || feedbackStatus === 'sent'}
-            />
-            <button
-              onClick={handleSendFeedback}
-              disabled={feedbackStatus === 'sending' || feedbackStatus === 'sent' || !feedbackText.trim()}
-              className="mt-3 w-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-4 py-2.5 text-sm font-bold text-white shadow-[0_14px_30px_rgba(139,92,246,0.2)] transition-opacity disabled:opacity-50"
-            >
-              {feedbackStatus === 'sending' ? 'Sending...' : feedbackStatus === 'sent' ? 'Sent successfully!' : 'Send feedback'}
-            </button>
+          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-transparent border border-primary/12 p-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Legal Documents</p>
+            <p className="text-[12px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
+              Promptro is committed to transparency. Read our policies below.
+            </p>
           </div>
-          <div className="rounded-[1.25rem] bg-white/62 p-4 text-sm font-medium text-[#6f6684] shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-            Support: Coming Soon
+          {legalLinks.map((link) => (
+            <Link
+              key={link.title}
+              to={link.href}
+              onClick={closePanels}
+              className="flex items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5"
+            >
+              <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${link.color} flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.1)]`}>
+                <link.icon className="h-5 w-5 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-[#171421] dark:text-white">{link.title}</p>
+                <p className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed mt-0.5">{link.desc}</p>
+              </div>
+              <ChevronRight className="h-4 w-4 shrink-0 text-[#80779a]" />
+            </Link>
+          ))}
+          <div className="rounded-[1.15rem] bg-white/40 dark:bg-white/5 p-3 text-center">
+            <p className="text-[10px] font-medium text-[#8a819d]">
+              Questions? Email: <span className="text-primary font-bold italic">Coming Soon</span>
+            </p>
           </div>
         </div>
       );
     }
 
-    const getSystemInfo = () => {
-      const ua = navigator.userAgent;
-      let os = "Web";
-      if (ua.indexOf("Android") !== -1) os = "Android";
-      else if (ua.indexOf("like Mac") !== -1) os = "iOS";
-      else if (ua.indexOf("Win") !== -1) os = "Windows";
-      else if (ua.indexOf("Mac") !== -1) os = "macOS";
-      else if (ua.indexOf("Linux") !== -1) os = "Linux";
+    if (expandedView === 'help') {
+      const helpCategories = [
+        { id: 'contact', label: '✉️ Contact Email', placeholder: 'Describe your issue and we\'ll get back to you...', subject: 'Contact' },
+        { id: 'bug', label: '🐛 Report a Bug', placeholder: 'What went wrong? Which page or feature?', subject: 'Bug Report' },
+        { id: 'feature', label: '💡 Request a Feature', placeholder: 'What feature would make Promptro better for you?', subject: 'Feature Request' },
+        { id: 'general', label: '💬 General Feedback', placeholder: 'Share any thoughts, praise or suggestions...', subject: 'General Feedback' },
+      ];
 
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const [activeHelp, setActiveHelp] = (window as any).__helpTab !== undefined
+        ? [null, null]
+        : [null, null];
 
-      return `${os} • ${width}×${height}`;
-    };
+      return (
+        <div className="flex flex-col gap-3 pb-6">
+          {/* Contact Email prominent */}
+          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4 border border-primary/15">
+            <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Contact Email</p>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </span>
+              <span className="text-sm font-bold text-[#8a819d] italic">Coming Soon</span>
+            </div>
+            <p className="text-[10px] font-medium text-[#8a819d] mt-1.5">Use the form below to send a message</p>
+          </div>
+
+          {/* Feedback form with tabs */}
+          <div className="rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Send Message</p>
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {['Bug Report', 'Feature Request', 'General Feedback'].map((label) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => {
+                    const textarea = document.getElementById('help-subject') as HTMLInputElement;
+                    if (textarea) textarea.value = label;
+                    const placeholder = document.getElementById('help-msg') as HTMLTextAreaElement;
+                    if (placeholder) {
+                      placeholder.placeholder =
+                        label === 'Bug Report' ? 'What went wrong? Which page or feature?' :
+                        label === 'Feature Request' ? 'What feature would make Promptro better for you?' :
+                        'Share any thoughts, praise or suggestions...';
+                    }
+                  }}
+                  className="rounded-full border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/10 px-2.5 py-1 text-[10px] font-bold text-[#4e4566] dark:text-[#c6bddb] hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-colors"
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <input
+              id="help-subject"
+              type="text"
+              defaultValue="General Feedback"
+              className="mb-2 w-full rounded-xl bg-white/72 dark:bg-white/10 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#958baa]"
+              placeholder="Subject"
+            />
+            <textarea
+              id="help-msg"
+              className="h-24 w-full resize-none rounded-2xl bg-white/72 dark:bg-white/10 p-3 text-sm font-medium text-[#171421] dark:text-white outline-none placeholder:text-[#958baa] disabled:opacity-60"
+              placeholder="Share any thoughts, praise or suggestions..."
+              value={feedbackText}
+              onChange={(e) => setFeedbackText(e.target.value)}
+              disabled={feedbackStatus === 'sending' || feedbackStatus === 'sent'}
+            />
+            <button
+              onClick={() => {
+                const subjectEl = document.getElementById('help-subject') as HTMLInputElement;
+                const subject = subjectEl?.value || 'General Feedback';
+                if (!feedbackText.trim()) return;
+                setFeedbackStatus('sending');
+                axios.post(`${API_BASE_URL}/api/feedback`, {
+                  user: isLoggedIn ? displayName : 'Guest',
+                  email: isLoggedIn ? displayEmail : 'N/A',
+                  subject,
+                  message: feedbackText.trim(),
+                }).then(() => {
+                  setFeedbackStatus('sent');
+                  setFeedbackText('');
+                }).catch(() => {
+                  alert('Failed to send. Please reach us on Instagram @promptro.in or visit promptro.in/contact');
+                  setFeedbackStatus('idle');
+                }).finally(() => {
+                  setTimeout(() => setFeedbackStatus('idle'), 3000);
+                });
+              }}
+              disabled={feedbackStatus === 'sending' || feedbackStatus === 'sent' || !feedbackText.trim()}
+              className="mt-3 w-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-4 py-2.5 text-sm font-bold text-white shadow-[0_14px_30px_rgba(139,92,246,0.2)] transition-opacity disabled:opacity-50"
+            >
+              {feedbackStatus === 'sending' ? 'Sending...' : feedbackStatus === 'sent' ? '✓ Sent!' : 'Send Message'}
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     const stats = [
-      { value: promptCount > 0 ? `${promptCount}` : '...', label: 'Live Prompts', color: 'from-[#8b5cf6] to-[#d946ef]' },
+      { value: promptCount > 0 ? `${promptCount}+` : '...', label: 'Live Prompts', color: 'from-[#8b5cf6] to-[#d946ef]' },
       { value: '100%', label: 'Free Access', color: 'from-[#10b981] to-[#059669]' },
     ];
 
-    return (
-      <div className="flex flex-col gap-2 pb-2 px-1 flex-1">
-        {/* Main Brand Card */}
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-white/60 dark:bg-white/5 p-4 text-center shadow-[0_12px_32px_rgba(72,56,118,0.06)] backdrop-blur-xl">
-          {/* Background Glow */}
-          <div className="absolute -right-12 -top-12 -z-10 h-32 w-32 rounded-full bg-primary/10 blur-2xl"></div>
-          <div className="absolute -left-12 -bottom-12 -z-10 h-32 w-32 rounded-full bg-[#ff6a3d]/10 blur-2xl"></div>
-          
-          <div className="mx-auto mb-2 flex h-14 w-14 items-center justify-center overflow-hidden rounded-[1.15rem] bg-white dark:bg-white/10 p-1 shadow-[0_10px_24px_rgba(139,92,246,0.12)] dark:shadow-none hover:scale-105 transition-transform duration-300">
-            <img src="/brand/logo.png" alt="Promptro Logo" className="h-full w-auto object-contain" />
-          </div>
+    const comingSoon = [
+      'Prompt Collections',
+      'Creator Profiles',
+      'Community Uploads',
+      'AI Style Mixer',
+    ];
 
-          <h3 className="text-lg font-black tracking-tight text-[#171421] dark:text-white bg-clip-text bg-gradient-to-r from-primary to-[#ff6a3d]">
-            Promptro Studio
-          </h3>
-          <p className="mt-1 text-[11px] font-medium leading-relaxed text-[#6f6684] dark:text-[#b2abc5]">
-            A premium, high-fidelity AI prompt ecosystem built to empower creators. Discover curated prompts and launch concepts instantly.
+    return (
+      <div className="flex flex-col gap-3 pb-6 px-0.5">
+        {/* Brand Header */}
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-primary/10 via-[#ff6a3d]/5 to-transparent p-4 text-center border border-primary/15">
+          <div className="mx-auto mb-2.5 flex h-14 w-14 items-center justify-center overflow-hidden rounded-[1.15rem] bg-white dark:bg-white/10 p-1 shadow-[0_10px_24px_rgba(139,92,246,0.16)]">
+            <img src="/brand/logo.png" alt="Promptro" className="h-full w-auto object-contain" />
+          </div>
+          <h3 className="text-base font-black tracking-tight text-[#171421] dark:text-white">Promptro</h3>
+          <p className="mt-0.5 text-[11px] font-medium text-[#6f6684] dark:text-[#b2abc5]">
+            AI Image Prompt Platform
           </p>
         </div>
 
-        {/* Stats Grid - 2 Column */}
+        {/* Info Grid */}
         <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-3 text-center">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">Founded</p>
+            <p className="mt-1 text-base font-black text-[#171421] dark:text-white">2026</p>
+          </div>
           {stats.map((stat, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center justify-center rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-2 text-center shadow-[0_8px_20px_rgba(72,56,118,0.03)] hover:shadow-md transition-all duration-300"
-            >
-              <span className={`bg-gradient-to-r ${stat.color} bg-clip-text text-transparent text-base font-black tracking-tight`}>
+            <div key={i} className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-3 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">{stat.label}</p>
+              <span className={`mt-1 block text-base font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                 {stat.value}
-              </span>
-              <span className="mt-0.5 text-[8px] font-extrabold uppercase tracking-wider text-[#8a819d] dark:text-[#a59db5]">
-                {stat.label}
               </span>
             </div>
           ))}
         </div>
 
-        {/* Interactive / Helpful Tip */}
-        <div className="rounded-[1.15rem] bg-white/50 dark:bg-white/5 p-3 shadow-[0_8px_20px_rgba(72,56,118,0.03)]">
-          <p className="text-[9px] font-black uppercase tracking-widest text-primary dark:text-[#ff6a3d]">Pro Tip 💡</p>
-          <p className="mt-0.5 text-[10px] font-medium leading-relaxed text-[#6f6684] dark:text-[#afa6c8]">
-            Tap on any tag at the bottom of a prompt to filter the exploration grid instantly!
+        {/* Founder */}
+        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 flex items-center gap-3">
+          <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#ff642d] flex items-center justify-center shadow-[0_6px_16px_rgba(116,55,255,0.3)]">
+            <span className="text-sm font-black text-white">MA</span>
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">Founder & Developer</p>
+            <p className="text-sm font-bold text-[#171421] dark:text-white">Mohammad Asad Ansari</p>
+          </div>
+        </div>
+
+        {/* Mission */}
+        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Mission</p>
+          <p className="text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
+            Help creators discover, save and share high-quality AI prompts — for free, forever.
           </p>
         </div>
 
-        {/* Call to Action Banner */}
-        <div className="relative overflow-hidden rounded-[1.35rem] bg-gradient-to-br from-primary/95 to-[#9d66ff]/95 dark:from-primary/20 dark:to-purple-950/20 py-4.5 px-5 text-center shadow-[0_12px_26px_rgba(139,92,246,0.15)]">
-          <h4 className="text-[13px] font-black uppercase tracking-wider text-white">Join the Community</h4>
-          <p className="mt-1 text-[10.5px] font-medium leading-relaxed text-white/90 dark:text-[#c4bed6]">
-            Sync saved boards & get notified of premium drops.
-          </p>
-          <Link
-            to="/auth"
-            onClick={closePanels}
-            className="mt-3 inline-flex h-9 items-center justify-center rounded-full bg-white px-5 text-[10px] font-black text-primary shadow hover:scale-[1.03] active:scale-95 transition-all"
-          >
-            Get Started Free
-          </Link>
+        {/* Instagram */}
+        <a
+          href="https://instagram.com/promptro.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 rounded-[1.25rem] bg-gradient-to-r from-[#f09433]/10 to-[#e6683c]/10 border border-[#f09433]/20 p-3.5 hover:from-[#f09433]/15 hover:to-[#e6683c]/15 transition-colors"
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#f09433] to-[#e6683c] shadow-[0_4px_12px_rgba(230,104,60,0.3)]">
+            <Instagram className="h-4.5 w-4.5 text-white" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">Instagram</p>
+            <p className="text-sm font-bold text-[#171421] dark:text-white">@promptro.in</p>
+          </div>
+          <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[#8a819d]" />
+        </a>
+
+        {/* Coming Soon Features */}
+        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Coming Soon ✨</p>
+          <div className="flex flex-col gap-1.5">
+            {comingSoon.map((feature) => (
+              <div key={feature} className="flex items-center gap-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-primary/50 shrink-0" />
+                <p className="text-[12px] font-medium text-[#6f6684] dark:text-[#afa6c8]">{feature}</p>
+                <span className="ml-auto text-[9px] font-bold uppercase tracking-wider text-primary/60 bg-primary/8 px-1.5 py-0.5 rounded-full">Soon</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Footer Info */}
-        <div className="mt-auto rounded-[1.15rem] bg-white/40 dark:bg-white/5 py-2 px-4 text-center">
+        {/* Version */}
+        <div className="rounded-[1rem] bg-white/40 dark:bg-white/5 py-2 px-4 text-center">
           <span className="text-[8px] font-bold uppercase tracking-widest text-[#8a819d] dark:text-[#a098b0]">
-            v1.0.0 • {getSystemInfo()}
+            Promptro v1.0.0 • © 2026
           </span>
         </div>
       </div>
@@ -1334,8 +1485,9 @@ export default function TopNavbar() {
                       </div>
                     </div>
 
-                    <div className="flex shrink-0 flex-col gap-2">
-                      {drawerItems.map((item) => (
+                    {/* Scrollable items container */}
+                    <div className="flex-1 overflow-y-auto hide-scrollbar min-h-0 flex flex-col gap-2 pb-1">
+                      {mainDrawerItems.map((item) => (
                         <button
                           key={item.title}
                           type="button"
@@ -1343,17 +1495,23 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-2.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${item.action === 'delete-account'
-                              ? 'bg-[#fff4f8]/72 text-[#f23672] shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:text-[#ff8fb4] dark:hover:bg-[#f23672]/18'
-                              : 'bg-white/62 text-[#242033] shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
-                            }`}
+                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${
+                            item.action === 'delete-account'
+                              ? 'bg-[#fff4f8]/72 shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
+                              : 'bg-white/62 dark:bg-white/5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
+                          }`}
                         >
-                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${item.action === 'delete-account' ? 'bg-[#ffe5ef] text-[#f23672] dark:bg-[#f23672]/16 dark:text-[#ff8fb4]' : 'bg-primary/10 text-primary'
-                            }`}>
+                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${
+                            item.action === 'delete-account'
+                              ? 'bg-[#ffe5ef] text-[#f23672] dark:bg-[#f23672]/16 dark:text-[#ff8fb4]'
+                              : 'bg-primary/10 text-primary'
+                          }`}>
                             <item.icon className="h-4 w-4" />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className={`block truncate text-[12px] font-medium leading-tight ${item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#242033]'}`}>{item.title}</span>
+                            <span className={`block truncate text-[12px] font-medium leading-tight ${
+                              item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#242033] dark:text-white'
+                            }`}>{item.title}</span>
                             <span className="mt-0.5 block line-clamp-2 text-[10px] font-medium leading-snug text-[#80779a]">
                               {item.action === 'appearance' ? `${item.description} (${appearanceMode})` : item.description}
                             </span>
@@ -1365,7 +1523,7 @@ export default function TopNavbar() {
                       ))}
                     </div>
 
-                    <div className="mt-auto shrink-0 pt-3 text-center">
+                    <div className="shrink-0 pt-3 text-center">
                       <div className="flex items-center justify-center gap-1 text-[10px] font-medium text-[#8a819d]">
                         Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                       </div>

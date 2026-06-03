@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -10,6 +10,8 @@ import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, s
 import { useSearch } from '../context/SearchContext';
 import { useIsMobileDevice } from '../utils/device';
 import SEOMeta from '../components/common/SEOMeta';
+import AuthorCard from '../components/common/AuthorCard';
+import JsonLd from '../components/common/JsonLd';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -318,6 +320,45 @@ export default function ImageDetail() {
         keywords={`${prompt.title}, ${prompt.category} prompt, AI image prompt, ${prompt.model} prompt, Promptro`}
         ogImage={prompt.image_url}
         ogType="article"
+        author="Mohammad Asad Ansari"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://promptro.in' },
+          { name: prompt.category, url: `https://promptro.in/explore?category=${encodeURIComponent(prompt.category)}` },
+          { name: prompt.title, url: `https://promptro.in/prompt/${prompt.id}` },
+        ]}
+      />
+      <JsonLd
+        id={`img-obj-${prompt.id}`}
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'CreativeWork',
+          name: prompt.title,
+          description: `${prompt.title} AI image prompt for ${prompt.category} style. Generated with ${prompt.model}.`,
+          image: prompt.image_url,
+          url: `https://promptro.in/prompt/${prompt.id}`,
+          genre: prompt.category,
+          keywords: Array.isArray(prompt.tags) ? prompt.tags.join(', ') : '',
+          datePublished: prompt.created_at || new Date().toISOString().split('T')[0],
+          dateModified: prompt.updated_at || prompt.created_at || new Date().toISOString().split('T')[0],
+          author: {
+            '@type': 'Person',
+            name: 'Mohammad Asad Ansari',
+            jobTitle: 'Founder & Developer',
+            url: 'https://promptro.in/about',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Promptro',
+            url: 'https://promptro.in',
+            logo: {
+              '@type': 'ImageObject',
+              url: 'https://promptro.in/brand/logo.png',
+            },
+          },
+          inLanguage: 'en',
+          isAccessibleForFree: true,
+          license: 'https://promptro.in/terms',
+        }}
       />
       {isPortrait ? (
         <div className="flex flex-col md:flex-row gap-5 md:gap-10 lg:gap-12 md:h-[calc(100vh-100px)] md:min-h-[500px]">
@@ -376,6 +417,12 @@ export default function ImageDetail() {
       )}
 
       <section className="pb-4 md:mt-8">
+        {/* Author Attribution */}
+        <div className="mb-6">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8d86a0]/60 mb-2">Curated by</p>
+          <AuthorCard variant="compact" />
+        </div>
+
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-white/10 shadow-[0_12px_30px_rgba(255,106,61,0.16)]">

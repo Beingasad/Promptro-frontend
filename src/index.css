@@ -355,6 +355,131 @@
   }
 }
 
+/* ============================================================
+   Blog Post Prose Styles (prose-custom class)
+   Renders HTML content from blogData.ts with consistent styling
+   ============================================================ */
+.prose-custom {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #4a445f;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .prose-custom {
+  color: #c4bed6;
+}
+
+.prose-custom h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #171421;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 6rem;
+}
+
+[data-theme="dark"] .prose-custom h2 {
+  color: #f7f2ff;
+}
+
+.prose-custom h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #171421;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  scroll-margin-top: 6rem;
+}
+
+[data-theme="dark"] .prose-custom h3 {
+  color: #e4dcf5;
+}
+
+.prose-custom p {
+  margin-bottom: 1rem;
+}
+
+.prose-custom strong {
+  font-weight: 700;
+  color: #171421;
+}
+
+[data-theme="dark"] .prose-custom strong {
+  color: #f7f2ff;
+}
+
+.prose-custom ul,
+.prose-custom ol {
+  margin: 0.75rem 0 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.prose-custom ul {
+  list-style-type: disc;
+}
+
+.prose-custom ol {
+  list-style-type: decimal;
+}
+
+.prose-custom li {
+  padding-left: 0.25rem;
+}
+
+.prose-custom a {
+  color: #8b5cf6;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.prose-custom a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.prose-custom code {
+  font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.85em;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 0.35rem;
+  padding: 0.1em 0.4em;
+  color: #7437ff;
+}
+
+[data-theme="dark"] .prose-custom code {
+  background: rgba(139, 92, 246, 0.15);
+  color: #c4b5fd;
+}
+
+.prose-custom em {
+  font-style: italic;
+  color: #5f5774;
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.04);
+  border-radius: 0 0.75rem 0.75rem 0;
+  font-size: 0.93em;
+  font-style: normal;
+}
+
+[data-theme="dark"] .prose-custom em {
+  color: #afa6c8;
+  background: rgba(139, 92, 246, 0.07);
+}
+
+.prose-custom section {
+  margin-bottom: 1rem;
+}
+
 /* Global utility classes outside of Tailwind layers to ensure they are never stripped */
 .hide-scrollbar::-webkit-scrollbar {
   display: none !important;

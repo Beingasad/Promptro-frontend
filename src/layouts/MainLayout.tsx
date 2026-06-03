@@ -29,15 +29,33 @@ export default function MainLayout() {
   const isPromptDetail = location.pathname.startsWith('/prompt/');
   const isHome = location.pathname === '/';
   const isAuth = location.pathname === '/auth';
+  const isBlogPost = location.pathname.startsWith('/blog/');
   const showPageSearch = location.pathname === '/explore' || location.pathname === '/saved';
   const showPageBack = !isHome && !isPromptDetail && !isAuth;
+  const showBottomNav = 
+    location.pathname === '/' ||
+    location.pathname === '/explore' ||
+    location.pathname === '/saved' ||
+    location.pathname === '/categories';
   const pagePillLabel = location.pathname === '/categories'
     ? 'Prompt worlds'
     : location.pathname === '/explore'
       ? 'Explore prompts'
       : location.pathname === '/saved'
         ? 'Saved prompts'
-        : '';
+        : location.pathname === '/about'
+          ? 'About Promptro'
+          : location.pathname === '/contact'
+            ? 'Contact'
+            : location.pathname === '/privacy-policy'
+              ? 'Privacy Policy'
+              : location.pathname === '/terms'
+                ? 'Terms of Service'
+                : location.pathname === '/blog'
+                  ? 'Insights & Tutorials'
+                  : isBlogPost
+                    ? 'Article'
+                    : '';
 
   return (
     <div className="min-h-screen bg-background relative flex flex-col">
@@ -84,12 +102,14 @@ export default function MainLayout() {
       </main>
 
       {!isAuth && (
-        <footer className="relative z-10 pb-24 text-center text-[10px] font-medium tracking-normal text-[#8d86a0]/70 md:pb-3">
-          © 2026 Promptro. All rights reserved.
+        <footer className={`relative z-10 text-center ${showBottomNav ? 'pb-24 md:pb-32' : 'pb-6 md:pb-8'}`}>
+          <p className="text-[10px] font-medium text-[#8d86a0]/50">
+            &copy; {new Date().getFullYear()} Promptro. All rights reserved.
+          </p>
         </footer>
       )}
 
-      {!isPromptDetail && !isAuth && <BottomNav />}
+      {showBottomNav && <BottomNav />}
     </div>
   );
 }

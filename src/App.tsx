@@ -8,6 +8,12 @@ import ImageDetail from './pages/ImageDetail';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 import Auth from './pages/Auth';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import { SearchProvider } from './context/SearchContext';
 import { CategoryProvider } from './context/CategoryContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
@@ -32,6 +38,14 @@ function App() {
                 <Route path="categories" element={<Categories />} />
                 <Route path="prompt/:id" element={<ImageDetail />} />
                 <Route path="auth" element={<Auth />} />
+                {/* Trust & SEO Pages */}
+                <Route path="about" element={<About />} />
+                <Route path="contact" element={<Contact />} />
+                <Route path="privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="terms" element={<TermsOfService />} />
+                {/* Blog System */}
+                <Route path="blog" element={<Blog />} />
+                <Route path="blog/:slug" element={<BlogPost />} />
               </Route>
               <Route path="/asad87/login" element={<AdminLogin />} />
               <Route
