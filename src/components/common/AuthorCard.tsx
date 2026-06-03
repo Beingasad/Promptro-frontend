@@ -1,5 +1,11 @@
-import { ExternalLink, Instagram, Twitter } from 'lucide-react';
+import { ExternalLink, Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 interface AuthorCardProps {
   /** Compact inline variant vs. full card */
@@ -75,16 +81,13 @@ export default function AuthorCard({ variant = 'full', className = '' }: AuthorC
             <Instagram className="h-3.5 w-3.5" />
             Instagram
           </a>
-          <a
-            href="https://twitter.com/promptro_in"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8] hover:text-primary transition-colors"
-            aria-label="Promptro on Twitter"
+          <div
+            className="flex items-center gap-1 text-[11px] font-semibold text-[#756d8d]/50 dark:text-[#afa6c8]/50 cursor-not-allowed select-none"
+            title="Coming Soon"
           >
-            <Twitter className="h-3.5 w-3.5" />
-            Twitter
-          </a>
+            <XIcon className="h-3 w-3" />
+            X (Soon)
+          </div>
         </div>
       </div>
     </aside>

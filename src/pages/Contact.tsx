@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Globe, Instagram, Twitter, Send, CheckCircle2, MessageSquare } from 'lucide-react';
+import { Mail, Globe, Instagram, Send, CheckCircle2, MessageSquare } from 'lucide-react';
 import SEOMeta from '../components/common/SEOMeta';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
+
+const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 const socialLinks = [
   {
@@ -14,11 +20,11 @@ const socialLinks = [
     color: 'from-[#f09433] to-[#e6683c]',
   },
   {
-    icon: Twitter,
-    label: 'Twitter / X',
-    handle: '@promptro_in',
-    href: 'https://twitter.com/promptro_in',
-    color: 'from-[#1DA1F2] to-[#0d8fd9]',
+    icon: XIcon,
+    label: 'X (Twitter)',
+    handle: 'Coming Soon',
+    href: '#',
+    color: 'from-[#0d0d0d] to-[#2b2b2b]',
   },
   {
     icon: Globe,
@@ -118,23 +124,31 @@ export default function Contact() {
       >
         <h2 className="text-lg font-bold mb-4">Find Us Online</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {socialLinks.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 hover:shadow-[0_12px_28px_rgba(116,55,255,0.14)] transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center shadow-md`}>
-                <s.icon className="h-5 w-5 text-white" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[11px] text-[#756d8d] dark:text-[#afa6c8] font-medium">{s.label}</p>
-                <p className="text-sm font-bold text-[#171421] dark:text-white truncate">{s.handle}</p>
-              </div>
-            </a>
-          ))}
+          {socialLinks.map((s) => {
+            const isClickable = s.href !== '#';
+            const ContainerComponent = isClickable ? 'a' : 'div';
+            return (
+              <ContainerComponent
+                key={s.label}
+                {...(isClickable ? { href: s.href, target: '_blank', rel: 'noopener noreferrer' } : {})}
+                className={`flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 ${
+                  isClickable
+                    ? 'hover:shadow-[0_12px_28px_rgba(116,55,255,0.14)] transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer'
+                    : 'opacity-70 cursor-not-allowed select-none'
+                }`}
+              >
+                <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center shadow-md`}>
+                  <s.icon className="h-5 w-5 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] text-[#756d8d] dark:text-[#afa6c8] font-medium">
+                    {s.label} {!isClickable && <span className="text-[9px] font-bold text-primary ml-1">(Soon)</span>}
+                  </p>
+                  <p className="text-sm font-bold text-[#171421] dark:text-white truncate">{s.handle}</p>
+                </div>
+              </ContainerComponent>
+            );
+          })}
         </div>
       </motion.section>
 
