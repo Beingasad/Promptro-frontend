@@ -1182,50 +1182,42 @@ export default function TopNavbar() {
 
           {/* Find Us Online */}
           <div className="mt-2 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-            <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Find Us Online</p>
-            <div className="flex flex-col gap-2">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3 text-center">Find Us Online</p>
+            <div className="grid grid-cols-3 gap-2">
+              {/* Instagram */}
               <a
                 href="https://instagram.com/promptro.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-[1rem] bg-white/80 dark:bg-white/10 p-3 hover:shadow-md transition-all active:scale-[0.98]"
+                className="flex flex-col items-center gap-1.5 p-1 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors active:scale-95 text-center"
               >
-                <div className="h-8.5 w-8.5 shrink-0 rounded-lg bg-gradient-to-br from-[#f09433] to-[#e6683c] flex items-center justify-center shadow-sm">
-                  <Instagram className="h-4.5 w-4.5 text-white" />
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#f09433] to-[#e6683c] flex items-center justify-center shadow-md">
+                  <Instagram className="h-5 w-5 text-white" />
                 </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium leading-none">Instagram</p>
-                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5">@promptro.in</p>
-                </div>
+                <span className="text-[10px] text-[#171421] dark:text-white font-bold leading-tight">Instagram</span>
               </a>
 
+              {/* X / Twitter */}
               <div
-                className="flex items-center gap-3 rounded-[1rem] bg-white/80 dark:bg-white/10 p-3 opacity-70 cursor-not-allowed select-none"
+                className="flex flex-col items-center gap-1.5 p-1 rounded-xl opacity-70 cursor-not-allowed select-none text-center"
               >
-                <div className="h-8.5 w-8.5 shrink-0 rounded-lg bg-gradient-to-br from-[#0d0d0d] to-[#2b2b2b] flex items-center justify-center shadow-sm">
-                  <XIcon className="h-4.5 w-4.5 text-white" />
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#0d0d0d] to-[#2b2b2b] flex items-center justify-center shadow-md">
+                  <XIcon className="h-5 w-5 text-white" />
                 </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium leading-none">
-                    X (Twitter) <span className="text-[8px] font-bold text-primary ml-1">(Soon)</span>
-                  </p>
-                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5">Coming Soon</p>
-                </div>
+                <span className="text-[10px] text-[#8a819d] font-bold leading-tight">X (Soon)</span>
               </div>
 
+              {/* Website */}
               <a
                 href="https://promptro.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-[1rem] bg-white/80 dark:bg-white/10 p-3 hover:shadow-md transition-all active:scale-[0.98]"
+                className="flex flex-col items-center gap-1.5 p-1 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors active:scale-95 text-center"
               >
-                <div className="h-8.5 w-8.5 shrink-0 rounded-lg bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center shadow-sm">
-                  <Globe className="h-4.5 w-4.5 text-white" />
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center shadow-md">
+                  <Globe className="h-5 w-5 text-white" />
                 </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium leading-none">Website</p>
-                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5">promptro.in</p>
-                </div>
+                <span className="text-[10px] text-[#171421] dark:text-white font-bold leading-tight">Website</span>
               </a>
             </div>
           </div>
