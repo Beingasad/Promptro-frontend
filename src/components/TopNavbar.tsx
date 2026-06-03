@@ -1181,30 +1181,38 @@ export default function TopNavbar() {
           </div>
 
           {/* Find Us Online */}
-          <div className="mt-2 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
-            <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3 text-center">Find Us Online</p>
-            <div className="grid grid-cols-3 gap-2">
+          <div className="mt-2">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Find Us Online</p>
+            <div className="flex flex-col gap-2.5">
               {/* Instagram */}
               <a
                 href="https://instagram.com/promptro.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1.5 p-1 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors active:scale-95 text-center"
+                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
               >
                 <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#f09433] to-[#e6683c] flex items-center justify-center shadow-md">
                   <Instagram className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-[10px] text-[#171421] dark:text-white font-bold leading-tight">Instagram</span>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium">Instagram</p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate">@promptro.in</p>
+                </div>
               </a>
 
               {/* X / Twitter */}
               <div
-                className="flex flex-col items-center gap-1.5 p-1 rounded-xl opacity-70 cursor-not-allowed select-none text-center"
+                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 opacity-70 cursor-not-allowed select-none"
               >
                 <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#0d0d0d] to-[#2b2b2b] flex items-center justify-center shadow-md">
                   <XIcon className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-[10px] text-[#8a819d] font-bold leading-tight">X (Soon)</span>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium">
+                    X (Twitter) <span className="text-[8px] font-bold text-primary ml-1">(Soon)</span>
+                  </p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate">Coming Soon</p>
+                </div>
               </div>
 
               {/* Website */}
@@ -1212,12 +1220,15 @@ export default function TopNavbar() {
                 href="https://promptro.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1.5 p-1 rounded-xl hover:bg-white/50 dark:hover:bg-white/5 transition-colors active:scale-95 text-center"
+                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
               >
                 <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center shadow-md">
                   <Globe className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-[10px] text-[#171421] dark:text-white font-bold leading-tight">Website</span>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium">Website</p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate">promptro.in</p>
+                </div>
               </a>
             </div>
           </div>
