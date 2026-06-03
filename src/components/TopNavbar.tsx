@@ -1400,13 +1400,13 @@ export default function TopNavbar() {
           <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Our Story</p>
           <p className="text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
             It all started while scrolling through Instagram. I would see a breathtaking AI-generated image, 
-            but getting the prompt was a constant struggle — you had to follow the creator, leave a comment, 
+            but getting the prompt was a constant struggle because you had to follow the creator, leave a comment, 
             and wait for an automated link that either never arrived or was completely broken.
           </p>
           <p className="mt-2 text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
-            Frustrated by this endless gatekeeping, I built Promptro. A beautifully curated, completely open 
+            Frustrated by this endless gatekeeping, I built Promptro: a beautifully curated, completely open 
             space where anyone can instantly copy high-quality prompts for ChatGPT, Gemini, and other popular 
-            AI tools. No barriers, no paywalls — just pure creativity, free for everyone.
+            AI tools, with no barriers or paywalls. It is just pure creativity, free for everyone.
           </p>
         </div>
 
@@ -1707,9 +1707,10 @@ export default function TopNavbar() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -18 }}
                     transition={{ duration: 0.22 }}
-                    className="flex min-h-0 flex-1 flex-col"
+                    className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="mb-4 grid shrink-0 grid-cols-[2.75rem_1fr_2.75rem] items-center">
+                    <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-[#ffffff] via-[#ffffff]/90 to-transparent dark:from-[#1c182a] dark:via-[#1c182a]/90 dark:to-transparent" />
+                    <div className="absolute top-0 inset-x-0 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-12">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1743,7 +1744,7 @@ export default function TopNavbar() {
                         )}
                       </div>
                     </div>
-                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col">
+                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col pt-14">
                       {renderExpandedContent()}
                     </div>
                   </motion.div>
