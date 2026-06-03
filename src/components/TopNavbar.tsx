@@ -1214,22 +1214,6 @@ export default function TopNavbar() {
                   <p className="text-xs font-bold text-[#171421] dark:text-white truncate">Coming Soon</p>
                 </div>
               </div>
-
-              {/* Website */}
-              <a
-                href="https://promptro.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
-              >
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center shadow-md">
-                  <Globe className="h-5 w-5 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium">Website</p>
-                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate">promptro.in</p>
-                </div>
-              </a>
             </div>
           </div>
 

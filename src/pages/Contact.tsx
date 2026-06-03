@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Globe, Instagram, Send, CheckCircle2, MessageSquare } from 'lucide-react';
+import { Mail, Instagram, Send, CheckCircle2, MessageSquare } from 'lucide-react';
 import SEOMeta from '../components/common/SEOMeta';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -25,13 +25,6 @@ const socialLinks = [
     handle: 'Coming Soon',
     href: '#',
     color: 'from-[#0d0d0d] to-[#2b2b2b]',
-  },
-  {
-    icon: Globe,
-    label: 'Website',
-    handle: 'promptro.in',
-    href: 'https://promptro.in',
-    color: 'from-[#7437ff] to-[#dd4bd2]',
   },
 ];
 
