@@ -762,8 +762,8 @@ export default function TopNavbar() {
     },
     {
       icon: CircleHelp,
-      title: 'Help & Feedback',
-      description: 'Report bugs, request features, contact us',
+      title: 'Help & Contact',
+      description: 'Contact us, report bugs, share feedback',
       action: 'help',
     },
     {
@@ -934,7 +934,8 @@ export default function TopNavbar() {
     }
 
     if (action === 'help') {
-      setExpandedView('help');
+      navigate('/contact');
+      closePanels();
       return;
     }
 
