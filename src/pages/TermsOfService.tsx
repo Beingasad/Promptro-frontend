@@ -23,7 +23,7 @@ const sections: Section[] = [
     id: 'description-of-service',
     title: '2. Description of Service',
     content: (
-      <p>Promptro is an online platform that provides a curated library of AI image prompts. Users can browse, copy, save, and share prompts for use with third-party AI image generation tools including Midjourney, DALL-E, Stable Diffusion, Flux, and others. Promptro does not generate images directly — it provides the prompts used with those external tools.</p>
+      <p>Promptro is an online platform that provides a curated library of AI image prompts. Users can browse, copy, save, and share prompts for use with third-party AI tools including ChatGPT, Gemini, Midjourney, and others. Promptro does not generate images directly — it provides the prompts used with those external tools.</p>
     ),
   },
   {
@@ -118,7 +118,7 @@ const sections: Section[] = [
     content: (
       <div className="space-y-2">
         <p>For questions about these Terms of Service:</p>
-        <p><strong>Email:</strong> <span className="text-[#8a819d] italic font-semibold">Coming Soon</span></p>
+        <p><strong>Email:</strong> <a href="mailto:support.promptro@gmail.com" className="text-primary font-semibold hover:underline">support.promptro@gmail.com</a></p>
         <p><strong>Website:</strong> <a href="https://promptro.in/contact" className="text-primary font-semibold hover:underline">https://promptro.in/contact</a></p>
       </div>
     ),

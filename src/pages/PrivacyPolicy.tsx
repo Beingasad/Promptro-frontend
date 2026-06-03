@@ -118,7 +118,7 @@ const sections: Section[] = [
     content: (
       <div className="space-y-2">
         <p>If you have questions about this Privacy Policy or your personal data, please contact us:</p>
-        <p><strong>Email:</strong> <span className="text-[#8a819d] italic font-semibold">Coming Soon</span></p>
+        <p><strong>Email:</strong> <a href="mailto:support.promptro@gmail.com" className="text-primary font-semibold hover:underline">support.promptro@gmail.com</a></p>
         <p><strong>Website:</strong> <a href="https://promptro.in" className="text-primary font-semibold hover:underline">https://promptro.in</a></p>
       </div>
     ),

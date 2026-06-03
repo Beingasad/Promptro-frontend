@@ -29,6 +29,7 @@ import {
   LayoutGrid,
   Shield,
   BookOpen,
+  Mail,
 } from 'lucide-react';
 import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -75,6 +76,19 @@ export default function TopNavbar() {
   }, []);
   const [menuOpen, setMenuOpen] = useState(false);
   const [expandedView, setExpandedView] = useState<DrawerView>(null);
+
+  // Restore sidebar state when returning via back button from Privacy/Terms
+  useEffect(() => {
+    const pending = sessionStorage.getItem('promptro:sidebar-restore');
+    if (pending) {
+      sessionStorage.removeItem('promptro:sidebar-restore');
+      try {
+        const { view } = JSON.parse(pending);
+        setMenuOpen(true);
+        if (view) setExpandedView(view as DrawerView);
+      } catch {}
+    }
+  }, [location.pathname]);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [isFullWidth, setIsFullWidth] = useState(false);
@@ -82,6 +96,7 @@ export default function TopNavbar() {
   const [recentPrompts, setRecentPrompts] = useState<Prompt[]>([]);
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackEmail, setFeedbackEmail] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -788,9 +803,11 @@ export default function TopNavbar() {
       setCurrentUser(user);
       if (user) {
         setLocalAvatar(localStorage.getItem(`promptro:avatar:${user.uid}`) || '');
+        setFeedbackEmail(user.email || '');
         syncUserActivity(user).catch(() => undefined);
       } else {
         setLocalAvatar('');
+        setFeedbackEmail('');
       }
     });
   }, []);
@@ -896,19 +913,22 @@ export default function TopNavbar() {
     }
 
     if (action === 'blog') {
+      sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: null }));
       navigate('/blog');
       closePanels();
       return;
     }
 
     if (action === 'privacy') {
-      navigate('/privacy-policy', { state: { from: 'legal' } });
+      sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
+      navigate('/privacy-policy');
       closePanels();
       return;
     }
 
     if (action === 'terms') {
-      navigate('/terms', { state: { from: 'legal' } });
+      sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
+      navigate('/terms');
       closePanels();
       return;
     }
@@ -1004,11 +1024,14 @@ export default function TopNavbar() {
             </p>
           </div>
           {legalLinks.map((link) => (
-            <Link
+            <button
               key={link.title}
-              to={link.href}
-              onClick={closePanels}
-              className="flex items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5"
+              type="button"
+              onClick={() => {
+                const action = link.href === '/privacy-policy' ? 'privacy' : 'terms';
+                handleDrawerAction(action);
+              }}
+              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5 text-left"
             >
               <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${link.color} flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.1)]`}>
                 <link.icon className="h-5 w-5 text-white" />
@@ -1018,11 +1041,11 @@ export default function TopNavbar() {
                 <p className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed mt-0.5">{link.desc}</p>
               </div>
               <ChevronRight className="h-4 w-4 shrink-0 text-[#80779a]" />
-            </Link>
+            </button>
           ))}
           <div className="rounded-[1.15rem] bg-white/40 dark:bg-white/5 p-3 text-center">
             <p className="text-[10px] font-medium text-[#8a819d]">
-              Questions? Email: <span className="text-primary font-bold italic">Coming Soon</span>
+              Questions? Email: <a href="mailto:support.promptro@gmail.com" className="text-primary font-bold hover:underline">support.promptro@gmail.com</a>
             </p>
           </div>
         </div>
@@ -1050,7 +1073,7 @@ export default function TopNavbar() {
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               </span>
-              <span className="text-sm font-bold text-[#8a819d] italic">Coming Soon</span>
+              <a href="mailto:support.promptro@gmail.com" className="text-sm font-bold text-primary hover:underline">support.promptro@gmail.com</a>
             </div>
             <p className="text-[10px] font-medium text-[#8a819d] mt-1.5">Use the form below to send a message</p>
           </div>
@@ -1087,6 +1110,22 @@ export default function TopNavbar() {
               className="mb-2 w-full rounded-xl bg-white/72 dark:bg-white/10 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#958baa]"
               placeholder="Subject"
             />
+            <div className="flex gap-2 mb-2">
+              <input
+                id="help-reply-email"
+                type="email"
+                className="flex-1 min-w-0 rounded-xl bg-white/72 dark:bg-white/10 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#958baa]"
+                placeholder="Your email *"
+                value={feedbackEmail}
+                onChange={(e) => setFeedbackEmail(e.target.value)}
+              />
+              <input
+                id="help-reply-phone"
+                type="tel"
+                className="flex-1 min-w-0 rounded-xl bg-white/72 dark:bg-white/10 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#958baa]"
+                placeholder="Phone (optional)"
+              />
+            </div>
             <textarea
               id="help-msg"
               className="h-24 w-full resize-none rounded-2xl bg-white/72 dark:bg-white/10 p-3 text-sm font-medium text-[#171421] dark:text-white outline-none placeholder:text-[#958baa] disabled:opacity-60"
@@ -1098,26 +1137,31 @@ export default function TopNavbar() {
             <button
               onClick={() => {
                 const subjectEl = document.getElementById('help-subject') as HTMLInputElement;
+                const replyPhoneEl = document.getElementById('help-reply-phone') as HTMLInputElement;
                 const subject = subjectEl?.value || 'General Feedback';
-                if (!feedbackText.trim()) return;
+                const replyEmail = feedbackEmail.trim();
+                const replyPhone = replyPhoneEl?.value?.trim() || '';
+                if (!feedbackText.trim() || !replyEmail) return;
                 setFeedbackStatus('sending');
                 axios.post(`${API_BASE_URL}/api/feedback`, {
                   user: isLoggedIn ? displayName : 'Guest',
-                  email: isLoggedIn ? displayEmail : 'N/A',
+                  email: replyEmail,
                   subject,
-                  message: feedbackText.trim(),
+                  message: `${feedbackText.trim()}${replyPhone ? `\n\nPhone: ${replyPhone}` : ''}`,
                 }).then(() => {
                   setFeedbackStatus('sent');
                   setFeedbackText('');
+                  if (!isLoggedIn) setFeedbackEmail('');
+                  if (replyPhoneEl) replyPhoneEl.value = '';
                 }).catch(() => {
-                  alert('Failed to send. Please reach us on Instagram @promptro.in or visit promptro.in/contact');
+                  alert('Failed to send. Please reach us at support.promptro@gmail.com');
                   setFeedbackStatus('idle');
                 }).finally(() => {
                   setTimeout(() => setFeedbackStatus('idle'), 3000);
                 });
               }}
-              disabled={feedbackStatus === 'sending' || feedbackStatus === 'sent' || !feedbackText.trim()}
-              className="mt-3 w-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-4 py-2.5 text-sm font-bold text-white shadow-[0_14px_30px_rgba(139,92,246,0.2)] transition-opacity disabled:opacity-50"
+              disabled={feedbackStatus === 'sending' || feedbackStatus === 'sent' || !feedbackText.trim() || !feedbackEmail.trim()}
+              className="mt-3 w-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-4 py-2.5 text-sm font-bold text-white shadow-[0_14px_30px_rgba(139,92,246,0.2)] transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {feedbackStatus === 'sending' ? 'Sending...' : feedbackStatus === 'sent' ? '✓ Sent!' : 'Send Message'}
             </button>
@@ -1140,23 +1184,49 @@ export default function TopNavbar() {
 
     return (
       <div className="flex flex-col gap-3 pb-6 px-0.5">
-        {/* Brand Header */}
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-primary/10 via-[#ff6a3d]/5 to-transparent p-4 text-center border border-primary/15">
-          <div className="mx-auto mb-2.5 flex h-14 w-14 items-center justify-center overflow-hidden rounded-[1.15rem] bg-white dark:bg-white/10 p-1 shadow-[0_10px_24px_rgba(139,92,246,0.16)]">
-            <img src="/brand/logo.png" alt="Promptro" className="h-full w-auto object-contain" />
-          </div>
-          <h3 className="text-base font-black tracking-tight text-[#171421] dark:text-white">Promptro</h3>
-          <p className="mt-0.5 text-[11px] font-medium text-[#6f6684] dark:text-[#b2abc5]">
-            AI Image Prompt Platform
+
+        {/* Our Story - TOP */}
+        <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-[#ff6a3d]/5 border border-primary/12 p-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Our Story</p>
+          <p className="text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
+            It all started while scrolling through Instagram. I would see a breathtaking AI-generated image, 
+            but getting the prompt was a constant struggle — you had to follow the creator, leave a comment, 
+            and wait for an automated link that either never arrived or was completely broken.
+          </p>
+          <p className="mt-2 text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
+            Frustrated by this endless gatekeeping, I built Promptro. A beautifully curated, completely open 
+            space where anyone can instantly copy high-quality prompts for ChatGPT, Gemini, and other popular 
+            AI tools. No barriers, no paywalls — just pure creativity, free for everyone.
           </p>
         </div>
 
-        {/* Info Grid */}
-        <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-3 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">Founded</p>
-            <p className="mt-1 text-base font-black text-[#171421] dark:text-white">2026</p>
+        {/* Founder */}
+        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#ff642d] flex items-center justify-center shadow-[0_6px_16px_rgba(116,55,255,0.3)]">
+              <span className="text-sm font-black text-white">MA</span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">Founder &amp; Developer</p>
+              <p className="text-sm font-bold text-[#171421] dark:text-white truncate">Mohammad Asad Ansari</p>
+            </div>
           </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href="https://instagram.com/beingxasad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#f09433] to-[#e6683c] text-white hover:scale-105 transition-transform"
+              aria-label="Founder Instagram"
+              title="beingxasad"
+            >
+              <Instagram className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 gap-2">
           {stats.map((stat, i) => (
             <div key={i} className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-3 text-center">
               <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">{stat.label}</p>
@@ -1165,17 +1235,6 @@ export default function TopNavbar() {
               </span>
             </div>
           ))}
-        </div>
-
-        {/* Founder */}
-        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 flex items-center gap-3">
-          <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#ff642d] flex items-center justify-center shadow-[0_6px_16px_rgba(116,55,255,0.3)]">
-            <span className="text-sm font-black text-white">MA</span>
-          </div>
-          <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">Founder & Developer</p>
-            <p className="text-sm font-bold text-[#171421] dark:text-white">Mohammad Asad Ansari</p>
-          </div>
         </div>
 
         {/* Mission */}
@@ -1455,7 +1514,13 @@ export default function TopNavbar() {
                       </button>
                       <h2 className="text-center text-lg font-bold text-[#171421] dark:text-white">{expandedTitle}</h2>
                       <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-white/10 shadow-[0_10px_24px_rgba(72,56,118,0.1)] dark:shadow-none">
-                        {expandedView === 'about' ? (
+                        {expandedView === 'recent' ? (
+                          <Clock3 className="h-5 w-5 text-primary" />
+                        ) : expandedView === 'help' ? (
+                          <CircleHelp className="h-5 w-5 text-primary" />
+                        ) : expandedView === 'legal' ? (
+                          <Shield className="h-5 w-5 text-primary" />
+                        ) : expandedView === 'about' ? (
                           <Info className="h-5 w-5 text-primary" />
                         ) : (
                           <img src="/brand/logo.png" alt="" className="h-9 w-auto object-contain" />

@@ -53,7 +53,7 @@ const values = [
   {
     icon: Cpu,
     title: 'AI-First Platform',
-    desc: 'Designed from day one for AI creators. Works seamlessly with Midjourney, DALL-E 3, Stable Diffusion, Flux and more.',
+    desc: 'Designed from day one for AI creators. Works seamlessly with ChatGPT, Gemini, Midjourney and more.',
     color: 'from-[#dd4bd2] to-[#ff642d]',
   },
   {
@@ -185,7 +185,7 @@ export default function About() {
             <strong className="text-[#171421] dark:text-white">Promptro</strong> is where creators come to discover, copy and use thousands of high-quality AI image prompts — completely free.
           </p>
           <p>
-            Instead of spending hours on prompt engineering, you browse our curated library, copy any prompt in one tap, and paste it into <strong className="text-[#171421] dark:text-white">Midjourney, DALL-E 3, Stable Diffusion, Flux</strong> or any AI tool of your choice.
+            Instead of spending hours on prompt engineering, you browse our curated library, copy any prompt in one tap, and paste it into <strong className="text-[#171421] dark:text-white">ChatGPT, Gemini, Midjourney</strong> or any AI tool of your choice.
           </p>
           <p>
             Every prompt is tested and includes negative prompts, style tags, category filters and model recommendations — so you get stunning results on the first try.
@@ -233,7 +233,7 @@ export default function About() {
               </div>
               <div className="flex gap-2 mt-8">
                 <a
-                  href="https://instagram.com/promptro.in"
+                  href="https://instagram.com/beingxasad"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#f09433] to-[#e6683c] text-white shadow-[0_4px_12px_rgba(230,104,60,0.3)] hover:scale-105 transition-transform"
@@ -242,10 +242,10 @@ export default function About() {
                   <Instagram className="h-4 w-4" />
                 </a>
                 <a
-                  href="/contact"
+                  href="mailto:support.promptro@gmail.com"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors hover:scale-105"
-                  aria-label="Contact"
-                  title="Contact (Email coming soon)"
+                  aria-label="Email"
+                  title="support.promptro@gmail.com"
                 >
                   <Mail className="h-4 w-4" />
                 </a>
@@ -259,7 +259,10 @@ export default function About() {
               Founder &amp; Developer · Promptro
             </p>
             <p className="text-[14px] font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed" itemProp="description">
-              Mohammad Asad Ansari built Promptro in 2026 with a single goal: make the best AI prompts free and accessible to every creator. Passionate about AI, design and creative technology, he personally curates and tests every prompt in the library.
+              I built Promptro in 2026 to solve a simple frustration: seeing beautiful AI art on Instagram, 
+              only to be forced to follow and comment for prompt links that never arrived. Today, Promptro 
+              is a completely free, open library helping creators get instant access to production-ready prompts 
+              for ChatGPT, Gemini, and other top AI tools without any gatekeeping.
             </p>
 
             {/* Quick info pills */}

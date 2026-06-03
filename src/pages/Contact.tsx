@@ -30,7 +30,7 @@ const socialLinks = [
 ];
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,10 +42,10 @@ export default function Contact() {
         user: form.name || 'Anonymous',
         email: form.email || 'N/A',
         subject: form.subject || 'Contact Form',
-        message: form.message,
+        message: `${form.message.trim()}${form.phone ? `\n\nPhone: ${form.phone}` : ''}`,
       });
       setStatus('sent');
-      setForm({ name: '', email: '', subject: '', message: '' });
+      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch {
       setStatus('error');
     }
@@ -100,14 +100,14 @@ export default function Contact() {
           </div>
           <div>
             <p className="text-xs text-[#756d8d] dark:text-[#afa6c8] font-medium">Email</p>
-            <p className="text-base font-bold text-[#8d86a0] dark:text-[#afa6c8] italic">
-              Coming Soon
-            </p>
+            <a
+              href="mailto:support.promptro@gmail.com"
+              className="text-base font-bold text-primary hover:underline"
+            >
+              support.promptro@gmail.com
+            </a>
           </div>
         </div>
-        <p className="mt-3 text-xs text-[#8d86a0]/70 font-medium">
-          For now, reach us on Instagram or use the feedback form below.
-        </p>
       </motion.section>
 
       {/* Social Links */}
@@ -165,7 +165,7 @@ export default function Contact() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
                   Your Name
@@ -181,7 +181,7 @@ export default function Contact() {
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
-                  Email Address
+                  Email Address <span className="text-[#ff6a3d]">*</span>
                 </label>
                 <input
                   type="email"
@@ -189,6 +189,20 @@ export default function Contact() {
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="you@example.com"
+                  className="glass-input text-sm"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+                  Phone Number (Optional)
+                </label>
+                <input
+                  type="tel"
+                  id="contact-phone"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  placeholder="+91 98765 43210"
                   className="glass-input text-sm"
                 />
               </div>
@@ -222,12 +236,12 @@ export default function Contact() {
             </div>
             {status === 'error' && (
               <p className="text-xs text-[#ff6a3d] font-medium">
-                Something went wrong. Please reach us on Instagram @promptro.in
+              Something went wrong. Please reach us at <a href="mailto:support.promptro@gmail.com" className="font-bold text-primary hover:underline">support.promptro@gmail.com</a> or on Instagram @promptro.in
               </p>
             )}
             <button
               type="submit"
-              disabled={status === 'sending' || !form.message.trim()}
+              disabled={status === 'sending' || !form.message.trim() || !form.email.trim()}
               className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7437ff] to-[#dd4bd2] px-8 py-3 text-sm font-bold text-white shadow-[0_10px_26px_rgba(116,55,255,0.28)] hover:shadow-[0_14px_32px_rgba(116,55,255,0.38)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed self-start"
             >
               {status === 'sending' ? (
