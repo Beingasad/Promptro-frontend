@@ -74,7 +74,7 @@ export default function Blog() {
       >
         <Link
           to={`/blog/${featured.slug}`}
-          className="group block rounded-[2rem] overflow-hidden bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_22px_56px_rgba(116,55,255,0.14)] transition-all"
+          className="group block rounded-[2rem] overflow-hidden bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_22px_56px_rgba(116,55,255,0.14)] transition-all glass-shine hover-glass-glow"
         >
           <div className="relative aspect-[16/7] overflow-hidden">
             <img
@@ -130,7 +130,7 @@ export default function Blog() {
             >
               <Link
                 to={`/blog/${post.slug}`}
-                className="group flex flex-col rounded-[1.5rem] overflow-hidden bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_16px_40px_rgba(116,55,255,0.12)] transition-all h-full"
+                className="group flex flex-col rounded-[1.5rem] overflow-hidden bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_16px_40px_rgba(116,55,255,0.12)] transition-all h-full glass-shine hover-glass-glow"
               >
                 <div className="aspect-[16/9] overflow-hidden">
                   <img
@@ -174,7 +174,7 @@ export default function Blog() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5"
+        className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 glass-shine hover-glass-glow"
       >
         <div className="flex items-center gap-2 mb-3">
           <Tag className="h-4 w-4 text-primary" />

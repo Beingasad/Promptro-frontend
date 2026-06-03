@@ -171,7 +171,7 @@ export default function TermsOfService() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5"
+        className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 glass-shine hover-glass-glow"
         aria-label="Table of contents"
       >
         <p className="text-xs font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8] mb-3">Contents</p>
@@ -198,7 +198,7 @@ export default function TermsOfService() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 + i * 0.04 }}
-            className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 md:p-6"
+            className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 md:p-6 glass-shine hover-glass-glow"
           >
             <h2 className="text-lg font-bold mb-3">{s.title}</h2>
             <div className="text-[14px] md:text-[15px] font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed">

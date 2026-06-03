@@ -176,7 +176,7 @@ export default function BlogPost() {
           </p>
 
           {/* Mobile TOC */}
-          <details className="lg:hidden rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 overflow-hidden">
+          <details className="lg:hidden rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 overflow-hidden glass-shine hover-glass-glow">
             <summary className="flex items-center gap-2 p-4 cursor-pointer text-sm font-bold select-none">
               <List className="h-4 w-4 text-primary" />
               Table of Contents
@@ -211,7 +211,7 @@ export default function BlogPost() {
           </div>
 
           {/* FAQ Section */}
-          <section className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 md:p-7">
+          <section className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 md:p-7 glass-shine hover-glass-glow">
             <div className="flex items-center gap-2 mb-5">
               <HelpCircle className="h-5 w-5 text-primary" />
               <h2 className="text-lg font-bold">Frequently Asked Questions</h2>
@@ -260,7 +260,7 @@ export default function BlogPost() {
                   <Link
                     key={r.slug}
                     to={`/blog/${r.slug}`}
-                    className="group flex gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 hover:shadow-[0_12px_28px_rgba(116,55,255,0.12)] transition-all"
+                    className="group flex gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 hover:shadow-[0_12px_28px_rgba(116,55,255,0.12)] transition-all glass-shine hover-glass-glow"
                   >
                     <div className="h-16 w-20 shrink-0 rounded-xl overflow-hidden">
                       <img src={r.featuredImage} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -281,7 +281,7 @@ export default function BlogPost() {
 
         {/* Sticky Desktop TOC Sidebar */}
         <aside className="hidden lg:block w-64 shrink-0">
-          <div className="sticky top-24 rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5">
+          <div className="sticky top-24 rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 glass-shine hover-glass-glow">
             <div className="flex items-center gap-2 mb-4">
               <List className="h-4 w-4 text-primary" />
               <p className="text-xs font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8]">Contents</p>

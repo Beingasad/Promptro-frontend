@@ -81,8 +81,21 @@ export default function TopNavbar() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [expandedView, setExpandedView] = useState<DrawerView>(null);
+
+  const [menuOpen, setMenuOpen] = useState(() => {
+    const pending = sessionStorage.getItem('promptro:sidebar-restore');
+    return !!pending;
+  });
+  const [expandedView, setExpandedView] = useState<DrawerView>(() => {
+    const pending = sessionStorage.getItem('promptro:sidebar-restore');
+    if (pending) {
+      try {
+        const { view } = JSON.parse(pending);
+        return view as DrawerView;
+      } catch {}
+    }
+    return null;
+  });
 
   // Restore sidebar state when returning via back button from Privacy/Terms
   useEffect(() => {
@@ -96,6 +109,7 @@ export default function TopNavbar() {
       } catch {}
     }
   }, [location.pathname]);
+
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [isFullWidth, setIsFullWidth] = useState(false);
