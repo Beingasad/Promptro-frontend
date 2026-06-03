@@ -934,13 +934,22 @@ export default function TopNavbar() {
     }
 
     if (action === 'help') {
-      navigate('/contact');
-      closePanels();
+      if (windowWidth >= 768) {
+        navigate('/contact');
+        closePanels();
+      } else {
+        setExpandedView('help');
+      }
       return;
     }
 
     if (action === 'about') {
-      setExpandedView('about');
+      if (windowWidth >= 768) {
+        navigate('/about');
+        closePanels();
+      } else {
+        setExpandedView('about');
+      }
       return;
     }
 
