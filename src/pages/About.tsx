@@ -161,7 +161,7 @@ export default function About() {
         {stats.map((s) => (
           <div
             key={s.label}
-            className="flex flex-col items-center justify-center rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 text-center gap-2"
+            className="flex flex-col items-center justify-center rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 text-center gap-2 glass-shine hover-glass-glow"
           >
             <div className={`h-9 w-9 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center shadow-[0_6px_16px_rgba(0,0,0,0.12)]`}>
               <s.icon className="h-4.5 w-4.5 text-white" />
@@ -173,7 +173,7 @@ export default function About() {
       </motion.div>
 
       {/* ── WHAT IS PROMPTRO ── */}
-      <motion.section {...fadeUp(0.12)} className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8">
+      <motion.section {...fadeUp(0.12)} className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8 glass-shine hover-glass-glow">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center shadow-[0_6px_16px_rgba(116,55,255,0.28)]">
             <BookOpen className="h-4.5 w-4.5 text-white" />
@@ -216,7 +216,7 @@ export default function About() {
       <motion.section {...fadeUp(0.18)}>
         <h2 className="text-xl md:text-2xl font-bold mb-4">Meet the Founder</h2>
         <div
-          className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 overflow-hidden"
+          className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 overflow-hidden glass-shine hover-glass-glow"
           itemScope
           itemType="https://schema.org/Person"
         >
@@ -289,7 +289,7 @@ export default function About() {
           {values.map((v) => (
             <div
               key={v.title}
-              className="flex gap-4 rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 hover:shadow-[0_16px_40px_rgba(116,55,255,0.1)] transition-shadow"
+              className="flex gap-4 rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 hover:shadow-[0_16px_40px_rgba(116,55,255,0.1)] transition-shadow glass-shine hover-glass-glow"
             >
               <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${v.color} flex items-center justify-center shadow-[0_6px_14px_rgba(0,0,0,0.1)]`}>
                 <v.icon className="h-5 w-5 text-white" />
@@ -344,7 +344,7 @@ export default function About() {
           {comingSoon.map((f) => (
             <div
               key={f.label}
-              className="flex flex-col gap-2 rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-dashed border-primary/20 p-4"
+              className="flex flex-col gap-2 rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-dashed border-primary/20 p-4 glass-shine hover-glass-glow"
             >
               <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
                 <f.icon className="h-4.5 w-4.5 text-primary" />

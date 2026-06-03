@@ -90,7 +90,7 @@ export default function Contact() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8"
+        className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8 glass-shine hover-glass-glow"
       >
         <h2 className="text-lg font-bold mb-4">Contact Email</h2>
         <div className="flex items-center gap-3">
@@ -150,7 +150,7 @@ export default function Contact() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8"
+        className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8 glass-shine hover-glass-glow"
       >
         <h2 className="text-lg font-bold mb-5">Send a Message</h2>
 

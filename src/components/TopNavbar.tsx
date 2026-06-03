@@ -1036,7 +1036,7 @@ export default function TopNavbar() {
       ];
       return (
         <div className="flex flex-col gap-3 pb-6">
-          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-transparent border border-primary/12 p-4">
+          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-transparent border border-primary/12 p-4 glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Legal Documents</p>
             <p className="text-[12px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
               Promptro is committed to transparency. Read our policies below.
@@ -1050,7 +1050,7 @@ export default function TopNavbar() {
                 const action = link.href === '/privacy-policy' ? 'privacy' : 'terms';
                 handleDrawerAction(action);
               }}
-              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5 text-left"
+              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5 text-left glass-shine hover-glass-glow"
             >
               <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${link.color} flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.1)]`}>
                 <link.icon className="h-5 w-5 text-white" />
@@ -1062,7 +1062,7 @@ export default function TopNavbar() {
               <ChevronRight className="h-4 w-4 shrink-0 text-[#80779a]" />
             </button>
           ))}
-          <div className="rounded-[1.15rem] bg-white/40 dark:bg-white/5 p-3 text-center">
+          <div className="rounded-[1.15rem] bg-white/40 dark:bg-white/5 p-3 text-center glass-shine hover-glass-glow">
             <p className="text-[10px] font-medium text-[#8a819d]">
               Questions? Email: <a href="mailto:support.promptro@gmail.com" className="text-primary font-bold hover:underline">support.promptro@gmail.com</a>
             </p>
@@ -1072,17 +1072,10 @@ export default function TopNavbar() {
     }
 
     if (expandedView === 'help') {
-      const helpCategories = [
-        { id: 'contact', label: '✉️ Contact Email', placeholder: 'Describe your issue and we\'ll get back to you...', subject: 'Contact' },
-        { id: 'bug', label: '🐛 Report a Bug', placeholder: 'What went wrong? Which page or feature?', subject: 'Bug Report' },
-        { id: 'feature', label: '💡 Request a Feature', placeholder: 'What feature would make Promptro better for you?', subject: 'Feature Request' },
-        { id: 'general', label: '💬 General Feedback', placeholder: 'Share any thoughts, praise or suggestions...', subject: 'General Feedback' },
-      ];
-
       return (
         <div className="flex flex-col gap-3 pb-6">
           {/* Contact Email prominent */}
-          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4 border border-primary/15">
+          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4 border border-primary/15 glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Contact Email</p>
             <div className="flex items-center gap-2 mt-1">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 shrink-0">
@@ -1094,7 +1087,7 @@ export default function TopNavbar() {
           </div>
 
           {/* Feedback form with tabs */}
-          <div className="rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
+          <div className="rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)] glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Send Message</p>
             <div className="flex flex-wrap gap-1.5 mb-3">
               {['Bug Report', 'Feature Request', 'General Feedback'].map((label) => (
@@ -1237,7 +1230,7 @@ export default function TopNavbar() {
       <div className="flex flex-col gap-3 pb-6 px-0.5">
 
         {/* Our Story - TOP */}
-        <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-[#ff6a3d]/5 border border-primary/12 p-4">
+        <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-[#ff6a3d]/5 border border-primary/12 p-4 glass-shine hover-glass-glow">
           <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Our Story</p>
           <p className="text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
             It all started while scrolling through Instagram. I would see a breathtaking AI-generated image, 
@@ -1252,7 +1245,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Founder */}
-        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 flex items-center justify-between gap-3">
+        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 flex items-center justify-between gap-3 glass-shine hover-glass-glow">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#ff642d] flex items-center justify-center shadow-[0_6px_16px_rgba(116,55,255,0.3)]">
               <span className="text-sm font-black text-white">MA</span>
@@ -1279,7 +1272,7 @@ export default function TopNavbar() {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-2">
           {stats.map((stat, i) => (
-            <div key={i} className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-3 text-center">
+            <div key={i} className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-3 text-center glass-shine hover-glass-glow">
               <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">{stat.label}</p>
               <span className={`mt-1 block text-base font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                 {stat.value}
@@ -1289,7 +1282,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Mission */}
-        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4">
+        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 glass-shine hover-glass-glow">
           <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Mission</p>
           <p className="text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
             Help creators discover, save and share high-quality AI prompts — for free, forever.
@@ -1301,7 +1294,7 @@ export default function TopNavbar() {
           href="https://instagram.com/promptro.in"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 rounded-[1.25rem] bg-gradient-to-r from-[#f09433]/10 to-[#e6683c]/10 border border-[#f09433]/20 p-3.5 hover:from-[#f09433]/15 hover:to-[#e6683c]/15 transition-colors"
+          className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
         >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#f09433] to-[#e6683c] shadow-[0_4px_12px_rgba(230,104,60,0.3)]">
             <Instagram className="h-4.5 w-4.5 text-white" />
@@ -1314,7 +1307,7 @@ export default function TopNavbar() {
         </a>
 
         {/* Coming Soon Features */}
-        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4">
+        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 glass-shine hover-glass-glow">
           <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Coming Soon ✨</p>
           <div className="flex flex-col gap-1.5">
             {comingSoon.map((feature) => (
@@ -1328,7 +1321,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Version */}
-        <div className="rounded-[1rem] bg-white/40 dark:bg-white/5 py-2 px-4 text-center">
+        <div className="rounded-[1rem] bg-white/40 dark:bg-white/5 py-2 px-4 text-center glass-shine hover-glass-glow">
           <span className="text-[8px] font-bold uppercase tracking-widest text-[#8a819d] dark:text-[#a098b0]">
             Promptro v1.0.0 • © 2026
           </span>
@@ -1591,7 +1584,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="mb-3 shrink-0 rounded-[1.15rem] bg-white/62 p-3 shadow-[0_14px_34px_rgba(139,92,246,0.1)] backdrop-blur-2xl">
+                    <div className="mb-3 shrink-0 rounded-[1.15rem] bg-white/62 p-3 shadow-[0_14px_34px_rgba(139,92,246,0.1)] backdrop-blur-2xl glass-shine hover-glass-glow">
                       <div className="flex items-start gap-2">
                         <div className="min-w-0">
                           <p className="text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
@@ -1611,7 +1604,7 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${
+                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${
                             item.action === 'delete-account'
                               ? 'bg-[#fff4f8]/72 shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
                               : 'bg-white/62 dark:bg-white/5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
