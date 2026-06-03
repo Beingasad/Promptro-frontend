@@ -1707,10 +1707,9 @@ export default function TopNavbar() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -18 }}
                     transition={{ duration: 0.22 }}
-                    className="flex min-h-0 flex-1 flex-col relative"
+                    className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-[#ffffff] via-[#ffffff]/90 to-transparent dark:from-[#1c182a] dark:via-[#1c182a]/90 dark:to-transparent" />
-                    <div className="absolute top-0 inset-x-0 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-12">
+                    <div className="mb-4 grid shrink-0 grid-cols-[2.75rem_1fr_2.75rem] items-center">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1744,7 +1743,7 @@ export default function TopNavbar() {
                         )}
                       </div>
                     </div>
-                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col pt-14">
+                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col">
                       {renderExpandedContent()}
                     </div>
                   </motion.div>
