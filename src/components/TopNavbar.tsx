@@ -1189,7 +1189,7 @@ export default function TopNavbar() {
                 href="https://instagram.com/promptro.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
+                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
               >
                 <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#f09433] to-[#e6683c] flex items-center justify-center shadow-md">
                   <Instagram className="h-5 w-5 text-white" />

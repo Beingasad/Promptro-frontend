@@ -124,7 +124,7 @@ export default function Contact() {
               <ContainerComponent
                 key={s.label}
                 {...(isClickable ? { href: s.href, target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className={`flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 ${
+                className={`flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow ${
                   isClickable
                     ? 'hover:shadow-[0_12px_28px_rgba(116,55,255,0.14)] transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer'
                     : 'opacity-70 cursor-not-allowed select-none'
@@ -249,7 +249,7 @@ export default function Contact() {
             <button
               type="submit"
               disabled={status === 'sending' || !form.message.trim() || !form.email.trim()}
-              className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7437ff] to-[#dd4bd2] px-8 py-3 text-sm font-bold text-white shadow-[0_10px_26px_rgba(116,55,255,0.28)] hover:shadow-[0_14px_32px_rgba(116,55,255,0.38)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed self-start"
+              className="group flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7437ff] to-[#dd4bd2] px-8 py-3 text-sm font-bold text-white shadow-[0_10px_26px_rgba(116,55,255,0.28)] hover:shadow-[0_14px_32px_rgba(116,55,255,0.38)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed self-start"
             >
               {status === 'sending' ? (
                 <>
@@ -258,7 +258,7 @@ export default function Contact() {
                 </>
               ) : (
                 <>
-                  <Send className="h-4 w-4" />
+                  <Send className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
                   Send Message
                 </>
               )}
