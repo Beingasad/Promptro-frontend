@@ -97,6 +97,8 @@ export default function TopNavbar() {
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackEmail, setFeedbackEmail] = useState('');
+  const [feedbackSubject, setFeedbackSubject] = useState('General Feedback');
+  const [feedbackPhone, setFeedbackPhone] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -1070,10 +1072,6 @@ export default function TopNavbar() {
         { id: 'general', label: '💬 General Feedback', placeholder: 'Share any thoughts, praise or suggestions...', subject: 'General Feedback' },
       ];
 
-      const [activeHelp, setActiveHelp] = (window as any).__helpTab !== undefined
-        ? [null, null]
-        : [null, null];
-
       return (
         <div className="flex flex-col gap-3 pb-6">
           {/* Contact Email prominent */}
@@ -1083,7 +1081,7 @@ export default function TopNavbar() {
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               </span>
-              <a href="mailto:support.promptro@gmail.com" className="text-sm font-bold text-primary hover:underline">support.promptro@gmail.com</a>
+              <a href="mailto:support.promptro@gmail.com" className="text-xs font-bold text-primary hover:underline font-mono">support.promptro@gmail.com</a>
             </div>
             <p className="text-[10px] font-medium text-[#8a819d] mt-1.5">Use the form below to send a message</p>
           </div>
@@ -1097,15 +1095,7 @@ export default function TopNavbar() {
                   key={label}
                   type="button"
                   onClick={() => {
-                    const textarea = document.getElementById('help-subject') as HTMLInputElement;
-                    if (textarea) textarea.value = label;
-                    const placeholder = document.getElementById('help-msg') as HTMLTextAreaElement;
-                    if (placeholder) {
-                      placeholder.placeholder =
-                        label === 'Bug Report' ? 'What went wrong? Which page or feature?' :
-                        label === 'Feature Request' ? 'What feature would make Promptro better for you?' :
-                        'Share any thoughts, praise or suggestions...';
-                    }
+                    setFeedbackSubject(label);
                   }}
                   className="rounded-full border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/10 px-2.5 py-1 text-[10px] font-bold text-[#4e4566] dark:text-[#c6bddb] hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-colors"
                 >
@@ -1116,7 +1106,8 @@ export default function TopNavbar() {
             <input
               id="help-subject"
               type="text"
-              defaultValue="General Feedback"
+              value={feedbackSubject}
+              onChange={(e) => setFeedbackSubject(e.target.value)}
               className="mb-2 w-full rounded-xl bg-white/72 dark:bg-white/10 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#958baa]"
               placeholder="Subject"
             />
@@ -1134,23 +1125,27 @@ export default function TopNavbar() {
                 type="tel"
                 className="flex-1 min-w-0 rounded-xl bg-white/72 dark:bg-white/10 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#958baa]"
                 placeholder="Phone (optional)"
+                value={feedbackPhone}
+                onChange={(e) => setFeedbackPhone(e.target.value)}
               />
             </div>
             <textarea
               id="help-msg"
               className="h-24 w-full resize-none rounded-2xl bg-white/72 dark:bg-white/10 p-3 text-sm font-medium text-[#171421] dark:text-white outline-none placeholder:text-[#958baa] disabled:opacity-60"
-              placeholder="Share any thoughts, praise or suggestions..."
+              placeholder={
+                feedbackSubject === 'Bug Report' ? 'What went wrong? Which page or feature?' :
+                feedbackSubject === 'Feature Request' ? 'What feature would make Promptro better for you?' :
+                'Share any thoughts, praise or suggestions...'
+              }
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
               disabled={feedbackStatus === 'sending' || feedbackStatus === 'sent'}
             />
             <button
               onClick={() => {
-                const subjectEl = document.getElementById('help-subject') as HTMLInputElement;
-                const replyPhoneEl = document.getElementById('help-reply-phone') as HTMLInputElement;
-                const subject = subjectEl?.value || 'General Feedback';
+                const subject = feedbackSubject.trim() || 'General Feedback';
                 const replyEmail = feedbackEmail.trim();
-                const replyPhone = replyPhoneEl?.value?.trim() || '';
+                const replyPhone = feedbackPhone.trim();
                 if (!feedbackText.trim() || !replyEmail) return;
                 setFeedbackStatus('sending');
                 axios.post(`${API_BASE_URL}/api/feedback`, {
@@ -1161,8 +1156,9 @@ export default function TopNavbar() {
                 }).then(() => {
                   setFeedbackStatus('sent');
                   setFeedbackText('');
+                  setFeedbackSubject('General Feedback');
+                  setFeedbackPhone('');
                   if (!isLoggedIn) setFeedbackEmail('');
-                  if (replyPhoneEl) replyPhoneEl.value = '';
                 }).catch(() => {
                   alert('Failed to send. Please reach us at support.promptro@gmail.com');
                   setFeedbackStatus('idle');
