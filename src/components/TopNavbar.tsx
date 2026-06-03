@@ -762,20 +762,20 @@ export default function TopNavbar() {
     },
     {
       icon: CircleHelp,
-      title: 'Help & Contact',
-      description: 'Contact us, report bugs, share feedback',
+      title: 'Contact & Support',
+      description: 'Get support, report bugs or contact us',
       action: 'help',
     },
     {
       icon: Info,
-      title: 'About Promptro',
-      description: 'Platform info, mission & founder',
+      title: 'About Us',
+      description: 'Our story, mission & founder',
       action: 'about',
     },
     {
       icon: BookOpen,
-      title: 'Insights & Tutorials',
-      description: 'Guides, tips & AI prompt tutorials',
+      title: 'Blog & Guides',
+      description: 'AI prompt tutorials, tips & guides',
       action: 'blog',
     },
     {
@@ -975,10 +975,10 @@ export default function TopNavbar() {
     expandedView === 'recent'
       ? 'Recently Viewed'
       : expandedView === 'help'
-        ? 'Help & Feedback'
+        ? 'Contact & Support'
         : expandedView === 'legal'
           ? 'Legal'
-          : 'About Promptro';
+          : 'About Us';
 
   const renderExpandedContent = () => {
     if (expandedView === 'recent') {
