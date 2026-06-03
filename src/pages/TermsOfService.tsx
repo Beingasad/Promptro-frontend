@@ -5,13 +5,13 @@ import SEOMeta from '../components/common/SEOMeta';
 const LAST_UPDATED = 'June 3, 2026';
 const EFFECTIVE_DATE = 'June 3, 2026';
 
-interface Section {
+export interface Section {
   id: string;
   title: string;
   content: React.ReactNode;
 }
 
-const sections: Section[] = [
+export const sections: Section[] = [
   {
     id: 'acceptance',
     title: '1. Acceptance of Terms',

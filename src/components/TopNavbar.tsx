@@ -50,8 +50,12 @@ import { API_BASE_URL } from '../config';
 
 import { useSearch } from '../context/SearchContext';
 import { useCategories } from '../context/CategoryContext';
+import { sections as privacySections } from '../pages/PrivacyPolicy';
+import { sections as termsSections } from '../pages/TermsOfService';
+import blogPosts from '../data/blogData';
+import { ChevronDown } from 'lucide-react';
 
-type DrawerView = 'recent' | 'help' | 'about' | 'legal' | null;
+type DrawerView = 'recent' | 'help' | 'about' | 'legal' | 'privacy' | 'terms' | 'blog' | 'blog-post' | null;
 
 export default function TopNavbar() {
   const navigate = useNavigate();
@@ -122,6 +126,8 @@ export default function TopNavbar() {
   const [feedbackPhone, setFeedbackPhone] = useState('');
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [selectedBlogPostSlug, setSelectedBlogPostSlug] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -936,23 +942,35 @@ export default function TopNavbar() {
     }
 
     if (action === 'blog') {
-      sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: null }));
-      navigate('/blog');
-      closePanels();
+      if (windowWidth >= 768) {
+        sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: null }));
+        navigate('/blog');
+        closePanels();
+      } else {
+        setExpandedView('blog');
+      }
       return;
     }
 
     if (action === 'privacy') {
-      sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
-      navigate('/privacy-policy');
-      closePanels();
+      if (windowWidth >= 768) {
+        sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
+        navigate('/privacy-policy');
+        closePanels();
+      } else {
+        setExpandedView('privacy');
+      }
       return;
     }
 
     if (action === 'terms') {
-      sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
-      navigate('/terms');
-      closePanels();
+      if (windowWidth >= 768) {
+        sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
+        navigate('/terms');
+        closePanels();
+      } else {
+        setExpandedView('terms');
+      }
       return;
     }
 
@@ -1010,9 +1028,143 @@ export default function TopNavbar() {
         ? 'Contact & Support'
         : expandedView === 'legal'
           ? 'Legal'
-          : 'About Us';
+          : expandedView === 'privacy'
+            ? 'Privacy Policy'
+            : expandedView === 'terms'
+              ? 'Terms of Service'
+              : expandedView === 'blog'
+                ? 'Insights & Tutorials'
+                : expandedView === 'blog-post'
+                  ? 'Article'
+                  : 'About Us';
 
   const renderExpandedContent = () => {
+    if (expandedView === 'privacy') {
+      return (
+        <div className="flex flex-col gap-4 pb-6">
+          {privacySections.map((s) => (
+            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
+              <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
+              <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
+                {s.content}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (expandedView === 'terms') {
+      return (
+        <div className="flex flex-col gap-4 pb-6">
+          {termsSections.map((s) => (
+            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
+              <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
+              <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
+                {s.content}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (expandedView === 'blog') {
+      return (
+        <div className="flex flex-col gap-4 pb-6">
+          {blogPosts.map((post) => (
+            <button
+              key={post.slug}
+              type="button"
+              onClick={() => {
+                setSelectedBlogPostSlug(post.slug);
+                setExpandedView('blog-post');
+              }}
+              className="flex flex-col text-left rounded-[1.25rem] overflow-hidden bg-white/62 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_12px_24px_rgba(139,92,246,0.1)] transition-all hover:-translate-y-0.5 glass-shine hover-glass-glow"
+            >
+              <div className="aspect-[16/8] w-full overflow-hidden relative">
+                <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
+                <div className="absolute top-2 left-2">
+                  <span className="inline-block rounded-full bg-primary/90 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wider">
+                    {post.category}
+                  </span>
+                </div>
+              </div>
+              <div className="p-4 flex-1">
+                <h3 className="text-xs font-bold leading-snug text-[#171421] dark:text-white group-hover:text-primary transition-colors line-clamp-2">
+                  {post.title}
+                </h3>
+                <p className="mt-1 text-[10px] font-medium text-[#756d8d] dark:text-[#afa6c8] line-clamp-2 leading-relaxed">
+                  {post.excerpt}
+                </p>
+                <div className="mt-3 pt-2 border-t border-white/30 dark:border-white/5 flex items-center justify-between text-[8px] font-bold text-[#8d86a0] uppercase tracking-wider">
+                  <span>{post.readingTime}</span>
+                  <span className="text-primary font-bold flex items-center gap-0.5">Read <ChevronRight className="h-3 w-3" /></span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    if (expandedView === 'blog-post') {
+      const post = blogPosts.find((p) => p.slug === selectedBlogPostSlug);
+      if (!post) return <p className="text-xs text-[#8d86a0]">Post not found.</p>;
+      return (
+        <div className="flex flex-col gap-4 pb-6">
+          {/* Featured Image */}
+          <div className="rounded-[1.25rem] overflow-hidden aspect-[16/9] w-full border border-white/80 dark:border-white/10">
+            <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
+          </div>
+
+          {/* Meta */}
+          <div className="flex flex-col gap-1">
+            <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{post.category}</span>
+            <h3 className="text-sm font-black text-[#171421] dark:text-white leading-tight">{post.title}</h3>
+            <p className="text-[9px] font-medium text-[#8d86a0]">By {post.author} • {post.readingTime}</p>
+          </div>
+
+          {/* Excerpt */}
+          <p className="text-xs font-medium leading-relaxed text-primary bg-primary/5 border border-primary/10 rounded-[1rem] p-3">
+            {post.excerpt}
+          </p>
+
+          {/* Main Content */}
+          <div 
+            className="prose-custom text-xs font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+
+          {/* FAQ Accordion */}
+          {post.faqs.length > 0 && (
+            <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 mt-2 glass-shine hover-glass-glow">
+              <h4 className="text-xs font-bold text-[#171421] dark:text-white mb-3">Frequently Asked Questions</h4>
+              <div className="flex flex-col divide-y divide-white/35 dark:divide-white/5">
+                {post.faqs.map((faq, i) => (
+                  <div key={i} className="py-2.5">
+                    <button
+                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                      className="flex w-full items-start justify-between gap-2 text-left"
+                      type="button"
+                    >
+                      <span className="text-xs font-bold text-[#242033] dark:text-white leading-tight">{faq.question}</span>
+                      <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-primary transition-transform mt-0.5 ${openFaq === i ? 'rotate-180' : ''}`} />
+                    </button>
+                    {openFaq === i && (
+                      <p className="pt-1.5 text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
     if (expandedView === 'recent') {
       return (
         <div className="columns-1 sm:columns-2 gap-3 space-y-3 pb-6">
@@ -1562,8 +1714,14 @@ export default function TopNavbar() {
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          setExpandedView(null);
-                          setIsFullWidth(false);
+                          if (expandedView === 'privacy' || expandedView === 'terms') {
+                            setExpandedView('legal');
+                          } else if (expandedView === 'blog-post') {
+                            setExpandedView('blog');
+                          } else {
+                            setExpandedView(null);
+                            setIsFullWidth(false);
+                          }
                         }}
                         className="flex h-10 w-10 items-center justify-center rounded-full bg-white/68 text-[#171421] shadow-[0_12px_28px_rgba(72,56,118,0.12)]"
                         aria-label="Back to menu"
