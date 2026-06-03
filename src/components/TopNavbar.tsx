@@ -30,7 +30,14 @@ import {
   Shield,
   BookOpen,
   Mail,
+  Globe,
 } from 'lucide-react';
+
+const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
@@ -1172,6 +1179,57 @@ export default function TopNavbar() {
               {feedbackStatus === 'sending' ? 'Sending...' : feedbackStatus === 'sent' ? '✓ Sent!' : 'Send Message'}
             </button>
           </div>
+
+          {/* Find Us Online */}
+          <div className="mt-2 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)]">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Find Us Online</p>
+            <div className="flex flex-col gap-2">
+              <a
+                href="https://instagram.com/promptro.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-[1rem] bg-white/80 dark:bg-white/10 p-3 hover:shadow-md transition-all active:scale-[0.98]"
+              >
+                <div className="h-8.5 w-8.5 shrink-0 rounded-lg bg-gradient-to-br from-[#f09433] to-[#e6683c] flex items-center justify-center shadow-sm">
+                  <Instagram className="h-4.5 w-4.5 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium leading-none">Instagram</p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5">@promptro.in</p>
+                </div>
+              </a>
+
+              <div
+                className="flex items-center gap-3 rounded-[1rem] bg-white/80 dark:bg-white/10 p-3 opacity-70 cursor-not-allowed select-none"
+              >
+                <div className="h-8.5 w-8.5 shrink-0 rounded-lg bg-gradient-to-br from-[#0d0d0d] to-[#2b2b2b] flex items-center justify-center shadow-sm">
+                  <XIcon className="h-4.5 w-4.5 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium leading-none">
+                    X (Twitter) <span className="text-[8px] font-bold text-primary ml-1">(Soon)</span>
+                  </p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5">Coming Soon</p>
+                </div>
+              </div>
+
+              <a
+                href="https://promptro.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-[1rem] bg-white/80 dark:bg-white/10 p-3 hover:shadow-md transition-all active:scale-[0.98]"
+              >
+                <div className="h-8.5 w-8.5 shrink-0 rounded-lg bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center shadow-sm">
+                  <Globe className="h-4.5 w-4.5 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium leading-none">Website</p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5">promptro.in</p>
+                </div>
+              </a>
+            </div>
+          </div>
+
         </div>
       );
     }
