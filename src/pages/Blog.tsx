@@ -34,7 +34,7 @@ export default function Blog() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="w-full max-w-5xl mx-auto px-2 pt-1 pb-4 md:pt-2 md:pb-10 flex flex-col gap-8"
+      className="w-full max-w-5xl mx-auto px-3 py-6 md:py-10 flex flex-col gap-8 pb-4"
     >
       <SEOMeta
         title="Insights & Tutorials | Promptro AI Prompt Guides"

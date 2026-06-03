@@ -54,7 +54,7 @@ export default function Contact() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="w-full max-w-3xl mx-auto px-2 pt-1 pb-4 md:pt-2 md:pb-10 flex flex-col gap-10"
+      className="w-full max-w-3xl mx-auto px-3 py-6 md:py-10 flex flex-col gap-10 pb-4"
     >
       <SEOMeta
         title="Contact Promptro | Get in Touch"
@@ -72,17 +72,25 @@ export default function Contact() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55 }}
-        className="text-center"
+        className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 text-center"
       >
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-[1.1] mb-4">
-          We'd love to{' '}
-          <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent">
-            hear from you
-          </span>
-        </h1>
-        <p className="text-base md:text-lg font-medium text-[#6f6684] dark:text-[#afa6c8] max-w-lg mx-auto">
-          Whether you have feedback, a bug report, a collaboration idea, or just want to say hi — we're here.
-        </p>
+        {/* Animated gradient bg */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#7437ff]/12 via-[#dd4bd2]/8 to-[#ff642d]/10 rounded-[2.5rem]" />
+        <div className="absolute inset-0 border border-white/70 dark:border-white/10 rounded-[2.5rem]" />
+        <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full bg-[#7437ff]/15 blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-[#ff642d]/15 blur-3xl" />
+
+        <div className="relative z-10">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight leading-[1.1] mb-4">
+            We'd love to{' '}
+            <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent">
+              hear from you
+            </span>
+          </h1>
+          <p className="text-base md:text-lg font-medium text-[#6f6684] dark:text-[#afa6c8] max-w-lg mx-auto">
+            Whether you have feedback, a bug report, a collaboration idea, or just want to say hi, we're here.
+          </p>
+        </div>
       </motion.section>
 
       {/* Direct Contact */}
