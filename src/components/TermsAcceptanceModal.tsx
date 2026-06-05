@@ -97,18 +97,19 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e9e2f3] bg-white/96 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.16)] backdrop-blur-2xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/94 dark:text-white sm:p-8"
           >
             {/* Header */}
-            <div className="flex items-start gap-3 mb-4 pb-4 border-b border-[#e9e2f3] dark:border-white/5">
-              {/* Raw FileText Icon on the left (no container) */}
-              <FileText className="h-6 w-6 text-primary shrink-0 mt-0.5" />
-              
-              <div className="space-y-0.5">
-                <span className="block text-[10px] font-extrabold uppercase tracking-widest text-primary">
+            <div className="flex flex-col gap-1.5 mb-4 pb-4 border-b border-[#e9e2f3] dark:border-white/5">
+              {/* Row 1: Icon & Required Agreement text inline and same size */}
+              <div className="flex items-center gap-1.5 text-primary">
+                <FileText className="h-4 w-4 shrink-0" />
+                <span className="text-[10px] font-extrabold uppercase tracking-widest leading-none">
                   Required Agreement
                 </span>
-                <h3 className="text-lg sm:text-xl font-black tracking-tight text-[#171421] dark:text-white leading-tight">
-                  Terms of Service Updates
-                </h3>
               </div>
+              
+              {/* Row 2: Heading below */}
+              <h3 className="text-lg sm:text-xl font-black tracking-tight text-[#171421] dark:text-white leading-tight">
+                Terms of Service Updates
+              </h3>
             </div>
 
             <p className="text-xs font-semibold leading-relaxed text-[#5f5774] dark:text-[#afa6c8] mb-4">
