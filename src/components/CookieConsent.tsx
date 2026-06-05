@@ -63,26 +63,26 @@ export default function CookieConsent() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 30, scale: 0.95 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed bottom-24 left-4 right-4 z-50 mx-auto max-w-4xl rounded-2xl border border-white/60 bg-white/70 p-5 shadow-[0_20px_50px_rgba(72,56,118,0.18)] backdrop-blur-xl dark:border-white/10 dark:bg-[#1a1625]/80 sm:p-6 md:bottom-4"
+          initial={{ y: '100%', opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: '100%', opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed bottom-0 left-0 right-0 z-[60] w-full border-t border-[#e9e2f3] bg-white/94 px-6 py-5 shadow-[0_-12px_42px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0d0b14]/94 dark:shadow-[0_-12px_52px_rgba(0,0,0,0.48)] md:px-12 md:py-4.5"
         >
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="mx-auto flex max-w-[1600px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex items-start gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary/20">
                 <Cookie className="h-5 w-5" />
               </div>
-              <div className="space-y-1">
-                <h4 className="text-base font-bold text-[#171421] dark:text-white">Cookie Preferences</h4>
-                <p className="text-sm font-medium leading-relaxed text-[#736b88] dark:text-[#afa6c8]">
+              <div className="space-y-0.5">
+                <h4 className="text-[15px] font-bold text-[#171421] dark:text-white">Cookie Preferences</h4>
+                <p className="text-xs sm:text-sm font-semibold leading-relaxed text-[#5f5774] dark:text-[#afa6c8]">
                   We use cookies to improve your experience, analytics, and platform performance.
                 </p>
               </div>
             </div>
             
-            <div className="flex flex-wrap items-center gap-2.5 sm:justify-end">
+            <div className="flex flex-wrap items-center gap-2 md:gap-3 sm:justify-end">
               <Link
                 to="/privacy-policy"
                 onClick={() => setIsVisible(false)}
