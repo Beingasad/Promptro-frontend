@@ -7,6 +7,8 @@ import TopNavbar from '../components/TopNavbar';
 import BottomNav from '../components/BottomNav';
 import SearchPill from '../components/SearchPill';
 import PageBackButton from '../components/PageBackButton';
+import CookieConsent from '../components/CookieConsent';
+import TermsAcceptanceModal from '../components/TermsAcceptanceModal';
 
 export default function MainLayout() {
   const location = useLocation();
@@ -27,9 +29,14 @@ export default function MainLayout() {
   }, [location.pathname]);
 
   const isPromptDetail = location.pathname.startsWith('/prompt/');
-  const isHome = location.pathname === '/';
+  const isHome = 
+    location.pathname === '/' ||
+    location.pathname === '/about' ||
+    location.pathname === '/contact' ||
+    location.pathname === '/privacy-policy' ||
+    location.pathname === '/terms';
+  const isBlog = location.pathname === '/blog' || location.pathname.startsWith('/blog/');
   const isAuth = location.pathname === '/auth';
-  const isBlogPost = location.pathname.startsWith('/blog/');
   const showPageSearch = location.pathname === '/explore' || location.pathname === '/saved';
   const showPageBack = !isHome && !isPromptDetail && !isAuth;
   const showBottomNav = 
@@ -53,7 +60,7 @@ export default function MainLayout() {
                 ? 'Terms of Service'
                 : location.pathname === '/blog'
                   ? 'Insights & Tutorials'
-                  : isBlogPost
+                  : isBlog
                     ? 'Article'
                     : '';
 
@@ -110,6 +117,9 @@ export default function MainLayout() {
       )}
 
       {showBottomNav && <BottomNav />}
+
+      <CookieConsent />
+      {!isAuth && <TermsAcceptanceModal />}
     </div>
   );
 }

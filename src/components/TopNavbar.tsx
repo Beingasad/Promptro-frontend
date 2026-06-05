@@ -31,6 +31,7 @@ import {
   BookOpen,
   Mail,
   Globe,
+  Newspaper,
 } from 'lucide-react';
 
 const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -42,6 +43,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import ImageCard, { Prompt } from './ImageCard';
+import SEOMeta from './common/SEOMeta';
 import { auth } from '../lib/firebase';
 import { clearLocalActivity, onActivityUpdated, readLocalActivity, syncUserActivity } from '../lib/activity';
 import { applyThemeMode, readThemeMode, type ThemeMode } from '../lib/theme';
@@ -768,6 +770,10 @@ export default function TopNavbar() {
     setExpandedView(null);
     setNotificationsOpen(false);
     setProfileOpen(false);
+    const path = location.pathname;
+    if (path === '/about' || path === '/contact' || path === '/privacy-policy' || path === '/terms') {
+      navigate('/');
+    }
   };
 
   const mainDrawerItems = [
@@ -853,6 +859,39 @@ export default function TopNavbar() {
       document.body.style.overflow = originalOverflow;
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const path = location.pathname;
+    const keepMenuOpen = location.state?.keepMenuOpen;
+
+    if (location.state?.keepMenuOpen) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+
+    if (path === '/about') {
+      setMenuOpen(true);
+      setExpandedView('about');
+    } else if (path === '/contact') {
+      setMenuOpen(true);
+      setExpandedView('help');
+    } else if (path === '/privacy-policy') {
+      setMenuOpen(true);
+      setExpandedView('privacy');
+    } else if (path === '/terms') {
+      setMenuOpen(true);
+      setExpandedView('terms');
+    } else {
+      if (menuOpen && (expandedView === 'about' || expandedView === 'help' || expandedView === 'privacy' || expandedView === 'terms')) {
+        if (keepMenuOpen) {
+          const restoreView = location.state?.restoreView || null;
+          setExpandedView(restoreView);
+        } else {
+          setMenuOpen(false);
+          setExpandedView(null);
+        }
+      }
+    }
+  }, [location.pathname, location.state]);
 
   useEffect(() => onActivityUpdated(() => {
     setRecentPrompts(readLocalActivity().recentPrompts);
@@ -953,44 +992,22 @@ export default function TopNavbar() {
     }
 
     if (action === 'privacy') {
-      if (windowWidth >= 768) {
-        sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
-        navigate('/privacy-policy');
-        closePanels();
-      } else {
-        setExpandedView('privacy');
-      }
+      navigate('/privacy-policy');
       return;
     }
 
     if (action === 'terms') {
-      if (windowWidth >= 768) {
-        sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: 'legal' }));
-        navigate('/terms');
-        closePanels();
-      } else {
-        setExpandedView('terms');
-      }
+      navigate('/terms');
       return;
     }
 
     if (action === 'help') {
-      if (windowWidth >= 768) {
-        navigate('/contact');
-        closePanels();
-      } else {
-        setExpandedView('help');
-      }
+      navigate('/contact');
       return;
     }
 
     if (action === 'about') {
-      if (windowWidth >= 768) {
-        navigate('/about');
-        closePanels();
-      } else {
-        setExpandedView('about');
-      }
+      navigate('/about');
       return;
     }
 
@@ -1042,6 +1059,16 @@ export default function TopNavbar() {
     if (expandedView === 'privacy') {
       return (
         <div className="flex flex-col gap-4 pb-6">
+          <SEOMeta
+            title="Privacy Policy | Promptro"
+            description="Read Promptro's Privacy Policy to understand how we collect, use and protect your personal information on the AI prompt platform."
+            canonical="https://promptro.in/privacy-policy"
+            robots="index, follow"
+            breadcrumbs={[
+              { name: 'Home', url: 'https://promptro.in' },
+              { name: 'Privacy Policy', url: 'https://promptro.in/privacy-policy' },
+            ]}
+          />
           {privacySections.map((s) => (
             <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
@@ -1057,6 +1084,16 @@ export default function TopNavbar() {
     if (expandedView === 'terms') {
       return (
         <div className="flex flex-col gap-4 pb-6">
+          <SEOMeta
+            title="Terms of Service | Promptro"
+            description="Read Promptro's Terms of Service to understand the rules, rights and responsibilities for using the Promptro AI prompt platform."
+            canonical="https://promptro.in/terms"
+            robots="index, follow"
+            breadcrumbs={[
+              { name: 'Home', url: 'https://promptro.in' },
+              { name: 'Terms of Service', url: 'https://promptro.in/terms' },
+            ]}
+          />
           {termsSections.map((s) => (
             <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
@@ -1240,6 +1277,15 @@ export default function TopNavbar() {
     if (expandedView === 'help') {
       return (
         <div className="flex flex-col gap-3 pb-6">
+          <SEOMeta
+            title="Contact Promptro | Get in Touch"
+            description="Contact Promptro for support, feedback or collaboration. Reach out via Instagram @promptro.in or visit our website at promptro.in."
+            canonical="https://promptro.in/contact"
+            breadcrumbs={[
+              { name: 'Home', url: 'https://promptro.in' },
+              { name: 'Contact', url: 'https://promptro.in/contact' },
+            ]}
+          />
           {/* Contact Email prominent */}
           <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4 border border-primary/15 glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Contact Email</p>
@@ -1394,6 +1440,15 @@ export default function TopNavbar() {
 
     return (
       <div className="flex flex-col gap-3 pb-6 px-0.5">
+        <SEOMeta
+          title="About Promptro | AI Image Prompt Platform"
+          description="Learn about Promptro — the curated AI image prompt library founded by Mohammad Asad Ansari in 2026. Mission, values, founder info and what's coming next."
+          canonical="https://promptro.in/about"
+          breadcrumbs={[
+            { name: 'Home', url: 'https://promptro.in' },
+            { name: 'About', url: 'https://promptro.in/about' },
+          ]}
+        />
 
         {/* Our Story - TOP */}
         <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-[#ff6a3d]/5 border border-primary/12 p-4 glass-shine hover-glass-glow">
@@ -1709,44 +1764,49 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    {/* Header Blending Gradient Mask */}
-                    <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-[#ffffff] via-[#ffffff]/90 to-transparent dark:from-[#1c182a] dark:via-[#1c182a]/90 dark:to-transparent" />
-                    
-                    <div className="absolute top-0 inset-x-0 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-12">
+                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/70 dark:bg-[#1c182a]/70 backdrop-blur-xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] border border-white/40 dark:border-white/10">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           if (expandedView === 'privacy' || expandedView === 'terms') {
                             setExpandedView('legal');
+                            navigate('/', { state: { keepMenuOpen: true, restoreView: 'legal' } });
                           } else if (expandedView === 'blog-post') {
                             setExpandedView('blog');
                           } else {
                             setExpandedView(null);
                             setIsFullWidth(false);
+                            navigate('/', { state: { keepMenuOpen: true } });
                           }
                         }}
-                        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/68 text-[#171421] shadow-[0_12px_28px_rgba(72,56,118,0.12)]"
+                        className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 dark:bg-white/10 text-[#171421] dark:text-white shadow-[0_4px_12px_rgba(72,56,118,0.08)] dark:shadow-none hover:scale-105 transition-transform"
                         aria-label="Back to menu"
                       >
                         <ArrowLeft className="h-5 w-5" />
                       </button>
-                      <h2 className="text-center text-lg font-bold text-[#171421] dark:text-white">{expandedTitle}</h2>
-                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-white/10 shadow-[0_10px_24px_rgba(72,56,118,0.1)] dark:shadow-none">
+                      <h2 className="text-center text-base sm:text-lg font-bold text-[#171421] dark:text-white line-clamp-1 px-2">{expandedTitle}</h2>
+                      <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-white/10 shadow-[0_4px_12px_rgba(72,56,118,0.08)] dark:shadow-none">
                         {expandedView === 'recent' ? (
                           <Clock3 className="h-5 w-5 text-primary" />
                         ) : expandedView === 'help' ? (
                           <CircleHelp className="h-5 w-5 text-primary" />
-                        ) : expandedView === 'legal' ? (
+                        ) : expandedView === 'legal' || expandedView === 'privacy' ? (
                           <Shield className="h-5 w-5 text-primary" />
+                        ) : expandedView === 'terms' ? (
+                          <BookOpen className="h-5 w-5 text-primary" />
                         ) : expandedView === 'about' ? (
                           <Info className="h-5 w-5 text-primary" />
+                        ) : expandedView === 'contact' ? (
+                          <Mail className="h-5 w-5 text-primary" />
+                        ) : expandedView === 'blog' || expandedView === 'blog-post' ? (
+                          <Newspaper className="h-5 w-5 text-primary" />
                         ) : (
-                          <img src="/brand/logo.png" alt="" className="h-9 w-auto object-contain" />
+                          <img src="/brand/logo.png" alt="" className="h-8 w-auto object-contain" />
                         )}
                       </div>
                     </div>
-                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col pt-14">
+                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col pt-20">
                       {renderExpandedContent()}
                     </div>
                   </motion.div>

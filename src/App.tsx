@@ -39,8 +39,8 @@ function App() {
                 <Route path="prompt/:id" element={<ImageDetail />} />
                 <Route path="auth" element={<Auth />} />
                 {/* Trust & SEO Pages */}
-                <Route path="about" element={<About />} />
-                <Route path="contact" element={<Contact />} />
+                <Route path="about" element={<Home />} />
+                <Route path="contact" element={<Home />} />
                 <Route path="privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="terms" element={<TermsOfService />} />
                 {/* Blog System */}

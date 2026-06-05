@@ -22,6 +22,8 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 import SEOMeta from '../components/common/SEOMeta';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 type AuthMode = 'login' | 'signup';
 
@@ -35,6 +37,7 @@ export default function Auth() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   useEffect(() => {
     if (!auth) return;
@@ -85,12 +88,24 @@ export default function Auth() {
         const normalizedName = name.trim();
         const credential = await createUserWithEmailAndPassword(auth, normalizedEmail, password);
         await updateProfile(credential.user, { displayName: normalizedName });
+        
+        // Save Terms and Conditions acceptance
+        try {
+          await axios.post(`${API_BASE_URL}/api/consent/accept`, {
+            user_id: credential.user.uid,
+            email: normalizedEmail,
+          });
+        } catch (consentErr) {
+          console.error('Failed to save user consent during signup:', consentErr);
+        }
+
         await sendEmailVerification(credential.user);
         await signOut(auth);
         setMode('login');
         setName('');
         setEmail(normalizedEmail);
         setPassword('');
+        setAgreedToTerms(false);
         setNotice(`Please verify ${normalizedEmail}, then log in with the same password.`);
         return;
       } else {
@@ -256,6 +271,28 @@ export default function Auth() {
               </span>
             </label>
 
+            {mode === 'signup' && (
+              <label className="flex items-start gap-2.5 mt-1 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={agreedToTerms}
+                  onChange={(e) => setAgreedToTerms(e.target.checked)}
+                  className="mt-1 h-4 w-4 shrink-0 rounded border-[#e9e2f3] text-primary focus:ring-primary/20 accent-primary"
+                  required
+                />
+                <span className="text-xs font-semibold text-[#736b88] leading-tight">
+                  I agree to the{' '}
+                  <Link to="/terms" target="_blank" className="text-primary hover:underline font-bold">
+                    Terms & Conditions
+                  </Link>{' '}
+                  and{' '}
+                  <Link to="/privacy-policy" target="_blank" className="text-primary hover:underline font-bold">
+                    Privacy Policy
+                  </Link>.
+                </span>
+              </label>
+            )}
+
             {error && (
               <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
                 {error}
@@ -270,7 +307,7 @@ export default function Auth() {
 
             <button
               type="submit"
-              disabled={!isFirebaseConfigured || loading}
+              disabled={!isFirebaseConfigured || loading || (mode === 'signup' && !agreedToTerms)}
               className="mt-0.5 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
@@ -285,6 +322,7 @@ export default function Auth() {
               setName('');
               setError('');
               setNotice('');
+              setAgreedToTerms(false);
             }}
             className="mt-3 w-full text-center text-sm font-bold text-primary"
           >
