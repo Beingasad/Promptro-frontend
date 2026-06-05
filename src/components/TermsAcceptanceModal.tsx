@@ -100,14 +100,14 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             <div className="flex flex-col gap-1.5 mb-4 pb-4 border-b border-[#e9e2f3] dark:border-white/5">
               {/* Row 1: Icon & Required Agreement text inline and same size */}
               <div className="flex items-center gap-1.5 text-primary">
-                <FileText className="h-4 w-4 shrink-0" />
-                <span className="text-[10px] font-extrabold uppercase tracking-widest leading-none">
+                <FileText className="h-[18px] w-[18px] shrink-0" />
+                <span className="text-[11px] font-black uppercase tracking-widest leading-none">
                   Required Agreement
                 </span>
               </div>
               
               {/* Row 2: Heading below */}
-              <h3 className="text-lg sm:text-xl font-black tracking-tight text-[#171421] dark:text-white leading-tight">
+              <h3 className="text-base sm:text-lg font-black tracking-tight text-[#171421] dark:text-white leading-tight">
                 Terms of Service Updates
               </h3>
             </div>
