@@ -48,14 +48,11 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
   // Prevent parent page scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
-      document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
     } else {
-      document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
     }
     return () => {
-      document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
     };
   }, [isOpen]);
@@ -99,24 +96,65 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e9e2f3] bg-white/96 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.16)] backdrop-blur-2xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/94 dark:text-white sm:p-8"
           >
-            {/* Header: Horizontal Flex Row */}
-            <div className="flex items-start gap-4 mb-5">
-              {/* Animated Ring Gradient Icon */}
-              <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-primary to-secondary p-[1.5px] shadow-[0_8px_24px_rgba(139,92,246,0.22)]">
-                <div className="flex h-full w-full items-center justify-center rounded-2xl bg-white dark:bg-[#171421] text-primary">
-                  <FileText className="h-5 w-5 text-primary" />
+            {/* Header */}
+            <div className="flex flex-col items-center text-center mb-5">
+              {/* Animated Double Ring Gradient Icon */}
+              <div className="relative mb-3.5 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-secondary p-[1.5px] shadow-[0_8px_24px_rgba(139,92,246,0.22)]">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-white dark:bg-[#171421] text-primary">
+                  <FileText className="h-6 w-6 text-primary" />
                 </div>
               </div>
-              <div className="flex flex-col items-start text-left">
-                <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary dark:bg-primary/20">
-                  Required Agreement
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary dark:bg-primary/20">
+                Required Agreement
+              </span>
+              <h3 className="mt-2 text-xl sm:text-2xl font-black tracking-tight text-[#171421] dark:text-white">
+                Terms of Service Updates
+              </h3>
+              <p className="mt-1.5 text-xs font-semibold leading-relaxed text-[#736b88] dark:text-[#afa6c8] px-2">
+                To continue using Promptro, please review and accept our updated Terms of Service and Privacy Policy.
+              </p>
+            </div>
+
+            {/* Scrollable Summary Cards */}
+            <div className="mb-5 max-h-52 overflow-y-auto rounded-2xl border border-[#e9e2f3]/60 bg-[#fcfaff]/50 p-4 text-[13px] font-medium text-[#5c5470] dark:border-white/5 dark:bg-white/5 dark:text-[#afa6c8] space-y-3 hide-scrollbar">
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  1
                 </span>
-                <h3 className="mt-1.5 text-lg sm:text-xl font-black tracking-tight text-[#171421] dark:text-white leading-none">
-                  Terms of Service Updates
-                </h3>
-                <p className="mt-2 text-xs font-semibold leading-relaxed text-[#736b88] dark:text-[#afa6c8]">
-                  To continue using Promptro, please review and accept our updated Terms of Service and Privacy Policy.
-                </p>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Acceptance of Terms</h4>
+                  <p className="text-[11px] leading-relaxed">By creating an account, you agree to comply with our full Terms of Service and Privacy Policy.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  2
+                </span>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Account & Credentials</h4>
+                  <p className="text-[11px] leading-relaxed">You are responsible for safeguarding your credentials. Violations of policy can result in account suspension.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  3
+                </span>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">No Scrapes & Crawlers</h4>
+                  <p className="text-[11px] leading-relaxed">Prompts are for personal and commercial creative use. Data scraping to build competing databases is prohibited.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  4
+                </span>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Privacy & Cookies</h4>
+                  <p className="text-[11px] leading-relaxed">We use browser local storage to save your preferences. Minimal analytics run in the background to ensure reliability.</p>
+                </div>
               </div>
             </div>
 
