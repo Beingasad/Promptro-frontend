@@ -45,6 +45,18 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
     return () => unsubscribe();
   }, []);
 
+  // Prevent parent page scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const handleAccept = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreed || !user) return;
@@ -82,7 +94,7 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#171421]/90 p-6 shadow-[0_24px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl text-white sm:p-8"
+            className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e9e2f3] bg-white/94 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.16)] backdrop-blur-2xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/90 dark:text-white sm:p-8"
           >
             {/* Header */}
             <div className="flex items-center gap-3 mb-4">
@@ -90,31 +102,31 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
                 <FileText className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-xl font-bold">Terms of Service Updates</h3>
-                <p className="text-xs font-semibold text-[#afa6c8] uppercase tracking-wider">Required Agreement</p>
+                <h3 className="text-xl font-bold text-[#171421] dark:text-white">Terms of Service Updates</h3>
+                <p className="text-xs font-semibold text-[#736b88] dark:text-[#afa6c8] uppercase tracking-wider">Required Agreement</p>
               </div>
             </div>
 
-            <p className="text-sm font-medium text-[#c4bed6] mb-4">
+            <p className="text-sm font-medium text-[#4a445f] dark:text-[#c4bed6] mb-4">
               To continue using Promptro, please review and accept our updated Terms of Service and Privacy Policy.
             </p>
 
             {/* Scrollable Summary */}
-            <div className="mb-5 max-h-48 overflow-y-auto rounded-2xl border border-white/5 bg-white/5 p-4 text-xs font-medium text-[#afa6c8] leading-relaxed space-y-3 custom-scrollbar">
+            <div className="mb-5 max-h-48 overflow-y-auto rounded-2xl border border-[#e9e2f3] bg-[#fcfaff]/80 p-4 text-xs font-medium text-[#5c5470] dark:border-white/5 dark:bg-white/5 dark:text-[#afa6c8] leading-relaxed space-y-3 custom-scrollbar">
               <div>
-                <h4 className="font-bold text-white mb-1">1. Acceptance of Terms</h4>
+                <h4 className="font-bold text-[#171421] dark:text-white mb-1">1. Acceptance of Terms</h4>
                 <p>By creating an account or signing in to Promptro, you agree to comply with our full Terms of Service and Privacy Policy. Please ensure you review both documents.</p>
               </div>
               <div>
-                <h4 className="font-bold text-white mb-1">2. User Account & Safety</h4>
+                <h4 className="font-bold text-[#171421] dark:text-white mb-1">2. User Account & Safety</h4>
                 <p>You agree to protect your credentials, maintain account security, and notify us of any security breach. Accounts violating terms may be suspended.</p>
               </div>
               <div>
-                <h4 className="font-bold text-white mb-1">3. Curated Library & Scraper Protection</h4>
+                <h4 className="font-bold text-[#171421] dark:text-white mb-1">3. Curated Library & Scraper Protection</h4>
                 <p>Prompts are provided for personal and commercial creative use. Scraped/resold libraries or competing products built from data scraping are strictly prohibited.</p>
               </div>
               <div>
-                <h4 className="font-bold text-white mb-1">4. Cookies & Analytics</h4>
+                <h4 className="font-bold text-[#171421] dark:text-white mb-1">4. Cookies & Analytics</h4>
                 <p>We use localized browser storage to retain state and cookie preferences. We run minimal analytics to optimize system and database performance.</p>
               </div>
             </div>
@@ -130,11 +142,15 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
                     className="peer sr-only"
                     required
                   />
-                  <div className="h-5 w-5 rounded-md border border-white/20 bg-white/5 transition-all peer-checked:border-primary peer-checked:bg-primary flex items-center justify-center">
-                    <Check className="h-3 w-3 text-white opacity-0 transition-opacity peer-checked:opacity-100" />
+                  <div className={`h-5 w-5 rounded-md border transition-all flex items-center justify-center ${
+                    agreed 
+                      ? "border-primary bg-primary" 
+                      : "border-[#d9cde8] bg-[#fdfcff] dark:border-white/20 dark:bg-white/5"
+                  }`}>
+                    <Check className={`h-3 w-3 text-white transition-opacity duration-200 ${agreed ? "opacity-100" : "opacity-0"}`} />
                   </div>
                 </div>
-                <span className="text-xs font-medium text-[#c4bed6]">
+                <span className="text-xs font-semibold text-[#4a445f] dark:text-[#c4bed6]">
                   I agree to the{' '}
                   <a
                     href="/terms"
