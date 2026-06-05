@@ -117,44 +117,44 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             </p>
 
             {/* Scrollable Summary Cards */}
-            <div className="mb-5 max-h-52 overflow-y-auto rounded-2xl border border-[#e9e2f3]/60 bg-[#fcfaff]/50 p-4 text-[13px] font-medium text-[#5c5470] dark:border-white/5 dark:bg-white/5 dark:text-[#afa6c8] space-y-3 hide-scrollbar">
-              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+            <div className="mb-5 max-h-52 overflow-y-auto space-y-3.5 hide-scrollbar">
+              <div className="flex gap-3.5 items-start">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
                   1
                 </span>
                 <div>
                   <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Acceptance of Terms</h4>
-                  <p className="text-[11px] leading-relaxed">By creating an account, you agree to comply with our full Terms of Service and Privacy Policy.</p>
+                  <p className="text-[11px] leading-relaxed text-[#5f5774] dark:text-[#afa6c8]">By creating an account, you agree to comply with our full Terms of Service and Privacy Policy.</p>
                 </div>
               </div>
 
-              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+              <div className="flex gap-3.5 items-start">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
                   2
                 </span>
                 <div>
                   <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Account & Credentials</h4>
-                  <p className="text-[11px] leading-relaxed">You are responsible for safeguarding your credentials. Violations of policy can result in account suspension.</p>
+                  <p className="text-[11px] leading-relaxed text-[#5f5774] dark:text-[#afa6c8]">You are responsible for safeguarding your credentials. Violations of policy can result in account suspension.</p>
                 </div>
               </div>
 
-              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+              <div className="flex gap-3.5 items-start">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
                   3
                 </span>
                 <div>
                   <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">No Scrapes & Crawlers</h4>
-                  <p className="text-[11px] leading-relaxed">Prompts are for personal and commercial creative use. Data scraping to build competing databases is prohibited.</p>
+                  <p className="text-[11px] leading-relaxed text-[#5f5774] dark:text-[#afa6c8]">Prompts are for personal and commercial creative use. Data scraping to build competing databases is prohibited.</p>
                 </div>
               </div>
 
-              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+              <div className="flex gap-3.5 items-start">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
                   4
                 </span>
                 <div>
                   <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Privacy & Cookies</h4>
-                  <p className="text-[11px] leading-relaxed">We use browser local storage to save your preferences. Minimal analytics run in the background to ensure reliability.</p>
+                  <p className="text-[11px] leading-relaxed text-[#5f5774] dark:text-[#afa6c8]">We use browser local storage to save your preferences. Minimal analytics run in the background to ensure reliability.</p>
                 </div>
               </div>
             </div>
