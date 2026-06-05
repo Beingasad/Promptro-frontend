@@ -81,7 +81,7 @@ export default function CookieConsent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[105] bg-[#0c0a12]/30 backdrop-blur-[3px] pointer-events-auto"
+            className="fixed inset-0 z-[105] bg-black/5 backdrop-blur-[5px] pointer-events-auto"
           />
 
           <motion.div
