@@ -100,28 +100,28 @@ export default function CookieConsent() {
                 <div className="space-y-0.5">
                   <h4 className="text-[15px] font-bold text-[#171421] dark:text-white">Cookie Preferences</h4>
                   <p className="text-xs sm:text-sm font-semibold leading-relaxed text-[#5f5774] dark:text-[#afa6c8]">
-                    We use cookies to improve your experience, analytics, and platform performance.
+                    We use cookies to improve your experience, analytics, and platform performance. Read our{' '}
+                    <Link
+                      to="/privacy-policy"
+                      onClick={() => setIsVisible(false)}
+                      className="text-primary hover:underline font-bold"
+                    >
+                      Privacy Policy
+                    </Link>.
                   </p>
                 </div>
               </div>
               
-              <div className="flex flex-wrap items-center gap-2 md:gap-3 sm:justify-end">
-                <Link
-                  to="/privacy-policy"
-                  onClick={() => setIsVisible(false)}
-                  className="rounded-full px-3 py-1.5 text-xs font-bold text-[#736b88] hover:text-[#171421] dark:text-[#afa6c8] dark:hover:text-white transition-colors"
-                >
-                  View Privacy Policy
-                </Link>
+              <div className="flex items-center gap-2.5 justify-end shrink-0 w-full md:w-auto mt-2 md:mt-0">
                 <button
                   onClick={() => handleConsent('rejected')}
-                  className="rounded-full border border-[#e9e2f3] bg-white/50 px-4 py-2.5 text-xs font-bold text-[#242033] hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 transition-colors"
+                  className="flex-1 md:flex-initial text-center rounded-full border border-[#e9e2f3] bg-white/50 px-5 py-2.5 text-xs font-bold text-[#242033] hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 transition-all active:scale-[0.98]"
                 >
-                  Reject Non-Essential Cookies
+                  Reject
                 </button>
                 <button
                   onClick={() => handleConsent('accepted')}
-                  className="rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 py-2.5 text-xs font-bold text-white shadow-[0_10px_20px_rgba(139,92,246,0.15)] hover:opacity-95 transition-all"
+                  className="flex-1 md:flex-initial text-center rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-6 py-2.5 text-xs font-bold text-white shadow-[0_10px_20px_rgba(139,92,246,0.15)] hover:opacity-95 transition-all active:scale-[0.98]"
                 >
                   Accept All
                 </button>
