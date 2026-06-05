@@ -94,46 +94,73 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e9e2f3] bg-white/94 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.16)] backdrop-blur-2xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/90 dark:text-white sm:p-8"
+            className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e9e2f3] bg-white/96 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.16)] backdrop-blur-2xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/94 dark:text-white sm:p-8"
           >
             {/* Header */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <FileText className="h-6 w-6" />
+            <div className="flex flex-col items-center text-center mb-5">
+              {/* Animated Double Ring Gradient Icon */}
+              <div className="relative mb-3.5 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-secondary p-[1.5px] shadow-[0_8px_24px_rgba(139,92,246,0.22)]">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-white dark:bg-[#171421] text-primary">
+                  <FileText className="h-6 w-6 text-primary" />
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-[#171421] dark:text-white">Terms of Service Updates</h3>
-                <p className="text-xs font-semibold text-[#736b88] dark:text-[#afa6c8] uppercase tracking-wider">Required Agreement</p>
-              </div>
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary dark:bg-primary/20">
+                Required Agreement
+              </span>
+              <h3 className="mt-2 text-xl sm:text-2xl font-black tracking-tight text-[#171421] dark:text-white">
+                Terms of Service Updates
+              </h3>
+              <p className="mt-1.5 text-xs font-semibold leading-relaxed text-[#736b88] dark:text-[#afa6c8] px-2">
+                To continue using Promptro, please review and accept our updated Terms of Service and Privacy Policy.
+              </p>
             </div>
 
-            <p className="text-sm font-medium text-[#4a445f] dark:text-[#c4bed6] mb-4">
-              To continue using Promptro, please review and accept our updated Terms of Service and Privacy Policy.
-            </p>
+            {/* Scrollable Summary Cards */}
+            <div className="mb-5 max-h-52 overflow-y-auto rounded-2xl border border-[#e9e2f3]/60 bg-[#fcfaff]/50 p-4 text-[13px] font-medium text-[#5c5470] dark:border-white/5 dark:bg-white/5 dark:text-[#afa6c8] space-y-3 custom-scrollbar">
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  1
+                </span>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Acceptance of Terms</h4>
+                  <p className="text-[11px] leading-relaxed">By creating an account, you agree to comply with our full Terms of Service and Privacy Policy.</p>
+                </div>
+              </div>
 
-            {/* Scrollable Summary */}
-            <div className="mb-5 max-h-48 overflow-y-auto rounded-2xl border border-[#e9e2f3] bg-[#fcfaff]/80 p-4 text-xs font-medium text-[#5c5470] dark:border-white/5 dark:bg-white/5 dark:text-[#afa6c8] leading-relaxed space-y-3 custom-scrollbar">
-              <div>
-                <h4 className="font-bold text-[#171421] dark:text-white mb-1">1. Acceptance of Terms</h4>
-                <p>By creating an account or signing in to Promptro, you agree to comply with our full Terms of Service and Privacy Policy. Please ensure you review both documents.</p>
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  2
+                </span>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Account & Credentials</h4>
+                  <p className="text-[11px] leading-relaxed">You are responsible for safeguarding your credentials. Violations of policy can result in account suspension.</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold text-[#171421] dark:text-white mb-1">2. User Account & Safety</h4>
-                <p>You agree to protect your credentials, maintain account security, and notify us of any security breach. Accounts violating terms may be suspended.</p>
+
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  3
+                </span>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">No Scrapes & Crawlers</h4>
+                  <p className="text-[11px] leading-relaxed">Prompts are for personal and commercial creative use. Data scraping to build competing databases is prohibited.</p>
+                </div>
               </div>
-              <div>
-                <h4 className="font-bold text-[#171421] dark:text-white mb-1">3. Curated Library & Scraper Protection</h4>
-                <p>Prompts are provided for personal and commercial creative use. Scraped/resold libraries or competing products built from data scraping are strictly prohibited.</p>
-              </div>
-              <div>
-                <h4 className="font-bold text-[#171421] dark:text-white mb-1">4. Cookies & Analytics</h4>
-                <p>We use localized browser storage to retain state and cookie preferences. We run minimal analytics to optimize system and database performance.</p>
+
+              <div className="flex gap-3 items-start p-2.5 rounded-xl bg-white/40 dark:bg-[#1d192c]/40 border border-[#e9e2f3]/40 dark:border-white/5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary dark:bg-primary/20">
+                  4
+                </span>
+                <div>
+                  <h4 className="font-bold text-[#171421] dark:text-white text-xs mb-0.5">Privacy & Cookies</h4>
+                  <p className="text-[11px] leading-relaxed">We use browser local storage to save your preferences. Minimal analytics run in the background to ensure reliability.</p>
+                </div>
               </div>
             </div>
 
             {/* Form */}
             <form onSubmit={handleAccept} className="flex flex-col gap-4">
-              <label className="flex items-start gap-3 cursor-pointer">
+              <label className="flex items-start gap-3 cursor-pointer select-none">
                 <div className="relative mt-0.5 shrink-0">
                   <input
                     type="checkbox"
@@ -144,13 +171,13 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
                   />
                   <div className={`h-5 w-5 rounded-md border transition-all flex items-center justify-center ${
                     agreed 
-                      ? "border-primary bg-primary" 
-                      : "border-[#d9cde8] bg-[#fdfcff] dark:border-white/20 dark:bg-white/5"
+                      ? "border-primary bg-primary scale-105" 
+                      : "border-[#d9cde8] bg-[#fdfcff] hover:border-primary/50 dark:border-white/20 dark:bg-white/5"
                   }`}>
                     <Check className={`h-3 w-3 text-white transition-opacity duration-200 ${agreed ? "opacity-100" : "opacity-0"}`} />
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-[#4a445f] dark:text-[#c4bed6]">
+                <span className="text-[12px] font-semibold text-[#4a445f] dark:text-[#c4bed6] leading-snug">
                   I agree to the{' '}
                   <a
                     href="/terms"
@@ -175,7 +202,7 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
               <button
                 type="submit"
                 disabled={!agreed || submitting}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]"
               >
                 {submitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
