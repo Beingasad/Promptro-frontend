@@ -97,14 +97,12 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-[#e9e2f3] bg-white/96 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.16)] backdrop-blur-2xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/94 dark:text-white sm:p-8"
           >
             {/* Header */}
-            <div className="flex items-center gap-4 mb-4 pb-4 border-b border-[#e9e2f3] dark:border-white/5">
-              {/* Rounded Box with FileText Icon (matching the website's legal page style) */}
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary dark:bg-primary/20 shadow-sm">
-                <FileText className="h-6 w-6 text-primary" />
-              </div>
+            <div className="flex items-start gap-3 mb-4 pb-4 border-b border-[#e9e2f3] dark:border-white/5">
+              {/* Raw FileText Icon on the left (no container) */}
+              <FileText className="h-6 w-6 text-primary shrink-0 mt-0.5" />
               
               <div className="space-y-0.5">
-                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-primary dark:bg-primary/20">
+                <span className="block text-[10px] font-extrabold uppercase tracking-widest text-primary">
                   Required Agreement
                 </span>
                 <h3 className="text-lg sm:text-xl font-black tracking-tight text-[#171421] dark:text-white leading-tight">
