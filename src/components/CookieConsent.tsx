@@ -67,7 +67,7 @@ export default function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: '100%', opacity: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-0 left-0 right-0 z-[60] w-full border-t border-[#e9e2f3] bg-white/94 px-6 py-5 shadow-[0_-12px_42px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0d0b14]/94 dark:shadow-[0_-12px_52px_rgba(0,0,0,0.48)] md:px-12 md:py-4.5"
+          className="fixed bottom-0 left-0 right-0 z-[60] w-full rounded-t-3xl border-t border-[#e9e2f3] bg-white/94 px-6 py-5 shadow-[0_-12px_42px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#0d0b14]/94 dark:shadow-[0_-12px_52px_rgba(0,0,0,0.48)] md:px-12 md:py-4.5"
         >
           <div className="mx-auto flex max-w-[1600px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex items-start gap-4">
