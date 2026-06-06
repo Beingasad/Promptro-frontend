@@ -614,3 +614,11 @@
   color: #6d4dec !important;
   transition: fill 0.2s ease, color 0.2s ease !important;
 }
+
+@keyframes rippleRing {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 1; border-color: #6d4dec; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; border-color: rgba(109, 77, 236, 0); }
+}
+.animate-ripple-ring {
+  animation: rippleRing 0.55s cubic-bezier(0.1, 0.8, 0.3, 1) both;
+}

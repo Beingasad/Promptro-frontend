@@ -169,9 +169,6 @@ export default function MainLayout() {
           const aspectRatio = card.startHeight / card.startWidth;
           const finalWidth = 24;
           const finalHeight = 24 * aspectRatio;
-          const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-          const initialRadius = isMobile ? '1.35rem' : '1.75rem';
-          const finalRadius = isMobile ? '0.15rem' : '0.2rem';
 
           return (
             <motion.div
@@ -183,26 +180,34 @@ export default function MainLayout() {
                 width: card.startWidth,
                 height: card.startHeight,
                 opacity: 0.9,
-                borderRadius: initialRadius,
+                borderRadius: '1.25rem',
                 overflow: 'hidden',
-                boxShadow: '0 20px 50px rgba(109, 77, 236, 0.28)',
-                border: '2px solid rgba(139, 92, 246, 0.35)',
+                boxShadow: '0 20px 50px rgba(109, 77, 236, 0.35)',
+                border: '2.5px solid rgba(139, 92, 246, 0.45)',
                 zIndex: 99999,
                 pointerEvents: 'none',
                 transformOrigin: 'top left',
+                scale: 1,
+                rotate: 0,
               }}
               animate={{
                 top: card.endY - finalHeight / 2,
                 left: card.endX - finalWidth / 2,
                 width: finalWidth,
                 height: finalHeight,
-                opacity: 0,
-                borderRadius: finalRadius,
+                opacity: 0.1,
+                borderRadius: '0.15rem',
+                scale: [1, 1.05, 0.22],
+                rotate: -14,
               }}
               exit={{ opacity: 0 }}
               transition={{
-                duration: 0.82,
-                ease: [0.16, 1, 0.3, 1], // easeOutExpo
+                duration: 0.84,
+                left: { ease: [0.16, 1, 0.3, 1] }, // easeOutExpo
+                top: { ease: [0.7, 0, 0.84, 0] }, // easeIn (creating a premium parabolic arc path)
+                scale: { ease: [0.16, 1, 0.3, 1] },
+                rotate: { ease: [0.16, 1, 0.3, 1] },
+                opacity: { duration: 0.8, ease: 'linear' },
               }}
               onAnimationComplete={() => {
                 setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
@@ -213,6 +218,14 @@ export default function MainLayout() {
                   target.classList.remove('animate-bounce-short');
                   void target.offsetWidth; // Force reflow
                   target.classList.add('animate-bounce-short');
+                }
+
+                // Trigger the ripple ring burst animation on the bottom nav icon
+                const ripple = document.getElementById('bottom-nav-saved-ripple');
+                if (ripple) {
+                  ripple.classList.remove('animate-ripple-ring');
+                  void ripple.offsetWidth; // Force reflow
+                  ripple.classList.add('animate-ripple-ring');
                 }
               }}
             >
