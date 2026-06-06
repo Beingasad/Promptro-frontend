@@ -142,13 +142,28 @@ export default function ImageDetail() {
     setTimeout(() => setCopiedNegative(false), 1800);
   };
 
-  const toggleSave = () => {
+  const toggleSave = (event: React.MouseEvent) => {
     if (!prompt) return;
 
     const nextSaved = !saved;
     setSavedPrompt(prompt, nextSaved);
     setSaved(nextSaved);
     saveUserActivity(auth?.currentUser).catch(() => undefined);
+
+    const btn = event.currentTarget as HTMLElement;
+    const rect = btn?.getBoundingClientRect();
+    if (nextSaved && rect) {
+      const animEvent = new CustomEvent('prompt-saved-animation', {
+        detail: {
+          imageUrl: prompt.image_url,
+          startX: rect.left,
+          startY: rect.top,
+          startWidth: rect.width || 40,
+          startHeight: rect.height || 40
+        }
+      });
+      window.dispatchEvent(animEvent);
+    }
   };
 
   const toggleLike = async () => {

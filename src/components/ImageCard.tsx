@@ -73,6 +73,21 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
     setSavedPrompt(prompt, nextSaved);
     setSaved(nextSaved);
     saveUserActivity(auth?.currentUser).catch(() => undefined);
+
+    const cardEl = (event.currentTarget as HTMLElement).closest('.group');
+    const rect = cardEl?.getBoundingClientRect();
+    if (nextSaved && rect) {
+      const animEvent = new CustomEvent('prompt-saved-animation', {
+        detail: {
+          imageUrl: prompt.image_url,
+          startX: rect.left,
+          startY: rect.top,
+          startWidth: rect.width,
+          startHeight: rect.height
+        }
+      });
+      window.dispatchEvent(animEvent);
+    }
   };
 
   const toggleLike = (event: MouseEvent) => {

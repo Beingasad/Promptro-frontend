@@ -17,6 +17,7 @@ export default function BottomNav() {
           key={item.path}
           to={item.path}
           end={item.path === '/'}
+          id={item.path === '/saved' ? 'bottom-nav-saved' : undefined}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className={({ isActive }) =>
             cn(

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -9,9 +9,51 @@ import SearchPill from '../components/SearchPill';
 import PageBackButton from '../components/PageBackButton';
 import CookieConsent from '../components/CookieConsent';
 import TermsAcceptanceModal from '../components/TermsAcceptanceModal';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface FlyingCard {
+  id: number;
+  imageUrl: string;
+  startX: number;
+  startY: number;
+  startWidth: number;
+  startHeight: number;
+  endX: number;
+  endY: number;
+}
 
 export default function MainLayout() {
   const location = useLocation();
+  const [flyingCards, setFlyingCards] = useState<FlyingCard[]>([]);
+
+  useEffect(() => {
+    const handleSavedAnimation = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      const targetElement = document.getElementById('bottom-nav-saved');
+      const targetRect = targetElement?.getBoundingClientRect();
+      if (targetRect) {
+        const id = Date.now() + Math.random();
+        setFlyingCards((prev) => [
+          ...prev,
+          {
+            id,
+            imageUrl: detail.imageUrl,
+            startX: detail.startX,
+            startY: detail.startY,
+            startWidth: detail.startWidth,
+            startHeight: detail.startHeight,
+            endX: targetRect.left + targetRect.width / 2,
+            endY: targetRect.top + targetRect.height / 2,
+          },
+        ]);
+      }
+    };
+
+    window.addEventListener('prompt-saved-animation', handleSavedAnimation);
+    return () => {
+      window.removeEventListener('prompt-saved-animation', handleSavedAnimation);
+    };
+  }, []);
 
   useEffect(() => {
     // Record page visit
@@ -120,6 +162,56 @@ export default function MainLayout() {
 
       <CookieConsent />
       {!isAuth && <TermsAcceptanceModal />}
+
+      {/* Flying card animations overlay */}
+      <AnimatePresence>
+        {flyingCards.map((card) => (
+          <motion.div
+            key={card.id}
+            initial={{
+              position: 'fixed',
+              top: card.startY,
+              left: card.startX,
+              width: card.startWidth,
+              height: card.startHeight,
+              opacity: 0.9,
+              borderRadius: '1.25rem',
+              overflow: 'hidden',
+              boxShadow: '0 20px 50px rgba(109, 77, 236, 0.28)',
+              border: '2px solid rgba(139, 92, 246, 0.35)',
+              zIndex: 99999,
+              pointerEvents: 'none',
+              transformOrigin: 'top left',
+            }}
+            animate={{
+              top: card.endY - 12,
+              left: card.endX - 12,
+              width: 24,
+              height: 24,
+              opacity: 0.15,
+              borderRadius: '50%',
+            }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.82,
+              ease: [0.16, 1, 0.3, 1], // easeOutExpo
+            }}
+            onAnimationComplete={() => {
+              setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
+              
+              // Bounce feedback on the target saved button
+              const target = document.getElementById('bottom-nav-saved');
+              if (target) {
+                target.classList.remove('animate-bounce-short');
+                void target.offsetWidth; // Force reflow
+                target.classList.add('animate-bounce-short');
+              }
+            }}
+          >
+            <img src={card.imageUrl} className="w-full h-full object-cover" alt="" />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }
