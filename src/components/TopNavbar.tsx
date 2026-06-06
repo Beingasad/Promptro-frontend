@@ -1884,20 +1884,18 @@ export default function TopNavbar() {
       <AnimatePresence>
         {notificationsOpen && (
           <>
-            <motion.button
-              type="button"
-              aria-label="Close notifications"
-              className="fixed inset-0 z-[110] cursor-default bg-transparent"
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setNotificationsOpen(false)}
+              className="fixed inset-0 z-[110] bg-black/5 md:bg-transparent backdrop-blur-[3px] md:backdrop-blur-none cursor-default pointer-events-auto"
             />
             <motion.div
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] border border-[#e9e2f3] dark:border-white/10 bg-white/95 dark:bg-[#171421]/95 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
+              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] border border-white/50 dark:border-white/10 bg-white/75 dark:bg-[#171421]/80 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-3xl"
             >
               <div className="mb-2 flex items-center justify-between gap-3">
                 <button
