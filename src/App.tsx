@@ -17,6 +17,7 @@ import BlogPost from './pages/BlogPost';
 import { SearchProvider } from './context/SearchContext';
 import { CategoryProvider } from './context/CategoryContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import GlobalAlert from './components/common/GlobalAlert';
 
 import { useEffect } from 'react';
 
@@ -38,6 +39,7 @@ function App() {
       <SearchProvider>
         <CategoryProvider>
           <Router>
+            <GlobalAlert />
             <Routes>
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
