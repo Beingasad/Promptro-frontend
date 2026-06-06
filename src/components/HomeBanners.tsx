@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { ExternalLink, Sparkles, Flame, Zap, Star, Layout } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { HomeBannersSkeleton } from './common/Skeleton';
+import { Prompt } from './ImageCard';
 
 interface Banner {
   id: number;
@@ -38,7 +39,12 @@ const getDarkGradient = (lightGrad: string = '') => {
   return 'dark:from-[#1c1a26] dark:to-[#12101b]';
 };
 
-export default function HomeBanners() {
+interface HomeBannersProps {
+  prompts: Prompt[];
+  promptsLoading: boolean;
+}
+
+export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProps) {
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
       const cached = sessionStorage.getItem('promptro_home_banners');
@@ -47,94 +53,72 @@ export default function HomeBanners() {
       return [];
     }
   });
-  const [loading, setLoading] = useState(() => {
-    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
-    if (isInitial) {
-      return true;
-    }
-    try {
-      const cached = sessionStorage.getItem('promptro_home_banners');
-      return !cached;
-    } catch {
-      return true;
-    }
-  });
+  const [bannersLoading, setBannersLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBanners = async () => {
       try {
-        const [bannersRes, promptsRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/banners?active_only=true`),
-          axios.get(`${API_BASE_URL}/api/prompts`)
-        ]);
-
-        const allPrompts = promptsRes.data;
-        const activeBanners = bannersRes.data;
-
-        // Sort prompts to find Latest and Most Loved
-        const latestPrompt = [...allPrompts].sort((a, b) => 
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        )[0];
-
-        const mostLovedPrompt = [...allPrompts].sort((a, b) => 
-          (b.likes + b.views) - (a.likes + a.views)
-        )[0];
-
-        // Process banners to make them dynamic if needed
-        const processedBanners = activeBanners.map((banner: Banner) => {
-          const tag = banner.tag_text.toUpperCase();
-          
-          // Logic for Latest Prompt (NEW UPDATE)
-          if (tag.includes('NEW') && allPrompts.length >= 2) {
-            const latest = [...allPrompts].sort((a, b) => 
-              new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-            );
-            return {
-              ...banner,
-              image_url: banner.image_url || latest[0].image_url,
-              secondary_image: latest[1].image_url,
-              button_link: `/explore?filter=New Updates`
-            };
-          }
-          
-          // Logic for Most Loved Prompt (TRENDING/LOVED)
-          if ((tag.includes('TRENDING') || tag.includes('LOVED')) && allPrompts.length >= 2) {
-            const loved = [...allPrompts].sort((a, b) => 
-              (b.likes + b.views) - (a.likes + a.views)
-            );
-            return {
-              ...banner,
-              image_url: banner.image_url || loved[0].image_url,
-              secondary_image: loved[1].image_url,
-              button_link: `/explore?filter=Trending`
-            };
-          }
-
-          return banner;
-        });
-
-        setBanners(processedBanners);
+        const res = await axios.get(`${API_BASE_URL}/api/banners?active_only=true`);
+        setBanners(res.data);
         try {
-          sessionStorage.setItem('promptro_home_banners', JSON.stringify(processedBanners));
+          sessionStorage.setItem('promptro_home_banners', JSON.stringify(res.data));
         } catch (e) {
           console.warn('sessionStorage error:', e);
         }
       } catch (error) {
         console.error('Failed to fetch data for banners:', error);
       } finally {
-        setLoading(false);
+        setBannersLoading(false);
       }
     };
-    fetchData();
+    fetchBanners();
   }, []);
 
-  if (loading || banners.length === 0) {
+  const loading = bannersLoading || promptsLoading;
+
+  const processedBanners = useMemo(() => {
+    if (loading || banners.length === 0 || prompts.length === 0) return [];
+
+    return banners.map((banner: Banner) => {
+      const tag = banner.tag_text.toUpperCase();
+      
+      // Logic for Latest Prompt (NEW UPDATE)
+      if (tag.includes('NEW') && prompts.length >= 2) {
+        const latest = [...prompts].sort((a, b) => 
+          new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime()
+        );
+        return {
+          ...banner,
+          image_url: banner.image_url || latest[0].image_url,
+          secondary_image: latest[1].image_url,
+          button_link: `/explore?filter=New Updates`
+        };
+      }
+      
+      // Logic for Most Loved Prompt (TRENDING/LOVED)
+      if ((tag.includes('TRENDING') || tag.includes('LOVED')) && prompts.length >= 2) {
+        const loved = [...prompts].sort((a, b) => 
+          ((b.likes || 0) + (b.views || 0)) - ((a.likes || 0) + (a.views || 0))
+        );
+        return {
+          ...banner,
+          image_url: banner.image_url || loved[0].image_url,
+          secondary_image: loved[1].image_url,
+          button_link: `/explore?filter=Trending`
+        };
+      }
+
+      return banner;
+    });
+  }, [banners, prompts, loading]);
+
+  if (loading || processedBanners.length === 0) {
     return <HomeBannersSkeleton />;
   }
 
   return (
     <div className="hidden lg:grid grid-cols-2 gap-4 lg:flex-[1.8] min-w-0">
-      {banners.slice(0, 2).map((banner: any, index) => (
+      {processedBanners.slice(0, 2).map((banner: any, index) => (
         <motion.a
           key={banner.id}
           href={banner.button_link}

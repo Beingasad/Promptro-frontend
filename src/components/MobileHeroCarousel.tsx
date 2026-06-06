@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { MobileHeroCarouselSkeleton } from './common/Skeleton';
+import { Prompt } from './ImageCard';
 
 interface Banner {
   id: number | string;
@@ -28,7 +29,12 @@ const getDarkGradient = (lightGrad: string = '') => {
   return 'dark:from-[#1c1a26] dark:to-[#12101b]';
 };
 
-export default function MobileHeroCarousel() {
+interface MobileHeroCarouselProps {
+  prompts: Prompt[];
+  promptsLoading: boolean;
+}
+
+export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHeroCarouselProps) {
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
       const cached = sessionStorage.getItem('promptro_mobile_banners');
@@ -38,95 +44,85 @@ export default function MobileHeroCarousel() {
     }
   });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(() => {
-    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
-    if (isInitial) {
-      return true;
-    }
-    try {
-      const cached = sessionStorage.getItem('promptro_mobile_banners');
-      return !cached;
-    } catch {
-      return true;
-    }
-  });
+  const [bannersLoading, setBannersLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBanners = async () => {
       try {
-        const [bannersRes, promptsRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/api/banners?active_only=true`),
-          axios.get(`${API_BASE_URL}/api/prompts`)
-        ]);
-
-        const allPrompts = promptsRes.data;
-        const activeBanners = bannersRes.data;
-
-        const latest = [...allPrompts].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        const loved = [...allPrompts].sort((a, b) => (b.likes + b.views) - (a.likes + a.views));
-
-        const processedBanners: Banner[] = [
-          // Slide 0: Main Hero Text
-          {
-            id: 'hero-text',
-            type: 'text',
-            title: 'Trending AI Prompts',
-            subtitle: 'Explore thousands of cinematic, aesthetic and creative AI prompts to create stunning images instantly.',
-            tag_text: 'Discover, Copy & Create'
-          }
-        ];
-
-        // Slide 1 & 2 from API
-        activeBanners.slice(0, 2).forEach((banner: any, index: number) => {
-          const tag = banner.tag_text.toUpperCase();
-          let img = banner.image_url;
-          let link = banner.button_link;
-
-          if (tag.includes('NEW') && latest.length > 0) {
-            img = img || latest[0].image_url;
-            link = '/explore?filter=New Updates';
-          } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length > 0) {
-            img = img || loved[0].image_url;
-            link = '/explore?filter=Trending';
-          }
-
-          processedBanners.push({
-            ...banner,
-            type: 'banner',
-            image_url: img,
-            button_link: link
-          });
-        });
-
-        setBanners(processedBanners);
+        const res = await axios.get(`${API_BASE_URL}/api/banners?active_only=true`);
+        setBanners(res.data);
         try {
-          sessionStorage.setItem('promptro_mobile_banners', JSON.stringify(processedBanners));
+          sessionStorage.setItem('promptro_mobile_banners', JSON.stringify(res.data));
         } catch (e) {
           console.warn('sessionStorage error:', e);
         }
       } catch (error) {
         console.error('Failed to fetch mobile banners:', error);
       } finally {
-        setLoading(false);
+        setBannersLoading(false);
       }
     };
 
-    fetchData();
+    fetchBanners();
   }, []);
 
+  const loading = bannersLoading || promptsLoading;
+
+  const processedBanners = useMemo(() => {
+    if (loading || banners.length === 0 || prompts.length === 0) return [];
+
+    const latest = [...prompts].sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime());
+    const loved = [...prompts].sort((a, b) => ((b.likes || 0) + (b.views || 0)) - ((a.likes || 0) + (a.views || 0)));
+
+    const result: Banner[] = [
+      // Slide 0: Main Hero Text
+      {
+        id: 'hero-text',
+        type: 'text',
+        title: 'Trending AI Prompts',
+        subtitle: 'Explore thousands of cinematic, aesthetic and creative AI prompts to create stunning images instantly.',
+        tag_text: 'Discover, Copy & Create'
+      }
+    ];
+
+    // Slide 1 & 2 from API
+    banners.slice(0, 2).forEach((banner: any) => {
+      const tag = banner.tag_text.toUpperCase();
+      let img = banner.image_url;
+      let link = banner.button_link;
+
+      if (tag.includes('NEW') && latest.length > 0) {
+        img = img || latest[0].image_url;
+        link = '/explore?filter=New Updates';
+      } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length > 0) {
+        img = img || loved[0].image_url;
+        link = '/explore?filter=Trending';
+      }
+
+      result.push({
+        ...banner,
+        type: 'banner',
+        image_url: img,
+        button_link: link
+      });
+    });
+
+    return result;
+  }, [banners, prompts, loading]);
+
   useEffect(() => {
-    if (banners.length <= 1) return;
+    if (processedBanners.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % banners.length);
+      setCurrentIndex((prev) => (prev + 1) % processedBanners.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [banners.length]);
+  }, [processedBanners.length]);
 
-  if (loading || banners.length === 0) {
+  if (loading || processedBanners.length === 0) {
     return <MobileHeroCarouselSkeleton />;
   }
 
-  const current = banners[currentIndex];
+  const current = processedBanners[currentIndex];
 
   return (
     <div className="lg:hidden w-full h-[120px] relative mt-2 mb-1 -mx-0.5 scale-[1.02]">

@@ -20,6 +20,7 @@ export interface Prompt {
   aspect_ratio?: string;
   prompt_text?: string;
   tags?: string[];
+  created_at?: string;
 }
 
 interface ImageCardProps {

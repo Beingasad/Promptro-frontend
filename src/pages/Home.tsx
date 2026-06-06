@@ -189,9 +189,9 @@ export default function Home() {
         </div>
 
         {/* Mobile Unified Carousel */}
-        <MobileHeroCarousel />
+        <MobileHeroCarousel prompts={prompts} promptsLoading={loading} />
 
-        <HomeBanners />
+        <HomeBanners prompts={prompts} promptsLoading={loading} />
       </section>
 
       <div className="w-full">
