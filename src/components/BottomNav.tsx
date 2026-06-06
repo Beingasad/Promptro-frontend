@@ -28,7 +28,7 @@ export default function BottomNav() {
         >
           {({ isActive }) => (
             <>
-              <div className="relative">
+              <div className="relative" id={item.path === '/saved' ? 'bottom-nav-saved-icon' : undefined}>
                 <span className={cn("absolute left-1/2 top-1/2 -z-10 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300", isActive ? "bg-primary/12 shadow-[0_0_22px_rgba(139,92,246,0.28)]" : "bg-transparent")} />
                 <item.icon className={cn("w-[18px] h-[18px] md:w-5 md:h-5 transition-transform duration-300", isActive && "scale-105 fill-primary/15")} />
                 {isActive && (

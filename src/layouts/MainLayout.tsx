@@ -20,6 +20,8 @@ interface FlyingCard {
   startHeight: number;
   endX: number;
   endY: number;
+  endWidth: number;
+  endHeight: number;
 }
 
 export default function MainLayout() {
@@ -29,7 +31,7 @@ export default function MainLayout() {
   useEffect(() => {
     const handleSavedAnimation = (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      const targetElement = document.getElementById('bottom-nav-saved');
+      const targetElement = document.getElementById('bottom-nav-saved-icon') || document.getElementById('bottom-nav-saved');
       const targetRect = targetElement?.getBoundingClientRect();
       if (targetRect) {
         const id = Date.now() + Math.random();
@@ -44,6 +46,8 @@ export default function MainLayout() {
             startHeight: detail.startHeight,
             endX: targetRect.left + targetRect.width / 2,
             endY: targetRect.top + targetRect.height / 2,
+            endWidth: targetRect.width,
+            endHeight: targetRect.height,
           },
         ]);
       }
@@ -166,8 +170,8 @@ export default function MainLayout() {
       {/* Flying card animations overlay */}
       <AnimatePresence>
         {flyingCards.map((card) => {
-          const targetWidth = 24;
-          const scaleTarget = targetWidth / card.startWidth;
+          // Fit the card exactly inside the target icon container dimensions
+          const scaleTarget = Math.min(card.endWidth / card.startWidth, card.endHeight / card.startHeight);
 
           return (
             <motion.div
@@ -178,14 +182,11 @@ export default function MainLayout() {
                 left: card.startX,
                 width: card.startWidth,
                 height: card.startHeight,
-                borderRadius: '1.25rem',
                 overflow: 'hidden',
-                boxShadow: '0 10px 30px rgba(109, 77, 236, 0.25)',
-                border: '2px solid rgba(139, 92, 246, 0.4)',
                 zIndex: 99999,
                 pointerEvents: 'none',
                 transformOrigin: 'center center',
-                willChange: 'transform, opacity',
+                willChange: 'transform, opacity, clip-path',
               }}
               initial={{
                 opacity: 0.95,
@@ -193,6 +194,7 @@ export default function MainLayout() {
                 y: 0,
                 scale: 1,
                 rotate: 0,
+                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 100%)', // Rectangle
               }}
               animate={{
                 x: card.endX - (card.startX + card.startWidth / 2),
@@ -200,6 +202,7 @@ export default function MainLayout() {
                 scale: scaleTarget,
                 rotate: -12,
                 opacity: 0.1,
+                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%)', // Bookmark shape
               }}
               exit={{ opacity: 0 }}
               transition={{
@@ -209,6 +212,7 @@ export default function MainLayout() {
                 scale: { ease: [0.16, 1, 0.3, 1] },
                 rotate: { ease: [0.16, 1, 0.3, 1] },
                 opacity: { duration: 0.5, ease: 'linear' },
+                clipPath: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
               }}
               onAnimationComplete={() => {
                 setFlyingCards((prev) => {
@@ -231,7 +235,7 @@ export default function MainLayout() {
                 });
               }}
             >
-              <img src={card.imageUrl} decoding="async" className="w-full h-full object-cover rounded-[1.25rem]" alt="" />
+              <img src={card.imageUrl} decoding="async" className="w-full h-full object-cover" alt="" />
             </motion.div>
           );
         })}
