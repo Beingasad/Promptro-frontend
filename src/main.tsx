@@ -6,6 +6,10 @@ import { applyThemeMode, readThemeMode } from './lib/theme'
 
 applyThemeMode(readThemeMode())
 
+if (typeof window !== 'undefined') {
+  (window as any).__promptroAppLoaded = false;
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />

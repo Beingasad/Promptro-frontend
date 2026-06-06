@@ -37,6 +37,10 @@ export default function Home() {
     }
   });
   const [loading, setLoading] = useState(() => {
+    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
+    if (isInitial) {
+      return true;
+    }
     try {
       const cached = sessionStorage.getItem('promptro_home_prompts');
       return !cached;

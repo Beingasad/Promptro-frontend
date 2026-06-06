@@ -18,6 +18,8 @@ import { SearchProvider } from './context/SearchContext';
 import { CategoryProvider } from './context/CategoryContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
+import { useEffect } from 'react';
+
 // Simple Protected Route Component
 const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem('adminAuth') === 'true';
@@ -25,6 +27,12 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).__promptroAppLoaded = true;
+    }
+  }, []);
+
   return (
     <ErrorBoundary>
       <SearchProvider>

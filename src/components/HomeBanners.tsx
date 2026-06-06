@@ -39,8 +39,26 @@ const getDarkGradient = (lightGrad: string = '') => {
 };
 
 export default function HomeBanners() {
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [banners, setBanners] = useState<Banner[]>(() => {
+    try {
+      const cached = sessionStorage.getItem('promptro_home_banners');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
+    if (isInitial) {
+      return true;
+    }
+    try {
+      const cached = sessionStorage.getItem('promptro_home_banners');
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,6 +114,11 @@ export default function HomeBanners() {
         });
 
         setBanners(processedBanners);
+        try {
+          sessionStorage.setItem('promptro_home_banners', JSON.stringify(processedBanners));
+        } catch (e) {
+          console.warn('sessionStorage error:', e);
+        }
       } catch (error) {
         console.error('Failed to fetch data for banners:', error);
       } finally {

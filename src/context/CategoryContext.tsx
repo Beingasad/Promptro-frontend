@@ -21,12 +21,28 @@ const CategoryContext = createContext<CategoryContextType | undefined>(undefined
 const API_URL = `${API_BASE_URL}/api/categories`;
 
 export function CategoryProvider({ children }: { children: React.ReactNode }) {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(() => {
+    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
+    if (isInitial) {
+      return [];
+    }
+    try {
+      const cached = sessionStorage.getItem('promptro_categories');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const fetchCategories = async () => {
     try {
       const response = await axios.get(API_URL);
       setCategories(response.data);
+      try {
+        sessionStorage.setItem('promptro_categories', JSON.stringify(response.data));
+      } catch (e) {
+        console.warn('sessionStorage error:', e);
+      }
     } catch (error) {
       console.error('Failed to fetch categories', error);
     }

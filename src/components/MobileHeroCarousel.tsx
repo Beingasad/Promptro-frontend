@@ -29,9 +29,27 @@ const getDarkGradient = (lightGrad: string = '') => {
 };
 
 export default function MobileHeroCarousel() {
-  const [banners, setBanners] = useState<Banner[]>([]);
+  const [banners, setBanners] = useState<Banner[]>(() => {
+    try {
+      const cached = sessionStorage.getItem('promptro_mobile_banners');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
+    if (isInitial) {
+      return true;
+    }
+    try {
+      const cached = sessionStorage.getItem('promptro_mobile_banners');
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,6 +99,11 @@ export default function MobileHeroCarousel() {
         });
 
         setBanners(processedBanners);
+        try {
+          sessionStorage.setItem('promptro_mobile_banners', JSON.stringify(processedBanners));
+        } catch (e) {
+          console.warn('sessionStorage error:', e);
+        }
       } catch (error) {
         console.error('Failed to fetch mobile banners:', error);
       } finally {
