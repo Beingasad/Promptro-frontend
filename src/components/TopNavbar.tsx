@@ -1921,7 +1921,7 @@ export default function TopNavbar() {
                 <h3 className="flex-1 text-sm font-bold text-[#171421] dark:text-white uppercase tracking-wider">Notifications</h3>
                 <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">{notifications.length} NEW</span>
               </div>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 max-h-[224px] overflow-y-auto pr-1 hide-scrollbar">
                 {notifications.length > 0 ? (
                   notifications.map((notif) => (
                     <button
