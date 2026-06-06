@@ -207,3 +207,78 @@ export function DetailSkeleton() {
     </div>
   );
 }
+
+export function HomeBannersSkeleton() {
+  return (
+    <div className="hidden lg:grid grid-cols-2 gap-4 lg:flex-[1.8] min-w-0">
+      {Array.from({ length: 2 }).map((_, index) => (
+        <div
+          key={index}
+          className="relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.06)] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 h-[178px]"
+        >
+          {/* Shimmer overlay */}
+          <div className="absolute inset-0 shimmer-bg w-full h-full" />
+          
+          {/* Left side text skeleton */}
+          <div className="relative z-10 flex flex-col gap-2.5 w-[52%]">
+            {/* Tag pill */}
+            <div className="h-6 w-24 bg-white/20 rounded-full animate-pulse" />
+            {/* Title */}
+            <div className="h-6 w-40 bg-white/20 rounded-md animate-pulse mt-1" />
+            {/* Subtitle */}
+            <div className="h-4 w-full bg-white/10 rounded-md animate-pulse" />
+            {/* Button */}
+            <div className="h-4 w-20 bg-white/25 rounded-md animate-pulse mt-2" />
+          </div>
+
+          {/* Right side collage skeleton */}
+          <div className="relative h-32 w-36 shrink-0 flex items-center justify-end">
+            <div className="relative z-20 h-32 w-22 rounded-2xl bg-white/15 animate-pulse shadow-md" />
+            <div className="absolute z-10 -left-8 top-6 h-28 w-20 rounded-2xl bg-white/10 animate-pulse shadow-sm" style={{ transform: 'rotate(-12deg)' }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function MobileHeroCarouselSkeleton() {
+  return (
+    <div className="lg:hidden w-full h-[120px] relative mt-2 mb-1 -mx-0.5 scale-[1.02] rounded-2xl bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_15px_35px_rgba(72,56,118,0.06)] overflow-hidden flex items-center justify-between p-5">
+      {/* Shimmer background */}
+      <div className="absolute inset-0 shimmer-bg w-full h-full" />
+      
+      {/* Left side text skeleton */}
+      <div className="flex-1 min-w-0 pr-4 relative z-10 flex flex-col gap-1.5">
+        <div className="h-4 w-20 bg-white/20 rounded-full animate-pulse" />
+        <div className="h-5 w-32 bg-white/20 rounded-md animate-pulse" />
+        <div className="h-4 w-44 bg-white/10 rounded-md animate-pulse" />
+      </div>
+
+      {/* Right side image placeholder skeleton */}
+      <div className="w-16 h-24 rounded-2xl bg-white/15 animate-pulse shadow-md shrink-0 relative z-10" />
+    </div>
+  );
+}
+
+export function CategoriesSkeleton() {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0 mt-4">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div
+          key={i}
+          className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-md"
+        >
+          {/* Shimmer background */}
+          <div className="absolute inset-0 shimmer-bg w-full h-full" />
+          
+          {/* Overlay with bottom placeholders */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-4 sm:p-8">
+            <div className="h-6 w-2/3 bg-white/20 rounded-md animate-pulse mb-2" />
+            <div className="h-4 w-1/3 bg-white/10 rounded-md animate-pulse" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

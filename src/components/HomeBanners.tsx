@@ -4,6 +4,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { ExternalLink, Sparkles, Flame, Zap, Star, Layout } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { HomeBannersSkeleton } from './common/Skeleton';
 
 interface Banner {
   id: number;
@@ -104,7 +105,9 @@ export default function HomeBanners() {
     fetchData();
   }, []);
 
-  if (loading || banners.length === 0) return null;
+  if (loading || banners.length === 0) {
+    return <HomeBannersSkeleton />;
+  }
 
   return (
     <div className="hidden lg:grid grid-cols-2 gap-4 lg:flex-[1.8] min-w-0">

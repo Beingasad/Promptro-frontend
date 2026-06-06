@@ -55,8 +55,12 @@ export default function SearchPill() {
       )}
 
       <div className={`relative flex items-center transition-all duration-300 ${isFocused ? 'scale-[1.01]' : 'scale-100'}`}>
-        <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`} />
-        <div className="relative flex h-12 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 shadow-[0_16px_38px_rgba(80,67,120,0.14)] backdrop-blur-2xl dark:bg-[#171421]/78 dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14">
+        <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${
+          isHome ? 'opacity-45 md:hidden' : (isFocused ? 'opacity-100' : 'opacity-45')
+        }`} />
+        <div className={`relative flex h-12 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 shadow-[0_16px_38px_rgba(80,67,120,0.14)] backdrop-blur-2xl dark:bg-[#171421]/78 dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14 ${
+          isHome ? 'md:shadow-none dark:md:shadow-none' : ''
+        }`}>
           <div className="flex flex-grow items-center h-full min-w-0">
             <div className="pl-4 pr-2.5 text-[#81789e] md:pl-5 shrink-0">
               <Search className="h-5 w-5" />

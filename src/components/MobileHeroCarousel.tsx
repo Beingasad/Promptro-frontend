@@ -4,6 +4,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { MobileHeroCarouselSkeleton } from './common/Skeleton';
 
 interface Banner {
   id: number | string;
@@ -98,7 +99,9 @@ export default function MobileHeroCarousel() {
     return () => clearInterval(interval);
   }, [banners.length]);
 
-  if (loading || banners.length === 0) return null;
+  if (loading || banners.length === 0) {
+    return <MobileHeroCarouselSkeleton />;
+  }
 
   const current = banners[currentIndex];
 
