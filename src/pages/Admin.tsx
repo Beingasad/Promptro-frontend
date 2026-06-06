@@ -50,6 +50,7 @@ import {
   Headphones,
   Inbox,
   MailOpen,
+  Mail,
   CircleDot,
 } from 'lucide-react';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
@@ -2463,10 +2464,19 @@ export default function Admin() {
                   const res = await axios.post(`${API_BASE_URL}/api/feedback/${id}/reply`, { reply_text: replyText });
                   setFeedbacks(prev => prev.map(f => f.id === id ? res.data : f));
                   addLog('Reply Sent', 'Admin', `Replied to feedback #${id}`, 'Success');
+
+                  // Open default mail client with the reply text as body
+                  const feedbackItem = feedbacks.find(f => f.id === id);
+                  if (feedbackItem && feedbackItem.email) {
+                    const mailtoSubject = encodeURIComponent(`Re: ${feedbackItem.subject || 'Promptro Support'}`);
+                    const mailtoBody = encodeURIComponent(`Hello ${feedbackItem.user || 'Customer'},\n\n${replyText}\n\nBest regards,\nPromptro Support Team`);
+                    window.location.href = `mailto:${feedbackItem.email}?subject=${mailtoSubject}&body=${mailtoBody}`;
+                  }
+
                   setReplyingToId(null);
                   setReplyText('');
                   fetchSupportStats();
-                  setMessage('Reply sent successfully!');
+                  setMessage('Reply saved & mail client opened!');
                   setTimeout(() => setMessage(''), 3000);
                 } catch {
                   addLog('Reply Failed', 'Admin', `Failed to reply to feedback #${id}`, 'Failed');
@@ -2666,6 +2676,15 @@ export default function Admin() {
                                   <Reply className="w-3 h-3" />
                                   {item.reply_text ? 'Edit Reply' : 'Reply'}
                                 </button>
+                              )}
+                              {replyingToId !== item.id && item.email && (
+                                <a
+                                  href={`mailto:${item.email}?subject=${encodeURIComponent(`Re: ${item.subject || 'Promptro Support'}`)}&body=${encodeURIComponent(`Hello ${item.user || 'Customer'},\n\n\n\nBest regards,\nPromptro Support Team`)}`}
+                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-all"
+                                >
+                                  <Mail className="w-3 h-3" />
+                                  Send Email
+                                </a>
                               )}
                               {item.status === 'unread' && (
                                 <button

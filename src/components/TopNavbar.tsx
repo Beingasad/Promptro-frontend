@@ -1372,6 +1372,29 @@ export default function TopNavbar() {
                 const replyEmail = feedbackEmail.trim();
                 const replyPhone = feedbackPhone.trim();
                 if (!feedbackText.trim() || !replyEmail) return;
+
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(replyEmail)) {
+                  alert('Please enter a valid email address.');
+                  return;
+                }
+
+                // Validate optional phone number (must be exactly 10 digits if provided)
+                if (replyPhone !== '') {
+                  let cleanPhone = replyPhone.replace(/\D/g, '');
+                  if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
+                    cleanPhone = cleanPhone.slice(2);
+                  } else if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+                    cleanPhone = cleanPhone.slice(1);
+                  }
+
+                  if (cleanPhone.length !== 10) {
+                    alert('Please enter a valid 10-digit phone number.');
+                    return;
+                  }
+                }
+
                 setFeedbackStatus('sending');
                 axios.post(`${API_BASE_URL}/api/feedback`, {
                   user: isLoggedIn ? displayName : 'Guest',

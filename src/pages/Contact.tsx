@@ -35,6 +35,29 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.message.trim()) return;
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    // Validate optional phone number (must be exactly 10 digits if provided)
+    if (form.phone.trim() !== '') {
+      let cleanPhone = form.phone.replace(/\D/g, '');
+      if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
+        cleanPhone = cleanPhone.slice(2);
+      } else if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+        cleanPhone = cleanPhone.slice(1);
+      }
+
+      if (cleanPhone.length !== 10) {
+        alert('Please enter a valid 10-digit phone number.');
+        return;
+      }
+    }
+
     setStatus('sending');
     try {
       await axios.post(`${API_BASE_URL}/api/feedback`, {
