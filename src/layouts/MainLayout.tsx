@@ -214,7 +214,7 @@ export default function MainLayout() {
                 setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
               }}
             >
-              <img src={card.imageUrl} decoding="async" className="w-full h-full object-cover" alt="" />
+              <img src={card.imageUrl} decoding="async" className="w-full h-full object-cover rounded-[1.25rem]" alt="" />
             </motion.div>
           );
         })}
