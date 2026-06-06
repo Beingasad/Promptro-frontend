@@ -34,9 +34,6 @@ export default function BottomNav() {
                 {isActive && (
                   <div className="absolute inset-0 bg-primary/22 blur-md rounded-full -z-20 scale-150"></div>
                 )}
-                {item.path === '/saved' && (
-                  <span id="bottom-nav-saved-ripple" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-transparent pointer-events-none h-8 w-8 -z-10" />
-                )}
               </div>
               <span className={cn("text-[10px] md:text-xs font-medium leading-none tracking-normal transition-opacity", !isActive && "opacity-75")}>
                 {item.label}

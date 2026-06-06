@@ -203,12 +203,12 @@ export default function MainLayout() {
               }}
               exit={{ opacity: 0 }}
               transition={{
-                duration: 0.45,
+                duration: 0.6,
                 x: { ease: [0.16, 1, 0.3, 1] }, // easeOutExpo
                 y: { ease: [0.7, 0, 0.84, 0] }, // easeIn (creating a parabolic curved path)
                 scale: { ease: [0.16, 1, 0.3, 1] },
                 rotate: { ease: [0.16, 1, 0.3, 1] },
-                opacity: { duration: 0.4, ease: 'linear' },
+                opacity: { duration: 0.5, ease: 'linear' },
               }}
               onAnimationComplete={() => {
                 setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
@@ -224,19 +224,6 @@ export default function MainLayout() {
                   setTimeout(() => {
                     target.classList.remove('animate-bounce-short');
                   }, 450);
-                }
-
-                // Trigger the ripple ring burst animation on the bottom nav icon
-                const ripple = document.getElementById('bottom-nav-saved-ripple');
-                if (ripple) {
-                  ripple.classList.remove('animate-ripple-ring');
-                  void ripple.offsetWidth; // Force reflow
-                  ripple.classList.add('animate-ripple-ring');
-                  
-                  // Cleanup class after animation ends
-                  setTimeout(() => {
-                    ripple.classList.remove('animate-ripple-ring');
-                  }, 550);
                 }
               }}
             >
