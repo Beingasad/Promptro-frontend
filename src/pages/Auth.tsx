@@ -141,7 +141,20 @@ export default function Auth() {
         // Fallback: let Firebase handle it if check fails
       }
 
-      await signInWithEmailAndPassword(auth, normalizedEmail, password);
+      const loginResult = await signInWithEmailAndPassword(auth, normalizedEmail, password);
+      
+      // Auto-register profile for existing email users if missing in DB
+      try {
+        await axios.post(`${API_BASE_URL}/api/auth/register-profile`, {
+          firebase_uid: loginResult.user.uid,
+          first_name: loginResult.user.displayName?.split(' ')[0] || 'User',
+          last_name: loginResult.user.displayName?.split(' ').slice(1).join(' ') || null,
+          email: loginResult.user.email,
+          provider: 'email',
+          terms_accepted: true,
+        });
+      } catch { /* profile may already exist */ }
+
       navigate('/', { replace: true });
     } catch (err) {
       setError(getFirebaseError(err));
