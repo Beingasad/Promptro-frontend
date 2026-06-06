@@ -40,9 +40,21 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(prompt.likes);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
+
+  // Instant pre-load check to handle browser-cached images without visual glitch
+  useEffect(() => {
+    if (prompt.image_url) {
+      const img = new Image();
+      img.src = prompt.image_url;
+      if (img.complete) {
+        setImageLoaded(true);
+      }
+    }
+  }, [prompt.image_url]);
 
   useEffect(() => {
     const { savedPrompts, likedPrompts } = readLocalActivity();
@@ -92,19 +104,26 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   return (
     <Link 
       to={`/prompt/${prompt.id}`}
-      className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-transparent shadow-[0_18px_42px_rgba(32,26,54,0.13)] glass-shine hover-glass-glow"
+      className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_18px_42px_rgba(32,26,54,0.13)] glass-shine hover-glass-glow"
       style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
     >
+      {/* Background Shimmer (behind image, showing during load) */}
+      {!imageLoaded && (
+        <div className="absolute inset-0 shimmer-bg w-full h-full" />
+      )}
+
       <motion.img
         src={prompt.image_url || 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'}
         alt={prompt.title}
+        onLoad={() => setImageLoaded(true)}
         onError={(e) => {
           const target = e.target as HTMLImageElement;
           target.onerror = null; // Prevent infinite loop
           target.src = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
+          setImageLoaded(true);
         }}
         initial={{ opacity: 0, scale: 1.04 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        animate={imageLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.04 }}
         viewport={{ once: true, margin: '120px' }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.055]`}

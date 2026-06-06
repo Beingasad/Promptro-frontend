@@ -72,7 +72,7 @@ interface GridSkeletonProps {
   count?: number;
 }
 
-export function GridSkeleton({ isHome, count = 8 }: GridSkeletonProps) {
+export function GridSkeleton({ isHome, count = 12 }: GridSkeletonProps) {
   // Predefined aspect ratios to simulate a realistic masonry layout
   const mockAspectRatios = [
     'aspect-[4/5]',
