@@ -173,6 +173,18 @@ export default function TopNavbar() {
     localStorage.setItem('showcase_selected_prompts', JSON.stringify(selectedPromptsForShowcase));
   }, [selectedPromptsForShowcase]);
 
+  // Prevent background scrolling when notifications are open on mobile devices
+  useEffect(() => {
+    if (notificationsOpen && window.innerWidth < 768) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [notificationsOpen]);
+
   // Load prompts automatically if restored on refresh
   useEffect(() => {
     if (showShowcaseModal && allPromptsForShowcase.length === 0) {
