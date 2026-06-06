@@ -59,7 +59,7 @@ export default function MainLayout() {
               : location.pathname === '/terms'
                 ? 'Terms of Service'
                 : location.pathname === '/blog'
-                  ? 'Insights & Tutorials'
+                  ? 'Blog & Guides'
                   : isBlog
                     ? 'Article'
                     : '';

@@ -45,6 +45,12 @@ import {
   Download,
   Grid,
   Settings,
+  MessageSquare,
+  Reply,
+  Headphones,
+  Inbox,
+  MailOpen,
+  CircleDot,
 } from 'lucide-react';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
 import SEOMeta from '../components/common/SEOMeta';
@@ -161,6 +167,12 @@ export default function Admin() {
   const [newCatImageFile, setNewCatImageFile] = useState<File | null>(null);
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
+  const [supportFilter, setSupportFilter] = useState<'all' | 'unread' | 'replied' | 'resolved'>('all');
+  const [supportSearch, setSupportSearch] = useState('');
+  const [replyingToId, setReplyingToId] = useState<number | null>(null);
+  const [replyText, setReplyText] = useState('');
+  const [sendingReply, setSendingReply] = useState(false);
+  const [supportStats, setSupportStats] = useState<any>({ total: 0, unread: 0, read: 0, replied: 0, resolved: 0, open_tickets: 0, response_rate: 0 });
   const [logs, setLogs] = useState<any[]>([]);
 
   const addLog = (action: string, user: string, details: string, status: 'Success' | 'Failed' = 'Success') => {
@@ -602,6 +614,15 @@ export default function Admin() {
     }
   };
 
+  const fetchSupportStats = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/feedback/stats`);
+      setSupportStats(response.data);
+    } catch {
+      console.error('Failed to fetch support stats');
+    }
+  };
+
   const fetchBanners = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/banners`);
@@ -693,6 +714,7 @@ export default function Admin() {
   useEffect(() => {
     fetchPrompts();
     fetchFeedbacks();
+    fetchSupportStats();
     fetchBanners();
     fetchAdminNotifications();
     fetchAnalytics();
@@ -2420,100 +2442,357 @@ export default function Admin() {
               </div>
             )}
 
-            {activeTab === 'Help & Feedback' && (
+            {activeTab === 'Support' && (() => {
+              const statusColors: Record<string, string> = {
+                unread: 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400',
+                read: 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400',
+                replied: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400',
+                resolved: 'bg-[#f0edf7] text-[#756d8d] dark:bg-white/10 dark:text-[#afa6c8]',
+              };
+              const filteredFeedbacks = feedbacks.filter(item => {
+                const matchesFilter = supportFilter === 'all' || item.status === supportFilter;
+                const q = supportSearch.toLowerCase();
+                const matchesSearch = !q || item.user?.toLowerCase().includes(q) || item.email?.toLowerCase().includes(q) || item.subject?.toLowerCase().includes(q);
+                return matchesFilter && matchesSearch;
+              });
+
+              const handleReply = async (id: number) => {
+                if (!replyText.trim()) return;
+                setSendingReply(true);
+                try {
+                  const res = await axios.post(`${API_BASE_URL}/api/feedback/${id}/reply`, { reply_text: replyText });
+                  setFeedbacks(prev => prev.map(f => f.id === id ? res.data : f));
+                  addLog('Reply Sent', 'Admin', `Replied to feedback #${id}`, 'Success');
+                  setReplyingToId(null);
+                  setReplyText('');
+                  fetchSupportStats();
+                  setMessage('Reply sent successfully!');
+                  setTimeout(() => setMessage(''), 3000);
+                } catch {
+                  addLog('Reply Failed', 'Admin', `Failed to reply to feedback #${id}`, 'Failed');
+                  setError('Failed to send reply');
+                } finally {
+                  setSendingReply(false);
+                }
+              };
+
+              const handleStatusChange = async (id: number, newStatus: string) => {
+                try {
+                  const res = await axios.patch(`${API_BASE_URL}/api/feedback/${id}/status`, { status: newStatus });
+                  setFeedbacks(prev => prev.map(f => f.id === id ? res.data : f));
+                  addLog('Status Updated', 'Admin', `Feedback #${id} marked as ${newStatus}`, 'Success');
+                  fetchSupportStats();
+                } catch {
+                  addLog('Status Update Failed', 'Admin', `Failed to update feedback #${id}`, 'Failed');
+                }
+              };
+
+              const handleDelete = (id: number, userName: string) => {
+                triggerConfirm({
+                  title: 'Delete Message',
+                  message: `Are you sure you want to permanently delete the message from "${userName}"?`,
+                  type: 'danger',
+                  onConfirm: async () => {
+                    try {
+                      await axios.delete(`${API_BASE_URL}/api/feedback/${id}`);
+                      setFeedbacks(prev => prev.filter(f => f.id !== id));
+                      addLog('Feedback Deleted', 'Admin', `Deleted feedback from "${userName}"`, 'Success');
+                      fetchSupportStats();
+                    } catch {
+                      addLog('Delete Failed', 'Admin', `Failed to delete feedback from "${userName}"`, 'Failed');
+                    }
+                  }
+                });
+              };
+
+              const pillTabs = [
+                { key: 'all' as const, label: 'All Messages', icon: Inbox, count: feedbacks.length },
+                { key: 'unread' as const, label: 'Unread', icon: MailOpen, count: supportStats.unread },
+                { key: 'replied' as const, label: 'Replied', icon: Reply, count: supportStats.replied },
+                { key: 'resolved' as const, label: 'Resolved', icon: CheckCircle2, count: supportStats.resolved },
+              ];
+
+              return (
               <div className="flex flex-col gap-8">
+                {/* Header */}
                 <div>
-                  <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">Help & Feedback</h1>
-                  <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium">Manage user inquiries and platform feedback</p>
+                  <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">Support</h1>
+                  <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium">Manage user inquiries, reply to messages & track support tickets</p>
+                </div>
+
+                {/* Sub-tab Pills */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {pillTabs.map(tab => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setSupportFilter(tab.key)}
+                      className={cn(
+                        "flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all duration-300",
+                        supportFilter === tab.key
+                          ? "bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-lg shadow-primary/20"
+                          : "bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] dark:text-[#afa6c8] hover:bg-primary/5 hover:text-primary hover:border-primary/20"
+                      )}
+                    >
+                      <tab.icon className="w-3.5 h-3.5" />
+                      {tab.label}
+                      <span className={cn(
+                        "min-w-[20px] h-5 flex items-center justify-center rounded-full text-[10px] font-bold px-1.5",
+                        supportFilter === tab.key ? "bg-white/25 text-white" : "bg-[#f0edf7] dark:bg-white/10 text-[#756d8d]"
+                      )}>
+                        {tab.count}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Search Bar */}
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#756d8d]" />
+                  <input
+                    type="text"
+                    placeholder="Search by name, email, or subject..."
+                    value={supportSearch}
+                    onChange={(e) => setSupportSearch(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-sm font-medium text-[#171421] dark:text-white placeholder:text-[#756d8d] focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
+                  />
+                  {supportSearch && (
+                    <button onClick={() => setSupportSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2">
+                      <X className="w-4 h-4 text-[#756d8d] hover:text-primary transition-colors" />
+                    </button>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Feedback Cards */}
                   <div className="lg:col-span-2 flex flex-col gap-4">
-                    {feedbacks.length > 0 ? (
-                      feedbacks.map((item) => (
-                        <div key={item.id} className={cn("p-6 rounded-[2rem] border transition-all cursor-pointer group", 
-                          item.status === 'unread' ? "bg-white dark:bg-white/10 border-primary/20 shadow-lg shadow-primary/5" : "bg-[#f8f7fc] dark:bg-white/5 border-[#e9e2f3] dark:border-white/10")}>
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                {item.user.charAt(0)}
+                    <AnimatePresence mode="popLayout">
+                      {filteredFeedbacks.length > 0 ? (
+                        filteredFeedbacks.map((item) => (
+                          <motion.div
+                            key={item.id}
+                            layout
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.25 }}
+                            className={cn(
+                              "p-6 rounded-[2rem] border transition-all group",
+                              item.status === 'unread'
+                                ? "bg-white dark:bg-white/10 border-primary/20 shadow-lg shadow-primary/5"
+                                : "bg-[#f8f7fc] dark:bg-white/5 border-[#e9e2f3] dark:border-white/10"
+                            )}
+                          >
+                            {/* Card Header */}
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-[#ff6a3d]/20 flex items-center justify-center text-primary font-bold text-sm">
+                                  {item.user?.charAt(0)?.toUpperCase() || 'G'}
+                                </div>
+                                <div>
+                                  <h4 className="font-bold text-sm text-[#171421] dark:text-white">{item.user}</h4>
+                                  <p className="text-[10px] text-[#756d8d] font-medium">{item.email}</p>
+                                </div>
                               </div>
-                              <div>
-                                <h4 className="font-bold text-sm">{item.user}</h4>
-                                <p className="text-[10px] text-[#756d8d] font-medium">{item.email}</p>
+                              <div className="flex items-center gap-2">
+                                <span className={cn("px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider", statusColors[item.status] || statusColors.unread)}>
+                                  {item.status}
+                                </span>
+                                <span className="text-[10px] font-medium text-[#756d8d]">{new Date(item.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                               </div>
                             </div>
-                            <span className="text-[10px] font-bold text-[#756d8d]">{new Date(item.created_at).toLocaleString()}</span>
-                          </div>
-                          <h5 className="font-bold text-sm mb-2 text-[#171421] dark:text-white">{item.subject}</h5>
-                          <p className="text-xs text-[#756d8d] leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all">
-                            {item.message}
+
+                            {/* Subject & Message */}
+                            <h5 className="font-bold text-sm mb-1.5 text-[#171421] dark:text-white">{item.subject}</h5>
+                            <p className="text-xs text-[#756d8d] leading-relaxed mb-3">{item.message}</p>
+
+                            {/* Admin Reply (if exists) */}
+                            {item.reply_text && (
+                              <div className="mb-3 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-500/20">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <Reply className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Admin Reply</span>
+                                  {item.replied_at && (
+                                    <span className="text-[9px] text-emerald-500/70 font-medium ml-auto">
+                                      {new Date(item.replied_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-xs text-emerald-800 dark:text-emerald-300 leading-relaxed">{item.reply_text}</p>
+                              </div>
+                            )}
+
+                            {/* Inline Reply Box */}
+                            {replyingToId === item.id && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="mb-3"
+                              >
+                                <textarea
+                                  value={replyText}
+                                  onChange={(e) => setReplyText(e.target.value)}
+                                  placeholder="Type your reply here..."
+                                  rows={3}
+                                  className="w-full p-3 rounded-xl bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-sm font-medium text-[#171421] dark:text-white placeholder:text-[#756d8d] focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+                                  autoFocus
+                                />
+                                <div className="flex items-center gap-2 mt-2">
+                                  <button
+                                    onClick={() => handleReply(item.id)}
+                                    disabled={sendingReply || !replyText.trim()}
+                                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-gradient-to-r from-primary to-[#ff6a3d] text-white text-[10px] font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all disabled:opacity-50"
+                                  >
+                                    {sendingReply ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
+                                    {sendingReply ? 'Sending...' : 'Send Reply'}
+                                  </button>
+                                  <button
+                                    onClick={() => { setReplyingToId(null); setReplyText(''); }}
+                                    className="px-4 py-1.5 rounded-lg bg-[#f0edf7] dark:bg-white/10 text-[10px] font-bold text-[#756d8d] hover:text-primary transition-colors"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              </motion.div>
+                            )}
+
+                            {/* Action Buttons */}
+                            <div className="flex items-center gap-2 pt-3 border-t border-[#e9e2f3] dark:border-white/10 flex-wrap">
+                              {replyingToId !== item.id && (
+                                <button
+                                  onClick={() => { setReplyingToId(item.id); setReplyText(item.reply_text || ''); }}
+                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary/10 text-primary text-[10px] font-bold hover:bg-primary hover:text-white transition-all"
+                                >
+                                  <Reply className="w-3 h-3" />
+                                  {item.reply_text ? 'Edit Reply' : 'Reply'}
+                                </button>
+                              )}
+                              {item.status === 'unread' && (
+                                <button
+                                  onClick={() => handleStatusChange(item.id, 'read')}
+                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] font-bold hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all"
+                                >
+                                  <Eye className="w-3 h-3" />
+                                  Mark Read
+                                </button>
+                              )}
+                              {item.status !== 'resolved' && (
+                                <button
+                                  onClick={() => handleStatusChange(item.id, 'resolved')}
+                                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-all"
+                                >
+                                  <CheckCircle2 className="w-3 h-3" />
+                                  Resolve
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleDelete(item.id, item.user)}
+                                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400 text-[10px] font-bold hover:bg-red-100 dark:hover:bg-red-500/20 transition-all ml-auto"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                                Delete
+                              </button>
+                            </div>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <motion.div
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="bg-white dark:bg-white/5 border border-dashed border-[#e9e2f3] dark:border-white/20 rounded-[2rem] p-16 text-center"
+                        >
+                          <MessageSquare className="w-12 h-12 text-[#756d8d] opacity-20 mx-auto mb-4" />
+                          <p className="font-bold text-[#756d8d] mb-1">No messages found</p>
+                          <p className="text-[11px] text-[#afa6c8]">
+                            {supportFilter !== 'all' ? `No ${supportFilter} messages` : supportSearch ? 'Try a different search term' : 'User messages will appear here'}
                           </p>
-                          <div className="mt-4 flex items-center gap-3 pt-4 border-t border-[#e9e2f3] dark:border-white/10 opacity-0 group-hover:opacity-100 transition-all">
-                            <button className="px-4 py-1.5 rounded-lg bg-primary text-white text-[10px] font-bold">Reply</button>
-                            <button 
-                              onClick={async (e) => {
-                                e.stopPropagation();
-                                try {
-                                  await axios.delete(`${API_BASE_URL}/api/feedback/${item.id}`);
-                                  setFeedbacks(feedbacks.filter(f => f.id !== item.id));
-                                  addLog('Feedback Archived', 'Admin', `Successfully archived feedback from "${item.user}"`, 'Success');
-                                } catch {
-                                  addLog('Feedback Archive Failed', 'Admin', `Failed to archive feedback from "${item.user}"`, 'Failed');
-                                  alert('Failed to archive feedback');
-                                }
-                              }}
-                              className="px-4 py-1.5 rounded-lg bg-white dark:bg-white/10 text-[10px] font-bold"
-                            >
-                              Archive
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="bg-white dark:bg-white/5 border border-dashed border-[#e9e2f3] dark:border-white/20 rounded-[2rem] p-20 text-center">
-                         <Info className="w-12 h-12 text-[#756d8d] opacity-20 mx-auto mb-4" />
-                         <p className="font-bold text-[#756d8d]">No feedback messages found</p>
-                      </div>
-                    )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
 
-                  <div className="flex flex-col gap-8">
-                    <div className="bg-gradient-to-br from-primary to-secondary p-8 rounded-[2.5rem] text-white">
-                      <h3 className="text-lg font-bold mb-1">Feedback Score</h3>
-                      <p className="text-white/70 text-xs font-medium mb-6">Based on user satisfaction ratings.</p>
-                      <div className="flex items-center justify-between">
-                         <div>
-                            <p className="text-3xl font-bold">4.8/5</p>
-                            <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Avg Rating</p>
-                         </div>
-                         <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-lg flex items-center justify-center">
-                            <Heart className="w-8 h-8 fill-current" />
-                         </div>
+                  {/* Stats Sidebar */}
+                  <div className="flex flex-col gap-6">
+                    {/* Overview Card */}
+                    <div className="bg-gradient-to-br from-primary to-[#ff6a3d] p-7 rounded-[2rem] text-white">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Headphones className="w-5 h-5" />
+                        <h3 className="text-base font-bold">Support Overview</h3>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-2xl font-bold">{supportStats.total}</p>
+                          <p className="text-[9px] font-bold uppercase tracking-widest opacity-70">Total Messages</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold">{supportStats.open_tickets}</p>
+                          <p className="text-[9px] font-bold uppercase tracking-widest opacity-70">Open Tickets</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold">{supportStats.response_rate}%</p>
+                          <p className="text-[9px] font-bold uppercase tracking-widest opacity-70">Response Rate</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold">{supportStats.resolved}</p>
+                          <p className="text-[9px] font-bold uppercase tracking-widest opacity-70">Resolved</p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2.5rem] p-8">
-                      <h3 className="text-sm font-bold mb-4">Support Stats</h3>
-                      <div className="flex flex-col gap-4">
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-[#756d8d]">Open Tickets</span>
-                          <span className="text-xs font-bold">12</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-[#756d8d]">Avg Response Time</span>
-                          <span className="text-xs font-bold">45m</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-[#756d8d]">Resolved Today</span>
-                          <span className="text-xs font-bold">24</span>
-                        </div>
+                    {/* Status Breakdown */}
+                    <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2rem] p-7">
+                      <h3 className="text-sm font-bold mb-5 text-[#171421] dark:text-white">Status Breakdown</h3>
+                      <div className="flex flex-col gap-3.5">
+                        {[
+                          { label: 'Unread', count: supportStats.unread, color: 'bg-amber-500', icon: MailOpen },
+                          { label: 'Read', count: supportStats.read, color: 'bg-blue-500', icon: Eye },
+                          { label: 'Replied', count: supportStats.replied, color: 'bg-emerald-500', icon: Reply },
+                          { label: 'Resolved', count: supportStats.resolved, color: 'bg-[#756d8d]', icon: CheckCircle2 },
+                        ].map(stat => (
+                          <div key={stat.label} className="flex items-center gap-3">
+                            <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center text-white", stat.color)}>
+                              <stat.icon className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-medium text-[#756d8d]">{stat.label}</span>
+                                <span className="text-xs font-bold text-[#171421] dark:text-white">{stat.count}</span>
+                              </div>
+                              <div className="w-full h-1.5 rounded-full bg-[#f0edf7] dark:bg-white/10 overflow-hidden">
+                                <div
+                                  className={cn("h-full rounded-full transition-all duration-500", stat.color)}
+                                  style={{ width: `${supportStats.total > 0 ? (stat.count / supportStats.total) * 100 : 0}%` }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
+                    </div>
+
+                    {/* Quick Tips */}
+                    <div className="bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2rem] p-6">
+                      <h3 className="text-xs font-bold mb-3 text-[#756d8d] uppercase tracking-wider">Quick Tips</h3>
+                      <ul className="flex flex-col gap-2 text-[11px] text-[#756d8d] leading-relaxed">
+                        <li className="flex items-start gap-2">
+                          <CircleDot className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                          Reply to messages to automatically mark them as "Replied"
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CircleDot className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                          Resolve tickets once the issue is fully handled
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CircleDot className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                          Use search to quickly find specific user messages
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+              );
+            })()}
 
             {activeTab === 'Settings' && (
               <div className="flex flex-col gap-8">

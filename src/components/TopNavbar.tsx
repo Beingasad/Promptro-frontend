@@ -1050,7 +1050,7 @@ export default function TopNavbar() {
             : expandedView === 'terms'
               ? 'Terms of Service'
               : expandedView === 'blog'
-                ? 'Insights & Tutorials'
+                ? 'Blog & Guides'
                 : expandedView === 'blog-post'
                   ? 'Article'
                   : 'About Us';
