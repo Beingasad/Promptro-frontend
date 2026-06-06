@@ -461,14 +461,7 @@ export default function ImageDetail() {
           </div>
         </>
       )}
-
       <section className="pb-4 md:mt-8">
-        {/* Author Attribution */}
-        <div className="mb-6">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8d86a0]/60 mb-2">Curated by</p>
-          <AuthorCard variant="compact" />
-        </div>
-
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-white/10 shadow-[0_12px_30px_rgba(255,106,61,0.16)]">
