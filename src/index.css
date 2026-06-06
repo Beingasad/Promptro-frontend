@@ -602,17 +602,3 @@
   animation: var(--animate-shimmer) !important;
 }
 
-@keyframes bounceShort {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.22); }
-}
-.animate-bounce-short {
-  animation: bounceShort 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-}
-.animate-bounce-short svg {
-  fill: #6d4dec !important;
-  color: #6d4dec !important;
-}
-#bottom-nav-saved svg {
-  transition: fill 0.3s ease, color 0.3s ease, transform 0.3s ease !important;
-}
