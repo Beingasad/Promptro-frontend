@@ -26,10 +26,15 @@
   --animate-pulse-glow: pulseGlow 2s infinite;
   --animate-drift-blob-1: driftBlob1 25s infinite alternate ease-in-out;
   --animate-drift-blob-2: driftBlob2 30s infinite alternate ease-in-out;
+  --animate-shimmer: shimmer 1.8s infinite linear;
 
   @keyframes fadeIn {
     0% { opacity: 0; }
     100% { opacity: 1; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
   @keyframes slideUp {
     0% { opacity: 0; transform: translateY(20px); }
@@ -572,4 +577,27 @@
   [data-theme="dark"] .shadow-\[0_28px_80px_rgba\(72\,56\,118\,0\.16\)\] {
     box-shadow: 0 22px 58px rgba(0, 0, 0, 0.34) !important;
   }
+}
+
+/* Custom premium skeleton shimmer loader style */
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(230, 226, 240, 0.5) 25%,
+    rgba(255, 255, 255, 0.5) 37%,
+    rgba(230, 226, 240, 0.5) 63%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+[data-theme="dark"] .shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 37%,
+    rgba(255, 255, 255, 0.03) 63%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: var(--animate-shimmer) !important;
 }

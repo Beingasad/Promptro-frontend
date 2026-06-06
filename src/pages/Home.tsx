@@ -11,6 +11,7 @@ import HomeBanners from '../components/HomeBanners';
 import MobileHeroCarousel from '../components/MobileHeroCarousel';
 import { useCategories } from '../context/CategoryContext';
 import SEOMeta from '../components/common/SEOMeta';
+import { GridSkeleton } from '../components/common/Skeleton';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -191,9 +192,7 @@ export default function Home() {
 
       <div className="w-full">
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          </div>
+          <GridSkeleton isHome={true} />
         ) : (
           <>
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">

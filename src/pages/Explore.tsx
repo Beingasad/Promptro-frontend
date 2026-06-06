@@ -9,6 +9,7 @@ import { useSearch } from '../context/SearchContext';
 import MasonryGrid from '../components/MasonryGrid';
 import type { Prompt } from '../components/ImageCard';
 import SEOMeta from '../components/common/SEOMeta';
+import { GridSkeleton } from '../components/common/Skeleton';
 
 const sortOptions = ['All', 'Popular', 'New Updates', 'Trending', 'Most viewed'] as const;
 type SortOption = typeof sortOptions[number];
@@ -193,9 +194,7 @@ export default function Explore() {
 
 
       {loading ? (
-        <div className="flex h-64 items-center justify-center">
-          <div className="h-11 w-11 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-        </div>
+        <GridSkeleton isHome={false} />
       ) : visiblePrompts.length ? (
         <MasonryGrid prompts={visiblePrompts} isTwoColumns={true} />
       ) : (

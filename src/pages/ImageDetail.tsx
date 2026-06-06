@@ -12,6 +12,7 @@ import { useIsMobileDevice } from '../utils/device';
 import SEOMeta from '../components/common/SEOMeta';
 import AuthorCard from '../components/common/AuthorCard';
 import JsonLd from '../components/common/JsonLd';
+import { DetailSkeleton } from '../components/common/Skeleton';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -171,11 +172,7 @@ export default function ImageDetail() {
   };
 
   if (loading) {
-    return (
-      <div className="flex min-h-[70vh] items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-      </div>
-    );
+    return <DetailSkeleton />;
   }
 
   if (!prompt) {
