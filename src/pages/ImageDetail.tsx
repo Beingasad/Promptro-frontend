@@ -85,6 +85,40 @@ export default function ImageDetail() {
 
   const [isPortrait, setIsPortrait] = useState(false);
 
+  // Disable browser scroll restoration and force scrollTo(0,0) immediately on route load
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    
+    // Scroll immediately to the top of the viewport
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    
+    // Re-apply slightly later to handle paint/render layout offsets
+    const t1 = setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 20);
+    const t2 = setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 60);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [id]);
+
+  // Also force scroll to top when detail data renders and replaces the skeleton
+  useEffect(() => {
+    if (!loading) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      const timer = setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
   useEffect(() => {
     const fetchPrompt = async () => {
       try {
