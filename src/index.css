@@ -485,6 +485,51 @@
   margin-bottom: 1rem;
 }
 
+.prose-custom table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9em;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.prose-custom th,
+.prose-custom td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.prose-custom th {
+  background-color: rgba(139, 92, 246, 0.08);
+  font-weight: 700;
+  color: #171421;
+  border-bottom: 1.5px solid rgba(139, 92, 246, 0.2);
+}
+
+[data-theme="dark"] .prose-custom th {
+  background-color: rgba(139, 92, 246, 0.15);
+  color: #f7f2ff;
+  border-bottom: 1.5px solid rgba(139, 92, 246, 0.3);
+}
+
+.prose-custom td {
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.prose-custom tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-custom tr:nth-child(even) {
+  background-color: rgba(139, 92, 246, 0.02);
+}
+
+[data-theme="dark"] .prose-custom tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
 /* Global utility classes outside of Tailwind layers to ensure they are never stripped */
 .hide-scrollbar::-webkit-scrollbar {
   display: none !important;
