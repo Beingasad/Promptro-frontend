@@ -21,6 +21,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
+  fetchSignInMethodsForEmail,
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 import SEOMeta from '../components/common/SEOMeta';
@@ -141,6 +142,20 @@ export default function Auth() {
         // Fallback: let Firebase handle it if check fails
       }
 
+      // Check if email has a google provider in Firebase
+      if (isFirebaseConfigured && auth) {
+        try {
+          const methods = await fetchSignInMethodsForEmail(auth, normalizedEmail);
+          if (methods.includes('google.com')) {
+            setError('This email is registered via Google. Please log in using the Google button.');
+            setLoading(false);
+            return;
+          }
+        } catch (firebaseErr: any) {
+          console.warn('Firebase fetchSignInMethodsForEmail check failed:', firebaseErr);
+        }
+      }
+
       const loginResult = await signInWithEmailAndPassword(auth, normalizedEmail, password);
       
       // Auto-register profile for existing email users if missing in DB
@@ -180,11 +195,51 @@ export default function Auth() {
       return;
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     setError('');
     setLoading(true);
     try {
+      // 1. Check if email is already registered in our backend DB
+      try {
+        const checkRes = await axios.get(`${API_BASE_URL}/api/auth/check-email?email=${encodeURIComponent(normalizedEmail)}`);
+        if (checkRes.data && checkRes.data.exists) {
+          if (checkRes.data.provider === 'google') {
+            setError('This email is registered via Google. Please log in using the Google button.');
+            setLoading(false);
+            return;
+          } else {
+            setError('An account already exists with this email. Please log in.');
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (checkErr) {
+        console.error('Error checking email provider:', checkErr);
+      }
+
+      // 2. Fallback client-side Firebase Auth check (e.g. for users that exist in Firebase but not in the DB)
+      if (isFirebaseConfigured && auth) {
+        try {
+          const methods = await fetchSignInMethodsForEmail(auth, normalizedEmail);
+          if (methods.includes('google.com')) {
+            setError('This email is registered via Google. Please log in using the Google button.');
+            setLoading(false);
+            return;
+          }
+          if (methods.length > 0) {
+            setError('An account already exists with this email. Please log in.');
+            setLoading(false);
+            return;
+          }
+        } catch (firebaseErr: any) {
+          console.warn('Firebase fetchSignInMethodsForEmail check failed:', firebaseErr);
+        }
+      }
+
+      // 3. Send OTP
       await axios.post(`${API_BASE_URL}/api/auth/send-otp`, {
-        email: email.trim().toLowerCase(),
+        email: normalizedEmail,
       });
       setSignupStep('otp');
       setResendTimer(60);
@@ -789,16 +844,18 @@ export default function Auth() {
           )}
 
           {/* Toggle Login/Signup */}
-          <button
-            type="button"
-            onClick={() => {
-              setMode((current) => (current === 'login' ? 'signup' : 'login'));
-              resetForm();
-            }}
-            className="mt-3 w-full text-center text-sm font-bold text-primary"
-          >
-            {mode === 'login' ? 'New here? Create an account' : 'Already have an account? Login'}
-          </button>
+          {(mode === 'login' || (mode === 'signup' && signupStep === 'info')) && (
+            <button
+              type="button"
+              onClick={() => {
+                setMode((current) => (current === 'login' ? 'signup' : 'login'));
+                resetForm();
+              }}
+              className="mt-3 w-full text-center text-sm font-bold text-primary"
+            >
+              {mode === 'login' ? 'New here? Create an account' : 'Already have an account? Login'}
+            </button>
+          )}
         </div>
       </motion.section>
     </div>
