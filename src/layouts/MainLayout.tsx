@@ -212,6 +212,19 @@ export default function MainLayout() {
               }}
               onAnimationComplete={() => {
                 setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
+                
+                // Snappy bounce/fill feedback on the target saved button
+                const target = document.getElementById('bottom-nav-saved');
+                if (target) {
+                  target.classList.remove('animate-bounce-short');
+                  void target.offsetWidth; // Force reflow
+                  target.classList.add('animate-bounce-short');
+                  
+                  // Cleanup class after 400ms so it immediately goes back to how it was before
+                  setTimeout(() => {
+                    target.classList.remove('animate-bounce-short');
+                  }, 400);
+                }
               }}
             >
               <img src={card.imageUrl} decoding="async" className="w-full h-full object-cover rounded-[1.25rem]" alt="" />
