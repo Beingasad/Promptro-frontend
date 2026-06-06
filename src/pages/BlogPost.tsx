@@ -93,7 +93,7 @@ export default function BlogPost() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6"
+      className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 pt-4 md:pt-6"
     >
       <SEOMeta
         title={post.metaTitle}
@@ -113,15 +113,6 @@ export default function BlogPost() {
       />
       <JsonLd schema={articleSchema} id={`article-${post.slug}`} />
       <JsonLd schema={faqSchema} id={`faq-${post.slug}`} />
-
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-[11px] font-medium text-[#8d86a0]/70 mb-6" aria-label="Breadcrumb">
-        <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-        <ChevronRight className="h-3 w-3" />
-        <Link to="/blog" className="hover:text-primary transition-colors">Insights &amp; Tutorials</Link>
-        <ChevronRight className="h-3 w-3" />
-        <span className="text-[#4a445f] dark:text-[#c4bed6] truncate max-w-[260px]">{post.title}</span>
-      </nav>
 
       <div className="flex flex-col lg:flex-row gap-10">
         {/* Main Content */}

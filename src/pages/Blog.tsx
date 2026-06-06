@@ -34,7 +34,7 @@ export default function Blog() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 flex flex-col gap-8"
+      className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 flex flex-col gap-8 pt-4 md:pt-6"
     >
       <SEOMeta
         title="Insights & Tutorials | Promptro AI Prompt Guides"
@@ -47,13 +47,6 @@ export default function Blog() {
         ]}
       />
       <JsonLd schema={blogListSchema} id="blog-list" />
-
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-[11px] font-medium text-[#8d86a0]/70" aria-label="Breadcrumb">
-        <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-        <ChevronRight className="h-3 w-3" />
-        <span className="text-[#4a445f] dark:text-[#c4bed6]">Insights &amp; Tutorials</span>
-      </nav>
 
       {/* Hero */}
       <motion.header
