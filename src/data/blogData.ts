@@ -44,15 +44,17 @@ const posts: BlogPost[] = [
     authorTitle: 'Founder of Promptro',
     publishDate: '2026-05-01T00:00:00Z',
     updatedDate: '2026-06-06T12:00:00Z',
-    readingTime: '6 min read',
+    readingTime: '12 min read',
     category: 'Beginner Guides',
     tags: ['AI prompts', 'beginners', 'Midjourney', 'DALL-E', 'guide'],
     excerpt: 'An empty text box can be intimidating. Here is a no-nonsense, human-to-human guide explaining what AI prompts are, why simple words fail, and how to write descriptions that generate jaw-dropping visuals.',
     toc: [
       { id: 'why-empty-box', title: 'The Empty Text Box Struggle', level: 2 },
       { id: 'how-prompts-work', title: 'What Actually Happens Behind the Prompt?', level: 2 },
-      { id: 'anatomy-of-prompt', title: 'The Anatomy of a Pro-Level Prompt', level: 2 },
-      { id: 'real-examples', title: 'Real Prompt Examples: From Bad to Brilliant', level: 2 },
+      { id: 'anatomy-of-prompt', title: 'The Five Pillars of a Perfect Prompt', level: 2 },
+      { id: 'camera-lighting-cheat-sheet', title: 'Camera and Lighting Cheat Sheet', level: 3 },
+      { id: 'style-cheat-sheet', title: 'Style and Aesthetic Cheat Sheet', level: 3 },
+      { id: 'real-examples', title: 'Real Prompt Transformations: Before and After', level: 2 },
       { id: 'human-best-practices', title: 'My Personal Rules for Better Prompting', level: 2 },
       { id: 'negative-prompts-intro', title: 'What About Negative Prompts?', level: 2 },
       { id: 'skip-the-struggle', title: 'Skip the Grind: Where to Find Ready-Made Prompts', level: 2 },
@@ -81,41 +83,72 @@ const posts: BlogPost[] = [
   <h2>The Empty Text Box Struggle</h2>
   <p>Let’s be honest. When you first open Midjourney, DALL-E, or Stable Diffusion and see that blank text box staring back at you, it’s intimidating. You type something simple like <em>"a cool sports car"</em> or <em>"a house in the hills"</em>, hit enter, and wait. What you get back usually looks like a cheap plastic toy or a generic stock photo. It’s frustrating.</p>
   <p>When our team first started experimenting with generative AI in a small, cramped co-working desk in Bengaluru back in 2024, our early outputs were, frankly, laughable. We quickly realized a fundamental truth: <strong>the quality of the image is directly tied to how clearly you communicate your vision to the AI</strong>. That communication is what we call an <strong>AI Image Prompt</strong>.</p>
-  <p>It isn't about code or math; it is about learning a new language—part creative direction, part photography vocabulary, and part raw imagination.</p>
+  <p>It isn't about code or math; it is about learning a new language—part creative direction, part photography vocabulary, and part raw imagination. If you've been struggling to make your AI images look professional, this guide is for you. We'll strip away the academic jargon and look at how things work in the real world.</p>
 </section>
 
 <section id="how-prompts-work">
   <h2>What Actually Happens Behind the Prompt?</h2>
   <p>AI image generators don't "think" or understand the world the way humans do. They are trained on millions of images paired with text captions. When you enter a prompt, the AI matches the statistical patterns of your words against its massive library to draw pixels that correspond to those patterns.</p>
   <p>Because it's a game of statistics, generic words yield generic images. If you write <em>"a woman"</em>, the AI will pull a statistical average of what a woman looks like in stock photos. But if you write <em>"a candid portrait of an elderly Varanasi weaver, deep facial wrinkles, soft window light, shot on a 50mm lens, film grain,"</em> you force the AI to pull from highly specific, artistic, and rich datasets.</p>
+  <p>Understanding this is your superpower. You aren't coding the image; you are steering a probability engine. By choosing your words carefully, you guide the engine away from generic stock-photo aesthetics and toward cinematic masterpiece status.</p>
 </section>
 
 <section id="anatomy-of-prompt">
-  <h2>The Anatomy of a Pro-Level Prompt</h2>
+  <h2>The Five Pillars of a Perfect Prompt</h2>
   <p>After generating thousands of images for client campaigns and social media grids, we’ve found that the best prompts usually follow a simple, logical structure. You don't need all these elements every single time, but keeping them in mind makes a world of difference:</p>
-  <ul>
-    <li><strong>The Subject:</strong> Who or what is the main focus? (e.g., *a steaming cup of masala chai*, *a futuristic rickshaw*)</li>
-    <li><strong>The Environment:</strong> Where is this happening? (e.g., *a rain-slicked street in South Mumbai at night*, *a misty tea garden in Darjeeling*)</li>
+  <ol>
+    <li><strong>The Subject:</strong> Who or what is the main focus? Be specific. Instead of "a dog," try "a golden retriever puppy."</li>
+    <li><strong>The Environment &amp; Background:</strong> Where is this happening? Describe the weather, the setting, and the background elements. (e.g., *a rain-slicked street in South Mumbai at night*, *a misty tea garden in Darjeeling*)</li>
     <li><strong>The Medium &amp; Style:</strong> Is it a photo, an oil painting, an anime sketch, or a 3D render? (e.g., *analog film photography*, *watercolor illustration*)</li>
     <li><strong>Lighting:</strong> Lighting defines the mood. (e.g., *dramatic side lighting*, *harsh afternoon sun with sharp shadows*, *neon reflections*)</li>
     <li><strong>Camera Specs:</strong> Using real photography terms tells the AI how to frame the shot. (e.g., *macro lens*, *85mm portrait lens*, *wide-angle panoramic*)</li>
-  </ul>
+  </ol>
   <em>Pro Tip: AI models read from left to right. The words at the very beginning of your prompt carry the most weight. Always put your main subject first, and leave style and technical settings for the end.</em>
 </section>
 
+<section id="camera-lighting-cheat-sheet">
+  <h3>Camera and Lighting Cheat Sheet</h3>
+  <p>If you want your AI images to look like real photographs, you need to use the language of photographers. Here is a quick cheat sheet of terms that modern AI models understand exceptionally well:</p>
+  <ul>
+    <li><strong>85mm Lens / f/1.8 Aperture:</strong> This is the holy grail for portraits. It creates a tack-sharp subject with a beautifully blurred, out-of-focus background (bokeh).</li>
+    <li><strong>35mm Film / Analog Grain:</strong> Excellent for street photography. It adds a textured, retro, authentic look that breaks the clinical digital smoothness.</li>
+    <li><strong>Volumetric Lighting / Cinematic Haze:</strong> Perfect for adding drama. It makes light rays visible through dust or fog, creating depth.</li>
+    <li><strong>Rembrandt Lighting:</strong> A classic portrait lighting setup where light comes from the side, creating a small triangle of light on the shadowed cheek.</li>
+    <li><strong>Golden Hour:</strong> The hour just after sunrise or before sunset. It floods the scene with warm, soft, orange light.</li>
+  </ul>
+</section>
+
+<section id="style-cheat-sheet">
+  <h3>Style and Aesthetic Cheat Sheet</h3>
+  <p>Not everything has to be a photo. Sometimes you need a stylized vector icon, a storyboard sketch, or an illustration. Here is what to write:</p>
+  <ul>
+    <li><strong>Minimalist Flat Vector Illustration:</strong> Clean lines, solid colors, no gradients. Perfect for modern SaaS websites and UI designs.</li>
+    <li><strong>Studio Ghibli Aesthetic:</strong> Soft hand-painted backgrounds, nostalgic clouds, anime characters, cozy colors.</li>
+    <li><strong>Ukiyo-e Woodblock Print:</strong> Traditional Japanese art style with bold outlines and flat colors.</li>
+    <li><strong>Double Exposure:</strong> Merges two images into one (e.g., a silhouette of a face filled with a dense pine forest).</li>
+  </ul>
+</section>
+
 <section id="real-examples">
-  <h2>Real Prompt Examples: From Bad to Brilliant</h2>
-  <p>To see how this works in practice, let’s look at how we can transform a basic, robotic prompt into something that feels alive and human:</p>
+  <h2>Real Prompt Transformations: Before and After</h2>
+  <p>To see how this works in practice, let’s look at how we can transform basic, robotic prompts into detailed, human-crafted descriptions:</p>
   
   <h3>Example 1: Food Photography</h3>
   <p><strong>Robotic Prompt:</strong> <code>Indian food samosa on a plate.</code></p>
-  <p><strong>Polished Prompt:</strong> <code>A macro shot of a golden-brown, crispy samosa, broken open with steam rising, mint chutney dripping, placed on a rustic wooden board, cinematic side lighting, shallow depth of field, warm color grading.</code></p>
+  <p><strong>What's wrong:</strong> The AI will likely generate a clean, sterile samosa on a white plate with harsh white studio light. It will look like a cheap menu photo.</p>
+  <p><strong>Polished Prompt:</strong> <code>A macro close-up shot of a golden-brown, crispy samosa, broken open in the middle with steam visibly rising, potato and pea filling showing, mint chutney dripping from the edge, placed on a rustic wooden board, red copper cups in the background, cinematic side lighting, shallow depth of field, warm color grading.</code></p>
 
   <h3>Example 2: Portrait Photography</h3>
   <p><strong>Robotic Prompt:</strong> <code>An Indian woman.</code></p>
-  <p><strong>Polished Prompt:</strong> <code>A close-up candid portrait of an Indian woman laughing, wearing a traditional embroidered saree, soft monsoon rain in the background, warm golden hour sun filtering through leaves, shot on a Hasselblad 80mm lens, highly detailed skin textures, authentic look.</code></p>
+  <p><strong>What's wrong:</strong> Too generic. The AI will output a stock portrait of a model with perfect, smoothed-out skin looking straight at the camera.</p>
+  <p><strong>Polished Prompt:</strong> <code>A close-up candid portrait of an Indian woman laughing, wearing a traditional embroidered silk saree, soft monsoon rain in the background, warm golden hour sun filtering through leaves, shot on a Hasselblad 80mm lens, highly detailed skin textures, authentic look, film grain.</code></p>
 
-  <p>See the difference? The second prompt gives the AI specific visual cues, resulting in an image that looks like it was shot by a professional photographer rather than rendered by an algorithm.</p>
+  <h3>Example 3: Landscape & Architecture</h3>
+  <p><strong>Robotic Prompt:</strong> <code>A mountain house.</code></p>
+  <p><strong>What's wrong:</strong> A simple house on a mountain. Very boring layout.</p>
+  <p><strong>Polished Prompt:</strong> <code>An architectural photograph of a modern glass-and-timber cabin perched on a rocky cliff in the Himalayas, surrounded by towering pine trees, dense morning mist rolling through the valley, warm lights glowing from inside the cabin, reflection on the wet wooden deck, wide-angle lens, shot on Fujifilm X-T5.</code></p>
+
+  <p>By expanding your description to cover the surrounding environment, lighting, and camera details, you give the AI a rich canvas to work with.</p>
 </section>
 
 <section id="human-best-practices">
@@ -153,15 +186,16 @@ const posts: BlogPost[] = [
     authorTitle: 'Founder of Promptro',
     publishDate: '2026-05-15T00:00:00Z',
     updatedDate: '2026-06-06T12:00:00Z',
-    readingTime: '10 min read',
+    readingTime: '15 min read',
     category: 'Prompt Libraries',
     tags: ['Midjourney', 'cinematic', 'portrait', 'fantasy', 'prompts 2026'],
     excerpt: 'At ₹800 to ₹2500+ a month, you don\'t want to waste your Midjourney GPU credits on trial and error. Here are 50 of our absolute best, copy-paste prompts that work in the real world.',
     toc: [
       { id: 'midjourney-pricing-reality', title: 'Why Midjourney Is Still Worth the INR Cost', level: 2 },
-      { id: 'cinematic-prompts', title: 'Cinematic Prompts (Movie Quality)', level: 2 },
+      { id: 'cinematic-prompts', title: 'Cinematic & Film Noir Prompts', level: 2 },
       { id: 'indian-portraits', title: 'Authentic Indian Portraits', level: 2 },
       { id: 'architectural-gems', title: 'Architecture & Dream Spaces', level: 2 },
+      { id: 'sci-fi-fantasy', title: 'Fantasy & Sci-Fi Worldbuilding', level: 2 },
       { id: 'anime-prompts', title: 'Anime & Illustration Styles', level: 2 },
       { id: 'practical-parameters', title: 'Parameters You Actually Need to Know', level: 2 },
     ],
@@ -188,13 +222,19 @@ const posts: BlogPost[] = [
 </section>
 
 <section id="cinematic-prompts">
-  <h2>Cinematic Prompts (Movie Quality)</h2>
+  <h2>Cinematic &amp; Film Noir Prompts</h2>
   <p>These prompts are designed to create high-contrast, moody scenes that look like screenshots from a big-budget film. They work beautifully for website banners and landing pages.</p>
   <ol>
     <li><code>A lone yellow taxi cab driving through a rain-soaked Kolkata street at night, neon street signs reflecting in dark puddles, cinematic mood lighting, shot on 35mm lens, atmospheric haze, volumetric fog --ar 16:9 --v 7</code></li>
     <li><code>An aerial cinematic wide shot of a traveler standing at the edge of a vast Himalayan cliff during sunrise, golden mist filling the valley below, cool blue and warm gold color grade, shot on RED camera --ar 16:9 --v 7</code></li>
     <li><code>A cozy antique bookstore interior, dust particles floating in columns of afternoon sunlight, wooden shelves filled with old leather books, cinematic depth, vintage aesthetic --ar 16:9 --v 7</code></li>
     <li><code>A cyber-punk tea stall in a futuristic Mumbai bazaar, holographic advertisements glowing on wet asphalt, steam rising from a kettle, rich textures, volumetric lighting --ar 16:9 --v 7</code></li>
+    <li><code>A moody jazz club, a saxophonist illuminated under a single spotlight, smoke swirling in the air, deep blue background, silhouette of the audience, cinematic lighting --ar 16:9 --v 7</code></li>
+    <li><code>A train speeding past a crossing in rural Rajasthan during golden hour, dust kick-up, dramatic sunburst, retro warm grading, motion blur --ar 16:9 --v 7</code></li>
+    <li><code>A detective in a trench coat standing under a flickering street lamp, rain-swept alley, dramatic shadows, noir style, high contrast --ar 16:9 --v 7</code></li>
+    <li><code>A cyberpunk street market, colorful neon signs, steam rising from local food stalls, busy crowd, futuristic details, shot on 35mm film --ar 16:9 --v 7</code></li>
+    <li><code>An abandoned glass greenhouse in a forest, overgrown vines, shafts of sunlight breaking through broken glass, dusty atmosphere, moody grading --ar 16:9 --v 7</code></li>
+    <li><code>A futuristic control room, massive screens displaying blue data grids, neon rim lighting, operator sitting in silhouette, modern sci-fi look --ar 16:9 --v 7</code></li>
   </ol>
 </section>
 
@@ -206,6 +246,12 @@ const posts: BlogPost[] = [
     <li><code>A candid street photo of a young Indian classical dancer sitting backstage, wearing traditional jewelry and a silk lehenga, dramatic side lighting casting soft shadows, quiet reflective expression, film grain, analog aesthetic --ar 2:3 --v 7</code></li>
     <li><code>A professional corporate headshot of a young female tech entrepreneur in a modern Bangalore office, blurred office background with green plants, confident smile, clean studio lighting, high-end commercial style --ar 2:3 --v 7</code></li>
     <li><code>A joyful portrait of children playing holi in a village courtyard, colorful powder explosion in mid-air, dynamic action freeze, sunlight catching water droplets, authentic candid smiles, shot on 50mm lens --ar 4:5 --v 7</code></li>
+    <li><code>Portrait of a Kathakali dancer applying face paint, extreme close-up, dramatic side studio lighting, rich colors of green and red paint, fine details of skin and costume --ar 2:3 --v 7</code></li>
+    <li><code>An Indian farmer in a mustard field, standing tall, warm sunlight hitting his face, vibrant yellow background, documentary style, realistic texture --ar 2:3 --v 7</code></li>
+    <li><code>A street vendor in Delhi during winter, steam from his tea kettle wrapping around his face, warm smile, candid portrait, shot on 35mm film --ar 2:3 --v 7</code></li>
+    <li><code>A high-fashion portrait of an Indian male model, modern designer kurta, neutral background, editorial lighting, sharp focus, 85mm lens --ar 2:3 --v 7</code></li>
+    <li><code>A smiling grandmother in a rural village weaving basket on a porch, warm sunlight, gentle expression, highly detailed textures --ar 2:3 --v 7</code></li>
+    <li><code>Close-up portrait of a young Indian groom in traditional sherwani, soft bokeh background of wedding lights, warm lighting, elegant style --ar 2:3 --v 7</code></li>
   </ol>
   <em>Pro Tip: If you get too much artificial smoothing on faces, try adding the parameter <code>--style raw</code> to your prompt. It reduces Midjourney's default artistic embellishments and gives you a much cleaner, photographic texture.</em>
 </section>
@@ -217,6 +263,30 @@ const posts: BlogPost[] = [
     <li><code>A minimalist wabi-sabi living room design, large arched concrete windows overlooking a rain-soaked courtyard, natural light, raw wood textures, beige linen sofa, serene interior photography --ar 16:9 --v 7</code></li>
     <li><code>A futuristic eco-friendly luxury villa built into a jungle cliff, cascading waterfalls, solar panels integrated into glass domes, lush greenery, photorealistic architectural concept render --ar 16:9 --v 7</code></li>
     <li><code>A luxury resort lobby inspired by Rajasthani palace architecture, white marble floors reflecting intricate archways, modern luxury furniture, soft warm ambient lighting, grand scale --ar 16:9 --v 7</code></li>
+    <li><code>A modern apartment balcony in South Mumbai during monsoon, glass railing, wet wooden decking, plants, cozy seating with warm lights, view of the sea in background --ar 16:9 --v 7</code></li>
+    <li><code>A concrete brutalist library interior, massive columns, towering bookshelves, skylight throwing long shadows on reading desks, silent atmospheric feel --ar 16:9 --v 7</code></li>
+    <li><code>A luxury spa room, stone textures, running water, warm candle light, tropical plants, minimalist layout, photorealistic render --ar 16:9 --v 7</code></li>
+    <li><code>A cozy attic bedroom, skylight window showing rain drops, bed with thick blankets, warm string lights, nostalgic mood --ar 16:9 --v 7</code></li>
+    <li><code>A modern museum gallery, high ceilings, large abstract painting on a concrete wall, single visitor standing in silhouette, minimalist composition --ar 16:9 --v 7</code></li>
+    <li><code>A mountain lodge dining room, stone fireplace with burning logs, large wooden dining table, panoramic glass window showing snow peaks --ar 16:9 --v 7</code></li>
+    <li><code>A rooftop garden restaurant at night, string lights, city skyline in background, cozy seating, warm atmosphere --ar 16:9 --v 7</code></li>
+  </ol>
+</section>
+
+<section id="sci-fi-fantasy">
+  <h2>Fantasy &amp; Sci-Fi Worldbuilding</h2>
+  <p>Let your imagination run wild with these concepts designed for gaming grids, storyboards, and digital art projects.</p>
+  <ol>
+    <li><code>An ancient dragon perched on top of a futuristic skyscraper, glowing cybernetic wings, rainy night, neon reflections on scales, cyberpunk city skyline --ar 16:9 --v 7</code></li>
+    <li><code>A floating island city in the sky, cascading waterfalls falling into the clouds below, fantasy stone architecture, flying ships, golden hour sun --ar 16:9 --v 7</code></li>
+    <li><code>An astronaut sitting on a mossy stone throne in an ancient jungle temple, overgrown vines on spacesuit, shafts of light breaking through canopy --ar 16:9 --v 7</code></li>
+    <li><code>A mystical glowing portal in the middle of a snowy pine forest, purple energy swirl, realistic lighting reflection on snow, mysterious mood --ar 16:9 --v 7</code></li>
+    <li><code>An underwater kingdom with massive bioluminescent glass domes, futuristic submarines navigating between coral towers, deep blue gradient --ar 16:9 --v 7</code></li>
+    <li><code>A giant ancient mechanical golem sitting in a desert valley, covered in sand and ruins, lone traveler standing in front looking up, scale and awe --ar 16:9 --v 7</code></li>
+    <li><code>A magical forest pathway at night, glowing bioluminescent mushrooms, floating dust particles, soft purple and blue ambient light --ar 16:9 --v 7</code></li>
+    <li><code>A futuristic city built inside a massive canyon, layers of suspended bridges, hover cars, vertical gardens, sunny clear sky, high-tech render --ar 16:9 --v 7</code></li>
+    <li><code>A mystical wizard\'s library, floating spellbooks, glowing crystal balls, magical dust in the air, dark cozy study room --ar 16:9 --v 7</code></li>
+    <li><code>A post-apocalyptic overgrown city, skyscrapers covered in ivy, deer grazing on a cracked highway, warm golden sun --ar 16:9 --v 7</code></li>
   </ol>
 </section>
 
@@ -226,6 +296,14 @@ const posts: BlogPost[] = [
   <ol>
     <li><code>A young girl sitting on her balcony during a warm summer evening, eating fresh mangoes, soft pastel colors, Studio Ghibli style, nostalgic and peaceful mood --ar 16:9 --niji 6</code></li>
     <li><code>A slice-of-life anime scene of a busy train station in Tokyo during cherry blossom season, soft sunlight filtering through windows, vibrant colors, detailed background illustration --ar 16:9 --niji 6</code></li>
+    <li><code>A samurai standing on a cliff overlooking a sea of clouds, hand-drawn manga style, ink sketch details, bold lines --ar 16:9 --niji 6</code></li>
+    <li><code>A cozy kitchen with fresh baked bread on the table, soft steam, warm colors, anime movie keyframe, detailed layout --ar 16:9 --niji 6</code></li>
+    <li><code>A futuristic anime city, flying cars, glowing billboards, dynamic camera angle, vibrant digital illustration --ar 16:9 --niji 6</code></li>
+    <li><code>A wizard casting a spell, glowing magical circle, colorful particles, epic battle manga keyframe --ar 16:9 --niji 6</code></li>
+    <li><code>A retro anime character portrait, 90s style, grainy cel animation look, soft eyes, detailed hair --ar 2:3 --niji 6</code></li>
+    <li><code>A magical library with floating lanterns, warm colors, watercolor anime background, fantasy illustration --ar 16:9 --niji 6</code></li>
+    <li><code>A giant robot standing in a grassy meadow under a blue sky, nostalgic clouds, anime movie style --ar 16:9 --niji 6</code></li>
+    <li><code>A quiet street in Japan during night, soft vending machine glow, rainy reflections, slice-of-life anime aesthetic --ar 16:9 --niji 6</code></li>
   </ol>
 </section>
 
@@ -253,15 +331,18 @@ const posts: BlogPost[] = [
     authorTitle: 'Founder of Promptro',
     publishDate: '2026-05-28T00:00:00Z',
     updatedDate: '2026-06-06T12:00:00Z',
-    readingTime: '7 min read',
+    readingTime: '12 min read',
     category: 'Tips & Techniques',
     tags: ['negative prompts', 'Stable Diffusion', 'tips', 'AI image quality'],
     excerpt: 'There is nothing worse than generating a gorgeous portrait only to find out the character has six fingers or a distorted face. Here is how to use negative prompts to fix it.',
     toc: [
       { id: 'anatomy-frustrations', title: 'The Ultimate Mood Killer', level: 2 },
       { id: 'how-it-works-practically', title: 'How Negative Prompting Actually Works', level: 2 },
+      { id: 'cfg-guidance-science', title: 'The Science of CFG Scale and Vector Steering', level: 3 },
       { id: 'universal-negative-list', title: 'The Universal "Clean-Up" List', level: 2 },
-      { id: 'negative-by-tool', title: 'How to Use Negatives in Midjourney vs Stable Diffusion', level: 2 },
+      { id: 'negative-by-tool', title: 'How to Use Negatives in Different Tools', level: 2 },
+      { id: 'stablediffusion-parentheses', title: 'Stable Diffusion: Parentheses and Weights', level: 3 },
+      { id: 'dalle3-workarounds', title: 'DALL-E 3: Exclusions in Positive Prompts', level: 3 },
       { id: 'avoid-overloading', title: 'The Danger of Prompt Overloading', level: 2 },
     ],
     faqs: [
@@ -284,6 +365,7 @@ const posts: BlogPost[] = [
   <h2>The Ultimate Mood Killer</h2>
   <p>We’ve all been there. You write a perfect, detailed prompt, wait anxiously for the rendering bar to hit 100%, and see a stunning image—except the character has six fingers, two heads, or a weird, distorted face. It's the ultimate mood killer.</p>
   <p>In the professional design world—whether you are making social media creatives for a startup in Delhi or storyboards for a production house in Mumbai—you can’t hand over messy, anatomically incorrect images to a client. They will notice immediately. This is where <strong>Negative Prompts</strong> come in. They are literally the "exclusion list" that tells the AI what to avoid at all costs.</p>
+  <p>By understanding how to use them, you transition from someone who just gets lucky with random generations to a professional who controls the AI output.</p>
 </section>
 
 <section id="how-it-works-practically">
@@ -292,32 +374,52 @@ const posts: BlogPost[] = [
   <p>A negative prompt works by applying guidance in the opposite direction. If you add <em>"blurry"</em> to your negative prompt, the AI mathematically pushes the pixels away from anything it learned was blurry during training. By combining specific exclusion terms, you can dramatically improve the clarity, composition, and anatomy of your generations.</p>
 </section>
 
+<section id="cfg-guidance-science">
+  <h3>The Science of CFG Scale and Vector Steering</h3>
+  <p>When you generate an image, the AI uses a parameter called **CFG Scale (Classifier Free Guidance)**. This scale decides how strictly the model follows your prompt. If your CFG scale is high, the model tries very hard to fit every positive word you wrote while pushing away from the negative words. </p>
+  <p>However, if your CFG scale is too high, the image can look burned, over-saturated, or full of weird artifacts. For most models, a CFG scale of **5 to 8** is the sweet spot. It provides enough guidance to follow your positive/negative prompt vectors without distorting the pixels.</p>
+</section>
+
 <section id="universal-negative-list">
   <h2>The Universal "Clean-Up" List</h2>
   <p>We keep a text file pinned on our desktop containing a set of universal terms. Whenever a model starts outputting weird proportions or low-resolution textures, we copy and paste this directly into the negative prompt field:</p>
   
   <h3>1. To Fix Bad Anatomy and Faces</h3>
-  <p><code>extra limbs, extra fingers, missing fingers, deformed hands, poorly drawn face, asymmetric eyes, bad anatomy, double faces, disfigured, malformed body parts</code></p>
+  <p><code>extra limbs, extra fingers, missing fingers, deformed hands, poorly drawn face, asymmetric eyes, bad anatomy, double faces, disfigured, malformed body parts, fused fingers, bad proportions, distorted fingers</code></p>
   
   <h3>2. To Fix Low-Resolution and Artificial Smoothness</h3>
-  <p><code>blurry, low quality, pixelated, jpeg artifacts, compression noise, grainy, low-res, generic render, plastic skin</code></p>
+  <p><code>blurry, low quality, pixelated, jpeg artifacts, compression noise, grainy, low-res, generic render, plastic skin, smoothed skin, flat colors, out of focus</code></p>
 
   <h3>3. To Prevent Unwanted Branding</h3>
-  <p><code>watermark, signature, text, logo, username, frame, border, stamp, copyright marks</code></p>
+  <p><code>watermark, signature, text, logo, username, frame, border, stamp, copyright marks, margins, letters, words</code></p>
   
   <em>Pro Tip: If you are using Stable Diffusion, you can use "embeddings" or "textual inversions" (like EasyNegative or BadHandv4) which package dozens of these negative terms into a single word shortcut. It saves a lot of typing!</em>
 </section>
 
 <section id="negative-by-tool">
-  <h2>How to Use Negatives in Midjourney vs Stable Diffusion</h2>
+  <h2>How to Use Negatives in Different Tools</h2>
   <p>Different tools handle negative prompting differently. Here is how to use them without getting confused:</p>
-  
-  <h3>Stable Diffusion (Automatic1111 / ComfyUI / Forge)</h3>
-  <p>Stable Diffusion has a dedicated "Negative Prompt" text box right below the main prompt window. This is where the feature is most powerful. You can even apply weights here. For example, typing <code>(watermark:1.3)</code> tells the AI to prioritize avoiding watermarks with 1.3 times the normal strength.</p>
   
   <h3>Midjourney V7</h3>
   <p>Midjourney doesn't have a separate text box. Instead, you add the <code>--no</code> flag at the very end of your prompt, followed by the things you want to exclude. Keep it simple and comma-separated.</p>
   <p><strong>Example:</strong> <code>A futuristic office lounge in Noida, glass walls, lush indoor plants --no people, desks, computers, watermarks --ar 16:9</code></p>
+</section>
+
+<section id="stablediffusion-parentheses">
+  <h3>Stable Diffusion: Parentheses and Weights</h3>
+  <p>In Stable Diffusion (using interfaces like Automatic1111, ComfyUI, or Forge), you can control the importance of individual negative words by wrapping them in parentheses and assigning numerical weights. </p>
+  <ul>
+    <li>Wrapping a word in parentheses increases its weight by 1.1x. For example: <code>(blurry)</code></li>
+    <li>Adding a colon and a number allows exact weighting. For example: <code>(extra limbs:1.35)</code> tells the AI to avoid extra limbs with 1.35 times the normal priority.</li>
+    <li>Conversely, using weights below 1.0 reduces the priority. For example: <code>(vintage:0.8)</code> subtly discourages retro aesthetics without banning them completely.</li>
+  </ul>
+  <p>If you find that a universal negative list is ruining your positive styling (e.g., making a gloomy, rainy scene too bright), try reducing the weights of contrast-altering words like "shadows" or "darkness" in your negative field.</p>
+</section>
+
+<section id="dalle3-workarounds">
+  <h3>DALL-E 3: Exclusions in Positive Prompts</h3>
+  <p>Since DALL-E 3 (via ChatGPT) doesn't have a negative input box, you must integrate exclusion rules directly into your natural language prompt. However, DALL-E 3 sometimes gets confused when you use negative words like "no" or "without," because it occasionally associates the noun with the scene anyway (e.g., "no apples" might generate apples because the word "apples" is present). </p>
+  <p>To bypass this, use active positive language to describe the absence. Instead of writing <em>"a park with no people,"</em> write <em>"an empty, desolate park, silent and completely deserted."</em> This guides the probability engine toward empty settings without using words that might trigger unwanted details.</p>
 </section>
 
 <section id="avoid-overloading">
@@ -339,13 +441,14 @@ const posts: BlogPost[] = [
     authorTitle: 'Founder of Promptro',
     publishDate: '2026-06-06T12:00:00Z',
     updatedDate: '2026-06-06T12:00:00Z',
-    readingTime: '8 min read',
+    readingTime: '12 min read',
     category: 'Comparison Guides',
     tags: ['ChatGPT', 'Gemini', 'DALL-E 3', 'Imagen 3', 'Face Consistency'],
     excerpt: 'ChatGPT or Gemini? If you are trying to build consistent characters or edit details on a canvas, there is a clear winner. We break down the real-world comparison.',
     toc: [
       { id: 'cut-the-pr-talk', title: 'Cutting Through the Marketing Hype', level: 2 },
       { id: 'face-consistency-showdown', title: 'The Character & Face Consistency Test', level: 2 },
+      { id: 'locking-seeds-chatgpt', title: 'Deep Dive: How to Extract and Lock Seeds in DALL-E 3', level: 3 },
       { id: 'inpainting-brush-wars', title: 'The Selective Inpainting Brush', level: 2 },
       { id: 'regional-language-test', title: 'GEO Edge: Gemini\'s Hinglish and Hindi Translation', level: 2 },
       { id: 'detail-and-lighting', title: 'Where Gemini Actually Wins: Lighting & Textures', level: 2 },
@@ -382,6 +485,17 @@ const posts: BlogPost[] = [
     <li><strong>ChatGPT (DALL-E 3 + GPT-4o):</strong> When you ask ChatGPT to modify an image, GPT-4o acts as an intelligent intermediary. It remembers your character's exact features (e.g., hair texture, skin tone, clothing style) and rewrites the prompt internally. It also supports seed tracking, allowing you to reference the specific generation ID to maintain facial consistency across the conversation.</li>
     <li><strong>Google Gemini (Imagen 3):</strong> Gemini generates every image from scratch. Even if you ask it to "use the same person from the previous image," it starts with a completely new random noise seed. The result? Your character will have a different jawline, nose, and eye shape in the next generation. For storyboards or mascot creation, this "face shifting" is a massive dealbreaker.</li>
   </ul>
+</section>
+
+<section id="locking-seeds-chatgpt">
+  <h3>Deep Dive: How to Extract and Lock Seeds in DALL-E 3</h3>
+  <p>To successfully lock character faces in ChatGPT, you need to understand how to pull seed values. DALL-E 3 assigns a unique number to every generated image, representing the mathematical starting point of the diffusion process. Here is how you can use it:</p>
+  <ol>
+    <li>Ask ChatGPT to generate your character (e.g., *a young Indian boy in a school uniform reading a book*).</li>
+    <li>Once generated, click the image. In the top right corner, click the 'Info' icon. It will display the raw prompt that GPT-4o generated and the seed number (e.g., <code>Seed: 382910471</code>).</li>
+    <li>In your next prompt, reference this seed directly: <em>"Using seed 382910471 and maintaining the identical character details, show him walking home from school, waving at a friend."</em></li>
+  </ol>
+  <p>This method restricts the DALL-E 3 noise generator to the same initial vector space, resulting in near-perfect facial structure preservation.</p>
 </section>
 
 <section id="inpainting-brush-wars">
