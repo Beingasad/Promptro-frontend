@@ -34,7 +34,7 @@ export default function Blog() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 flex flex-col gap-8 pt-4 md:pt-6"
+      className="w-full max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 flex flex-col gap-8 pt-6 md:pt-8"
     >
       <SEOMeta
         title="Insights & Tutorials | Promptro AI Prompt Guides"
@@ -55,10 +55,6 @@ export default function Blog() {
         transition={{ duration: 0.55 }}
         className="text-center py-4 md:py-8"
       >
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold text-primary uppercase tracking-wider mb-4">
-          <Sparkles className="h-3 w-3" />
-          Insights & Tutorials
-        </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] mb-4">
           AI Prompt{' '}
           <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent">
