@@ -166,48 +166,49 @@ export default function MainLayout() {
       {/* Flying card animations overlay */}
       <AnimatePresence>
         {flyingCards.map((card) => {
-          const aspectRatio = card.startHeight / card.startWidth;
-          const finalWidth = 24;
-          const finalHeight = 24 * aspectRatio;
+          const targetWidth = 24;
+          const scaleTarget = targetWidth / card.startWidth;
 
           return (
             <motion.div
               key={card.id}
-              initial={{
+              style={{
                 position: 'fixed',
                 top: card.startY,
                 left: card.startX,
                 width: card.startWidth,
                 height: card.startHeight,
-                opacity: 0.9,
                 borderRadius: '1.25rem',
                 overflow: 'hidden',
-                boxShadow: '0 20px 50px rgba(109, 77, 236, 0.35)',
-                border: '2.5px solid rgba(139, 92, 246, 0.45)',
+                boxShadow: '0 10px 30px rgba(109, 77, 236, 0.25)',
+                border: '2px solid rgba(139, 92, 246, 0.4)',
                 zIndex: 99999,
                 pointerEvents: 'none',
-                transformOrigin: 'top left',
+                transformOrigin: 'center center',
+                willChange: 'transform, opacity',
+              }}
+              initial={{
+                opacity: 0.95,
+                x: 0,
+                y: 0,
                 scale: 1,
                 rotate: 0,
               }}
               animate={{
-                top: card.endY - finalHeight / 2,
-                left: card.endX - finalWidth / 2,
-                width: finalWidth,
-                height: finalHeight,
+                x: card.endX - (card.startX + card.startWidth / 2),
+                y: card.endY - (card.startY + card.startHeight / 2),
+                scale: scaleTarget,
+                rotate: -12,
                 opacity: 0.1,
-                borderRadius: '0.15rem',
-                scale: [1, 1.05, 0.22],
-                rotate: -14,
               }}
               exit={{ opacity: 0 }}
               transition={{
-                duration: 0.84,
-                left: { ease: [0.16, 1, 0.3, 1] }, // easeOutExpo
-                top: { ease: [0.7, 0, 0.84, 0] }, // easeIn (creating a premium parabolic arc path)
+                duration: 0.45,
+                x: { ease: [0.16, 1, 0.3, 1] }, // easeOutExpo
+                y: { ease: [0.7, 0, 0.84, 0] }, // easeIn (creating a parabolic curved path)
                 scale: { ease: [0.16, 1, 0.3, 1] },
                 rotate: { ease: [0.16, 1, 0.3, 1] },
-                opacity: { duration: 0.8, ease: 'linear' },
+                opacity: { duration: 0.4, ease: 'linear' },
               }}
               onAnimationComplete={() => {
                 setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
@@ -218,6 +219,11 @@ export default function MainLayout() {
                   target.classList.remove('animate-bounce-short');
                   void target.offsetWidth; // Force reflow
                   target.classList.add('animate-bounce-short');
+                  
+                  // Cleanup class after animation ends so the icon returns to its original style
+                  setTimeout(() => {
+                    target.classList.remove('animate-bounce-short');
+                  }, 450);
                 }
 
                 // Trigger the ripple ring burst animation on the bottom nav icon
@@ -226,10 +232,15 @@ export default function MainLayout() {
                   ripple.classList.remove('animate-ripple-ring');
                   void ripple.offsetWidth; // Force reflow
                   ripple.classList.add('animate-ripple-ring');
+                  
+                  // Cleanup class after animation ends
+                  setTimeout(() => {
+                    ripple.classList.remove('animate-ripple-ring');
+                  }, 550);
                 }
               }}
             >
-              <img src={card.imageUrl} className="w-full h-full object-cover" alt="" />
+              <img src={card.imageUrl} decoding="async" className="w-full h-full object-cover" alt="" />
             </motion.div>
           );
         })}

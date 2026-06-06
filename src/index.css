@@ -612,7 +612,9 @@
 .animate-bounce-short svg {
   fill: #6d4dec !important;
   color: #6d4dec !important;
-  transition: fill 0.2s ease, color 0.2s ease !important;
+}
+#bottom-nav-saved svg {
+  transition: fill 0.3s ease, color 0.3s ease, transform 0.3s ease !important;
 }
 
 @keyframes rippleRing {
