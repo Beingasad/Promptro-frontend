@@ -671,25 +671,30 @@ export default function Admin() {
     }
   };
 
-  const handleDeleteUser = async (uid: string, email: string) => {
-    const confirmMsg = `Are you sure you want to permanently delete user "${email}" from the database?\n\nThis will remove their profile, consent status, saved prompts, and activity logs.\n\nNote: To fully revoke their login access, you must also delete them from the Firebase Authentication console.`;
-    if (!window.confirm(confirmMsg)) return;
-
-    try {
-      setSaving(true);
-      setSavingText('Deleting User...');
-      const response = await axios.delete(`${API_BASE_URL}/api/admin/users/${uid}`);
-      if (response.data.status === 'success') {
-        setMessage(`User ${email} permanently deleted from database.`);
-        await fetchUsers();
+  const handleDeleteUser = (uid: string, email: string) => {
+    triggerConfirm({
+      title: 'Delete User',
+      message: `Are you sure you want to permanently delete user "${email}" from the database?\n\nThis will remove their profile, consent status, saved prompts, and activity logs.\n\nNote: To fully revoke their login access, you must also delete them from the Firebase Authentication console.`,
+      confirmText: 'Delete User',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          setSaving(true);
+          setSavingText('Deleting User...');
+          const response = await axios.delete(`${API_BASE_URL}/api/admin/users/${uid}`);
+          if (response.data.status === 'success') {
+            setMessage(`User ${email} permanently deleted from database.`);
+            await fetchUsers();
+          }
+        } catch (err: any) {
+          const errorMsg = err?.response?.data?.detail || 'Failed to delete user.';
+          setError(errorMsg);
+        } finally {
+          setSaving(false);
+          setSavingText('');
+        }
       }
-    } catch (err: any) {
-      const errorMsg = err?.response?.data?.detail || 'Failed to delete user.';
-      setError(errorMsg);
-    } finally {
-      setSaving(false);
-      setSavingText('');
-    }
+    });
   };
 
   const fetchAdminNotifications = async () => {
