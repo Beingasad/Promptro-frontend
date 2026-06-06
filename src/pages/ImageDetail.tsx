@@ -462,16 +462,16 @@ export default function ImageDetail() {
         </>
       )}
       <section className="pb-4 md:mt-8">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-white/10 shadow-[0_12px_30px_rgba(255,106,61,0.16)]">
-              <Flame className="h-5 w-5 text-[#ff6a3d]" fill="currentColor" />
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
+            <span className="flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full bg-white dark:bg-white/10 shadow-[0_12px_30px_rgba(255,106,61,0.16)]">
+              <Flame className="h-4.5 w-4.5 md:h-5 md:w-5 text-[#ff6a3d]" fill="currentColor" />
             </span>
-            <h2 className="text-[32px] font-bold leading-none text-[#171421] dark:text-white">More Like This</h2>
+            <h2 className="text-lg md:text-2xl lg:text-[32px] font-bold leading-none text-[#171421] dark:text-white truncate">More Like This</h2>
           </div>
           <button 
             onClick={() => navigate(`/explore?category=${encodeURIComponent(prompt.category)}`)}
-            className="rounded-full px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
+            className="rounded-full px-3 py-1.5 md:py-2 text-xs md:text-sm font-bold text-primary hover:bg-primary/10 transition-colors shrink-0 whitespace-nowrap"
           >
             View all
           </button>
