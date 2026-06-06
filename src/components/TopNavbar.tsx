@@ -62,6 +62,7 @@ type DrawerView = 'recent' | 'help' | 'about' | 'legal' | 'privacy' | 'terms' | 
 export default function TopNavbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isHome = location.pathname === '/';
   const { searchQuery, setSearchQuery } = useSearch();
   const { categories: globalCategories } = useCategories();
   const [isFocused, setIsFocused] = useState(false);
@@ -1624,8 +1625,12 @@ export default function TopNavbar() {
 
         <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px] relative">
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
-            <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isFocused ? 'opacity-100' : 'opacity-45'}`}></div>
-            <div className="relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14">
+            <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${
+              isHome ? 'opacity-45 md:hidden' : (isFocused ? 'opacity-100' : 'opacity-45')
+            }`}></div>
+            <div className={`relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14 ${
+              isHome ? 'md:shadow-none md:dark:shadow-none' : ''
+            }`}>
               <div className="flex flex-grow items-center h-full min-w-0">
                 <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
                   <Search className="w-5 h-5 md:w-5.5 md:h-5.5" />
