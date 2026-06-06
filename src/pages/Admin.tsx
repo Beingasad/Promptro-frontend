@@ -112,6 +112,29 @@ const emptyForm: PromptForm = {
   tool: 'Midjourney',
 };
 
+export type AdminUser = {
+  firebase_uid: string;
+  first_name: string;
+  last_name: string | null;
+  gender: string | null;
+  email: string;
+  provider: 'email' | 'google';
+  terms_accepted: boolean;
+  terms_accepted_at: string | null;
+  email_verified: boolean;
+  created_at: string;
+  activity: {
+    saved_count: number;
+    liked_count: number;
+    recent_count: number;
+    updated_at: string | null;
+  };
+  consent: {
+    cookie_consent_status: string;
+    privacy_accepted_at: string | null;
+  };
+};
+
 export type AdminBanner = {
   id: number;
   tag_text: string;
@@ -139,6 +162,8 @@ const emptyBannerForm = {
 
 export default function Admin() {
   const [banners, setBanners] = useState<AdminBanner[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
   const [bannerForm, setBannerForm] = useState(emptyBannerForm);
   const [editingBanner, setEditingBanner] = useState<AdminBanner | null>(null);
   const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
@@ -633,6 +658,40 @@ export default function Admin() {
     }
   };
 
+  const fetchUsers = async () => {
+    setUsersLoading(true);
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/admin/users`);
+      setUsers(response.data);
+    } catch {
+      console.error('Failed to fetch admin users');
+      setError('Failed to fetch registered users. Please check backend connection.');
+    } finally {
+      setUsersLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async (uid: string, email: string) => {
+    const confirmMsg = `Are you sure you want to permanently delete user "${email}" from the database?\n\nThis will remove their profile, consent status, saved prompts, and activity logs.\n\nNote: To fully revoke their login access, you must also delete them from the Firebase Authentication console.`;
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      setSaving(true);
+      setSavingText('Deleting User...');
+      const response = await axios.delete(`${API_BASE_URL}/api/admin/users/${uid}`);
+      if (response.data.status === 'success') {
+        setMessage(`User ${email} permanently deleted from database.`);
+        await fetchUsers();
+      }
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.detail || 'Failed to delete user.';
+      setError(errorMsg);
+    } finally {
+      setSaving(false);
+      setSavingText('');
+    }
+  };
+
   const fetchAdminNotifications = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/notifications-admin`);
@@ -719,6 +778,7 @@ export default function Admin() {
     fetchBanners();
     fetchAdminNotifications();
     fetchAnalytics();
+    fetchUsers();
   }, []);
 
   useEffect(() => {
@@ -1266,6 +1326,155 @@ export default function Admin() {
                       >
                          Get Started
                       </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'Manage Users' && (
+              <div className="flex flex-col gap-8">
+                <div>
+                  <h1 className="text-4xl font-bold tracking-tight text-[#171421] dark:text-white">User Management</h1>
+                  <p className="text-[#756d8d] dark:text-[#afa6c8] mt-1 font-medium">Manage registered users, inspect their platform activities, or permanently delete them from the database.</p>
+                </div>
+
+                {/* Users statistics row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                    <span className="text-[10px] font-bold text-[#756d8d] uppercase tracking-wider">Total Users</span>
+                    <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">{users.length}</p>
+                  </div>
+                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Verified Users</span>
+                    <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">
+                      {users.filter(u => u.email_verified).length}
+                    </p>
+                  </div>
+                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Google Login</span>
+                    <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">
+                      {users.filter(u => u.provider === 'google').length}
+                    </p>
+                  </div>
+                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                    <span className="text-[10px] font-bold text-purple-500 uppercase tracking-wider">OTP Login</span>
+                    <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">
+                      {users.filter(u => u.provider === 'email').length}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-[2rem] border border-[#e9e2f3] dark:border-white/10 bg-white/50 dark:bg-white/5 p-6 backdrop-blur-md overflow-hidden">
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-lg font-black text-[#171421] dark:text-white">Registered Users ({users.length})</span>
+                    <button 
+                      onClick={fetchUsers}
+                      className="px-4 py-2 rounded-full border border-primary/20 text-primary font-bold text-xs hover:bg-primary/5 transition-all"
+                    >
+                      Refresh List
+                    </button>
+                  </div>
+
+                  {usersLoading ? (
+                    <div className="py-20 text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                      <p className="text-sm font-semibold text-[#756d8d] mt-4">Loading registered users...</p>
+                    </div>
+                  ) : users.length === 0 ? (
+                    <div className="py-20 text-center">
+                      <p className="text-sm font-bold text-[#756d8d]">No registered users found in the database.</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="border-b border-[#e9e2f3] dark:border-white/10 text-[11px] font-bold uppercase tracking-wider text-[#756d8d]">
+                            <th className="pb-3 pl-2">User</th>
+                            <th className="pb-3">Provider</th>
+                            <th className="pb-3">Gender</th>
+                            <th className="pb-3">Verified</th>
+                            <th className="pb-3">Registration Date</th>
+                            <th className="pb-3">Activity (Saves / Likes / Views)</th>
+                            <th className="pb-3 pr-2 text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#e9e2f3] dark:divide-white/5">
+                          {users.map(u => (
+                            <tr key={u.firebase_uid} className="text-[13px] text-[#171421] dark:text-white hover:bg-[#f8f7fc]/50 dark:hover:bg-white/5 transition-colors">
+                              <td className="py-4 pl-2">
+                                <div className="flex flex-col">
+                                  <span className="font-bold">{u.first_name} {u.last_name || ''}</span>
+                                  <span className="text-[11px] font-medium text-[#756d8d] select-all">{u.email}</span>
+                                  <span className="text-[9px] font-mono text-[#a59eb8] mt-0.5 select-all">{u.firebase_uid}</span>
+                                </div>
+                              </td>
+                              <td className="py-4">
+                                <span className={cn(
+                                  "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase",
+                                  u.provider === 'google' ? "bg-red-500/10 text-red-600 dark:text-red-400" : "bg-purple-500/10 text-purple-600 dark:text-purple-400"
+                                )}>
+                                  {u.provider}
+                                </span>
+                              </td>
+                              <td className="py-4 font-semibold text-[#5f5774] dark:text-[#afa6c8]">
+                                {u.gender || 'Not specified'}
+                              </td>
+                              <td className="py-4">
+                                {u.email_verified ? (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-500">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Yes
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-500">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> No
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-4 font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+                                {new Date(u.created_at).toLocaleDateString(undefined, {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </td>
+                              <td className="py-4">
+                                <div className="flex items-center gap-1.5 text-[11px] font-bold">
+                                  <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full" title="Saved Prompts">
+                                    💾 {u.activity?.saved_count || 0}
+                                  </span>
+                                  <span className="bg-rose-500/10 text-rose-600 dark:text-rose-400 px-2 py-0.5 rounded-full" title="Liked Prompts">
+                                    ❤️ {u.activity?.liked_count || 0}
+                                  </span>
+                                  <span className="bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full" title="Recent Views">
+                                    👁️ {u.activity?.recent_count || 0}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="py-4 pr-2 text-right">
+                                <button
+                                  onClick={() => handleDeleteUser(u.firebase_uid, u.email)}
+                                  className="px-3 py-1.5 text-xs font-bold text-white bg-rose-500 rounded-full hover:bg-rose-600 transition-all shadow-sm"
+                                  title="Delete User Permanently"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  
+                  <div className="mt-6 border-t border-[#e9e2f3] dark:border-white/10 pt-4 flex flex-col gap-1.5 text-xs text-[#756d8d] dark:text-[#afa6c8]">
+                    <p className="font-bold text-rose-500 dark:text-rose-400">⚠️ Disclaimer & Warning:</p>
+                    <p className="leading-relaxed">
+                      Deleting a user permanently removes all their local data, preferences, consent, saved items, and likes. 
+                      However, this <strong>does not automatically remove their credentials from Firebase Authentication</strong> due to Firebase provider segregation. 
+                      To fully revoke login access for deleted users, please locate the user's UID and delete them in your <strong>Firebase Console</strong>.
+                    </p>
                   </div>
                 </div>
               </div>
