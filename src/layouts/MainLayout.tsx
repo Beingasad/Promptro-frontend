@@ -165,52 +165,58 @@ export default function MainLayout() {
 
       {/* Flying card animations overlay */}
       <AnimatePresence>
-        {flyingCards.map((card) => (
-          <motion.div
-            key={card.id}
-            initial={{
-              position: 'fixed',
-              top: card.startY,
-              left: card.startX,
-              width: card.startWidth,
-              height: card.startHeight,
-              opacity: 0.9,
-              borderRadius: '1.25rem',
-              overflow: 'hidden',
-              boxShadow: '0 20px 50px rgba(109, 77, 236, 0.28)',
-              border: '2px solid rgba(139, 92, 246, 0.35)',
-              zIndex: 99999,
-              pointerEvents: 'none',
-              transformOrigin: 'top left',
-            }}
-            animate={{
-              top: card.endY - 12,
-              left: card.endX - 12,
-              width: 24,
-              height: 24,
-              opacity: 0.15,
-              borderRadius: '50%',
-            }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 0.82,
-              ease: [0.16, 1, 0.3, 1], // easeOutExpo
-            }}
-            onAnimationComplete={() => {
-              setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
-              
-              // Bounce feedback on the target saved button
-              const target = document.getElementById('bottom-nav-saved');
-              if (target) {
-                target.classList.remove('animate-bounce-short');
-                void target.offsetWidth; // Force reflow
-                target.classList.add('animate-bounce-short');
-              }
-            }}
-          >
-            <img src={card.imageUrl} className="w-full h-full object-cover" alt="" />
-          </motion.div>
-        ))}
+        {flyingCards.map((card) => {
+          const aspectRatio = card.startHeight / card.startWidth;
+          const finalWidth = 24;
+          const finalHeight = 24 * aspectRatio;
+
+          return (
+            <motion.div
+              key={card.id}
+              initial={{
+                position: 'fixed',
+                top: card.startY,
+                left: card.startX,
+                width: card.startWidth,
+                height: card.startHeight,
+                opacity: 0.9,
+                borderRadius: '1.25rem',
+                overflow: 'hidden',
+                boxShadow: '0 20px 50px rgba(109, 77, 236, 0.28)',
+                border: '2px solid rgba(139, 92, 246, 0.35)',
+                zIndex: 99999,
+                pointerEvents: 'none',
+                transformOrigin: 'top left',
+              }}
+              animate={{
+                top: card.endY - finalHeight / 2,
+                left: card.endX - finalWidth / 2,
+                width: finalWidth,
+                height: finalHeight,
+                opacity: 0.15,
+                borderRadius: '0.25rem',
+              }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 0.82,
+                ease: [0.16, 1, 0.3, 1], // easeOutExpo
+              }}
+              onAnimationComplete={() => {
+                setFlyingCards((prev) => prev.filter((c) => c.id !== card.id));
+                
+                // Bounce feedback on the target saved button
+                const target = document.getElementById('bottom-nav-saved');
+                if (target) {
+                  target.classList.remove('animate-bounce-short');
+                  void target.offsetWidth; // Force reflow
+                  target.classList.add('animate-bounce-short');
+                }
+              }}
+            >
+              <img src={card.imageUrl} className="w-full h-full object-cover" alt="" />
+            </motion.div>
+          );
+        })}
       </AnimatePresence>
     </div>
   );
