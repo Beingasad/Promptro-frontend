@@ -41,7 +41,7 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { onAuthStateChanged, signOut, type User, sendEmailVerification } from 'firebase/auth';
+import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import ImageCard, { Prompt } from './ImageCard';
 import SEOMeta from './common/SEOMeta';
 import { auth } from '../lib/firebase';
@@ -99,7 +99,7 @@ export default function TopNavbar() {
       try {
         const { view } = JSON.parse(pending);
         return view as DrawerView;
-      } catch {}
+      } catch { }
     }
     return null;
   });
@@ -113,7 +113,7 @@ export default function TopNavbar() {
         const { view } = JSON.parse(pending);
         setMenuOpen(true);
         if (view) setExpandedView(view as DrawerView);
-      } catch {}
+      } catch { }
     }
   }, [location.pathname]);
 
@@ -134,6 +134,7 @@ export default function TopNavbar() {
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [backendEmailVerified, setBackendEmailVerified] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [localAvatar, setLocalAvatar] = useState('');
   const [promptCount, setPromptCount] = useState<number>(0);
@@ -321,7 +322,7 @@ export default function TopNavbar() {
       ctx.save();
       ctx.translate(lx, ly);
       ctx.rotate(Math.PI * (angle + 0.5));
-      
+
       ctx.beginPath();
       ctx.ellipse(0, 0, 12 * scale, 6 * scale, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -853,9 +854,22 @@ export default function TopNavbar() {
         setLocalAvatar(localStorage.getItem(`promptro:avatar:${user.uid}`) || '');
         setFeedbackEmail(user.email || '');
         syncUserActivity(user).catch(() => undefined);
+        
+        // Check database for true verification status
+        axios.get(`${API_BASE_URL}/api/auth/profile/${user.uid}`)
+          .then((res) => {
+            if (res.data) {
+              setBackendEmailVerified(res.data.email_verified);
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to load email verification status from DB:", err);
+            setBackendEmailVerified(user.emailVerified);
+          });
       } else {
         setLocalAvatar('');
         setFeedbackEmail('');
+        setBackendEmailVerified(false);
       }
     });
   }, []);
@@ -1181,7 +1195,7 @@ export default function TopNavbar() {
           </p>
 
           {/* Main Content */}
-          <div 
+          <div
             className="prose-custom text-xs font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
@@ -1304,7 +1318,7 @@ export default function TopNavbar() {
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Contact Email</p>
             <div className="flex items-center gap-2 mt-1">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
               </span>
               <a href="mailto:support.promptro@gmail.com" className="text-xs font-bold text-primary hover:underline font-mono">support.promptro@gmail.com</a>
             </div>
@@ -1359,8 +1373,8 @@ export default function TopNavbar() {
               className="h-24 w-full resize-none rounded-2xl bg-white/72 dark:bg-white/10 p-3 text-sm font-medium text-[#171421] dark:text-white outline-none placeholder:text-[#958baa] disabled:opacity-60"
               placeholder={
                 feedbackSubject === 'Bug Report' ? 'What went wrong? Which page or feature?' :
-                feedbackSubject === 'Feature Request' ? 'What feature would make Promptro better for you?' :
-                'Share any thoughts, praise or suggestions...'
+                  feedbackSubject === 'Feature Request' ? 'What feature would make Promptro better for you?' :
+                    'Share any thoughts, praise or suggestions...'
               }
               value={feedbackText}
               onChange={(e) => setFeedbackText(e.target.value)}
@@ -1490,13 +1504,13 @@ export default function TopNavbar() {
         <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-[#ff6a3d]/5 border border-primary/12 p-4 glass-shine hover-glass-glow">
           <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Our Story</p>
           <p className="text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
-            It all started while scrolling through Instagram. I would see a breathtaking AI-generated image, 
-            but getting the prompt was a constant struggle because you had to follow the creator, leave a comment, 
+            It all started while scrolling through Instagram. I would see a breathtaking AI-generated image,
+            but getting the prompt was a constant struggle because you had to follow the creator, leave a comment,
             and wait for an automated link that either never arrived or was completely broken.
           </p>
           <p className="mt-2 text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
-            Frustrated by this endless gatekeeping, I built Promptro: a beautifully curated, completely open 
-            space where anyone can instantly copy high-quality prompts for ChatGPT, Gemini, and other popular 
+            Frustrated by this endless gatekeeping, I built Promptro: a beautifully curated, completely open
+            space where anyone can instantly copy high-quality prompts for ChatGPT, Gemini, and other popular
             AI tools, with no barriers or paywalls. It is just pure creativity, free for everyone.
           </p>
         </div>
@@ -1648,12 +1662,10 @@ export default function TopNavbar() {
 
         <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px] relative">
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
-            <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${
-              isHome ? 'opacity-45 md:hidden' : (isFocused ? 'opacity-100' : 'opacity-45')
-            }`}></div>
-            <div className={`relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14 ${
-              isHome ? 'md:shadow-none md:dark:shadow-none' : ''
-            }`}>
+            <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isHome ? 'opacity-45 md:hidden' : (isFocused ? 'opacity-100' : 'opacity-45')
+              }`}></div>
+            <div className={`relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14 ${isHome ? 'md:shadow-none md:dark:shadow-none' : ''
+              }`}>
               <div className="flex flex-grow items-center h-full min-w-0">
                 <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
                   <Search className="w-5 h-5 md:w-5.5 md:h-5.5" />
@@ -1676,8 +1688,8 @@ export default function TopNavbar() {
                   onClick={() => setCategoryDropdownOpen(prev => !prev)}
                   title="Select Category"
                   className={`flex items-center justify-center transition-all duration-300 cursor-pointer p-1.5 hover:scale-105 active:scale-95 ${categoryDropdownOpen || currentCategory !== 'All'
-                      ? 'text-primary'
-                      : 'text-[#81789e] hover:text-[#171421] dark:text-[#afa6c8]/60 dark:hover:text-white'
+                    ? 'text-primary'
+                    : 'text-[#81789e] hover:text-[#171421] dark:text-[#afa6c8]/60 dark:hover:text-white'
                     }`}
                 >
                   <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5" />
@@ -1703,8 +1715,8 @@ export default function TopNavbar() {
                       type="button"
                       onClick={() => handleSelectCategory(category)}
                       className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${currentCategory === category
-                          ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
-                          : 'text-[#4e4566] hover:bg-black/5 dark:text-[#c6bddb] dark:hover:bg-white/5'
+                        ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
+                        : 'text-[#4e4566] hover:bg-black/5 dark:text-[#c6bddb] dark:hover:bg-white/5'
                         }`}
                     >
                       {category}
@@ -1867,7 +1879,7 @@ export default function TopNavbar() {
                           <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
                             <p className="truncate text-[11px] font-medium text-[#80779a]">{displayEmail}</p>
                             {isLoggedIn && (
-                              currentUser?.emailVerified ? (
+                              backendEmailVerified ? (
                                 <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
                                   ✓ Verified
                                 </span>
@@ -1878,30 +1890,10 @@ export default function TopNavbar() {
                               )
                             )}
                           </div>
-                          {isLoggedIn && !currentUser?.emailVerified && (
-                            <button
-                              type="button"
-                              onClick={async (e) => {
-                                e.stopPropagation();
-                                if (!currentUser) return;
-                                try {
-                                  await sendEmailVerification(currentUser);
-                                  alert("Verification email sent! Please check your inbox.");
-                                } catch (err: any) {
-                                  console.error("Failed to send verification email:", err);
-                                  alert(err.message || "Failed to send verification email. Please try again later.");
-                                }
-                              }}
-                              className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-[#8b5cf6] hover:text-[#d94bcb] transition-colors bg-white/50 dark:bg-white/5 px-2.5 py-1 rounded-full border border-white/80 dark:border-white/10 shadow-sm"
-                            >
-                              <Mail className="h-3 w-3" />
-                              Resend Verification Email
-                            </button>
-                          )}
                         </div>
                       </div>
                     </div>
-
+ 
                     {/* Scrollable items container */}
                     <div className="flex-1 overflow-y-auto hide-scrollbar min-h-0 flex flex-col gap-2 pb-1">
                       {mainDrawerItems.map((item) => (
@@ -1912,23 +1904,20 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${
-                            item.action === 'delete-account'
+                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
                               ? 'bg-[#fff4f8]/72 shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
                               : 'bg-white/62 dark:bg-white/5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
-                          }`}
+                            }`}
                         >
-                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${
-                            item.action === 'delete-account'
+                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${item.action === 'delete-account'
                               ? 'bg-[#ffe5ef] text-[#f23672] dark:bg-[#f23672]/16 dark:text-[#ff8fb4]'
                               : 'bg-primary/10 text-primary'
-                          }`}>
+                            }`}>
                             <item.icon className="h-4 w-4" />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className={`block truncate text-[12px] font-medium leading-tight ${
-                              item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#242033] dark:text-white'
-                            }`}>{item.title}</span>
+                            <span className={`block truncate text-[12px] font-medium leading-tight ${item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#242033] dark:text-white'
+                              }`}>{item.title}</span>
                             <span className="mt-0.5 block line-clamp-2 text-[10px] font-medium leading-snug text-[#80779a]">
                               {item.action === 'appearance' ? `${item.description} (${appearanceMode})` : item.description}
                             </span>
@@ -1939,7 +1928,7 @@ export default function TopNavbar() {
                         </button>
                       ))}
                     </div>
-
+ 
                     <div className="shrink-0 pt-3 text-center">
                       <div className="flex items-center justify-center gap-1 text-[10px] font-medium text-[#8a819d]">
                         Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
@@ -1953,7 +1942,7 @@ export default function TopNavbar() {
           </>
         )}
       </AnimatePresence>
-
+ 
       <AnimatePresence>
         {notificationsOpen && (
           <>
@@ -2017,7 +2006,7 @@ export default function TopNavbar() {
           </>
         )}
       </AnimatePresence>
-
+ 
       <AnimatePresence>
         {profileOpen && (
           <>
@@ -2069,7 +2058,7 @@ export default function TopNavbar() {
                       <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
                         <p className="truncate text-xs font-medium text-[#7a728d]">{displayEmail}</p>
                         {isLoggedIn && (
-                          currentUser?.emailVerified ? (
+                          backendEmailVerified ? (
                             <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
                               ✓ Verified
                             </span>
@@ -2080,14 +2069,17 @@ export default function TopNavbar() {
                           )
                         )}
                       </div>
-                      {isLoggedIn && !currentUser?.emailVerified && (
+                      {isLoggedIn && !backendEmailVerified && (
                         <button
                           type="button"
                           onClick={async (e) => {
                             e.stopPropagation();
                             if (!currentUser) return;
                             try {
-                              await sendEmailVerification(currentUser);
+                              await axios.post(`${API_BASE_URL}/api/auth/send-verification`, {
+                                email: currentUser.email,
+                                firebase_uid: currentUser.uid,
+                              });
                               alert("Verification email sent! Please check your inbox.");
                             } catch (err: any) {
                               console.error("Failed to send verification email:", err);
@@ -2183,8 +2175,8 @@ export default function TopNavbar() {
                             }
                           }}
                           className={`flex items-center gap-4 p-3 rounded-2xl border transition-all cursor-pointer ${selectedPromptsForShowcase.includes(prompt.id)
-                              ? "border-primary bg-primary/5"
-                              : "border-[#e9e2f3] dark:border-white/10"
+                            ? "border-primary bg-primary/5"
+                            : "border-[#e9e2f3] dark:border-white/10"
                             }`}
                         >
                           <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
@@ -2195,8 +2187,8 @@ export default function TopNavbar() {
                             <p className="text-[10px] text-[#756d8d] mt-0.5 truncate">AI generated creative prompt</p>
                           </div>
                           <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${selectedPromptsForShowcase.includes(prompt.id)
-                              ? "bg-primary border-primary text-white"
-                              : "border-[#e9e2f3] dark:border-white/10"
+                            ? "bg-primary border-primary text-white"
+                            : "border-[#e9e2f3] dark:border-white/10"
                             }`}>
                             {selectedPromptsForShowcase.includes(prompt.id) && <Check className="w-3 h-3" />}
                           </div>
@@ -2224,8 +2216,8 @@ export default function TopNavbar() {
                           }, 2000);
                         }}
                         className={`flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${selectedPromptsForShowcase.length >= 1
-                            ? "bg-primary text-white shadow-primary/20 hover:scale-105"
-                            : "bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] cursor-not-allowed"
+                          ? "bg-primary text-white shadow-primary/20 hover:scale-105"
+                          : "bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] cursor-not-allowed"
                           }`}
                       >
                         {isGeneratingShowcase ? <Sparkles className="w-5 h-5 animate-spin" /> : <><Share2 className="w-4 h-4" /> Create Poster</>}
@@ -2263,13 +2255,13 @@ export default function TopNavbar() {
                       </div>
 
                       <div className={`w-[200px] h-[356px] md:w-[260px] md:h-[462px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden flex flex-col relative shrink-0 border transition-all duration-300 ${appearanceMode === 'Light'
-                          ? 'bg-gradient-to-b from-[#F1EEF6] via-[#EBE9F5] to-[#F5F3F9] border-primary/10 shadow-[0_24px_50px_-12px_rgba(99,34,242,0.16)]'
-                          : 'bg-gradient-to-b from-[#05050C] via-[#030308] to-[#0B0914] border-primary/20 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.7)]'
+                        ? 'bg-gradient-to-b from-[#F1EEF6] via-[#EBE9F5] to-[#F5F3F9] border-primary/10 shadow-[0_24px_50px_-12px_rgba(99,34,242,0.16)]'
+                        : 'bg-gradient-to-b from-[#05050C] via-[#030308] to-[#0B0914] border-primary/20 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.7)]'
                         }`}>
                         {/* Smooth lavender organic waves */}
                         <div className="absolute -top-8 -left-8 w-24 h-24 rounded-full bg-[#E5DEFD] dark:bg-[#151224] blur-md pointer-events-none" />
                         <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-[#E5DEFD] dark:bg-[#151224] blur-md pointer-events-none" />
-                        
+
                         {/* Glowing center orb */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
 

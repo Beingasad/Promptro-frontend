@@ -28,7 +28,7 @@ import SEOMeta from '../components/common/SEOMeta';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
-type AuthMode = 'login' | 'signup';
+type AuthMode = 'login' | 'signup' | 'forgot-password';
 type SignupStep = 'info' | 'otp' | 'terms';
 
 const GENDER_OPTIONS = ['Male', 'Female', 'Other', 'Prefer not to say'];
@@ -108,7 +108,7 @@ export default function Auth() {
           last_name: result.user.displayName?.split(' ').slice(1).join(' ') || null,
           email: result.user.email,
           provider: 'google',
-          terms_accepted: true,
+          terms_accepted: false,
         });
       } catch { /* profile may already exist */ }
       navigate('/', { replace: true });
@@ -173,6 +173,26 @@ export default function Auth() {
       navigate('/', { replace: true });
     } catch (err) {
       setError(getFirebaseError(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- Forgot Password ---
+  const handleForgotPassword = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setError('');
+    setNotice('');
+    setLoading(true);
+    try {
+      const normalizedEmail = email.trim().toLowerCase();
+      const response = await axios.post(`${API_BASE_URL}/api/auth/forgot-password`, {
+        email: normalizedEmail,
+      });
+      setNotice(response.data?.message || 'A password reset link has been sent to your email.');
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || 'Failed to send password reset link. Please try again.';
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -381,7 +401,7 @@ export default function Auth() {
   return (
     <div className="mx-auto flex w-full max-w-6xl items-center justify-center">
       <SEOMeta
-        title={mode === 'login' ? 'Login | Promptro' : 'Sign Up | Promptro'}
+        title={mode === 'login' ? 'Login | Promptro' : mode === 'forgot-password' ? 'Forgot Password | Promptro' : 'Sign Up | Promptro'}
         description="Login or sign up to Promptro to save prompts and access your boards."
         robots="noindex, nofollow"
       />
@@ -411,12 +431,16 @@ export default function Auth() {
               <h1 className="mt-3 text-4xl font-bold leading-tight text-white">
                 {mode === 'signup'
                   ? 'Create your account and start creating.'
-                  : 'Save ideas, sync boards, and keep creating.'}
+                  : mode === 'forgot-password'
+                    ? 'Get back to your creative workspace.'
+                    : 'Save ideas, sync boards, and keep creating.'}
               </h1>
               <p className="mt-4 text-sm font-medium leading-6 text-white/68">
                 {mode === 'signup'
                   ? 'Sign up with your email to unlock all Promptro features.'
-                  : 'Continue with Google or use your email to keep your Promptro profile connected across devices.'}
+                  : mode === 'forgot-password'
+                    ? 'Enter your email address and we will send you a secure link to reset your password.'
+                    : 'Continue with Google or use your email to keep your Promptro profile connected across devices.'}
               </p>
             </div>
           </div>
@@ -439,19 +463,21 @@ export default function Auth() {
           </div>
 
           <p className="text-xs font-medium uppercase text-primary">
-            {mode === 'login' ? 'Welcome back' : 'Create profile'}
+            {mode === 'login' ? 'Welcome back' : mode === 'forgot-password' ? 'Password Recovery' : 'Create profile'}
           </p>
           <h2 className="mt-1.5 text-2xl font-bold text-[#171421] sm:text-3xl">
-            {mode === 'login' ? 'Login to Promptro' : 'Sign up on Promptro'}
+            {mode === 'login' ? 'Login to Promptro' : mode === 'forgot-password' ? 'Forgot Password?' : 'Sign up on Promptro'}
           </h2>
           <p className="mt-1.5 text-sm font-medium leading-5 text-[#736b88]">
             {mode === 'login'
               ? 'Choose Google or email to open your account.'
-              : signupStep === 'info'
-                ? 'Fill in your details to get started.'
-                : signupStep === 'otp'
-                  ? 'Enter the 6-digit code sent to your email.'
-                  : 'Review and accept our policies.'}
+              : mode === 'forgot-password'
+                ? 'Enter your email to receive a secure password reset link.'
+                : signupStep === 'info'
+                  ? 'Fill in your details to get started.'
+                  : signupStep === 'otp'
+                    ? 'Enter the 6-digit code sent to your email.'
+                    : 'Review and accept our policies.'}
           </p>
 
           {!isFirebaseConfigured && (
@@ -551,6 +577,20 @@ export default function Auth() {
                 </span>
               </label>
 
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode('forgot-password');
+                    setError('');
+                    setNotice('');
+                  }}
+                  className="text-xs font-bold text-primary hover:underline"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+
               {error && (
                 <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
                   {error}
@@ -569,6 +609,59 @@ export default function Auth() {
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
                 Login with Email
+              </button>
+            </form>
+          )}
+
+          {/* ====== FORGOT PASSWORD FORM ====== */}
+          {mode === 'forgot-password' && (
+            <form onSubmit={handleForgotPassword} className="flex flex-col gap-3">
+              <label className="block">
+                <span className="mb-1.5 block text-sm font-bold text-[#242033]">Email</span>
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                  <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="auth-input h-full min-w-0 flex-1 bg-transparent text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa]"
+                    required
+                  />
+                </span>
+              </label>
+
+              {error && (
+                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                  {error}
+                </div>
+              )}
+              {notice && (
+                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium leading-6 text-emerald-800">
+                  {notice}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-0.5 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+                Send Reset Link
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('login');
+                  setError('');
+                  setNotice('');
+                }}
+                className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Login
               </button>
             </form>
           )}

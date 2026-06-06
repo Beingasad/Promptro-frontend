@@ -14,6 +14,8 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import Profile from './pages/Profile';
+import VerifyEmail from './pages/VerifyEmail';
 import { SearchProvider } from './context/SearchContext';
 import { CategoryProvider } from './context/CategoryContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
@@ -48,6 +50,8 @@ function App() {
                 <Route path="categories" element={<Categories />} />
                 <Route path="prompt/:id" element={<ImageDetail />} />
                 <Route path="auth" element={<Auth />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="verify-email" element={<VerifyEmail />} />
                 {/* Trust & SEO Pages */}
                 <Route path="about" element={<Home />} />
                 <Route path="contact" element={<Home />} />

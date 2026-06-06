@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, ShieldCheck, X, Loader2, CheckCircle2 } from 'lucide-react';
-import { onAuthStateChanged, sendEmailVerification, type User } from 'firebase/auth';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 export default function EmailVerificationPopup() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,11 +23,11 @@ export default function EmailVerificationPopup() {
         return;
       }
 
-      // Only show for email/password users who haven't verified
+      // Only show for email/password users
       const usesPasswordLogin = currentUser.providerData.some(
         (p) => p.providerId === 'password'
       );
-      if (!usesPasswordLogin || currentUser.emailVerified) {
+      if (!usesPasswordLogin) {
         setIsOpen(false);
         return;
       }
@@ -42,7 +44,22 @@ export default function EmailVerificationPopup() {
         }
       }
 
-      setIsOpen(true);
+      // Check backend profile for email_verified status
+      axios.get(`${API_BASE_URL}/api/auth/profile/${currentUser.uid}`)
+        .then((res) => {
+          if (res.data && res.data.email_verified) {
+            setIsOpen(false);
+          } else {
+            setIsOpen(true);
+          }
+        })
+        .catch(() => {
+          if (currentUser.emailVerified) {
+            setIsOpen(false);
+          } else {
+            setIsOpen(true);
+          }
+        });
     });
 
     return () => unsubscribe();
@@ -52,7 +69,10 @@ export default function EmailVerificationPopup() {
     if (!user) return;
     setSending(true);
     try {
-      await sendEmailVerification(user);
+      await axios.post(`${API_BASE_URL}/api/auth/send-verification`, {
+        email: user.email,
+        firebase_uid: user.uid
+      });
       setSent(true);
     } catch (err) {
       console.error('Failed to send verification email:', err);
@@ -100,8 +120,6 @@ export default function EmailVerificationPopup() {
               <X className="h-4 w-4" />
             </button>
 
-            {/* Gradient accent bar */}
-            <div className="h-1.5 w-full bg-gradient-to-r from-[#8b5cf6] via-[#d94bcb] to-[#ff6a3d]" />
 
             <div className="p-6 sm:p-8">
               {/* Icon */}

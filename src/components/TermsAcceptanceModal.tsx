@@ -23,6 +23,16 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
+
+        // Only show Terms modal for Google users
+        const isGoogleUser = currentUser.providerData.some(
+          (p) => p.providerId === 'google.com'
+        );
+        if (!isGoogleUser) {
+          setIsOpen(false);
+          return;
+        }
+
         try {
           // Check backend consent status
           const response = await axios.get(`${API_BASE_URL}/api/consent/${currentUser.uid}`);
@@ -33,7 +43,6 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
           }
         } catch (error) {
           console.error('Failed to check user terms acceptance:', error);
-          // Fallback to showing modal to be safe if checking fails, or keep hidden?
           // Since it's mandatory, let's keep it closed unless we confirm they are false, to prevent disrupting legitimate sessions.
         }
       } else {
@@ -108,12 +117,12 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
               
               {/* Row 2: Heading below */}
               <h3 className="text-base sm:text-lg font-black tracking-tight text-[#171421] dark:text-white leading-tight">
-                Terms of Service Updates
+                Terms & Conditions
               </h3>
             </div>
 
             <p className="text-xs font-semibold leading-relaxed text-[#5f5774] dark:text-[#afa6c8] mb-4">
-              To continue using Promptro, please review and accept our updated Terms of Service and Privacy Policy.
+              To continue using Promptro, please review and accept our Terms & Conditions and Privacy Policy.
             </p>
 
             {/* Scrollable Summary Cards */}
