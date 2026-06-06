@@ -9,6 +9,7 @@ import SearchPill from '../components/SearchPill';
 import PageBackButton from '../components/PageBackButton';
 import CookieConsent from '../components/CookieConsent';
 import TermsAcceptanceModal from '../components/TermsAcceptanceModal';
+import EmailVerificationPopup from '../components/EmailVerificationPopup';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface FlyingCard {
@@ -166,6 +167,7 @@ export default function MainLayout() {
 
       <CookieConsent />
       {!isAuth && <TermsAcceptanceModal />}
+      {!isAuth && <EmailVerificationPopup />}
 
       {/* Flying card animations overlay */}
       <AnimatePresence>

@@ -41,7 +41,7 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
+import { onAuthStateChanged, signOut, type User, sendEmailVerification } from 'firebase/auth';
 import ImageCard, { Prompt } from './ImageCard';
 import SEOMeta from './common/SEOMeta';
 import { auth } from '../lib/firebase';
@@ -1860,11 +1860,44 @@ export default function TopNavbar() {
                     className="flex min-h-0 flex-1 flex-col"
                   >
                     <div className="mb-3 shrink-0 rounded-[1.15rem] bg-white/62 p-3 shadow-[0_14px_34px_rgba(139,92,246,0.1)] backdrop-blur-2xl glass-shine hover-glass-glow">
-                      <div className="flex items-start gap-2">
-                        <div className="min-w-0">
+                      <div className="flex items-start gap-2 text-left">
+                        <div className="min-w-0 w-full">
                           <p className="text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
                           <p className="mt-0.5 truncate text-[15px] font-bold leading-tight text-[#171421]">{displayName}</p>
-                          <p className="mt-0.5 truncate text-[11px] font-medium text-[#80779a]">{displayEmail}</p>
+                          <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
+                            <p className="truncate text-[11px] font-medium text-[#80779a]">{displayEmail}</p>
+                            {isLoggedIn && (
+                              currentUser?.emailVerified ? (
+                                <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
+                                  ✓ Verified
+                                </span>
+                              ) : (
+                                <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-600 dark:text-amber-400">
+                                  Unverified
+                                </span>
+                              )
+                            )}
+                          </div>
+                          {isLoggedIn && !currentUser?.emailVerified && (
+                            <button
+                              type="button"
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                if (!currentUser) return;
+                                try {
+                                  await sendEmailVerification(currentUser);
+                                  alert("Verification email sent! Please check your inbox.");
+                                } catch (err: any) {
+                                  console.error("Failed to send verification email:", err);
+                                  alert(err.message || "Failed to send verification email. Please try again later.");
+                                }
+                              }}
+                              className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-[#8b5cf6] hover:text-[#d94bcb] transition-colors bg-white/50 dark:bg-white/5 px-2.5 py-1 rounded-full border border-white/80 dark:border-white/10 shadow-sm"
+                            >
+                              <Mail className="h-3 w-3" />
+                              Resend Verification Email
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -2031,9 +2064,42 @@ export default function TopNavbar() {
                         </span>
                       )}
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1 text-left">
                       <p className="truncate text-sm font-bold text-[#171421]">{displayName}</p>
-                      <p className="truncate text-xs font-medium text-[#7a728d]">{displayEmail}</p>
+                      <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
+                        <p className="truncate text-xs font-medium text-[#7a728d]">{displayEmail}</p>
+                        {isLoggedIn && (
+                          currentUser?.emailVerified ? (
+                            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
+                              ✓ Verified
+                            </span>
+                          ) : (
+                            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-600 dark:text-amber-400">
+                              Unverified
+                            </span>
+                          )
+                        )}
+                      </div>
+                      {isLoggedIn && !currentUser?.emailVerified && (
+                        <button
+                          type="button"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            if (!currentUser) return;
+                            try {
+                              await sendEmailVerification(currentUser);
+                              alert("Verification email sent! Please check your inbox.");
+                            } catch (err: any) {
+                              console.error("Failed to send verification email:", err);
+                              alert(err.message || "Failed to send verification email. Please try again later.");
+                            }
+                          }}
+                          className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-[#8b5cf6] hover:text-[#d94bcb] transition-colors bg-white/50 dark:bg-white/5 px-2.5 py-1 rounded-full border border-white/80 dark:border-white/10 shadow-sm"
+                        >
+                          <Mail className="h-3 w-3" />
+                          Resend Verification Email
+                        </button>
+                      )}
                     </div>
                   </div>
                   <label className="mb-3 flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 px-3 text-sm font-bold text-primary transition-colors hover:bg-white">
