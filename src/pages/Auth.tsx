@@ -126,7 +126,21 @@ export default function Auth() {
     setNotice('');
     setLoading(true);
     try {
-      const normalizedEmail = email.trim();
+      const normalizedEmail = email.trim().toLowerCase();
+
+      // Check if email has a google provider in our DB
+      try {
+        const checkRes = await axios.get(`${API_BASE_URL}/api/auth/check-email?email=${encodeURIComponent(normalizedEmail)}`);
+        if (checkRes.data && checkRes.data.exists && checkRes.data.provider === 'google') {
+          setError('This email is registered via Google. Please log in using the Google button.');
+          setLoading(false);
+          return;
+        }
+      } catch (checkErr) {
+        console.error('Error checking email provider:', checkErr);
+        // Fallback: let Firebase handle it if check fails
+      }
+
       await signInWithEmailAndPassword(auth, normalizedEmail, password);
       navigate('/', { replace: true });
     } catch (err) {
