@@ -169,6 +169,9 @@ export default function MainLayout() {
           const aspectRatio = card.startHeight / card.startWidth;
           const finalWidth = 24;
           const finalHeight = 24 * aspectRatio;
+          const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+          const initialRadius = isMobile ? '1.35rem' : '1.75rem';
+          const finalRadius = isMobile ? '0.15rem' : '0.2rem';
 
           return (
             <motion.div
@@ -180,7 +183,7 @@ export default function MainLayout() {
                 width: card.startWidth,
                 height: card.startHeight,
                 opacity: 0.9,
-                borderRadius: '1.25rem',
+                borderRadius: initialRadius,
                 overflow: 'hidden',
                 boxShadow: '0 20px 50px rgba(109, 77, 236, 0.28)',
                 border: '2px solid rgba(139, 92, 246, 0.35)',
@@ -193,8 +196,8 @@ export default function MainLayout() {
                 left: card.endX - finalWidth / 2,
                 width: finalWidth,
                 height: finalHeight,
-                opacity: 0.15,
-                borderRadius: '0.25rem',
+                opacity: 0,
+                borderRadius: finalRadius,
               }}
               exit={{ opacity: 0 }}
               transition={{
