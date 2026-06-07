@@ -64,12 +64,12 @@ export default function GlobalAlert() {
     };
   }, []);
 
-  // Auto close success toasts after 3 seconds
+  // Auto close success toasts after 2 seconds
   useEffect(() => {
     if (alert.isOpen && alert.type === 'success') {
       const timer = setTimeout(() => {
         closeAlert();
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [alert.isOpen, alert.type]);
