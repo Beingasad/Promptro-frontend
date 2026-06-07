@@ -139,7 +139,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 12, opacity: 0, scale: 0.95 }}
               transition={{ delay: 0.2, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute z-[210] w-[290px] max-w-[calc(100vw-32px)] bg-[#130f1e]/95 border border-white/10 backdrop-blur-xl rounded-[1.25rem] p-4 shadow-[0_22px_48px_rgba(0,0,0,0.6)] text-left"
+              className="absolute z-[210] w-[290px] max-w-[calc(100vw-32px)] bg-white/95 dark:bg-[#130f1e]/95 border border-[#e4e2ec] dark:border-white/10 backdrop-blur-xl rounded-[1.25rem] p-4 shadow-[0_22px_48px_rgba(72,56,118,0.14)] dark:shadow-[0_22px_48px_rgba(0,0,0,0.6)] text-left"
               style={{
                 left: `${cx}px`,
                 bottom: `${window.innerHeight - rect.top + 16}px`,
@@ -148,8 +148,8 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
             >
               {/* Pointing down arrow */}
               <div 
-                className="absolute bottom-[-7px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[7px] border-t-[#130f1e]/95" 
-                style={{ filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.5))' }}
+                className="absolute bottom-[-7px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[7px] border-t-white dark:border-t-[#130f1e]/95" 
+                style={{ filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.15))' }}
               />
 
               <div className="flex gap-2.5 items-start">
@@ -157,23 +157,23 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
                   <Layers className="h-4.5 w-4.5 text-white" />
                 </div>
                 <div className="min-w-0">
-                  <h4 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                  <h4 className="text-xs font-black text-primary dark:text-[#ff6a3d] uppercase tracking-wider flex items-center gap-1.5">
                     New Feature <Sparkles className="h-3 w-3 text-[#ff6a3d] animate-pulse" />
                   </h4>
-                  <p className="text-sm font-black text-white mt-0.5 leading-snug">
+                  <p className="text-sm font-black text-[#171421] dark:text-white mt-0.5 leading-snug">
                     Introduce Board Collections
                   </p>
-                  <p className="text-[12px] font-semibold text-[#a8a1c0] mt-1.5 leading-relaxed">
+                  <p className="text-[12px] font-semibold text-[#5c5470] dark:text-[#a8a1c0] mt-1.5 leading-relaxed">
                     Organize your favourite prompts into custom boards and share them with the world!
                   </p>
                 </div>
               </div>
 
               {/* Tooltip Actions */}
-              <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#e4e2ec]/60 dark:border-white/5">
                 <button
                   onClick={handleCompleteTour}
-                  className="text-[#88819e] hover:text-white text-[11px] font-bold px-2 py-1 transition-colors"
+                  className="text-[#88819e] hover:text-[#171421] dark:hover:text-white text-[11px] font-bold px-2 py-1 transition-colors"
                 >
                   Skip
                 </button>
@@ -199,7 +199,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 15 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-sm bg-[#0e0a16]/95 border border-white/10 backdrop-blur-2xl rounded-[2.25rem] p-6 shadow-[0_24px_60px_rgba(109,77,236,0.18)] overflow-hidden text-center"
+              className="relative w-full max-w-sm bg-white/95 dark:bg-[#0e0a16]/95 border border-[#e4e2ec] dark:border-white/10 backdrop-blur-2xl rounded-[2.25rem] p-6 shadow-[0_24px_60px_rgba(72,56,118,0.18)] dark:shadow-[0_24px_60px_rgba(109,77,236,0.18)] overflow-hidden text-center"
             >
               {/* Premium Background Auras */}
               <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-primary/20 blur-3xl pointer-events-none" />
@@ -208,7 +208,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
               {/* Close Button */}
               <button
                 onClick={handleCompleteTour}
-                className="absolute top-4 right-4 text-[#8a819d] hover:text-white bg-white/5 hover:bg-white/10 rounded-full p-1.5 transition-colors"
+                className="absolute top-4 right-4 text-[#8a819d] hover:text-[#171421] dark:hover:text-white bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-full p-1.5 transition-colors"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
@@ -219,14 +219,14 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
                 <Layers className="h-7 w-7 text-white" />
               </div>
 
-              <h3 className="text-xl font-black text-white tracking-tight">
+              <h3 className="text-xl font-black text-[#171421] dark:text-white tracking-tight">
                 How{' '}
                 <span className="bg-gradient-to-r from-primary via-[#dd4bd2] to-[#ff6a3d] bg-clip-text text-transparent">
                   Collections
                 </span>{' '}
                 Works
               </h3>
-              <p className="text-[12px] font-semibold text-[#8a819d] mt-1.5 max-w-xs mx-auto">
+              <p className="text-[12px] font-semibold text-[#5c5470] dark:text-[#8a819d] mt-1.5 max-w-xs mx-auto">
                 Organize, save and share prompt boards like a pro.
               </p>
 
@@ -238,8 +238,8 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
                     <FolderPlus className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h4 className="text-[13px] font-bold text-white">Create Custom Boards</h4>
-                    <p className="text-[11px] font-semibold text-[#8d86a0] mt-0.5 leading-normal">
+                    <h4 className="text-[13px] font-bold text-[#171421] dark:text-white">Create Custom Boards</h4>
+                    <p className="text-[11px] font-semibold text-[#6f6684] dark:text-[#8d86a0] mt-0.5 leading-normal">
                       Group prompts by themes like <em>Cinematic</em>, <em>Anime</em>, or <em>Portraits</em> to access them instantly.
                     </p>
                   </div>
@@ -251,8 +251,8 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
                     <Heart className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h4 className="text-[13px] font-bold text-white">One-Tap Quick Save</h4>
-                    <p className="text-[11px] font-semibold text-[#8d86a0] mt-0.5 leading-normal">
+                    <h4 className="text-[13px] font-bold text-[#171421] dark:text-white">One-Tap Quick Save</h4>
+                    <p className="text-[11px] font-semibold text-[#6f6684] dark:text-[#8d86a0] mt-0.5 leading-normal">
                       Tap the board folder icon on any prompt card to add it to one or more collections.
                     </p>
                   </div>
@@ -264,8 +264,8 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
                     <Share2 className="h-4.5 w-4.5" />
                   </div>
                   <div>
-                    <h4 className="text-[13px] font-bold text-white">Public Sharing Links</h4>
-                    <p className="text-[11px] font-semibold text-[#8d86a0] mt-0.5 leading-normal">
+                    <h4 className="text-[13px] font-bold text-[#171421] dark:text-white">Public Sharing Links</h4>
+                    <p className="text-[11px] font-semibold text-[#6f6684] dark:text-[#8d86a0] mt-0.5 leading-normal">
                       Share your boards with friends in one click. Other users can view and save your collections!
                     </p>
                   </div>
