@@ -77,10 +77,12 @@ export default function ProfileModal({
   // Load backend profile
   useEffect(() => {
     if (!currentUser || !isOpen) return;
-    setLoading(true);
-    setError(null);
-    axios.get(`${API_BASE_URL}/api/auth/profile/${currentUser.uid}`)
-      .then(res => {
+    
+    const fetchProfile = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/auth/profile/${currentUser.uid}`);
         if (res.data) {
           setProfile(res.data);
           setFirstName(res.data.first_name || '');
@@ -88,14 +90,46 @@ export default function ProfileModal({
           setUsername(res.data.username || '');
           setGender(res.data.gender || '');
         }
-      })
-      .catch(err => {
-        console.error("Failed to load backend profile details:", err);
-        setError("Could not load profile data.");
-      })
-      .finally(() => {
+      } catch (err: any) {
+        if (err.response?.status === 404) {
+          try {
+            // Auto-register legacy/missing profile
+            const displayNameClean = currentUser.displayName || 'User';
+            const names = displayNameClean.trim().split(' ');
+            const fName = names[0] || 'User';
+            const lName = names.slice(1).join(' ') || null;
+            const isGoogle = currentUser.providerData?.some((p: any) => p.providerId === 'google.com');
+            
+            const resReg = await axios.post(`${API_BASE_URL}/api/auth/register-profile`, {
+              firebase_uid: currentUser.uid,
+              first_name: fName,
+              last_name: lName,
+              email: currentUser.email,
+              provider: isGoogle ? 'google' : 'email',
+              terms_accepted: true
+            });
+            
+            if (resReg.data) {
+              setProfile(resReg.data);
+              setFirstName(resReg.data.first_name || '');
+              setLastName(resReg.data.last_name || '');
+              setUsername(resReg.data.username || '');
+              setGender(resReg.data.gender || '');
+            }
+          } catch (regErr) {
+            console.error("Failed to auto-register missing user profile:", regErr);
+            setError("Could not register profile in database.");
+          }
+        } else {
+          console.error("Failed to load backend profile details:", err);
+          setError("Could not load profile data.");
+        }
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProfile();
   }, [currentUser, isOpen]);
 
   // Sync profile details photo
