@@ -56,6 +56,15 @@ export default function ProfileModal({
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Cropper states
+  const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+  const [zoom, setZoom] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
+  const [imgDimensions, setImgDimensions] = useState({ width: 0, height: 0 });
   
   // Form input fields
   const [firstName, setFirstName] = useState('');
@@ -132,18 +141,118 @@ export default function ProfileModal({
     fetchProfile();
   }, [currentUser, isOpen]);
 
-  // Sync profile details photo
-  const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Photo selection file handler
+  const handleAvatarFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onloadend = () => {
-      const avatar = typeof reader.result === 'string' ? reader.result : '';
-      if (!avatar) return;
-      localStorage.setItem(`promptro:avatar:${currentUser.uid}`, avatar);
-      setLocalAvatar(avatar);
+      const src = typeof reader.result === 'string' ? reader.result : '';
+      if (!src) return;
+      
+      const tempImg = new Image();
+      tempImg.onload = () => {
+        const containerSize = 256;
+        let w = tempImg.width;
+        let h = tempImg.height;
+        
+        const ratio = w / h;
+        if (ratio > 1) {
+          h = containerSize;
+          w = containerSize * ratio;
+        } else {
+          w = containerSize;
+          h = containerSize / ratio;
+        }
+        
+        setImgDimensions({ width: w, height: h });
+        setZoom(1);
+        setPosition({ x: 0, y: 0 });
+        setCropImageSrc(src);
+      };
+      tempImg.src = src;
     };
     reader.readAsDataURL(file);
+  };
+
+  // Drag interaction handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    setInitialPosition({ x: position.x, y: position.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStart.x;
+    const dy = e.clientY - dragStart.y;
+    setPosition({
+      x: initialPosition.x + dx,
+      y: initialPosition.y + dy
+    });
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    setIsDragging(true);
+    setDragStart({ x: touch.clientX, y: touch.clientY });
+    setInitialPosition({ x: position.x, y: position.y });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - dragStart.x;
+    const dy = touch.clientY - dragStart.y;
+    setPosition({
+      x: initialPosition.x + dx,
+      y: initialPosition.y + dy
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Canvas Crop & Save confirm handler
+  const handleCropConfirm = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    if (ctx && cropImageSrc) {
+      ctx.beginPath();
+      ctx.arc(200, 200, 200, 0, Math.PI * 2);
+      ctx.clip();
+
+      const img = new Image();
+      img.onload = () => {
+        const previewWidth = imgDimensions.width;
+        const previewHeight = imgDimensions.height;
+        const scaleFactor = 400 / 192; // 192px is diameter of w-48 preview circle
+        
+        const dx = position.x * scaleFactor;
+        const dy = position.y * scaleFactor;
+        const sWidth = previewWidth * zoom * scaleFactor;
+        const sHeight = previewHeight * zoom * scaleFactor;
+        
+        ctx.drawImage(
+          img,
+          200 + dx - sWidth / 2,
+          200 + dy - sHeight / 2,
+          sWidth,
+          sHeight
+        );
+
+        // Quality set to 0.85 jpeg to optimize storage space
+        const base64Cropped = canvas.toDataURL('image/jpeg', 0.85);
+        localStorage.setItem(`promptro:avatar:${currentUser.uid}`, base64Cropped);
+        setLocalAvatar(base64Cropped);
+        setCropImageSrc(null);
+      };
+      img.src = cropImageSrc;
+    }
   };
 
   // Form submit handler
@@ -313,7 +422,7 @@ export default function ProfileModal({
                     {/* Camera Upload Trigger */}
                     <label className="absolute bottom-0 right-0 p-1.5 rounded-full bg-primary hover:bg-primary-hover text-white cursor-pointer shadow-lg hover:scale-110 active:scale-95 transition-all">
                       <Camera className="w-3.5 h-3.5" />
-                      <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
+                      <input type="file" accept="image/*" className="hidden" onChange={handleAvatarFileSelected} />
                     </label>
                   </div>
 
@@ -596,6 +705,89 @@ export default function ProfileModal({
               </div>
             )}
           </motion.div>
+
+          {/* Sub-Modal for Image Cropping/Zooming */}
+          <AnimatePresence>
+            {cropImageSrc && (
+              <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#0d0b14]/75 backdrop-blur-md">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="relative w-full max-w-[20rem] overflow-hidden rounded-[2rem] border border-white/80 bg-white/94 dark:border-white/10 dark:bg-[#14111f]/94 p-5 text-center shadow-2xl backdrop-blur-xl"
+                >
+                  <h4 className="text-sm font-black text-[#171421] dark:text-white uppercase tracking-wider mb-4">Adjust Photo</h4>
+                  
+                  <div className="flex flex-col items-center gap-4">
+                    {/* Cropper Box */}
+                    <div 
+                      className="relative w-64 h-64 bg-black/40 rounded-[1.75rem] overflow-hidden cursor-move select-none border border-[#e9e2f3] dark:border-white/10"
+                      onMouseDown={handleMouseDown}
+                      onMouseMove={handleMouseMove}
+                      onMouseUp={handleMouseUp}
+                      onMouseLeave={handleMouseUp}
+                      onTouchStart={handleTouchStart}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleMouseUp}
+                    >
+                      <img
+                        src={cropImageSrc}
+                        alt="Crop preview"
+                        className="absolute pointer-events-none max-w-none origin-center"
+                        style={{
+                          transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
+                          left: '50%',
+                          top: '50%',
+                          width: imgDimensions.width,
+                          height: imgDimensions.height,
+                          marginLeft: -imgDimensions.width / 2,
+                          marginTop: -imgDimensions.height / 2,
+                        }}
+                      />
+                      {/* Circular Cutout Overlay with beautiful shadow border */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border-2 border-white pointer-events-none shadow-[0_0_0_999px_rgba(13,11,20,0.6)]" />
+                    </div>
+
+                    {/* Slider zoom control */}
+                    <div className="w-full flex items-center gap-3 px-1.5 mt-2">
+                      <span className="text-xs font-bold text-[#8a819d]">-</span>
+                      <input 
+                        type="range" 
+                        min="1" 
+                        max="3" 
+                        step="0.02" 
+                        value={zoom} 
+                        onChange={(e) => setZoom(parseFloat(e.target.value))}
+                        className="flex-1 h-1.5 bg-[#e9e2f3] dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary"
+                      />
+                      <span className="text-xs font-bold text-primary">+</span>
+                    </div>
+                    
+                    <p className="text-[10px] text-[#8a819d] font-semibold">Drag to position, use slider to zoom</p>
+
+                    {/* Buttons */}
+                    <div className="flex gap-2.5 w-full mt-2">
+                      <button
+                        type="button"
+                        onClick={() => setCropImageSrc(null)}
+                        className="flex-1 h-10 rounded-full border border-[#e9e2f3] dark:border-white/10 text-xs font-bold text-[#242033] dark:text-white transition-all hover:bg-white/10"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCropConfirm}
+                        className="flex-1 h-10 rounded-full bg-primary text-white text-xs font-bold transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-1.5 hover:scale-102"
+                      >
+                        <Check className="w-4 h-4" />
+                        Crop & Save
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
         </div>
       )}
     </AnimatePresence>
