@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Layers, ChevronRight, X, FolderPlus, Heart, Share2, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { readLocalActivity, writeLocalActivity, saveUserActivity } from '../lib/activity';
+import { auth } from '../lib/firebase';
 
 interface CollectionsTourProps {
   show?: boolean;
@@ -25,6 +27,23 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
     window.addEventListener('promptro-cookie-consent-given', handleConsent);
     return () => {
       window.removeEventListener('promptro-cookie-consent-given', handleConsent);
+    };
+  }, []);
+
+  // Listen to user activity syncs (e.g. on login) to check if they completed the tour in a prior session
+  useEffect(() => {
+    const checkTourSync = () => {
+      const activity = readLocalActivity();
+      if (activity.likedPrompts.includes('__tour_seen__')) {
+        localStorage.setItem('promptro_collections_tour_seen', 'true');
+        setIsVisible(false);
+      }
+    };
+    checkTourSync();
+    
+    window.addEventListener('promptro:activity-updated', checkTourSync);
+    return () => {
+      window.removeEventListener('promptro:activity-updated', checkTourSync);
     };
   }, []);
 
@@ -80,6 +99,20 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
 
   const handleCompleteTour = () => {
     localStorage.setItem('promptro_collections_tour_seen', 'true');
+    
+    // Cloud-sync state: save tour completion to DB to persist across local storage cleans
+    try {
+      const activity = readLocalActivity();
+      if (!activity.likedPrompts.includes('__tour_seen__')) {
+        const nextLiked = [...activity.likedPrompts, '__tour_seen__'];
+        const updatedActivity = { ...activity, likedPrompts: nextLiked };
+        writeLocalActivity(updatedActivity);
+        saveUserActivity(auth?.currentUser, updatedActivity).catch(() => undefined);
+      }
+    } catch (err) {
+      console.error('Error saving tour completion state:', err);
+    }
+
     setIsVisible(false);
     setShowDetailsModal(false);
   };
