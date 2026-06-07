@@ -63,6 +63,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       setInCollection(false);
       try {
         await saveUserActivity(auth?.currentUser);
+        alert("Removed from collections successfully");
       } catch (err) {
         console.error("Failed to sync collection removal:", err);
       }

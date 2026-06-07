@@ -41,6 +41,10 @@ export function writeLocalActivity(activity: UserActivity) {
 }
 
 export function clearLocalActivity() {
+  if (typeof window !== 'undefined') {
+    (window as any).__promptroActivitySynced = false;
+    (window as any).__promptroLastSyncedUid = null;
+  }
   writeLocalActivity({ savedPrompts: [], likedPrompts: [], recentPrompts: [], collections: [] });
 }
 
@@ -55,6 +59,15 @@ export function onActivityUpdated(callback: () => void) {
 }
 
 export async function syncUserActivity(user: User) {
+  if (typeof window !== 'undefined') {
+    const lastSyncedUid = (window as any).__promptroLastSyncedUid;
+    if (lastSyncedUid !== user.uid) {
+      (window as any).__promptroActivitySynced = false;
+    }
+    if ((window as any).__promptroActivitySynced) {
+      return;
+    }
+  }
   try {
     const localActivity = readLocalActivity();
     const response = await axios.get(`${API_BASE_URL}/api/users/${user.uid}/activity`);
@@ -63,6 +76,10 @@ export async function syncUserActivity(user: User) {
 
     writeLocalActivity(mergedActivity);
     await saveUserActivity(user, mergedActivity);
+    if (typeof window !== 'undefined') {
+      (window as any).__promptroActivitySynced = true;
+      (window as any).__promptroLastSyncedUid = user.uid;
+    }
   } catch (error) {
     console.error('Error syncing user activity from backend database:', error);
   }

@@ -33,12 +33,16 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
   }, [isOpen]);
 
   const handleToggleCollection = async (collectionId: string) => {
-    const isSaved = collections.find(c => c.id === collectionId)?.prompts.some(p => p.id === prompt.id);
+    const col = collections.find(c => c.id === collectionId);
+    if (!col) return;
+    const isSaved = col.prompts.some(p => p.id === prompt.id);
     
     if (isSaved) {
       removePromptFromCollection(collectionId, prompt.id);
+      alert(`Removed from "${col.name}" successfully`);
     } else {
       addPromptToCollection(collectionId, prompt);
+      alert(`Added to "${col.name}" successfully`);
     }
 
     const updated = readLocalActivity().collections || [];
@@ -66,6 +70,7 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
       setShowNewInput(false);
 
       await saveUserActivity(auth.currentUser);
+      alert(`Created and saved to "${newCol.name}" successfully`);
     } catch (err) {
       console.error("Failed to create and sync new collection:", err);
     } finally {
