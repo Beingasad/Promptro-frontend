@@ -272,7 +272,7 @@ export default function ImageDetail() {
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
-              className={`h-4 w-4 md:h-5 md:w-5 transition-colors ${inCollection ? 'text-primary' : 'text-white'}`}
+              className="h-4 w-4 md:h-5 md:w-5 text-white"
               fill={inCollection ? 'currentColor' : 'none'}
             />
           </button>

@@ -174,7 +174,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
-              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${inCollection ? 'text-primary' : 'text-white'}`} 
+              className="w-4 h-4 md:w-5 md:h-5 text-white" 
               fill={inCollection ? 'currentColor' : 'none'}
               strokeWidth={2.4} 
             />
@@ -260,7 +260,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
               aria-label="Add to Collection"
             >
               <GalleryVerticalEnd 
-                className={`w-3.5 h-3.5 md:w-4.5 md:h-4.5 transition-colors ${inCollection ? 'text-primary' : 'text-white'}`}
+                className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 text-white"
                 fill={inCollection ? 'currentColor' : 'none'}
               />
             </button>
