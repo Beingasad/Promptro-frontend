@@ -388,7 +388,7 @@ export default function ProfileModal({
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
                               placeholder="First Name"
-                              className="glass-input text-xs font-semibold h-10 w-full"
+                              className="glass-input text-xs font-semibold h-11 py-0 w-full"
                               required
                             />
                           </label>
@@ -400,7 +400,7 @@ export default function ProfileModal({
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
                               placeholder="Last Name"
-                              className="glass-input text-xs font-semibold h-10 w-full"
+                              className="glass-input text-xs font-semibold h-11 py-0 w-full"
                             />
                           </label>
                         </div>
@@ -414,7 +414,7 @@ export default function ProfileModal({
                               value={username}
                               onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
                               placeholder="username"
-                              className="glass-input text-xs font-semibold h-10 pl-7 w-full"
+                              className="glass-input text-xs font-semibold h-11 py-0 pl-7 w-full"
                             />
                           </span>
                         </label>
@@ -425,7 +425,7 @@ export default function ProfileModal({
                             <select
                               value={gender}
                               onChange={(e) => setGender(e.target.value)}
-                              className="glass-input text-xs font-semibold h-10 appearance-none pr-8 bg-transparent"
+                              className="glass-input text-xs font-semibold h-11 py-0 appearance-none pr-8 bg-transparent w-full"
                             >
                               <option value="" disabled className="bg-[#14111f]">Select Gender</option>
                               <option value="Male" className="bg-[#14111f]">Male</option>
