@@ -61,6 +61,9 @@ export default function CookieConsent() {
     localStorage.setItem('promptro:cookie-consent', status);
     setIsVisible(false);
 
+    // Dispatch custom event to notify other components (e.g. CollectionsTour)
+    window.dispatchEvent(new Event('promptro-cookie-consent-given'));
+
     try {
       await axios.post(`${API_BASE_URL}/api/consent/cookie`, {
         user_id: userId,

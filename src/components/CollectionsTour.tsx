@@ -13,10 +13,30 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  
+  const [cookieConsentGiven, setCookieConsentGiven] = useState(() => 
+    !!localStorage.getItem('promptro:cookie-consent')
+  );
+
+  useEffect(() => {
+    const handleConsent = () => {
+      setCookieConsentGiven(true);
+    };
+    window.addEventListener('promptro-cookie-consent-given', handleConsent);
+    return () => {
+      window.removeEventListener('promptro-cookie-consent-given', handleConsent);
+    };
+  }, []);
 
   useEffect(() => {
     // If the tour is not active or user is on mobile/tablet view but bottom nav isn't visible, don't show
     if (!show) {
+      setIsVisible(false);
+      return;
+    }
+
+    // Pause the tour if the user is still viewing the Cookie Consent banner
+    if (!cookieConsentGiven) {
       setIsVisible(false);
       return;
     }
@@ -56,7 +76,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
     };
-  }, [location.pathname, show]);
+  }, [location.pathname, show, cookieConsentGiven]);
 
   const handleCompleteTour = () => {
     localStorage.setItem('promptro_collections_tour_seen', 'true');
