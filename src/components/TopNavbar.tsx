@@ -49,6 +49,7 @@ import { clearLocalActivity, onActivityUpdated, readLocalActivity, syncUserActiv
 import { applyThemeMode, readThemeMode, type ThemeMode } from '../lib/theme';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
+import ProfileModal from './ProfileModal';
 
 import { useSearch } from '../context/SearchContext';
 import { useCategories } from '../context/CategoryContext';
@@ -904,6 +905,11 @@ export default function TopNavbar() {
       navigate(location.pathname, { replace: true, state: {} });
     }
 
+    if (location.state?.openProfile) {
+      setProfileOpen(true);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+
     if (path === '/about') {
       setMenuOpen(true);
       setExpandedView('about');
@@ -937,6 +943,12 @@ export default function TopNavbar() {
     if (auth) await signOut(auth);
     clearLocalActivity();
     closePanels();
+  };
+
+  const handleProfileUpdated = () => {
+    if (auth && auth.currentUser) {
+      setCurrentUser(Object.create(auth.currentUser));
+    }
   };
 
   const executeDeleteAccount = async () => {
@@ -2022,126 +2034,19 @@ export default function TopNavbar() {
         )}
       </AnimatePresence>
  
-      <AnimatePresence>
-        {profileOpen && (
-          <>
-            <motion.button
-              type="button"
-              aria-label="Close profile"
-              className="fixed inset-0 z-[110] cursor-default bg-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setProfileOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, y: -8, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="fixed right-3 top-[3.65rem] z-[120] w-[min(18rem,calc(100vw-1.5rem))] overflow-hidden rounded-[1.6rem] border border-white/80 bg-white/90 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] backdrop-blur-2xl md:right-8 md:top-[5.1rem]"
-            >
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_20%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_88%_6%,rgba(255,106,61,0.14),transparent_42%)]" />
-              <div className="relative mb-3 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setProfileOpen(false)}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/76 text-primary shadow-[0_10px_24px_rgba(72,56,118,0.1)] transition-colors hover:bg-white"
-                  aria-label="Back"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                </button>
-                {isLoggedIn && (
-                  <span className="rounded-full bg-white/76 px-2.5 py-1 text-[11px] font-medium text-primary shadow-[0_10px_24px_rgba(72,56,118,0.08)]">
-                    {premiumLabel}
-                  </span>
-                )}
-              </div>
-              {isLoggedIn ? (
-                <>
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_10px_24px_rgba(72,56,118,0.1)]">
-                      {profilePhoto ? (
-                        <img src={profilePhoto} alt={displayName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
-                      ) : (
-                        <span className="flex h-full w-full items-center justify-center bg-primary/10 text-lg font-bold text-primary">
-                          {profileInitial}
-                        </span>
-                      )}
-                    </div>
-                    <div className="min-w-0 flex-1 text-left">
-                      <p className="truncate text-sm font-bold text-[#171421]">{displayName}</p>
-                      <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
-                        <p className="truncate text-xs font-medium text-[#7a728d]">{displayEmail}</p>
-                        {isLoggedIn && (
-                          backendEmailVerified ? (
-                            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
-                              ✓ Verified
-                            </span>
-                          ) : (
-                            <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-600 dark:text-amber-400">
-                              Unverified
-                            </span>
-                          )
-                        )}
-                      </div>
-                      {isLoggedIn && !backendEmailVerified && (
-                        <button
-                          type="button"
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            if (!currentUser) return;
-                            try {
-                              await axios.post(`${API_BASE_URL}/api/auth/send-verification`, {
-                                email: currentUser.email,
-                                firebase_uid: currentUser.uid,
-                              });
-                              alert("Verification email sent! Please check your inbox.");
-                            } catch (err: any) {
-                              console.error("Failed to send verification email:", err);
-                              alert(err.message || "Failed to send verification email. Please try again later.");
-                            }
-                          }}
-                          className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-[#8b5cf6] hover:text-[#d94bcb] transition-colors bg-white/50 dark:bg-white/5 px-2.5 py-1 rounded-full border border-white/80 dark:border-white/10 shadow-sm"
-                        >
-                          <Mail className="h-3 w-3" />
-                          Resend Verification Email
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  <label className="mb-3 flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 px-3 text-sm font-bold text-primary transition-colors hover:bg-white">
-                    <Camera className="h-4 w-4" />
-                    Set profile photo
-                    <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
-                  </label>
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="mx-auto flex h-11 w-full items-center justify-center rounded-full bg-[#fff4f8] px-3 text-center text-sm font-bold text-[#f23672] transition-colors hover:bg-[#ffeaf2] dark:bg-[#f23672]/12 dark:text-[#ff8fb4] dark:hover:bg-[#f23672]/18"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <div className="relative pt-1">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center text-[#171421] dark:text-white">
-                    <CircleUserRound className="h-9 w-9" />
-                  </div>
-                  <h3 className="mt-3 text-center text-lg font-bold text-[#171421]">Welcome</h3>
-                  <Link
-                    to="/auth"
-                    onClick={closePanels}
-                    className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-4 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5"
-                  >
-                    Login / Sign up
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              )}
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      <ProfileModal
+        isOpen={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        currentUser={currentUser}
+        backendEmailVerified={backendEmailVerified}
+        setBackendEmailVerified={setBackendEmailVerified}
+        handleLogout={handleLogout}
+        localAvatar={localAvatar}
+        setLocalAvatar={setLocalAvatar}
+        profileInitial={profileInitial}
+        profilePhoto={profilePhoto}
+        onProfileUpdated={handleProfileUpdated}
+      />
 
       {/* Showcase Creator Modal */}
       <AnimatePresence>
