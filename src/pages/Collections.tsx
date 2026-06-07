@@ -41,6 +41,10 @@ export default function Collections() {
     loadCollections();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [selectedCollectionId]);
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newColName.trim()) return;
@@ -92,6 +96,8 @@ export default function Collections() {
 
   // ── DETAIL VIEW ──
   if (selectedCollectionId && activeCollection) {
+    const coverImage = activeCollection.prompts[0]?.image_url;
+
     return (
       <div className="w-full flex flex-col gap-1">
         <SEOMeta
@@ -99,47 +105,72 @@ export default function Collections() {
           description={`Browse prompts in your ${activeCollection.name} collection.`}
           robots="noindex, nofollow"
         />
-        <section className="mb-6 md:mb-8 flex items-end justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setSelectedCollectionId(null)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/60 dark:border-white/10 bg-white/70 dark:bg-white/5 text-[#171421] dark:text-white shadow-sm hover:scale-105 transition-transform"
-              aria-label="Back"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
+
+        {/* Collection Banner Card (similar to Category cards style but banner aspect) */}
+        <div className="relative w-full h-48 sm:h-72 md:h-80 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5 mb-6 sm:mb-8 shadow-lg">
+          {coverImage ? (
+            <img
+              src={coverImage}
+              alt={activeCollection.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary/10 via-[#ff6a3d]/5 to-transparent flex items-center justify-center">
+              <GalleryVerticalEnd className="w-14 h-14 text-primary/20 animate-pulse" />
+            </div>
+          )}
+          
+          {/* Overlay Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
+
+          {/* Top Left: Glass Back Button */}
+          <button
+            onClick={() => setSelectedCollectionId(null)}
+            className="absolute top-4 left-4 sm:top-6 sm:left-6 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white shadow-sm hover:scale-105 transition-transform"
+            aria-label="Back"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+
+          {/* Banner Content overlay */}
+          <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <span className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-0.5">
+              <span className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#a78bfa] mb-1">
                 <GalleryVerticalEnd className="h-3.5 w-3.5" />
-                COLLECTION
+                Collection
               </span>
-              <h1 className="text-2xl font-black tracking-tight text-text-primary md:text-3xl">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white line-clamp-1">
                 {activeCollection.name}
               </h1>
+              <p className="text-white/60 text-xs sm:text-sm font-semibold mt-1">
+                {activeCollection.prompts.length} {activeCollection.prompts.length === 1 ? 'Prompt' : 'Prompts'}
+              </p>
+            </div>
+
+            {/* Controls (glass style) */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => { setRenameOpen(activeCollection.id); setRenameColName(activeCollection.name); }}
+                className="h-9 px-4 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-bold text-white hover:bg-white/25 transition-all flex items-center gap-1.5"
+              >
+                <Edit3 className="w-3.5 h-3.5" /> Rename
+              </button>
+              <button
+                onClick={() => handleDelete(activeCollection.id)}
+                className="h-9 px-4 rounded-full border border-rose-500/20 bg-rose-500/20 backdrop-blur-md text-xs font-bold text-rose-100 hover:bg-rose-500/35 transition-all flex items-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" /> Delete
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => { setRenameOpen(activeCollection.id); setRenameColName(activeCollection.name); }}
-              className="h-9 px-3.5 rounded-full border border-[#e9e2f3] dark:border-white/10 bg-white/70 dark:bg-white/5 text-[10px] font-bold text-primary hover:bg-white dark:hover:bg-white/10 transition-all flex items-center gap-1.5"
-            >
-              <Edit3 className="w-3 h-3" /> Rename
-            </button>
-            <button
-              onClick={() => handleDelete(activeCollection.id)}
-              className="h-9 px-3.5 rounded-full border border-rose-500/10 bg-rose-500/8 text-[10px] font-bold text-rose-500 hover:bg-rose-500/15 transition-all flex items-center gap-1.5"
-            >
-              <Trash2 className="w-3 h-3" /> Delete
-            </button>
-          </div>
-        </section>
+        </div>
 
         {activeCollection.prompts.length > 0 ? (
           <MasonryGrid prompts={activeCollection.prompts} isTwoColumns={true} />
         ) : (
-          <div className="min-h-[48vh] rounded-[1.8rem] border border-white/70 bg-white/58 px-6 py-12 text-center shadow-[0_18px_46px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#14111f]/62">
+          <div className="min-h-[35vh] rounded-[1.8rem] border border-white/70 bg-white/58 px-6 py-12 text-center shadow-[0_18px_46px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#14111f]/62 flex flex-col justify-center items-center">
             <p className="text-lg font-bold text-[#171421] dark:text-white">No prompts yet</p>
-            <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8]">Tap the folder icon on any prompt to add it here.</p>
+            <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8]">Tap the gallery icon on any prompt to add it here.</p>
           </div>
         )}
 
