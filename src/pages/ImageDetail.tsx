@@ -233,6 +233,27 @@ export default function ImageDetail() {
     }
   };
 
+  const handleCollectionClick = async () => {
+    if (!prompt) return;
+
+    if (inCollection) {
+      const activity = readLocalActivity();
+      const updatedCollections = (activity.collections || []).map(col => ({
+        ...col,
+        prompts: col.prompts.filter(p => p.id !== prompt.id)
+      }));
+      writeLocalActivity({ ...activity, collections: updatedCollections });
+      setInCollection(false);
+      try {
+        await saveUserActivity(auth?.currentUser);
+      } catch (err) {
+        console.error("Failed to sync collection removal:", err);
+      }
+    } else {
+      setCollectionModalOpen(true);
+    }
+  };
+
   if (loading) {
     return <DetailSkeleton />;
   }
@@ -267,7 +288,7 @@ export default function ImageDetail() {
             {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
           </button>
           <button
-            onClick={() => setCollectionModalOpen(true)}
+            onClick={handleCollectionClick}
             className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Add to Collection"
           >

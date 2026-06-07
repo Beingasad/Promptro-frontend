@@ -49,10 +49,26 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
 
-  const openCollectionModal = (event: MouseEvent) => {
+  const handleCollectionClick = async (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    setCollectionModalOpen(true);
+
+    if (inCollection) {
+      const activity = readLocalActivity();
+      const updatedCollections = (activity.collections || []).map(col => ({
+        ...col,
+        prompts: col.prompts.filter(p => p.id !== prompt.id)
+      }));
+      writeLocalActivity({ ...activity, collections: updatedCollections });
+      setInCollection(false);
+      try {
+        await saveUserActivity(auth?.currentUser);
+      } catch (err) {
+        console.error("Failed to sync collection removal:", err);
+      }
+    } else {
+      setCollectionModalOpen(true);
+    }
   };
 
   // Instant pre-load check to handle browser-cached images without visual glitch
@@ -170,7 +186,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
         <div className="absolute top-3 right-3 flex gap-1.5 transition-transform duration-300 group-hover:-translate-y-0.5">
           <button 
             className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
-            onClick={openCollectionModal}
+            onClick={handleCollectionClick}
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
@@ -256,7 +272,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
 
             <button
               className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
-              onClick={openCollectionModal}
+              onClick={handleCollectionClick}
               aria-label="Add to Collection"
             >
               <GalleryVerticalEnd 
