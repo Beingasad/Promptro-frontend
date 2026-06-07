@@ -22,10 +22,13 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
   const [collections, setCollections] = useState<Collection[]>([]);
   const [newCollectionName, setNewCollectionName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showNewInput, setShowNewInput] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setCollections(readLocalActivity().collections || []);
+      setShowNewInput(false);
+      setNewCollectionName('');
     }
   }, [isOpen]);
 
@@ -38,11 +41,9 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
       addPromptToCollection(collectionId, prompt);
     }
 
-    // Refresh state
     const updated = readLocalActivity().collections || [];
     setCollections(updated);
 
-    // Sync to backend
     try {
       await saveUserActivity(auth.currentUser);
     } catch (err) {
@@ -62,8 +63,8 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
       const updated = readLocalActivity().collections || [];
       setCollections(updated);
       setNewCollectionName('');
+      setShowNewInput(false);
 
-      // Sync to backend
       await saveUserActivity(auth.currentUser);
     } catch (err) {
       console.error("Failed to create and sync new collection:", err);
@@ -72,11 +73,13 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
     }
   };
 
+  const savedCount = collections.filter(c => c.prompts.some(p => p.id === prompt.id)).length;
+
   return (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
-          {/* Backdrop overlay */}
+          {/* Backdrop */}
           <motion.button
             type="button"
             className="fixed inset-0 bg-[#0d0b14]/50 dark:bg-black/60 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
@@ -84,33 +87,33 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            aria-label="Close modal backdrop"
+            aria-label="Close modal"
           />
 
-          {/* Modal Card */}
+          {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.94, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/80 bg-white/70 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.22)] backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/80 dark:text-white"
+            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/80 bg-white/70 shadow-[0_24px_60px_rgba(72,56,118,0.22)] backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/80 dark:text-white"
           >
-            {/* Title */}
-            <div className="flex items-center justify-between pb-3.5 border-b border-[#e9e2f3] dark:border-white/5 mb-4">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 pt-5 pb-3.5 border-b border-[#e9e2f3] dark:border-white/5">
               <div className="flex items-center gap-2">
                 <FolderPlus className="w-5 h-5 text-primary" />
-                <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white">Save to Collection</h3>
+                <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white">Add to Board</h3>
               </div>
               <button
                 onClick={onClose}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-[#e9e2f3] dark:border-white/10 bg-white/80 dark:bg-white/5 text-[#756d8d] dark:text-[#afa6c8]"
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-[#e9e2f3] dark:border-white/10 bg-white/80 dark:bg-white/5 text-[#756d8d] dark:text-[#afa6c8] hover:scale-105 transition-transform"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
 
             {/* Collections List */}
-            <div className="max-h-56 overflow-y-auto pr-1 flex flex-col gap-2 hide-scrollbar mb-4">
+            <div className="px-5 py-4 max-h-60 overflow-y-auto hide-scrollbar flex flex-col gap-2">
               {collections.length > 0 ? (
                 collections.map((col) => {
                   const isSaved = col.prompts.some(p => p.id === prompt.id);
@@ -118,19 +121,23 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
                     <button
                       key={col.id}
                       onClick={() => handleToggleCollection(col.id)}
-                      className="w-full flex items-center justify-between p-3 rounded-xl border border-white/60 bg-white/40 dark:border-white/5 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 transition-all text-left text-xs font-bold"
+                      className={`w-full flex items-center justify-between p-3 rounded-2xl border transition-all text-left text-xs font-bold ${
+                        isSaved 
+                          ? 'border-primary/30 bg-primary/8 dark:bg-primary/15' 
+                          : 'border-white/60 bg-white/40 dark:border-white/5 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10'
+                      }`}
                     >
                       <div className="flex items-center gap-2.5 truncate pr-2">
-                        <Folder className="w-4 h-4 text-[#8a819d] shrink-0" />
+                        <Folder className={`w-4 h-4 shrink-0 ${isSaved ? 'text-primary' : 'text-[#8a819d]'}`} />
                         <span className="truncate text-[#242033] dark:text-white">{col.name}</span>
                         <span className="text-[10px] text-[#8a819d] font-semibold shrink-0">({col.prompts.length})</span>
                       </div>
-                      <div className={`w-5 h-5 rounded-md flex items-center justify-center border transition-all shrink-0 ${
+                      <div className={`w-6 h-6 rounded-lg flex items-center justify-center border-2 transition-all shrink-0 ${
                         isSaved 
-                          ? 'bg-primary border-primary text-white' 
-                          : 'border-[#cfc7dd] dark:border-white/10 text-transparent'
+                          ? 'bg-primary border-primary text-white scale-105' 
+                          : 'border-[#cfc7dd] dark:border-white/15 text-transparent'
                       }`}>
-                        <Check className="w-3.5 h-3.5" />
+                        <Check className="w-3.5 h-3.5" strokeWidth={3} />
                       </div>
                     </button>
                   );
@@ -138,30 +145,61 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
               ) : (
                 <div className="py-6 text-center">
                   <Folder className="w-8 h-8 text-[#8a819d] mx-auto opacity-40 mb-2" />
-                  <p className="text-xs text-[#756d8d] dark:text-[#afa6c8] font-bold">No collections yet</p>
-                  <p className="text-[10px] text-[#8a819d] mt-1 font-semibold leading-relaxed">Create one below to start organizing your boards.</p>
+                  <p className="text-xs text-[#756d8d] dark:text-[#afa6c8] font-bold">No boards yet</p>
+                  <p className="text-[10px] text-[#8a819d] mt-1 font-semibold leading-relaxed">Create one below to organize your prompts.</p>
                 </div>
               )}
             </div>
 
-            {/* Create Collection Input Form */}
-            <form onSubmit={handleCreateCollection} className="flex gap-2 border-t border-[#e9e2f3] dark:border-white/5 pt-4">
-              <input
-                type="text"
-                value={newCollectionName}
-                onChange={(e) => setNewCollectionName(e.target.value)}
-                placeholder="New Collection Name..."
-                maxLength={30}
-                className="flex-1 h-10 px-3.5 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-[#1a1727]/80 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white transition-all"
-              />
+            {/* Create New Collection */}
+            <div className="px-5 pb-4 border-t border-[#e9e2f3] dark:border-white/5 pt-3">
+              {showNewInput ? (
+                <form onSubmit={handleCreateCollection} className="flex gap-2">
+                  <input
+                    type="text"
+                    autoFocus
+                    value={newCollectionName}
+                    onChange={(e) => setNewCollectionName(e.target.value)}
+                    placeholder="Board name..."
+                    maxLength={30}
+                    className="flex-1 h-10 px-3.5 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-[#1a1727]/80 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white"
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading || !newCollectionName.trim()}
+                    className="w-10 h-10 rounded-full bg-primary hover:bg-primary-hover disabled:opacity-50 text-white flex items-center justify-center shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
+                  >
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" strokeWidth={2.5} />}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setShowNewInput(false); setNewCollectionName(''); }}
+                    className="w-10 h-10 rounded-full border border-[#cfc7dd] dark:border-white/10 text-[#756d8d] flex items-center justify-center hover:scale-105 transition-all"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </form>
+              ) : (
+                <button
+                  onClick={() => setShowNewInput(true)}
+                  className="w-full h-10 flex items-center justify-center gap-2 rounded-full border border-dashed border-[#cfc7dd] dark:border-white/10 text-xs font-bold text-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all"
+                >
+                  <Plus className="w-4 h-4" />
+                  New Board
+                </button>
+              )}
+            </div>
+
+            {/* Done Button */}
+            <div className="px-5 pb-5">
               <button
-                type="submit"
-                disabled={loading || !newCollectionName.trim()}
-                className="w-10 h-10 rounded-full bg-primary hover:bg-primary-hover disabled:opacity-50 text-white flex items-center justify-center shadow-md shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+                onClick={onClose}
+                className="w-full h-11 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white text-sm font-bold shadow-[0_10px_24px_rgba(109,77,236,0.26)] hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center justify-center gap-2"
               >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4.5 h-4.5" />}
+                <Check className="w-4 h-4" strokeWidth={2.5} />
+                Done{savedCount > 0 ? ` · Saved to ${savedCount} board${savedCount > 1 ? 's' : ''}` : ''}
               </button>
-            </form>
+            </div>
           </motion.div>
         </div>
       )}
