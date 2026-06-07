@@ -204,7 +204,7 @@ export default function Collections() {
       />
       <div className="max-w-7xl mx-auto">
         {/* Header — modern dashboard layout */}
-        <header className="mb-6 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        <header className="mb-6 md:mb-10">
           <div className="flex flex-col items-start">
             <motion.span
               initial={{ opacity: 0, y: 15 }}
@@ -231,23 +231,6 @@ export default function Collections() {
               Curate and organize your favorite prompts into boards.
             </motion.p>
           </div>
-
-          {collections.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.12 }}
-              className="shrink-0"
-            >
-              <button
-                onClick={() => setCreateOpen(true)}
-                className="inline-flex items-center gap-2 h-10 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white px-5 text-xs font-black shadow-[0_12px_28px_rgba(109,77,236,0.26)] hover:scale-103 active:scale-97 transition-all cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                Create Board
-              </button>
-            </motion.div>
-          )}
         </header>
 
         {collections.length > 0 ? (
