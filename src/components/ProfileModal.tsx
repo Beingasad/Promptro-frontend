@@ -65,6 +65,9 @@ export default function ProfileModal({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   const [imgDimensions, setImgDimensions] = useState({ width: 0, height: 0 });
+  const [startPinchDist, setStartPinchDist] = useState(0);
+  const [startPinchZoom, setStartPinchZoom] = useState(1);
+  const [isPinching, setIsPinching] = useState(false);
   
   // Form input fields
   const [firstName, setFirstName] = useState('');
@@ -193,26 +196,52 @@ export default function ProfileModal({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length !== 1) return;
-    const touch = e.touches[0];
-    setIsDragging(true);
-    setDragStart({ x: touch.clientX, y: touch.clientY });
-    setInitialPosition({ x: position.x, y: position.y });
+    if (e.touches.length === 2) {
+      setIsDragging(false);
+      setIsPinching(true);
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      setStartPinchDist(dist);
+      setStartPinchZoom(zoom);
+    } else if (e.touches.length === 1) {
+      setIsPinching(false);
+      const touch = e.touches[0];
+      setIsDragging(true);
+      setDragStart({ x: touch.clientX, y: touch.clientY });
+      setInitialPosition({ x: position.x, y: position.y });
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging || e.touches.length !== 1) return;
-    const touch = e.touches[0];
-    const dx = touch.clientX - dragStart.x;
-    const dy = touch.clientY - dragStart.y;
-    setPosition({
-      x: initialPosition.x + dx,
-      y: initialPosition.y + dy
-    });
+    if (e.touches.length === 2 && isPinching) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      if (startPinchDist > 0) {
+        const factor = dist / startPinchDist;
+        const nextZoom = Math.min(Math.max(startPinchZoom * factor, 1), 3);
+        setZoom(nextZoom);
+      }
+    } else if (e.touches.length === 1 && isDragging) {
+      const touch = e.touches[0];
+      const dx = touch.clientX - dragStart.x;
+      const dy = touch.clientY - dragStart.y;
+      setPosition({
+        x: initialPosition.x + dx,
+        y: initialPosition.y + dy
+      });
+    }
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    setIsPinching(false);
+    setStartPinchDist(0);
   };
 
   // Canvas Crop & Save confirm handler
@@ -728,7 +757,7 @@ export default function ProfileModal({
                       onMouseLeave={handleMouseUp}
                       onTouchStart={handleTouchStart}
                       onTouchMove={handleTouchMove}
-                      onTouchEnd={handleMouseUp}
+                      onTouchEnd={handleTouchEnd}
                     >
                       <img
                         src={cropImageSrc}
