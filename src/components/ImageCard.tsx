@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Eye, Bookmark, FolderPlus } from 'lucide-react';
+import { Heart, Eye, Bookmark, GalleryVerticalEnd } from 'lucide-react';
 import CollectionSelectModal from './CollectionSelectModal';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -159,22 +159,16 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
 
       {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
-      {/* Top Left: Folder Icon (ONLY ON ORIGINAL HOME MODE) */}
+      {/* Top Right: Collection & Bookmark (ONLY ON ORIGINAL HOME MODE) */}
       {isHome && (
-        <div className="absolute top-3 left-3 transition-transform duration-300 group-hover:-translate-y-0.5">
+        <div className="absolute top-3 right-3 flex gap-1.5 transition-transform duration-300 group-hover:-translate-y-0.5">
           <button 
             className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
             onClick={openCollectionModal}
             aria-label="Add to Collection"
           >
-            <FolderPlus className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.4} />
+            <GalleryVerticalEnd className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.4} />
           </button>
-        </div>
-      )}
-
-      {/* Top Right: Bookmark Button (ONLY ON ORIGINAL HOME MODE) */}
-      {isHome && (
-        <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:-translate-y-0.5">
           <button 
             className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
             onClick={toggleSave}
