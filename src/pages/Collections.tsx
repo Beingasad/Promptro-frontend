@@ -134,15 +134,6 @@ export default function Collections() {
           {/* Overlay Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
 
-          {/* Top Left: Glass Back Button */}
-          <button
-            onClick={() => setSelectedCollectionId(null)}
-            className="absolute top-4 left-4 sm:top-6 sm:left-6 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white shadow-sm hover:scale-105 transition-transform"
-            aria-label="Back"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-
           {/* Banner Content overlay */}
           <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>

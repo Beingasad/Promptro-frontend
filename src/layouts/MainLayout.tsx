@@ -84,9 +84,8 @@ export default function MainLayout() {
     location.pathname === '/terms';
   const isBlog = location.pathname === '/blog' || location.pathname.startsWith('/blog/');
   const isAuth = location.pathname === '/auth';
-  const isCollectionsDetail = location.pathname === '/collections' && location.search.includes('id=');
   const showPageSearch = location.pathname === '/explore' || location.pathname === '/saved';
-  const showPageBack = !isHome && !isPromptDetail && !isAuth && !isCollectionsDetail;
+  const showPageBack = !isHome && !isPromptDetail && !isAuth;
   const showBottomNav = 
     location.pathname === '/' ||
     location.pathname === '/explore' ||
@@ -100,7 +99,7 @@ export default function MainLayout() {
       : location.pathname === '/saved'
         ? 'Saved prompts'
         : location.pathname === '/collections'
-          ? (isCollectionsDetail ? '' : 'Prompt Collections')
+          ? 'Prompt Collections'
         : location.pathname === '/about'
           ? 'About Promptro'
           : location.pathname === '/contact'
