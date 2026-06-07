@@ -36,37 +36,37 @@ const GENDER_OPTIONS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 export default function Auth() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<AuthMode>(
-    () => (sessionStorage.getItem('auth_mode') as AuthMode) || 'login'
+    () => (localStorage.getItem('auth_mode') as AuthMode) || 'login'
   );
   const [signupStep, setSignupStep] = useState<SignupStep>(
-    () => (sessionStorage.getItem('auth_signupStep') as SignupStep) || 'info'
+    () => (localStorage.getItem('auth_signupStep') as SignupStep) || 'info'
   );
 
   // Form fields
   const [firstName, setFirstName] = useState(
-    () => sessionStorage.getItem('auth_firstName') || ''
+    () => localStorage.getItem('auth_firstName') || ''
   );
   const [lastName, setLastName] = useState(
-    () => sessionStorage.getItem('auth_lastName') || ''
+    () => localStorage.getItem('auth_lastName') || ''
   );
   const [gender, setGender] = useState(
-    () => sessionStorage.getItem('auth_gender') || ''
+    () => localStorage.getItem('auth_gender') || ''
   );
   const [email, setEmail] = useState(
-    () => sessionStorage.getItem('auth_email') || ''
+    () => localStorage.getItem('auth_email') || ''
   );
   const [password, setPassword] = useState(
-    () => sessionStorage.getItem('auth_password') || ''
+    () => localStorage.getItem('auth_password') || ''
   );
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(
-    () => sessionStorage.getItem('auth_confirmPassword') || ''
+    () => localStorage.getItem('auth_confirmPassword') || ''
   );
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // OTP
   const [otpValues, setOtpValues] = useState<string[]>(() => {
-    const saved = sessionStorage.getItem('auth_otpValues');
+    const saved = localStorage.getItem('auth_otpValues');
     return saved ? JSON.parse(saved) : ['', '', '', '', '', ''];
   });
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -74,15 +74,15 @@ export default function Auth() {
 
   // Forgot Password Steps
   const [forgotStep, setForgotStep] = useState<'email' | 'otp' | 'reset'>(
-    () => (sessionStorage.getItem('auth_forgotStep') as 'email' | 'otp' | 'reset') || 'email'
+    () => (localStorage.getItem('auth_forgotStep') as 'email' | 'otp' | 'reset') || 'email'
   );
   const [forgotOtpVerifiedCode, setForgotOtpVerifiedCode] = useState(
-    () => sessionStorage.getItem('auth_forgotOtpVerifiedCode') || ''
+    () => localStorage.getItem('auth_forgotOtpVerifiedCode') || ''
   );
 
   // Terms
   const [agreedToTerms, setAgreedToTerms] = useState(
-    () => sessionStorage.getItem('auth_agreedToTerms') === 'true'
+    () => localStorage.getItem('auth_agreedToTerms') === 'true'
   );
 
   // UI State
@@ -117,7 +117,7 @@ export default function Auth() {
       'auth_confirmPassword', 'auth_otpValues', 'auth_forgotOtpVerifiedCode',
       'auth_agreedToTerms'
     ];
-    keys.forEach(k => sessionStorage.removeItem(k));
+    keys.forEach(k => localStorage.removeItem(k));
   };
 
   const resetForm = () => {
@@ -138,20 +138,20 @@ export default function Auth() {
     clearPersistedAuthState();
   };
 
-  // Sync state to sessionStorage
+  // Sync state to localStorage
   useEffect(() => {
-    sessionStorage.setItem('auth_mode', mode);
-    sessionStorage.setItem('auth_signupStep', signupStep);
-    sessionStorage.setItem('auth_forgotStep', forgotStep);
-    sessionStorage.setItem('auth_firstName', firstName);
-    sessionStorage.setItem('auth_lastName', lastName);
-    sessionStorage.setItem('auth_gender', gender);
-    sessionStorage.setItem('auth_email', email);
-    sessionStorage.setItem('auth_password', password);
-    sessionStorage.setItem('auth_confirmPassword', confirmPassword);
-    sessionStorage.setItem('auth_otpValues', JSON.stringify(otpValues));
-    sessionStorage.setItem('auth_forgotOtpVerifiedCode', forgotOtpVerifiedCode);
-    sessionStorage.setItem('auth_agreedToTerms', agreedToTerms.toString());
+    localStorage.setItem('auth_mode', mode);
+    localStorage.setItem('auth_signupStep', signupStep);
+    localStorage.setItem('auth_forgotStep', forgotStep);
+    localStorage.setItem('auth_firstName', firstName);
+    localStorage.setItem('auth_lastName', lastName);
+    localStorage.setItem('auth_gender', gender);
+    localStorage.setItem('auth_email', email);
+    localStorage.setItem('auth_password', password);
+    localStorage.setItem('auth_confirmPassword', confirmPassword);
+    localStorage.setItem('auth_otpValues', JSON.stringify(otpValues));
+    localStorage.setItem('auth_forgotOtpVerifiedCode', forgotOtpVerifiedCode);
+    localStorage.setItem('auth_agreedToTerms', agreedToTerms.toString());
   }, [
     mode, signupStep, forgotStep, firstName, lastName, gender, email,
     password, confirmPassword, otpValues, forgotOtpVerifiedCode, agreedToTerms
