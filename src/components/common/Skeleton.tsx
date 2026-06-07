@@ -292,7 +292,35 @@ export function CategoriesSkeleton() {
           <div className="absolute inset-0 shimmer-bg w-full h-full" />
           
           {/* Overlay with bottom placeholders */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-4 sm:p-8">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
+            <div className="h-6 w-2/3 bg-white/20 rounded-md animate-pulse mb-2" />
+            <div className="h-4 w-1/3 bg-white/10 rounded-md animate-pulse" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function CollectionsSkeleton() {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0 mt-4">
+      {/* Dashed Create Board card skeleton */}
+      <div className="relative flex aspect-[4/5] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.5rem] border-2 border-dashed border-[#cfc7dd] dark:border-white/10 bg-[#e8e2f0]/20 dark:bg-white/5 shadow-sm">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/15 animate-pulse" />
+        <div className="h-4 w-20 bg-white/15 rounded-md animate-pulse mt-4" />
+      </div>
+
+      {Array.from({ length: 7 }).map((_, i) => (
+        <div
+          key={i}
+          className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-md"
+        >
+          {/* Shimmer background */}
+          <div className="absolute inset-0 shimmer-bg w-full h-full" />
+          
+          {/* Overlay with bottom placeholders */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
             <div className="h-6 w-2/3 bg-white/20 rounded-md animate-pulse mb-2" />
             <div className="h-4 w-1/3 bg-white/10 rounded-md animate-pulse" />
           </div>

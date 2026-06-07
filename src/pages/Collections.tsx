@@ -27,6 +27,7 @@ import {
 } from '../lib/activity';
 import { auth } from '../lib/firebase';
 import SEOMeta from '../components/common/SEOMeta';
+import { CollectionsSkeleton } from '../components/common/Skeleton';
 
 export default function Collections() {
   const location = useLocation();
@@ -54,13 +55,24 @@ export default function Collections() {
   const [sharedError, setSharedError] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
 
+  // Loading states
+  const [loading, setLoading] = useState(true);
+
   const loadCollections = () => {
     setCollections(readLocalActivity().collections || []);
   };
 
   useEffect(() => {
     loadCollections();
-    return onActivityUpdated(loadCollections);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+
+    const unsubscribe = onActivityUpdated(loadCollections);
+    return () => {
+      clearTimeout(timer);
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -365,7 +377,9 @@ export default function Collections() {
           </div>
         </header>
 
-        {collections.length > 0 ? (
+        {loading ? (
+          <CollectionsSkeleton />
+        ) : collections.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0 mt-2">
             {/* Pinterest-style Create Board Card */}
             <motion.div
