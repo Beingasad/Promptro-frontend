@@ -107,7 +107,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
                 </mask>
               </defs>
               {/* Semi-transparent dark background layer */}
-              <rect width="100%" height="100%" fill="rgba(6, 4, 12, 0.72)" mask="url(#spotlight-mask)" className="backdrop-blur-[1px]" />
+              <rect width="100%" height="100%" fill="rgba(6, 4, 12, 0.72)" mask="url(#spotlight-mask)" />
             </svg>
 
             {/* Glowing animated border outline precisely around target */}
@@ -134,58 +134,62 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
             />
 
             {/* ── TOOLTIP CARD FLOAT ABOVE SPOTLIGHT ── */}
-            <motion.div
-              initial={{ y: 12, opacity: 0, scale: 0.95 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 12, opacity: 0, scale: 0.95 }}
-              transition={{ delay: 0.2, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute z-[210] w-[290px] max-w-[calc(100vw-32px)] bg-white/95 dark:bg-[#130f1e]/95 border border-[#e4e2ec] dark:border-white/10 backdrop-blur-xl rounded-[1.25rem] p-4 shadow-[0_22px_48px_rgba(72,56,118,0.14)] dark:shadow-[0_22px_48px_rgba(0,0,0,0.6)] text-left"
+            <div
+              className="absolute z-[210] w-[290px] max-w-[calc(100vw-32px)]"
               style={{
                 left: `${cx}px`,
                 bottom: `${window.innerHeight - rect.top + 16}px`,
                 transform: 'translateX(-50%)',
               }}
             >
-              {/* Pointing down arrow */}
-              <div 
-                className="absolute bottom-[-7px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[7px] border-t-white dark:border-t-[#130f1e]/95" 
-                style={{ filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.15))' }}
-              />
+              <motion.div
+                initial={{ y: 12, opacity: 0, scale: 0.95 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: 12, opacity: 0, scale: 0.95 }}
+                transition={{ delay: 0.2, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="bg-white/95 dark:bg-[#130f1e]/95 border border-[#e4e2ec] dark:border-white/10 backdrop-blur-xl rounded-[1.25rem] p-4 shadow-[0_22px_48px_rgba(72,56,118,0.14)] dark:shadow-[0_22px_48px_rgba(0,0,0,0.6)] text-left"
+              >
+                {/* Pointing down arrow */}
+                <div 
+                  className="absolute bottom-[-7px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-t-[7px] border-t-white dark:border-t-[#130f1e]/95" 
+                  style={{ filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.15))' }}
+                />
 
-              <div className="flex gap-2.5 items-start">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-[#ff6a3d] shadow-[0_4px_10px_rgba(109,77,236,0.3)]">
-                  <Layers className="h-4.5 w-4.5 text-white" />
+                <div className="flex gap-2.5 items-start">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-[#ff6a3d] shadow-[0_4px_10px_rgba(109,77,236,0.3)]">
+                    <Layers className="h-4.5 w-4.5 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-xs font-black text-primary dark:text-[#ff6a3d] uppercase tracking-wider flex items-center gap-1.5">
+                      New Feature <Sparkles className="h-3 w-3 text-[#ff6a3d] animate-pulse" />
+                    </h4>
+                    <p className="text-sm font-black text-[#171421] dark:text-white mt-0.5 leading-snug">
+                      Introduce Board Collections
+                    </p>
+                    <p className="text-[12px] font-semibold text-[#5c5470] dark:text-[#a8a1c0] mt-1.5 leading-relaxed">
+                      Organize your favourite prompts into custom boards and share them with the world!
+                    </p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h4 className="text-xs font-black text-primary dark:text-[#ff6a3d] uppercase tracking-wider flex items-center gap-1.5">
-                    New Feature <Sparkles className="h-3 w-3 text-[#ff6a3d] animate-pulse" />
-                  </h4>
-                  <p className="text-sm font-black text-[#171421] dark:text-white mt-0.5 leading-snug">
-                    Introduce Board Collections
-                  </p>
-                  <p className="text-[12px] font-semibold text-[#5c5470] dark:text-[#a8a1c0] mt-1.5 leading-relaxed">
-                    Organize your favourite prompts into custom boards and share them with the world!
-                  </p>
-                </div>
-              </div>
 
-              {/* Tooltip Actions */}
-              <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#e4e2ec]/60 dark:border-white/5">
-                <button
-                  onClick={handleCompleteTour}
-                  className="text-[#88819e] hover:text-[#171421] dark:hover:text-white text-[11px] font-bold px-2 py-1 transition-colors"
-                >
-                  Skip
-                </button>
-                <button
-                  onClick={() => setShowDetailsModal(true)}
-                  className="bg-gradient-to-r from-primary to-[#ff6a3d] text-white text-[11px] font-black tracking-normal px-3 py-1.5 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center gap-0.5 hover:scale-[1.03] active:scale-[0.97]"
-                >
-                  Read More
-                  <ChevronRight className="h-3 w-3 stroke-[2.5]" />
-                </button>
-              </div>
-            </motion.div>
+                {/* Tooltip Actions */}
+                <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#e4e2ec]/60 dark:border-white/5">
+                  <button
+                    onClick={handleCompleteTour}
+                    className="text-[#88819e] hover:text-[#171421] dark:hover:text-white text-[11px] font-bold px-2 py-1 transition-colors"
+                  >
+                    Skip
+                  </button>
+                  <button
+                    onClick={() => setShowDetailsModal(true)}
+                    className="bg-gradient-to-r from-primary to-[#ff6a3d] text-white text-[11px] font-black tracking-normal px-3 py-1.5 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center gap-0.5 hover:scale-[1.03] active:scale-[0.97]"
+                  >
+                    Read More
+                    <ChevronRight className="h-3 w-3 stroke-[2.5]" />
+                  </button>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
