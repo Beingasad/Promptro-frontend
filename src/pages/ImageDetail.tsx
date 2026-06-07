@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
@@ -255,8 +255,11 @@ export default function ImageDetail() {
     }
   };
 
+  const location = useLocation();
+  const stateIsPortrait = location.state?.isPortrait;
+
   if (loading) {
-    return <DetailSkeleton />;
+    return <DetailSkeleton isPortrait={stateIsPortrait ?? true} />;
   }
 
   if (!prompt) {
@@ -282,6 +285,13 @@ export default function ImageDetail() {
         </button>
         <div className="flex flex-col items-center gap-2">
           <button
+            onClick={handleShare}
+            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            aria-label="Share prompt"
+          >
+            {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
+          </button>
+          <button
             onClick={toggleSave}
             className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
@@ -297,13 +307,6 @@ export default function ImageDetail() {
               className="h-4 w-4 md:h-5 md:w-5 text-white"
               fill={inCollection ? 'currentColor' : 'none'}
             />
-          </button>
-          <button
-            onClick={handleShare}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
-            aria-label="Share prompt"
-          >
-            {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
           </button>
         </div>
       </div>
