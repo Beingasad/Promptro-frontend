@@ -783,7 +783,7 @@ export default function Auth() {
                   </div>
 
                   {/* OTP Input Boxes */}
-                  <div className="flex justify-center gap-2.5" onPaste={handleOtpPaste}>
+                  <div className="flex justify-center gap-1.5 sm:gap-2.5" onPaste={handleOtpPaste}>
                     {otpValues.map((val, i) => (
                       <input
                         key={i}
@@ -794,7 +794,7 @@ export default function Auth() {
                         value={val}
                         onChange={(e) => handleOtpChange(i, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                        className={`h-12 w-12 rounded-xl border-2 text-center text-lg font-bold outline-none transition-all ${
+                        className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl border-2 text-center text-base sm:text-lg font-bold outline-none transition-all ${
                           val
                             ? 'border-primary bg-primary/5 text-primary'
                             : 'border-[#e9e2f3] bg-white/72 text-[#171421] focus:border-primary focus:bg-primary/5'
@@ -1058,7 +1058,7 @@ export default function Auth() {
               </div>
 
               {/* OTP Input Boxes */}
-              <div className="flex justify-center gap-2.5" onPaste={handleOtpPaste}>
+              <div className="flex justify-center gap-1.5 sm:gap-2.5" onPaste={handleOtpPaste}>
                 {otpValues.map((val, i) => (
                   <input
                     key={i}
@@ -1069,7 +1069,7 @@ export default function Auth() {
                     value={val}
                     onChange={(e) => handleOtpChange(i, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                    className={`h-12 w-12 rounded-xl border-2 text-center text-lg font-bold outline-none transition-all ${
+                    className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl border-2 text-center text-base sm:text-lg font-bold outline-none transition-all ${
                       val
                         ? 'border-primary bg-primary/5 text-primary'
                         : 'border-[#e9e2f3] bg-white/72 text-[#171421] focus:border-primary focus:bg-primary/5'

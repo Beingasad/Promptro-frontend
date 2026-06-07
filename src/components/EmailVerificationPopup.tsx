@@ -49,6 +49,11 @@ export default function EmailVerificationPopup() {
         .then((res) => {
           if (res.data && res.data.email_verified) {
             setIsOpen(false);
+          } else if (currentUser.emailVerified) {
+            // Auto-sync backend
+            axios.patch(`${API_BASE_URL}/api/auth/profile/${currentUser.uid}/verify-email`)
+              .then(() => setIsOpen(false))
+              .catch(() => setIsOpen(true));
           } else {
             setIsOpen(true);
           }

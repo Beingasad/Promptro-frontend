@@ -859,7 +859,16 @@ export default function TopNavbar() {
         axios.get(`${API_BASE_URL}/api/auth/profile/${user.uid}`)
           .then((res) => {
             if (res.data) {
-              setBackendEmailVerified(res.data.email_verified);
+              if (res.data.email_verified) {
+                setBackendEmailVerified(true);
+              } else if (user.emailVerified) {
+                // Auto-sync backend
+                axios.patch(`${API_BASE_URL}/api/auth/profile/${user.uid}/verify-email`)
+                  .then(() => setBackendEmailVerified(true))
+                  .catch(() => setBackendEmailVerified(false));
+              } else {
+                setBackendEmailVerified(false);
+              }
             }
           })
           .catch((err) => {
@@ -935,7 +944,13 @@ export default function TopNavbar() {
     setIsDeletingAccount(true);
     setDeleteError(null);
     try {
+      const uid = currentUser.uid;
       await currentUser.delete();
+      try {
+        await axios.delete(`${API_BASE_URL}/api/admin/users/${uid}`);
+      } catch (dbErr) {
+        console.error("Failed to delete database profile:", dbErr);
+      }
       clearLocalActivity();
       setShowDeleteConfirm(false);
       closePanels();
