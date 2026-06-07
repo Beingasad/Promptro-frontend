@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { 
   X, Mail, ShieldCheck, Clock, User, Sparkles, Loader2, 
-  BadgeCheck, Edit3, Save, LogOut, Camera, Layers, AlertCircle, ChevronDown, Check, RefreshCw
+  BadgeCheck, Edit3, Save, LogOut, Camera, Layers, AlertCircle, ChevronDown, Check, RefreshCw,
+  GalleryVerticalEnd, Bookmark
 } from 'lucide-react';
 import axios from 'axios';
 import { updateProfile } from 'firebase/auth';
@@ -51,6 +53,7 @@ export default function ProfileModal({
   profilePhoto,
   onProfileUpdated
 }: ProfileModalProps) {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<BackendProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -75,14 +78,17 @@ export default function ProfileModal({
   const [username, setUsername] = useState('');
   const [gender, setGender] = useState('');
   const [savedCount, setSavedCount] = useState(0);
+  const [collectionsCount, setCollectionsCount] = useState(0);
   const [verificationLoading, setVerificationLoading] = useState(false);
   const [verificationSuccess, setVerificationSuccess] = useState(false);
 
-  // Fetch saved prompts count
+  // Fetch saved prompts count and collections count
   useEffect(() => {
     setSavedCount(readLocalActivity().savedPrompts.length);
+    setCollectionsCount(readLocalActivity().collections?.length || 0);
     return onActivityUpdated(() => {
       setSavedCount(readLocalActivity().savedPrompts.length);
+      setCollectionsCount(readLocalActivity().collections?.length || 0);
     });
   }, []);
 
@@ -644,22 +650,36 @@ export default function ProfileModal({
                           </div>
 
                           {/* Stat 3: Saved Count */}
-                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center">
-                            <Layers className="w-5 h-5 text-[#ff6a3d] shrink-0" />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onClose();
+                              navigate('/saved');
+                            }}
+                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
+                          >
+                            <Bookmark className="w-5 h-5 text-[#ff6a3d] shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {savedCount}
                             </span>
                             <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a819d] opacity-60 mt-0.5">Saved Prompts</span>
-                          </div>
+                          </button>
 
                           {/* Stat 4: Collections Count */}
-                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center">
-                            <Sparkles className="w-5 h-5 text-violet-500 shrink-0" />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onClose();
+                              navigate('/collections');
+                            }}
+                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
+                          >
+                            <GalleryVerticalEnd className="w-5 h-5 text-violet-500 shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
-                              0
+                              {collectionsCount}
                             </span>
                             <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a819d] opacity-60 mt-0.5">Collections</span>
-                          </div>
+                          </button>
                         </div>
 
                         {/* Verification notice if not verified */}
