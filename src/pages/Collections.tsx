@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { 
   Folder, 
@@ -24,8 +25,18 @@ import { auth } from '../lib/firebase';
 import SEOMeta from '../components/common/SEOMeta';
 
 export default function Collections() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const selectedCollectionId = queryParams.get('id');
+  const setSelectedCollectionId = (id: string | null) => {
+    if (id) {
+      navigate(`?id=${id}`);
+    } else {
+      navigate('/collections');
+    }
+  };
   const [collections, setCollections] = useState<Collection[]>([]);
-  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   
   const [createOpen, setCreateOpen] = useState(false);
   const [newColName, setNewColName] = useState('');
@@ -135,11 +146,7 @@ export default function Collections() {
           {/* Banner Content overlay */}
           <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <span className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-[#a78bfa] mb-1">
-                <GalleryVerticalEnd className="h-3.5 w-3.5" />
-                Collection
-              </span>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white line-clamp-1">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white line-clamp-1 mt-6">
                 {activeCollection.name}
               </h1>
               <p className="text-white/60 text-xs sm:text-sm font-semibold mt-1">
