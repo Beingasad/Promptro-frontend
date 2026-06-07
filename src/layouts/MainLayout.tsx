@@ -165,7 +165,7 @@ export default function MainLayout() {
 
       {showBottomNav && <BottomNav />}
 
-      <CookieConsent />
+      {location.pathname !== '/verify-email' && <CookieConsent />}
       {!isAuth && <TermsAcceptanceModal />}
       {!isAuth && <EmailVerificationPopup />}
 

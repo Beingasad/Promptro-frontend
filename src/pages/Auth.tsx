@@ -35,30 +35,55 @@ const GENDER_OPTIONS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
 export default function Auth() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<AuthMode>('login');
-  const [signupStep, setSignupStep] = useState<SignupStep>('info');
+  const [mode, setMode] = useState<AuthMode>(
+    () => (sessionStorage.getItem('auth_mode') as AuthMode) || 'login'
+  );
+  const [signupStep, setSignupStep] = useState<SignupStep>(
+    () => (sessionStorage.getItem('auth_signupStep') as SignupStep) || 'info'
+  );
 
   // Form fields
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [gender, setGender] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState(
+    () => sessionStorage.getItem('auth_firstName') || ''
+  );
+  const [lastName, setLastName] = useState(
+    () => sessionStorage.getItem('auth_lastName') || ''
+  );
+  const [gender, setGender] = useState(
+    () => sessionStorage.getItem('auth_gender') || ''
+  );
+  const [email, setEmail] = useState(
+    () => sessionStorage.getItem('auth_email') || ''
+  );
+  const [password, setPassword] = useState(
+    () => sessionStorage.getItem('auth_password') || ''
+  );
   const [showPassword, setShowPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(
+    () => sessionStorage.getItem('auth_confirmPassword') || ''
+  );
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // OTP
-  const [otpValues, setOtpValues] = useState<string[]>(['', '', '', '', '', '']);
+  const [otpValues, setOtpValues] = useState<string[]>(() => {
+    const saved = sessionStorage.getItem('auth_otpValues');
+    return saved ? JSON.parse(saved) : ['', '', '', '', '', ''];
+  });
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [resendTimer, setResendTimer] = useState(0);
 
   // Forgot Password Steps
-  const [forgotStep, setForgotStep] = useState<'email' | 'otp' | 'reset'>('email');
-  const [forgotOtpVerifiedCode, setForgotOtpVerifiedCode] = useState('');
+  const [forgotStep, setForgotStep] = useState<'email' | 'otp' | 'reset'>(
+    () => (sessionStorage.getItem('auth_forgotStep') as 'email' | 'otp' | 'reset') || 'email'
+  );
+  const [forgotOtpVerifiedCode, setForgotOtpVerifiedCode] = useState(
+    () => sessionStorage.getItem('auth_forgotOtpVerifiedCode') || ''
+  );
 
   // Terms
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(
+    () => sessionStorage.getItem('auth_agreedToTerms') === 'true'
+  );
 
   // UI State
   const [error, setError] = useState('');
@@ -85,6 +110,16 @@ export default function Auth() {
     return () => clearInterval(interval);
   }, [resendTimer]);
 
+  const clearPersistedAuthState = () => {
+    const keys = [
+      'auth_mode', 'auth_signupStep', 'auth_forgotStep', 'auth_firstName',
+      'auth_lastName', 'auth_gender', 'auth_email', 'auth_password',
+      'auth_confirmPassword', 'auth_otpValues', 'auth_forgotOtpVerifiedCode',
+      'auth_agreedToTerms'
+    ];
+    keys.forEach(k => sessionStorage.removeItem(k));
+  };
+
   const resetForm = () => {
     setFirstName('');
     setLastName('');
@@ -100,7 +135,27 @@ export default function Auth() {
     setForgotOtpVerifiedCode('');
     setError('');
     setNotice('');
+    clearPersistedAuthState();
   };
+
+  // Sync state to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('auth_mode', mode);
+    sessionStorage.setItem('auth_signupStep', signupStep);
+    sessionStorage.setItem('auth_forgotStep', forgotStep);
+    sessionStorage.setItem('auth_firstName', firstName);
+    sessionStorage.setItem('auth_lastName', lastName);
+    sessionStorage.setItem('auth_gender', gender);
+    sessionStorage.setItem('auth_email', email);
+    sessionStorage.setItem('auth_password', password);
+    sessionStorage.setItem('auth_confirmPassword', confirmPassword);
+    sessionStorage.setItem('auth_otpValues', JSON.stringify(otpValues));
+    sessionStorage.setItem('auth_forgotOtpVerifiedCode', forgotOtpVerifiedCode);
+    sessionStorage.setItem('auth_agreedToTerms', agreedToTerms.toString());
+  }, [
+    mode, signupStep, forgotStep, firstName, lastName, gender, email,
+    password, confirmPassword, otpValues, forgotOtpVerifiedCode, agreedToTerms
+  ]);
 
   // --- Google Login ---
   const handleGoogleLogin = async () => {
@@ -121,6 +176,7 @@ export default function Auth() {
           terms_accepted: false,
         });
       } catch { /* profile may already exist */ }
+      clearPersistedAuthState();
       navigate('/', { replace: true });
     } catch (err) {
       setError(getFirebaseError(err));
@@ -180,6 +236,7 @@ export default function Auth() {
         });
       } catch { /* profile may already exist */ }
 
+      clearPersistedAuthState();
       navigate('/', { replace: true });
     } catch (err) {
       setError(getFirebaseError(err));
@@ -451,6 +508,7 @@ export default function Auth() {
       }
 
       // 4. Auto-login — navigate to home (user stays logged in)
+      clearPersistedAuthState();
       navigate('/', { replace: true });
     } catch (err) {
       setError(getFirebaseError(err));
