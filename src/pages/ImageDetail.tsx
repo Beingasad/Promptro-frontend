@@ -7,7 +7,7 @@ import { API_BASE_URL } from '../config';
 import { motion } from 'framer-motion';
 import ImageCard, { Prompt } from '../components/ImageCard';
 import { auth } from '../lib/firebase';
-import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt, onActivityUpdated } from '../lib/activity';
+import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
 import { useSearch } from '../context/SearchContext';
 import { useIsMobileDevice } from '../utils/device';
 import SEOMeta from '../components/common/SEOMeta';

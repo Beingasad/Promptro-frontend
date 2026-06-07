@@ -7,7 +7,7 @@ import type { MouseEvent } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { auth } from '../lib/firebase';
-import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated } from '../lib/activity';
+import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
 
 export interface Prompt {
   id: string;
