@@ -280,24 +280,26 @@ export default function ImageDetail() {
         >
           <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
         </button>
-        <div className="flex flex-col items-center gap-2">
-          <button
-            onClick={toggleSave}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
-            aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
-          >
-            <Bookmark className="h-4 w-4 md:h-5 md:w-5" fill={saved ? 'currentColor' : 'none'} />
-          </button>
-          <button
-            onClick={handleCollectionClick}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
-            aria-label="Add to Collection"
-          >
-            <GalleryVerticalEnd 
-              className="h-4 w-4 md:h-5 md:w-5 text-white"
-              fill={inCollection ? 'currentColor' : 'none'}
-            />
-          </button>
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={handleCollectionClick}
+              className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+              aria-label="Add to Collection"
+            >
+              <GalleryVerticalEnd 
+                className="h-4 w-4 md:h-5 md:w-5 text-white"
+                fill={inCollection ? 'currentColor' : 'none'}
+              />
+            </button>
+            <button
+              onClick={toggleSave}
+              className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+              aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
+            >
+              <Bookmark className="h-4 w-4 md:h-5 md:w-5" fill={saved ? 'currentColor' : 'none'} />
+            </button>
+          </div>
           <button
             onClick={handleShare}
             className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"

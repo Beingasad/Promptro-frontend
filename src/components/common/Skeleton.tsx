@@ -126,12 +126,14 @@ export function DetailSkeleton() {
               <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
                 <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-                  <Bookmark className="h-4 w-4 md:h-5 md:w-5" />
-                </div>
-                <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-                  <GalleryVerticalEnd className="h-4 w-4 md:h-5 md:w-5" />
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex items-center gap-1.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
+                    <GalleryVerticalEnd className="h-4 w-4 md:h-5 md:w-5" />
+                  </div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
+                    <Bookmark className="h-4 w-4 md:h-5 md:w-5" />
+                  </div>
                 </div>
                 <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
                   <Share2 className="h-4 w-4 md:h-5 md:w-5" />
