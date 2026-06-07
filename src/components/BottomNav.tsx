@@ -6,8 +6,8 @@ export default function BottomNav() {
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: Compass, label: 'Explore', path: '/explore' },
-    { icon: Bookmark, label: 'Saved', path: '/saved' },
     { icon: GalleryVerticalEnd, label: 'Collections', path: '/collections' },
+    { icon: Bookmark, label: 'Saved', path: '/saved' },
     { icon: LayoutGrid, label: 'Categories', path: '/categories' },
   ];
 
