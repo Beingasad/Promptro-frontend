@@ -7,6 +7,7 @@ import TopNavbar from '../components/TopNavbar';
 import BottomNav from '../components/BottomNav';
 import SearchPill from '../components/SearchPill';
 import PageBackButton from '../components/PageBackButton';
+import CollectionsTour from '../components/CollectionsTour';
 import CookieConsent from '../components/CookieConsent';
 import TermsAcceptanceModal from '../components/TermsAcceptanceModal';
 import EmailVerificationPopup from '../components/EmailVerificationPopup';
@@ -167,6 +168,7 @@ export default function MainLayout() {
       )}
 
       {showBottomNav && <BottomNav />}
+      <CollectionsTour show={showBottomNav} />
 
       {location.pathname !== '/verify-email' && <CookieConsent />}
       {!isAuth && <TermsAcceptanceModal />}
