@@ -14,6 +14,21 @@ if (typeof window !== 'undefined') {
     const event = new CustomEvent('promptro-global-alert', { detail: { message: String(message) } });
     window.dispatchEvent(event);
   };
+
+  // Prevent browser pinch-to-zoom on mobile/touch devices
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  document.addEventListener('gesturestart', (e) => {
+    e.preventDefault();
+  });
+
+  document.addEventListener('gesturechange', (e) => {
+    e.preventDefault();
+  });
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
