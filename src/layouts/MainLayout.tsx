@@ -90,6 +90,7 @@ export default function MainLayout() {
     location.pathname === '/' ||
     location.pathname === '/explore' ||
     location.pathname === '/saved' ||
+    location.pathname === '/collections' ||
     location.pathname === '/categories';
   const pagePillLabel = location.pathname === '/categories'
     ? 'Prompt worlds'
@@ -97,6 +98,8 @@ export default function MainLayout() {
       ? 'Explore prompts'
       : location.pathname === '/saved'
         ? 'Saved prompts'
+        : location.pathname === '/collections'
+          ? 'Prompt Collections'
         : location.pathname === '/about'
           ? 'About Promptro'
           : location.pathname === '/contact'

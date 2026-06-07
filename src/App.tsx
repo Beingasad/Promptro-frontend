@@ -3,6 +3,7 @@ import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import Saved from './pages/Saved';
+import Collections from './pages/Collections';
 import Categories from './pages/Categories';
 import ImageDetail from './pages/ImageDetail';
 import Admin from './pages/Admin';
@@ -47,6 +48,7 @@ function App() {
                 <Route index element={<Home />} />
                 <Route path="explore" element={<Explore />} />
                 <Route path="saved" element={<Saved />} />
+                <Route path="collections" element={<Collections />} />
                 <Route path="categories" element={<Categories />} />
                 <Route path="prompt/:id" element={<ImageDetail />} />
                 <Route path="auth" element={<Auth />} />

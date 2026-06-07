@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2 } from 'lucide-react';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, FolderPlus } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import CollectionSelectModal from '../components/CollectionSelectModal';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { motion } from 'framer-motion';
@@ -42,6 +43,7 @@ export default function ImageDetail() {
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
   const [shared, setShared] = useState(false);
+  const [collectionModalOpen, setCollectionModalOpen] = useState(false);
 
   const handleShare = async () => {
     if (!prompt) return;
@@ -252,6 +254,13 @@ export default function ImageDetail() {
             aria-label="Share prompt"
           >
             {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
+          </button>
+          <button
+            onClick={() => setCollectionModalOpen(true)}
+            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            aria-label="Add to Collection"
+          >
+            <FolderPlus className="h-4 w-4 md:h-5 md:w-5" />
           </button>
           <button
             onClick={toggleSave}
@@ -482,6 +491,11 @@ export default function ImageDetail() {
           ))}
         </div>
       </section>
+      <CollectionSelectModal 
+        isOpen={collectionModalOpen} 
+        onClose={() => setCollectionModalOpen(false)} 
+        prompt={prompt} 
+      />
     </motion.div>
   );
 }

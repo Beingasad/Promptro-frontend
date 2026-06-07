@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Eye, Bookmark } from 'lucide-react';
+import { Heart, Eye, Bookmark, FolderPlus } from 'lucide-react';
+import CollectionSelectModal from './CollectionSelectModal';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import type { MouseEvent } from 'react';
@@ -42,9 +43,16 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(prompt.likes);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
+
+  const openCollectionModal = (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setCollectionModalOpen(true);
+  };
 
   // Instant pre-load check to handle browser-cached images without visual glitch
   useEffect(() => {
@@ -118,8 +126,9 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   };
 
   return (
-    <Link 
-      to={`/prompt/${prompt.id}`}
+    <>
+      <Link 
+        to={`/prompt/${prompt.id}`}
       className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_18px_42px_rgba(32,26,54,0.13)] glass-shine hover-glass-glow"
       style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
     >
@@ -150,9 +159,16 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
 
       {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
-      {/* Top Right: Bookmark Button (ONLY ON ORIGINAL HOME MODE) */}
+      {/* Top Right: Bookmark Button & Folder Icon (ONLY ON ORIGINAL HOME MODE) */}
       {isHome && (
-        <div className="absolute top-3 right-3 transition-transform duration-300 group-hover:-translate-y-0.5">
+        <div className="absolute top-3 right-3 flex gap-1.5 transition-transform duration-300 group-hover:-translate-y-0.5">
+          <button 
+            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
+            onClick={openCollectionModal}
+            aria-label="Add to Collection"
+          >
+            <FolderPlus className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.4} />
+          </button>
           <button 
             className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
             onClick={toggleSave}
@@ -230,6 +246,16 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
 
             <button
               className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+              onClick={openCollectionModal}
+              aria-label="Add to Collection"
+            >
+              <FolderPlus className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" />
+            </button>
+            
+            <div className="h-3 w-px bg-white/20" />
+
+            <button
+              className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
               onClick={toggleSave}
               aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
             >
@@ -239,6 +265,12 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
         )}
       </div>
     </Link>
+      <CollectionSelectModal 
+        isOpen={collectionModalOpen} 
+        onClose={() => setCollectionModalOpen(false)} 
+        prompt={prompt} 
+      />
+    </>
   );
 }
 
