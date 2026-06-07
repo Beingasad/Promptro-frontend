@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Share2, Heart, Eye, Sparkles } from 'lucide-react';
+import { ArrowLeft, Bookmark, Share2, Heart, Eye, Sparkles, GalleryVerticalEnd } from 'lucide-react';
 
 interface CardSkeletonProps {
   isHome?: boolean;
@@ -23,11 +23,14 @@ export function CardSkeleton({ isHome: propIsHome, aspectRatioClass }: CardSkele
       {/* Shadow overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
 
-      {/* Floating Save Button (Only for Home layout) */}
+      {/* Floating Save & Collection Buttons (Only for Home layout) */}
       {isHome && (
-        <div className="absolute top-3 right-3">
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/10 backdrop-blur-md flex items-center justify-center text-white/40">
-            <Bookmark className="w-4 h-4 md:w-5 md:h-5 opacity-40" />
+        <div className="absolute top-3 right-3 flex gap-1.5">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/10 backdrop-blur-md flex items-center justify-center text-white/30">
+            <GalleryVerticalEnd className="w-4 h-4 md:w-5 md:h-5 opacity-30" />
+          </div>
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/10 backdrop-blur-md flex items-center justify-center text-white/30">
+            <Bookmark className="w-4 h-4 md:w-5 md:h-5 opacity-30" />
           </div>
         </div>
       )}
