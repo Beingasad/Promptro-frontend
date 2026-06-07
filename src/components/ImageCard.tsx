@@ -249,7 +249,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
               onClick={openCollectionModal}
               aria-label="Add to Collection"
             >
-              <FolderPlus className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" />
+              <GalleryVerticalEnd className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" />
             </button>
             
             <div className="h-3 w-px bg-white/20" />
