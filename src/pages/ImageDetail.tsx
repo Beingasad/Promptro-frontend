@@ -7,7 +7,7 @@ import { API_BASE_URL } from '../config';
 import { motion } from 'framer-motion';
 import ImageCard, { Prompt } from '../components/ImageCard';
 import { auth } from '../lib/firebase';
-import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt } from '../lib/activity';
+import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt, onActivityUpdated } from '../lib/activity';
 import { useSearch } from '../context/SearchContext';
 import { useIsMobileDevice } from '../utils/device';
 import SEOMeta from '../components/common/SEOMeta';
@@ -42,6 +42,7 @@ export default function ImageDetail() {
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [inCollection, setInCollection] = useState(false);
   const [shared, setShared] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
 
@@ -140,10 +141,20 @@ export default function ImageDetail() {
       }
     };
 
-    const { savedPrompts, likedPrompts } = readLocalActivity();
-    setSaved(savedPrompts.some((item) => item.id === id));
-    setLiked(likedPrompts.includes(id || ''));
     if (id) fetchPrompt();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    const updateStates = () => {
+      const { savedPrompts, likedPrompts, collections } = readLocalActivity();
+      setSaved(savedPrompts.some((item) => item.id === id));
+      setLiked(likedPrompts.includes(id));
+      setInCollection((collections || []).some(c => c.prompts.some(p => p.id === id)));
+    };
+    updateStates();
+
+    return onActivityUpdated(updateStates);
   }, [id]);
 
   useEffect(() => {
@@ -260,7 +271,10 @@ export default function ImageDetail() {
             className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Add to Collection"
           >
-            <GalleryVerticalEnd className="h-4 w-4 md:h-5 md:w-5" />
+            <GalleryVerticalEnd 
+              className={`h-4 w-4 md:h-5 md:w-5 transition-colors ${inCollection ? 'text-primary' : 'text-white'}`}
+              fill={inCollection ? 'currentColor' : 'none'}
+            />
           </button>
           <button
             onClick={toggleSave}

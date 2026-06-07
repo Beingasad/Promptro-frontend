@@ -7,7 +7,7 @@ import type { MouseEvent } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { auth } from '../lib/firebase';
-import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt } from '../lib/activity';
+import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated } from '../lib/activity';
 
 export interface Prompt {
   id: string;
@@ -41,6 +41,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const finalAspectRatio = aspectRatio || prompt.aspectRatio || prompt.aspect_ratio;
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [inCollection, setInCollection] = useState(false);
   const [likes, setLikes] = useState(prompt.likes);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
@@ -66,11 +67,16 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   }, [prompt.image_url]);
 
   useEffect(() => {
-    const { savedPrompts, likedPrompts } = readLocalActivity();
+    const updateStates = () => {
+      const { savedPrompts, likedPrompts, collections } = readLocalActivity();
+      setSaved(savedPrompts.some((savedPrompt) => savedPrompt.id === prompt.id));
+      setLiked(likedPrompts.includes(prompt.id));
+      setLikes(prompt.likes + (likedPrompts.includes(prompt.id) ? 1 : 0));
+      setInCollection((collections || []).some(c => c.prompts.some(p => p.id === prompt.id)));
+    };
+    updateStates();
 
-    setSaved(savedPrompts.some((savedPrompt) => savedPrompt.id === prompt.id));
-    setLiked(likedPrompts.includes(prompt.id));
-    setLikes(prompt.likes + (likedPrompts.includes(prompt.id) ? 1 : 0));
+    return onActivityUpdated(updateStates);
   }, [prompt]);
 
   const toggleSave = (event: MouseEvent) => {
@@ -167,7 +173,11 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
             onClick={openCollectionModal}
             aria-label="Add to Collection"
           >
-            <GalleryVerticalEnd className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.4} />
+            <GalleryVerticalEnd 
+              className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${inCollection ? 'text-primary' : 'text-white'}`} 
+              fill={inCollection ? 'currentColor' : 'none'}
+              strokeWidth={2.4} 
+            />
           </button>
           <button 
             className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
@@ -249,7 +259,10 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
               onClick={openCollectionModal}
               aria-label="Add to Collection"
             >
-              <GalleryVerticalEnd className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" />
+              <GalleryVerticalEnd 
+                className={`w-3.5 h-3.5 md:w-4.5 md:h-4.5 transition-colors ${inCollection ? 'text-primary' : 'text-white'}`}
+                fill={inCollection ? 'currentColor' : 'none'}
+              />
             </button>
             
             <div className="h-3 w-px bg-white/20" />
