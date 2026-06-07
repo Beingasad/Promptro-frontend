@@ -51,6 +51,10 @@ export default function Auth() {
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [resendTimer, setResendTimer] = useState(0);
 
+  // Forgot Password Steps
+  const [forgotStep, setForgotStep] = useState<'email' | 'otp' | 'reset'>('email');
+  const [forgotOtpVerifiedCode, setForgotOtpVerifiedCode] = useState('');
+
   // Terms
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
@@ -88,6 +92,8 @@ export default function Auth() {
     setOtpValues(['', '', '', '', '', '']);
     setAgreedToTerms(false);
     setSignupStep('info');
+    setForgotStep('email');
+    setForgotOtpVerifiedCode('');
     setError('');
     setNotice('');
   };
@@ -178,20 +184,100 @@ export default function Auth() {
     }
   };
 
-  // --- Forgot Password ---
-  const handleForgotPassword = async (event: FormEvent<HTMLFormElement>) => {
+  // --- Forgot Password step 1: Send OTP ---
+  const handleForgotPasswordSendOTP = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
     setNotice('');
     setLoading(true);
     try {
       const normalizedEmail = email.trim().toLowerCase();
-      const response = await axios.post(`${API_BASE_URL}/api/auth/forgot-password`, {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/forgot-password/send-otp`, {
         email: normalizedEmail,
       });
-      setNotice(response.data?.message || 'A password reset link has been sent to your email.');
+      setForgotStep('otp');
+      setResendTimer(60);
+      setOtpValues(['', '', '', '', '', '']);
+      setNotice(response.data?.message || `Verification code sent to ${email.trim()}`);
     } catch (err: any) {
-      const msg = err?.response?.data?.detail || 'Failed to send password reset link. Please try again.';
+      const msg = err?.response?.data?.detail || 'Failed to send password reset code. Please try again.';
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- Forgot Password step 2: Verify OTP ---
+  const handleForgotPasswordVerifyOTP = async () => {
+    const otp = otpValues.join('');
+    if (otp.length !== 6) {
+      setError('Please enter the complete 6-digit code.');
+      return;
+    }
+    setError('');
+    setNotice('');
+    setLoading(true);
+    try {
+      const normalizedEmail = email.trim().toLowerCase();
+      await axios.post(`${API_BASE_URL}/api/auth/forgot-password/verify-otp`, {
+        email: normalizedEmail,
+        otp,
+      });
+      setForgotOtpVerifiedCode(otp);
+      setForgotStep('reset');
+      setPassword(''); // clear for entering new password
+      setNotice('');
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || 'Invalid OTP. Please try again.';
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- Forgot Password step 3: Reset Password ---
+  const handleForgotPasswordReset = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
+    setError('');
+    setNotice('');
+    setLoading(true);
+    try {
+      const normalizedEmail = email.trim().toLowerCase();
+      await axios.post(`${API_BASE_URL}/api/auth/forgot-password/reset-password`, {
+        email: normalizedEmail,
+        otp: forgotOtpVerifiedCode,
+        new_password: password,
+      });
+      setMode('login');
+      resetForm();
+      setNotice('Password reset successfully! Please log in with your new password.');
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || 'Failed to reset password. Please try again.';
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- Forgot Password: Resend OTP ---
+  const handleForgotPasswordResendOTP = async () => {
+    if (resendTimer > 0) return;
+    setError('');
+    setLoading(true);
+    try {
+      const normalizedEmail = email.trim().toLowerCase();
+      await axios.post(`${API_BASE_URL}/api/auth/forgot-password/send-otp`, {
+        email: normalizedEmail,
+      });
+      setResendTimer(60);
+      setOtpValues(['', '', '', '', '', '']);
+      setNotice('New code sent to your email.');
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || 'Failed to resend OTP.';
       setError(msg);
     } finally {
       setLoading(false);
@@ -381,7 +467,11 @@ export default function Auth() {
       otpRefs.current[index - 1]?.focus();
     }
     if (e.key === 'Enter' && otpValues.join('').length === 6) {
-      handleVerifyOTP();
+      if (mode === 'signup') {
+        handleVerifyOTP();
+      } else if (mode === 'forgot-password') {
+        handleForgotPasswordVerifyOTP();
+      }
     }
   };
 
@@ -439,7 +529,11 @@ export default function Auth() {
                 {mode === 'signup'
                   ? 'Sign up with your email to unlock all Promptro features.'
                   : mode === 'forgot-password'
-                    ? 'Enter your email address and we will send you a secure link to reset your password.'
+                    ? forgotStep === 'email'
+                      ? 'Enter your email address and we will send you a secure OTP to recover your password.'
+                      : forgotStep === 'otp'
+                        ? 'Enter the 6-digit verification code sent to your inbox.'
+                        : 'Choose a strong new password for your Promptro account.'
                     : 'Continue with Google or use your email to keep your Promptro profile connected across devices.'}
               </p>
             </div>
@@ -472,7 +566,11 @@ export default function Auth() {
             {mode === 'login'
               ? 'Choose Google or email to open your account.'
               : mode === 'forgot-password'
-                ? 'Enter your email to receive a secure password reset link.'
+                ? forgotStep === 'email'
+                  ? 'Enter your email to receive a secure recovery code.'
+                  : forgotStep === 'otp'
+                    ? 'Enter the 6-digit code sent to your email.'
+                    : 'Enter your new password below.'
                 : signupStep === 'info'
                   ? 'Fill in your details to get started.'
                   : signupStep === 'otp'
@@ -615,55 +713,202 @@ export default function Auth() {
 
           {/* ====== FORGOT PASSWORD FORM ====== */}
           {mode === 'forgot-password' && (
-            <form onSubmit={handleForgotPassword} className="flex flex-col gap-3">
-              <label className="block">
-                <span className="mb-1.5 block text-sm font-bold text-[#242033]">Email</span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
-                  <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="auth-input h-full min-w-0 flex-1 bg-transparent text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa]"
-                    required
-                  />
-                </span>
-              </label>
+            <div className="flex flex-col gap-3">
+              {/* Step 1: Enter Email */}
+              {forgotStep === 'email' && (
+                <form onSubmit={handleForgotPasswordSendOTP} className="flex flex-col gap-3">
+                  <label className="block">
+                    <span className="mb-1.5 block text-sm font-bold text-[#242033]">Email</span>
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                      <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        className="auth-input h-full min-w-0 flex-1 bg-transparent text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa]"
+                        required
+                      />
+                    </span>
+                  </label>
 
-              {error && (
-                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
-                  {error}
+                  {error && (
+                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                      {error}
+                    </div>
+                  )}
+                  {notice && (
+                    <div className="rounded-2xl border border-[#d9caf8] bg-primary/10 px-3 py-2 text-sm font-medium leading-5 text-primary">
+                      {notice}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="mt-0.5 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+                    Send Reset OTP
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('login');
+                      setError('');
+                      setNotice('');
+                    }}
+                    className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back to Login
+                  </button>
+                </form>
+              )}
+
+              {/* Step 2: Enter OTP */}
+              {forgotStep === 'otp' && (
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-3 rounded-2xl border border-[#d9caf8] bg-primary/5 p-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#8b5cf6] to-[#ff6a3d]">
+                      <KeyRound className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-[#242033]">Check your inbox</p>
+                      <p className="text-[11px] font-medium text-[#736b88]">
+                        Reset code sent to <span className="font-bold text-primary">{email.trim()}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* OTP Input Boxes */}
+                  <div className="flex justify-center gap-2.5" onPaste={handleOtpPaste}>
+                    {otpValues.map((val, i) => (
+                      <input
+                        key={i}
+                        ref={(el) => { otpRefs.current[i] = el; }}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={val}
+                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                        className={`h-12 w-12 rounded-xl border-2 text-center text-lg font-bold outline-none transition-all ${
+                          val
+                            ? 'border-primary bg-primary/5 text-primary'
+                            : 'border-[#e9e2f3] bg-white/72 text-[#171421] focus:border-primary focus:bg-primary/5'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Resend */}
+                  <div className="text-center">
+                    {resendTimer > 0 ? (
+                      <p className="text-xs font-medium text-[#978eaa]">
+                        Resend code in <span className="font-bold text-primary">{resendTimer}s</span>
+                      </p>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleForgotPasswordResendOTP}
+                        disabled={loading}
+                        className="text-xs font-bold text-primary hover:underline disabled:opacity-50"
+                      >
+                        Resend Code
+                      </button>
+                    )}
+                  </div>
+
+                  {error && (
+                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                      {error}
+                    </div>
+                  )}
+                  {notice && (
+                    <div className="rounded-2xl border border-[#d9caf8] bg-primary/10 px-3 py-2 text-sm font-medium leading-5 text-primary">
+                      {notice}
+                    </div>
+                  )}
+
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => { setForgotStep('email'); setError(''); setNotice(''); }}
+                      className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleForgotPasswordVerifyOTP}
+                      disabled={loading || otpValues.join('').length !== 6}
+                      className="flex h-11 flex-[2] items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+                      Verify Code
+                    </button>
+                  </div>
                 </div>
               )}
-              {notice && (
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-medium leading-6 text-emerald-800">
-                  {notice}
-                </div>
+
+              {/* Step 3: Reset Password */}
+              {forgotStep === 'reset' && (
+                <form onSubmit={handleForgotPasswordReset} className="flex flex-col gap-3">
+                  <label className="block">
+                    <span className="mb-1.5 block text-sm font-bold text-[#242033]">New Password</span>
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                      <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Minimum 6 characters"
+                        className="auth-input h-full min-w-0 flex-1 bg-transparent text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa]"
+                        minLength={6}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((s) => !s)}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#7a728d] transition-colors hover:bg-primary/10 hover:text-primary"
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </span>
+                  </label>
+
+                  {error && (
+                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                      {error}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={loading || password.length < 6}
+                    className="mt-0.5 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+                    Update Password
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode('login');
+                      resetForm();
+                    }}
+                    className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back to Login
+                  </button>
+                </form>
               )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="mt-0.5 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-                Send Reset Link
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setMode('login');
-                  setError('');
-                  setNotice('');
-                }}
-                className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back to Login
-              </button>
-            </form>
+            </div>
           )}
 
           {/* ====== SIGNUP STEP 1: INFO ====== */}
