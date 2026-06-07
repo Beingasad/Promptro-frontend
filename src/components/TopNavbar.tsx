@@ -1510,7 +1510,6 @@ export default function TopNavbar() {
     ];
 
     const comingSoon = [
-      'Prompt Collections',
       'Creator Profiles',
       'Community Uploads',
       'AI Style Mixer',

@@ -73,13 +73,13 @@ const values = [
 const timeline = [
   { year: '2026', title: 'Promptro Launched', desc: 'Started with a handpicked collection of 1,000 AI prompts.', icon: Sparkles },
   { year: '2026', title: 'Reached 10,000 Prompts', desc: 'Expanded across 20+ categories including cinematic, anime, portrait and architecture.', icon: Layers },
+  { year: '2026', title: 'Prompt Collections', desc: 'Organize, save and share prompt boards.', icon: Layers },
   { year: '2026', title: 'Insights & Tutorials', desc: 'Launched in-depth AI prompt tutorials, tips and Midjourney guides.', icon: BookOpen },
-  { year: 'Soon', title: 'Community Features', desc: 'Creator profiles, community uploads, collections and AI style mixer — coming next.', icon: Users },
+  { year: 'Soon', title: 'Community Features', desc: 'Creator profiles, community uploads and AI style mixer — coming next.', icon: Users },
 ];
 
 const comingSoon = [
   { icon: ImagePlus, label: 'Community Uploads', desc: 'Share your own prompts' },
-  { icon: Layers, label: 'Prompt Collections', desc: 'Organize & curate boards' },
   { icon: Users, label: 'Creator Profiles', desc: 'Follow your favourite creators' },
   { icon: Cpu, label: 'AI Style Mixer', desc: 'Blend styles intelligently' },
 ];
