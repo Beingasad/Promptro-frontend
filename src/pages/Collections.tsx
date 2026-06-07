@@ -10,8 +10,11 @@ import {
   ArrowUpRight,
   Check,
   Loader2,
-  GalleryVerticalEnd
+  GalleryVerticalEnd,
+  Share2
 } from 'lucide-react';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import MasonryGrid from '../components/MasonryGrid';
 import { 
   readLocalActivity, 
@@ -19,6 +22,7 @@ import {
   renameCollection, 
   createCollection,
   saveUserActivity,
+  onActivityUpdated,
   Collection 
 } from '../lib/activity';
 import { auth } from '../lib/firebase';
@@ -44,17 +48,52 @@ export default function Collections() {
   const [renameColName, setRenameColName] = useState('');
   const [saving, setSaving] = useState(false);
 
+  // Sharing states
+  const [sharedCollection, setSharedCollection] = useState<Collection | null>(null);
+  const [sharedLoading, setSharedLoading] = useState(false);
+  const [sharedError, setSharedError] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
+
   const loadCollections = () => {
     setCollections(readLocalActivity().collections || []);
   };
 
   useEffect(() => {
     loadCollections();
+    return onActivityUpdated(loadCollections);
   }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [selectedCollectionId]);
+
+  // Fetch shared collection if viewing another user's collection
+  useEffect(() => {
+    if (selectedCollectionId) {
+      const localCol = collections.find(c => c.id === selectedCollectionId);
+      if (localCol) {
+        setSharedCollection(null);
+        setSharedError(false);
+      } else {
+        setSharedLoading(true);
+        setSharedError(false);
+        axios.get(`${API_BASE_URL}/api/collections/${selectedCollectionId}`)
+          .then(res => {
+            setSharedCollection(res.data);
+          })
+          .catch(err => {
+            console.error("Failed to fetch shared collection:", err);
+            setSharedError(true);
+          })
+          .finally(() => {
+            setSharedLoading(false);
+          });
+      }
+    } else {
+      setSharedCollection(null);
+      setSharedError(false);
+    }
+  }, [selectedCollectionId, collections]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,11 +142,80 @@ export default function Collections() {
     }
   };
 
-  const activeCollection = collections.find(c => c.id === selectedCollectionId);
+  const activeCollection = collections.find(c => c.id === selectedCollectionId) || sharedCollection;
+
+  const handleShareCollection = async () => {
+    if (!activeCollection) return;
+    const shareUrl = `${window.location.origin}/collections?id=${activeCollection.id}`;
+    const shareText = `Check out my prompt collection "${activeCollection.name}" on Promptro! 🎨✨`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: activeCollection.name,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (err) {
+        console.error("Error sharing collection:", err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopiedShare(true);
+        setTimeout(() => setCopiedShare(false), 2000);
+      } catch (err) {
+        console.error("Failed to copy link:", err);
+      }
+    }
+  };
+
+  const handleSaveSharedCollection = async () => {
+    if (!activeCollection) return;
+    try {
+      if (collections.some(c => c.id === activeCollection.id)) return;
+      const activity = readLocalActivity();
+      const updatedCollections = [...(activity.collections || []), activeCollection];
+      writeLocalActivity({ ...activity, collections: updatedCollections });
+      loadCollections();
+      await saveUserActivity(auth.currentUser);
+      alert("Collection saved to your boards!");
+    } catch (err) {
+      console.error("Failed to save shared collection:", err);
+    }
+  };
 
   // ── DETAIL VIEW ──
-  if (selectedCollectionId && activeCollection) {
+  if (selectedCollectionId) {
+    if (sharedLoading) {
+      return (
+        <div className="min-h-[60vh] flex flex-col justify-center items-center">
+          <Loader2 className="w-8 h-8 text-primary animate-spin" />
+          <p className="text-xs font-bold text-[#8a819d] mt-3">Loading collection...</p>
+        </div>
+      );
+    }
+
+    if (sharedError || !activeCollection) {
+      return (
+        <div className="min-h-[50vh] flex flex-col justify-center items-center text-center px-4">
+          <Folder className="w-12 h-12 text-[#ff6a3d] opacity-50 mb-3" />
+          <p className="text-lg font-bold text-[#171421] dark:text-white">Collection not found</p>
+          <p className="text-xs font-semibold text-[#8a819d] mt-1 max-w-xs leading-relaxed">
+            This collection may have been deleted, or the shared link is invalid.
+          </p>
+          <button
+            onClick={() => setSelectedCollectionId(null)}
+            className="mt-5 h-9 px-5 rounded-full bg-primary text-white text-xs font-bold shadow-md shadow-primary/20 cursor-pointer"
+          >
+            Back to Collections
+          </button>
+        </div>
+      );
+    }
+
     const coverImage = activeCollection.prompts[0]?.image_url;
+    const isSharedViewer = !collections.some(c => c.id === activeCollection.id);
 
     return (
       <div className="w-full flex flex-col gap-1">
@@ -136,8 +244,13 @@ export default function Collections() {
 
           {/* Banner Content overlay */}
           <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white line-clamp-1 mt-6">
+            <div className="flex flex-col items-start">
+              {isSharedViewer && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[9px] font-black uppercase tracking-wider text-white mb-2 border border-white/10">
+                  <GalleryVerticalEnd className="w-3 h-3 text-[#ff6a3d]" /> Public Board
+                </span>
+              )}
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white line-clamp-1 mt-2">
                 {activeCollection.name}
               </h1>
               <p className="text-white/60 text-xs sm:text-sm font-semibold mt-1">
@@ -148,17 +261,36 @@ export default function Collections() {
             {/* Controls (glass style) */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => { setRenameOpen(activeCollection.id); setRenameColName(activeCollection.name); }}
-                className="h-9 px-4 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-bold text-white hover:bg-white/25 transition-all flex items-center gap-1.5"
+                onClick={handleShareCollection}
+                className="h-9 px-4 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-bold text-white hover:bg-white/25 transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                <Edit3 className="w-3.5 h-3.5" /> Rename
+                {copiedShare ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />} 
+                {copiedShare ? 'Copied' : 'Share'}
               </button>
-              <button
-                onClick={() => handleDelete(activeCollection.id)}
-                className="h-9 px-4 rounded-full border border-rose-500/20 bg-rose-500/20 backdrop-blur-md text-xs font-bold text-rose-100 hover:bg-rose-500/35 transition-all flex items-center gap-1.5"
-              >
-                <Trash2 className="w-3.5 h-3.5" /> Delete
-              </button>
+
+              {!isSharedViewer ? (
+                <>
+                  <button
+                    onClick={() => { setRenameOpen(activeCollection.id); setRenameColName(activeCollection.name); }}
+                    className="h-9 px-4 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-bold text-white hover:bg-white/25 transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" /> Rename
+                  </button>
+                  <button
+                    onClick={() => handleDelete(activeCollection.id)}
+                    className="h-9 px-4 rounded-full border border-rose-500/20 bg-rose-500/20 backdrop-blur-md text-xs font-bold text-rose-100 hover:bg-rose-500/35 transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" /> Delete
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={handleSaveSharedCollection}
+                  className="h-9 px-4 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white text-xs font-black shadow-md shadow-primary/20 hover:scale-102 transition-transform flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Save Board
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -168,7 +300,7 @@ export default function Collections() {
         ) : (
           <div className="min-h-[35vh] rounded-[1.8rem] border border-white/70 bg-white/58 px-6 py-12 text-center shadow-[0_18px_46px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#14111f]/62 flex flex-col justify-center items-center">
             <p className="text-lg font-bold text-[#171421] dark:text-white">No prompts yet</p>
-            <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8]">Tap the gallery icon on any prompt to add it here.</p>
+            <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8]">This board doesn't contain any prompts.</p>
           </div>
         )}
 
