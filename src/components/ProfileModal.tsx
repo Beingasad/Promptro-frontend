@@ -82,6 +82,18 @@ export default function ProfileModal({
   const [verificationLoading, setVerificationLoading] = useState(false);
   const [verificationSuccess, setVerificationSuccess] = useState(false);
 
+  // Prevent page scroll when the modal or cropping sub-modal is open
+  useEffect(() => {
+    if (isOpen || !!cropImageSrc) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, cropImageSrc]);
+
   // Fetch saved prompts count and collections count
   useEffect(() => {
     setSavedCount(readLocalActivity().savedPrompts.length);
@@ -220,6 +232,10 @@ export default function ProfileModal({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    // Prevent background scrolling while zooming or dragging the crop image
+    if (e.cancelable && (isPinching || isDragging)) {
+      e.preventDefault();
+    }
     if (e.touches.length === 2 && isPinching) {
       const t1 = e.touches[0];
       const t2 = e.touches[1];
