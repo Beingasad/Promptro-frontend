@@ -1622,7 +1622,7 @@ export default function TopNavbar() {
         {/* Version */}
         <div className="rounded-[1rem] bg-white/40 dark:bg-white/5 py-2 px-4 text-center glass-shine hover-glass-glow">
           <span className="text-[8px] font-bold uppercase tracking-widest text-[#8a819d] dark:text-[#a098b0]">
-            Promptro v1.0.0 • © 2026
+            Promptro v1.1.0 • © 2026
           </span>
         </div>
       </div>
@@ -1955,7 +1955,7 @@ export default function TopNavbar() {
                       <div className="flex items-center justify-center gap-1 text-[10px] font-medium text-[#8a819d]">
                         Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                       </div>
-                      <p className="mt-1.5 text-[10px] font-medium text-[#8a819d]">v1.0.0</p>
+                      <p className="mt-1.5 text-[10px] font-medium text-[#8a819d]">v1.1.0</p>
                     </div>
                   </motion.div>
                 )}
