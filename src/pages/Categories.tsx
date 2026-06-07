@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Grid } from 'lucide-react';
+import { ArrowUpRight, Grid, LayoutGrid } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCategories } from '../context/CategoryContext';
 import SEOMeta from '../components/common/SEOMeta';
@@ -18,19 +18,28 @@ export default function Categories() {
         keywords="AI prompt categories, prompt styles, Midjourney styles, ChatGPT templates, cinematic prompts, Promptro"
       />
       <div className="max-w-7xl mx-auto">
-        <header className="mb-2 sm:mb-4 text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
+        <header className="mb-6 md:mb-10 text-left flex flex-col items-start">
+          <motion.span
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl sm:text-6xl font-black tracking-tight mb-2 sm:mb-4 whitespace-nowrap"
+            className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1"
+          >
+            <LayoutGrid className="h-3.5 w-3.5" />
+            PROMPT CATEGORIES
+          </motion.span>
+          <motion.h1 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#171421] dark:text-white mb-2"
           >
             Explore <span className="text-primary">Categories</span>
           </motion.h1>
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[#756d8d] dark:text-[#afa6c8] text-base sm:text-xl font-medium max-w-xs sm:max-w-none mx-auto"
+            className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
           >
             Browse high-quality prompts curated by the community.
           </motion.p>

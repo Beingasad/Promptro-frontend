@@ -187,13 +187,32 @@ export default function Explore() {
         description="Explore high-quality AI prompts, cinematic prompts, portrait prompts, and creative templates in the Explore Studio."
         keywords="AI prompts, explore AI prompts, Midjourney prompts, ChatGPT prompts, Promptro"
       />
-      <section className="mb-6 md:mb-8">
-        <p className="flex items-center gap-2 text-sm font-medium uppercase text-primary">
-          <Compass className="h-4 w-4" />
-          Prompt library
-        </p>
-        <h1 className="mt-1 text-[34px] font-bold leading-none text-[#171421] md:text-5xl">Explore Studio</h1>
-      </section>
+      <header className="mb-6 md:mb-10 text-left flex flex-col items-start">
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1"
+        >
+          <Compass className="h-3.5 w-3.5" />
+          PROMPT LIBRARY
+        </motion.p>
+        <motion.h1
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#171421] dark:text-white mb-2"
+        >
+          Explore <span className="text-primary">Studio</span>
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+        >
+          Explore high-quality prompts and templates curated by the community.
+        </motion.p>
+      </header>
 
 
 

@@ -1758,7 +1758,7 @@ export default function TopNavbar() {
 
         <div className="flex shrink-0 items-center gap-2 md:gap-3">
           <button
-            className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#171421] dark:text-white transition-colors hover:bg-white/75 dark:hover:bg-white/10 md:h-11 md:w-11"
+            className="relative flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white transition-colors hover:bg-white/75 dark:hover:bg-white/10 md:h-12 md:w-12"
             onClick={() => {
               setNotificationsOpen((open) => !open);
               setHasUnreadNotifications(false);
@@ -1769,13 +1769,13 @@ export default function TopNavbar() {
             }}
             aria-label="Notifications"
           >
-            <Bell className="w-5 h-5 md:w-6 md:h-6" />
+            <Bell className="w-[22px] h-[22px] md:w-[26px] md:h-[26px]" />
             {hasUnreadNotifications && (
-              <span className="absolute top-2 right-2.5 h-2 w-2 rounded-full bg-[#ff6a3d] ring-2 ring-white" />
+              <span className="absolute top-2.5 right-3 h-2 w-2 rounded-full bg-[#ff6a3d] ring-2 ring-white dark:ring-[#14111f]" />
             )}
           </button>
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full text-[#171421] transition-colors hover:bg-white/75 md:h-11 md:w-11"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white transition-colors hover:bg-white/75 dark:hover:bg-white/10 md:h-12 md:w-12"
             onClick={() => {
               setProfileOpen((open) => !open);
               setMenuOpen(false);
@@ -1787,17 +1787,15 @@ export default function TopNavbar() {
               <img
                 src={profilePhoto}
                 alt={displayName}
-                className="h-6 w-6 rounded-full object-cover shadow-[0_2px_8px_rgba(23,20,33,0.14)] md:h-7 md:w-7"
+                className="h-8 w-8 rounded-full object-cover shadow-[0_2px_8px_rgba(23,20,33,0.14)] md:h-9 md:w-9"
                 referrerPolicy="no-referrer"
               />
             ) : isLoggedIn ? (
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary md:h-8 md:w-8">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs md:text-sm font-black text-primary md:h-9 md:w-9">
                 {profileInitial}
               </span>
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/75 dark:hover:bg-white/10 md:h-11 md:w-11">
-                <CircleUserRound className="w-5 h-5 md:w-6 md:h-6 text-[#171421] dark:text-white" />
-              </div>
+              <CircleUserRound className="w-[22px] h-[22px] md:w-[26px] md:h-[26px] text-[#171421] dark:text-white" />
             )}
           </button>
         </div>

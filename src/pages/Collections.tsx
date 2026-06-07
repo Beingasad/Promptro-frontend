@@ -203,43 +203,71 @@ export default function Collections() {
         robots="noindex, nofollow"
       />
       <div className="max-w-7xl mx-auto">
-        {/* Header — matching Categories style */}
-        <header className="mb-2 sm:mb-4 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-3xl sm:text-6xl font-black tracking-tight mb-2 sm:mb-4 whitespace-nowrap"
-          >
-            Your <span className="text-primary">Collections</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-[#756d8d] dark:text-[#afa6c8] text-base sm:text-xl font-medium max-w-xs sm:max-w-none mx-auto"
-          >
-            Curate and organize your favorite prompts into boards.
-          </motion.p>
-
-          {/* Create Board Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="mt-5"
-          >
-            <button
-              onClick={() => setCreateOpen(true)}
-              className="inline-flex items-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white px-6 text-sm font-bold shadow-[0_12px_28px_rgba(109,77,236,0.26)] hover:scale-105 active:scale-95 transition-transform"
+        {/* Header — modern dashboard layout */}
+        <header className="mb-6 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div className="flex flex-col items-start">
+            <motion.span
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1"
             >
-              <Plus className="w-4 h-4" />
-              Create Board
-            </button>
-          </motion.div>
+              <GalleryVerticalEnd className="h-3.5 w-3.5" />
+              YOUR BOARDS
+            </motion.span>
+            <motion.h1
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#171421] dark:text-white mb-2"
+            >
+              Your <span className="text-primary">Collections</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+            >
+              Curate and organize your favorite prompts into boards.
+            </motion.p>
+          </div>
+
+          {collections.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.12 }}
+              className="shrink-0"
+            >
+              <button
+                onClick={() => setCreateOpen(true)}
+                className="inline-flex items-center gap-2 h-10 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white px-5 text-xs font-black shadow-[0_12px_28px_rgba(109,77,236,0.26)] hover:scale-103 active:scale-97 transition-all cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                Create Board
+              </button>
+            </motion.div>
+          )}
         </header>
 
         {collections.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0 mt-2">
+            {/* Pinterest-style Create Board Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0 }}
+              onClick={() => setCreateOpen(true)}
+              className="group relative flex aspect-[4/5] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.5rem] border-2 border-dashed border-[#cfc7dd] dark:border-white/10 bg-white/20 dark:bg-white/5 hover:bg-white/40 dark:hover:bg-white/8 hover:border-primary dark:hover:border-primary/50 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
+            >
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-[0_8px_20px_rgba(109,77,236,0.08)]">
+                <Plus className="w-6 h-6 sm:w-8 sm:h-8" />
+              </div>
+              <span className="mt-3 sm:mt-4 text-xs sm:text-sm font-black text-[#5f5774] dark:text-[#c4bed6] group-hover:text-primary transition-colors uppercase tracking-wider">
+                Create Board
+              </span>
+            </motion.div>
+
             {collections.map((col, i) => {
               const coverImage = col.prompts[0]?.image_url;
 
@@ -248,7 +276,7 @@ export default function Collections() {
                   key={col.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: (i + 1) * 0.05 }}
                 >
                   <div
                     onClick={() => setSelectedCollectionId(col.id)}
@@ -302,14 +330,23 @@ export default function Collections() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="min-h-[40vh] rounded-[1.8rem] border border-white/70 bg-white/58 px-6 py-12 text-center shadow-[0_18px_46px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:border-white/10 dark:bg-[#14111f]/62 flex flex-col justify-center items-center mt-4"
+            transition={{ delay: 0.15 }}
+            className="min-h-[45vh] rounded-[2.25rem] border border-white/70 bg-white/45 dark:border-white/5 dark:bg-[#14111f]/45 p-8 text-center shadow-[0_24px_58px_rgba(72,56,118,0.08)] backdrop-blur-2xl flex flex-col justify-center items-center max-w-xl mx-auto mt-4"
           >
-            <Folder className="w-14 h-14 text-primary opacity-40 mb-3" />
-            <p className="text-lg font-bold text-[#171421] dark:text-white">No collections yet</p>
-            <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8] max-w-sm">
-              Create a board to organize prompts by style, project, or mood.
+            <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mb-4 shadow-[0_10px_25px_rgba(109,77,236,0.12)]">
+              <Folder className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-black text-[#171421] dark:text-white">No collections yet</h3>
+            <p className="mt-2 text-sm font-semibold text-[#6f6684] dark:text-[#afa6c8] max-w-sm leading-relaxed">
+              Create a board to organize prompts by style, project, or mood. Start fresh and compile your favorites!
             </p>
+            <button
+              onClick={() => setCreateOpen(true)}
+              className="mt-6 inline-flex items-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white px-6 text-sm font-bold shadow-[0_12px_28px_rgba(109,77,236,0.26)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+            >
+              <Plus className="w-4.5 h-4.5" />
+              Create First Board
+            </button>
           </motion.div>
         )}
       </div>
@@ -319,13 +356,44 @@ export default function Collections() {
         {createOpen && (
           <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
             <motion.button type="button" className="fixed inset-0 bg-[#0d0b14]/50 dark:bg-black/60 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setCreateOpen(false)} />
-            <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] border border-white/80 bg-white/80 p-5 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white">
-              <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white mb-3">Create Board</h3>
-              <form onSubmit={handleCreate} className="flex flex-col gap-3">
-                <input type="text" required value={newColName} onChange={(e) => setNewColName(e.target.value)} placeholder="e.g. Cinematic Landscapes" maxLength={30} className="w-full h-10 px-3.5 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 10 }}
+              className="relative w-full max-w-[22rem] rounded-[2.5rem] border border-white/80 bg-white/80 p-6 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white text-center"
+            >
+              <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
+                <Folder className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-black text-[#171421] dark:text-white mb-1">Create Board</h3>
+              <p className="text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8] mb-4">Give your new prompt board a unique name.</p>
+              <form onSubmit={handleCreate} className="flex flex-col gap-3.5">
+                <input
+                  type="text"
+                  required
+                  value={newColName}
+                  onChange={(e) => setNewColName(e.target.value)}
+                  placeholder="e.g. Cinematic Landscapes"
+                  maxLength={30}
+                  autoFocus
+                  className="w-full h-11 px-4 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white"
+                />
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => setCreateOpen(false)} className="flex-1 h-9 rounded-full border border-[#cfc7dd] dark:border-white/10 text-xs font-bold text-[#242033] dark:text-white">Cancel</button>
-                  <button type="submit" disabled={saving || !newColName.trim()} className="flex-1 h-9 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-primary/25 disabled:opacity-50">{saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />} Confirm</button>
+                  <button
+                    type="button"
+                    onClick={() => setCreateOpen(false)}
+                    className="flex-1 h-10 rounded-full border border-[#cfc7dd] dark:border-white/10 text-xs font-bold text-[#242033] dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving || !newColName.trim()}
+                    className="flex-1 h-10 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-primary/25 disabled:opacity-50 hover:scale-102 transition-transform cursor-pointer"
+                  >
+                    {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                    Create
+                  </button>
                 </div>
               </form>
             </motion.div>
@@ -338,13 +406,44 @@ export default function Collections() {
         {renameOpen && (
           <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
             <motion.button type="button" className="fixed inset-0 bg-[#0d0b14]/50 dark:bg-black/60 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
-            <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] border border-white/80 bg-white/80 p-5 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white">
-              <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white mb-3">Rename Board</h3>
-              <form onSubmit={handleRename} className="flex flex-col gap-3">
-                <input type="text" required value={renameColName} onChange={(e) => setRenameColName(e.target.value)} placeholder="Collection Name" maxLength={30} className="w-full h-10 px-3.5 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 10 }}
+              className="relative w-full max-w-[22rem] rounded-[2.5rem] border border-white/80 bg-white/80 p-6 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white text-center"
+            >
+              <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
+                <Edit3 className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-black text-[#171421] dark:text-white mb-1">Rename Board</h3>
+              <p className="text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8] mb-4">Provide a new name for your prompt board.</p>
+              <form onSubmit={handleRename} className="flex flex-col gap-3.5">
+                <input
+                  type="text"
+                  required
+                  value={renameColName}
+                  onChange={(e) => setRenameColName(e.target.value)}
+                  placeholder="Collection Name"
+                  maxLength={30}
+                  autoFocus
+                  className="w-full h-11 px-4 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white"
+                />
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => setRenameOpen(null)} className="flex-1 h-9 rounded-full border border-[#cfc7dd] dark:border-white/10 text-xs font-bold text-[#242033] dark:text-white">Cancel</button>
-                  <button type="submit" disabled={saving || !renameColName.trim()} className="flex-1 h-9 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-primary/25 disabled:opacity-50">{saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />} Save</button>
+                  <button
+                    type="button"
+                    onClick={() => setRenameOpen(null)}
+                    className="flex-1 h-10 rounded-full border border-[#cfc7dd] dark:border-white/10 text-xs font-bold text-[#242033] dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving || !renameColName.trim()}
+                    className="flex-1 h-10 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-primary/25 disabled:opacity-50 hover:scale-102 transition-transform cursor-pointer"
+                  >
+                    {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                    Save
+                  </button>
                 </div>
               </form>
             </motion.div>

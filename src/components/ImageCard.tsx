@@ -39,6 +39,13 @@ const formatCount = (value: number) => {
 
 export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const finalAspectRatio = aspectRatio || prompt.aspectRatio || prompt.aspect_ratio;
+  let isPortrait = true;
+  if (finalAspectRatio && finalAspectRatio.includes('/')) {
+    const [w, h] = finalAspectRatio.split('/').map(Number);
+    if (!isNaN(w) && !isNaN(h)) {
+      isPortrait = w < h;
+    }
+  }
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
   const [inCollection, setInCollection] = useState(false);
@@ -152,9 +159,10 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
     <>
       <Link 
         to={`/prompt/${prompt.id}`}
-      className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_18px_42px_rgba(32,26,54,0.13)] glass-shine hover-glass-glow"
-      style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
-    >
+        state={{ isPortrait }}
+        className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_18px_42px_rgba(32,26,54,0.13)] glass-shine hover-glass-glow"
+        style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
+      >
       {/* Background Shimmer (behind image, showing during load) */}
       {!imageLoaded && (
         <div className="absolute inset-0 shimmer-bg w-full h-full" />

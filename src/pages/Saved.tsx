@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Bookmark } from 'lucide-react';
+import { motion } from 'framer-motion';
 import MasonryGrid from '../components/MasonryGrid';
 import { Prompt } from '../components/ImageCard';
 import { onActivityUpdated, readLocalActivity } from '../lib/activity';
@@ -16,23 +17,43 @@ export default function Saved() {
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-1">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="w-full flex flex-col gap-1"
+    >
       <SEOMeta
         title="Saved Prompts | Promptro"
         description="View your saved AI image prompts and creative templates."
         robots="noindex, nofollow"
       />
-      <section className="mb-6 md:mb-8 flex items-end justify-between gap-4">
-        <div>
-          <span className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1">
-            <Bookmark className="h-3.5 w-3.5" />
-            YOUR PRIVATE BOARD
-          </span>
-          <h1 className="text-2xl font-black tracking-tight text-text-primary md:text-3xl">
-            Saved Prompts
-          </h1>
-        </div>
-      </section>
+      <header className="mb-6 md:mb-10 text-left flex flex-col items-start">
+        <motion.span
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1"
+        >
+          <Bookmark className="h-3.5 w-3.5" />
+          YOUR PRIVATE BOARD
+        </motion.span>
+        <motion.h1
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#171421] dark:text-white mb-2"
+        >
+          Saved <span className="text-primary">Prompts</span>
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+        >
+          Browse and manage your private gallery of saved creative prompts.
+        </motion.p>
+      </header>
 
       {savedPrompts.length ? (
         <MasonryGrid prompts={savedPrompts} isTwoColumns={true} />
@@ -42,6 +63,6 @@ export default function Saved() {
           <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684]">Tap the bookmark on any image card to save it here.</p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
