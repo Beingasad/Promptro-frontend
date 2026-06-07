@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, Compass, Bookmark, Folders, LayoutGrid } from 'lucide-react';
+import { Home, Compass, Bookmark, GalleryVerticalEnd, LayoutGrid } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export default function BottomNav() {
@@ -7,7 +7,7 @@ export default function BottomNav() {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Compass, label: 'Explore', path: '/explore' },
     { icon: Bookmark, label: 'Saved', path: '/saved' },
-    { icon: Folders, label: 'Collections', path: '/collections' },
+    { icon: GalleryVerticalEnd, label: 'Collections', path: '/collections' },
     { icon: LayoutGrid, label: 'Categories', path: '/categories' },
   ];
 
