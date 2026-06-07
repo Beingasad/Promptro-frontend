@@ -45,6 +45,8 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // OTP
   const [otpValues, setOtpValues] = useState<string[]>(['', '', '', '', '', '']);
@@ -89,6 +91,8 @@ export default function Auth() {
     setGender('');
     setEmail('');
     setPassword('');
+    setConfirmPassword('');
+    setShowConfirmPassword(false);
     setOtpValues(['', '', '', '', '', '']);
     setAgreedToTerms(false);
     setSignupStep('info');
@@ -240,6 +244,10 @@ export default function Auth() {
     event.preventDefault();
     if (password.length < 6) {
       setError('Password must be at least 6 characters.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
     setError('');
@@ -880,6 +888,29 @@ export default function Auth() {
                     </span>
                   </label>
 
+                  <label className="block">
+                    <span className="mb-1.5 block text-sm font-bold text-[#242033]">Confirm Password</span>
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                      <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
+                      <input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Confirm your password"
+                        className="auth-input h-full min-w-0 flex-1 bg-transparent text-sm font-medium text-[#171421] outline-none placeholder:text-[#958baa]"
+                        minLength={6}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword((s) => !s)}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#7a728d] transition-colors hover:bg-primary/10 hover:text-primary"
+                      >
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </span>
+                  </label>
+
                   {error && (
                     <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
                       {error}
@@ -888,7 +919,7 @@ export default function Auth() {
 
                   <button
                     type="submit"
-                    disabled={loading || password.length < 6}
+                    disabled={loading || password.length < 6 || confirmPassword.length < 6}
                     className="mt-0.5 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#ff6a3d] px-5 text-sm font-bold text-white shadow-[0_16px_34px_rgba(139,92,246,0.22)] transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
