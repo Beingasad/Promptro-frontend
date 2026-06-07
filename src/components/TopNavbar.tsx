@@ -32,6 +32,7 @@ import {
   Mail,
   Globe,
   Newspaper,
+  BadgeCheck,
 } from 'lucide-react';
 
 const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -1905,16 +1906,10 @@ export default function TopNavbar() {
                           <p className="mt-0.5 truncate text-[15px] font-bold leading-tight text-[#171421]">{displayName}</p>
                           <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
                             <p className="truncate text-[11px] font-medium text-[#80779a]">{displayEmail}</p>
-                            {isLoggedIn && (
-                              backendEmailVerified ? (
-                                <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
-                                  ✓ Verified
-                                </span>
-                              ) : (
-                                <span className="shrink-0 inline-flex items-center gap-0.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-600 dark:text-amber-400">
-                                  Unverified
-                                </span>
-                              )
+                            {isLoggedIn && backendEmailVerified && (
+                              <span className="inline-flex items-center text-emerald-500 ml-1">
+                                <BadgeCheck className="h-3.5 w-3.5" />
+                              </span>
                             )}
                           </div>
                         </div>
