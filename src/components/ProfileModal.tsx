@@ -436,7 +436,7 @@ export default function ProfileModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[26rem] overflow-hidden rounded-[2.5rem] border border-white/80 bg-white/70 p-6 shadow-[0_32px_80px_rgba(72,56,118,0.25)] backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/78 dark:text-white sm:p-8"
+            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-white/80 bg-white/70 p-5 sm:p-7 shadow-[0_32px_80px_rgba(72,56,118,0.25)] backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/78 dark:text-white"
           >
             {/* Ambient background glows */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.12),transparent_42%)]" />
@@ -456,16 +456,16 @@ export default function ProfileModal({
                 <p className="mt-2 text-xs text-[#756d8d] dark:text-[#afa6c8] font-bold uppercase tracking-wider">Syncing Details...</p>
               </div>
             ) : (
-              <div className="relative z-10 flex flex-col gap-5">
+              <div className="relative z-10 flex flex-col gap-4 overflow-y-auto hide-scrollbar min-h-0 pr-1">
                 {/* Top Section */}
-                <div className="flex flex-col items-center text-center mt-2">
+                <div className="flex flex-col items-center text-center mt-1">
                   {/* Large Avatar with camera upload edit overlay */}
-                  <div className="relative h-20 w-20 shrink-0 select-none">
+                  <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 select-none">
                     <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white/80 dark:border-white/10 bg-[#f8f7fc] dark:bg-[#201c31] shadow-[0_12px_28px_rgba(72,56,118,0.12)]">
                       {profilePhoto ? (
                         <img src={profilePhoto} alt={firstName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                       ) : (
-                        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary to-[#ff6a3d] text-3xl font-black text-white">
+                        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary to-[#ff6a3d] text-2xl sm:text-3xl font-black text-white">
                           {profileInitial}
                         </span>
                       )}
@@ -478,7 +478,7 @@ export default function ProfileModal({
                   </div>
 
                   {/* Full Name & Username */}
-                  <h3 className="text-xl font-black text-[#171421] dark:text-white mt-3 leading-snug">
+                  <h3 className="text-lg sm:text-xl font-black text-[#171421] dark:text-white mt-2 leading-snug">
                     {firstName} {lastName}
                   </h3>
                   
@@ -489,7 +489,7 @@ export default function ProfileModal({
                   )}
 
                   {/* Email & Verified Badge */}
-                  <div className="flex items-center justify-center gap-1.5 mt-2 bg-white/40 dark:bg-white/5 px-3 py-1 rounded-full border border-white/60 dark:border-white/5">
+                  <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-white/40 dark:bg-white/5 px-3 py-1 rounded-full border border-white/60 dark:border-white/5">
                     <Mail className="h-3.5 w-3.5 text-[#8a819d] shrink-0" />
                     <span className="text-xs font-medium text-[#5f5774] dark:text-[#c4bed6] truncate max-w-[12rem]">{currentUser.email}</span>
                     {backendEmailVerified ? (
@@ -504,12 +504,11 @@ export default function ProfileModal({
                   </div>
                 </div>
 
-                {/* Banner: Complete Your Profile */}
                 {isProfileIncomplete && !isEditing && (
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-3 items-start p-3.5 bg-gradient-to-r from-primary/8 to-secondary/4 border border-primary/15 rounded-[1.25rem] text-[11px] font-semibold text-[#5f5774] dark:text-[#c4bed6]"
+                    className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/8 to-secondary/4 border border-primary/15 rounded-xl text-[11px] font-semibold text-[#5f5774] dark:text-[#c4bed6]"
                   >
                     <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                     <div>
@@ -642,9 +641,9 @@ export default function ProfileModal({
                         className="flex flex-col gap-4"
                       >
                         {/* Stats Grid */}
-                        <div className="grid grid-cols-2 gap-2.5">
+                        <div className="grid grid-cols-2 gap-2">
                           {/* Stat 1: Verification */}
-                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center">
+                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center">
                             {backendEmailVerified ? (
                               <BadgeCheck className="w-5 h-5 text-emerald-500 shrink-0" />
                             ) : (
@@ -657,7 +656,7 @@ export default function ProfileModal({
                           </div>
 
                           {/* Stat 2: Joined Date */}
-                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center">
+                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center">
                             <Clock className="w-5 h-5 text-primary shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {profile ? formatDate(profile.created_at) : 'N/A'}
@@ -672,7 +671,7 @@ export default function ProfileModal({
                               onClose();
                               navigate('/saved');
                             }}
-                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
+                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
                           >
                             <Bookmark className="w-5 h-5 text-[#ff6a3d] shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
@@ -688,7 +687,7 @@ export default function ProfileModal({
                               onClose();
                               navigate('/collections');
                             }}
-                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-2xl p-3 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
+                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
                           >
                             <GalleryVerticalEnd className="w-5 h-5 text-violet-500 shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
