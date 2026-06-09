@@ -238,7 +238,22 @@ export default function Auth() {
 
       clearPersistedAuthState();
       navigate('/', { replace: true });
-    } catch (err) {
+    } catch (err: any) {
+      const errorMsg = err?.message || '';
+      const errorCode = err?.code || '';
+      if (errorMsg.includes('auth/invalid-credential') || errorCode.includes('auth/invalid-credential')) {
+        try {
+          const normalizedEmail = email.trim().toLowerCase();
+          const checkRes = await axios.get(`${API_BASE_URL}/api/auth/check-email?email=${encodeURIComponent(normalizedEmail)}`);
+          if (checkRes.data && !checkRes.data.exists) {
+            setError('This email is not registered.');
+            setLoading(false);
+            return;
+          }
+        } catch (checkErr) {
+          console.error('Error checking email on login failure:', checkErr);
+        }
+      }
       setError(getFirebaseError(err));
     } finally {
       setLoading(false);
@@ -705,7 +720,7 @@ export default function Auth() {
             <form onSubmit={handleLogin} className="flex flex-col gap-3">
               <label className="block">
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">Email</span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                   <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type="email"
@@ -720,7 +735,7 @@ export default function Auth() {
 
               <label className="block">
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">Password</span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                   <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -756,8 +771,21 @@ export default function Auth() {
               </div>
 
               {error && (
-                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65] dark:border-red-950/40 dark:bg-red-950/10 dark:text-red-400">
                   {error}
+                  {error.includes('not registered') && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode('signup');
+                        setError('');
+                        setNotice('');
+                      }}
+                      className="ml-1.5 font-extrabold underline cursor-pointer hover:opacity-80 transition-opacity text-primary dark:text-[#ff6a3d]"
+                    >
+                      Create an account
+                    </button>
+                  )}
                 </div>
               )}
               {notice && (
@@ -785,7 +813,7 @@ export default function Auth() {
                 <form onSubmit={handleForgotPasswordSendOTP} className="flex flex-col gap-3">
                   <label className="block">
                     <span className="mb-1.5 block text-sm font-bold text-[#242033]">Email</span>
-                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                       <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                       <input
                         type="email"
@@ -799,7 +827,7 @@ export default function Auth() {
                   </label>
 
                   {error && (
-                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65] dark:border-red-950/40 dark:bg-red-950/10 dark:text-red-400">
                       {error}
                     </div>
                   )}
@@ -888,7 +916,7 @@ export default function Auth() {
                   </div>
 
                   {error && (
-                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65] dark:border-red-950/40 dark:bg-red-950/10 dark:text-red-400">
                       {error}
                     </div>
                   )}
@@ -925,7 +953,7 @@ export default function Auth() {
                 <form onSubmit={handleForgotPasswordReset} className="flex flex-col gap-3">
                   <label className="block">
                     <span className="mb-1.5 block text-sm font-bold text-[#242033]">New Password</span>
-                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                       <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                       <input
                         type={showPassword ? 'text' : 'password'}
@@ -948,7 +976,7 @@ export default function Auth() {
 
                   <label className="block">
                     <span className="mb-1.5 block text-sm font-bold text-[#242033]">Confirm Password</span>
-                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                       <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                       <input
                         type={showConfirmPassword ? 'text' : 'password'}
@@ -970,7 +998,7 @@ export default function Auth() {
                   </label>
 
                   {error && (
-                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                    <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65] dark:border-red-950/40 dark:bg-red-950/10 dark:text-red-400">
                       {error}
                     </div>
                   )}
@@ -1008,7 +1036,7 @@ export default function Auth() {
                   <span className="mb-1.5 block text-sm font-bold text-[#242033]">
                     First Name <span className="text-[#ff6a3d]">*</span>
                   </span>
-                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                     <User className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                     <input
                       type="text"
@@ -1022,7 +1050,7 @@ export default function Auth() {
                 </label>
                 <label className="block">
                   <span className="mb-1.5 block text-sm font-bold text-[#242033]">Last Name</span>
-                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                     <input
                       type="text"
                       value={lastName}
@@ -1041,7 +1069,7 @@ export default function Auth() {
                   <button
                     type="button"
                     onClick={() => setGenderOpen(!genderOpen)}
-                    className="flex h-11 w-full items-center justify-between gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] text-sm font-medium"
+                    className="flex h-11 w-full items-center justify-between gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none text-sm font-medium"
                   >
                     <span className={gender ? 'text-[#171421]' : 'text-[#958baa]'}>
                       {gender || 'Select gender'}
@@ -1054,7 +1082,7 @@ export default function Auth() {
                         initial={{ opacity: 0, y: -4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -4 }}
-                        className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-[#e9e2f3] bg-white shadow-[0_12px_32px_rgba(72,56,118,0.14)]"
+                        className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-[#e9e2f3] bg-white dark:bg-[#1c182a] shadow-[0_12px_32px_rgba(72,56,118,0.14)]"
                       >
                         {GENDER_OPTIONS.map((opt) => (
                           <button
@@ -1076,7 +1104,7 @@ export default function Auth() {
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">
                   Email <span className="text-[#ff6a3d]">*</span>
                 </span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                   <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type="email"
@@ -1093,7 +1121,7 @@ export default function Auth() {
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">
                   Password <span className="text-[#ff6a3d]">*</span>
                 </span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
                   <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -1115,7 +1143,7 @@ export default function Auth() {
               </label>
 
               {error && (
-                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65] dark:border-red-950/40 dark:bg-red-950/10 dark:text-red-400">
                   {error}
                 </div>
               )}
@@ -1186,7 +1214,7 @@ export default function Auth() {
               </div>
 
               {error && (
-                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65] dark:border-red-950/40 dark:bg-red-950/10 dark:text-red-400">
                   {error}
                 </div>
               )}
@@ -1254,7 +1282,7 @@ export default function Auth() {
               </label>
 
               {error && (
-                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65]">
+                <div className="rounded-2xl border border-[#ffd1e1] bg-[#fff4f8] p-3 text-sm font-medium leading-6 text-[#d52c65] dark:border-red-950/40 dark:bg-red-950/10 dark:text-red-400">
                   {error}
                 </div>
               )}

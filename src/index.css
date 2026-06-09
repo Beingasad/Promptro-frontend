@@ -215,6 +215,13 @@
     transition: background-color 9999s ease-out 0s;
   }
 
+  [data-theme="dark"] .auth-input:-webkit-autofill,
+  [data-theme="dark"] .auth-input:-webkit-autofill:hover,
+  [data-theme="dark"] .auth-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f7f2ff !important;
+    caret-color: #f7f2ff !important;
+  }
+
   [data-theme="dark"] .glass-panel {
     background-image: linear-gradient(135deg, rgba(24, 20, 37, 0.72) 0%, rgba(12, 9, 20, 0.42) 100%) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;

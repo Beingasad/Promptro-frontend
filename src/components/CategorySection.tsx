@@ -8,7 +8,7 @@ interface CategorySectionProps {
 }
 
 export default function CategorySection({ activeCategory = 'All', onCategoryChange }: CategorySectionProps) {
-  const { categories: globalCategories } = useCategories();
+  const { categories: globalCategories, loading } = useCategories();
   const categoryNames = globalCategories.map(c => c.name);
   const categories = ['All', ...categoryNames];
   const [active, setActive] = useState(activeCategory);
@@ -75,6 +75,16 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
             <span className="relative z-10">{category}</span>
           </button>
         ))}
+        {loading && globalCategories.length === 0 && (
+          <>
+            <div className="shimmer-bg h-8 w-16 rounded-full opacity-60 md:h-10 md:w-20" />
+            <div className="shimmer-bg h-8 w-24 rounded-full opacity-60 md:h-10 md:w-28" />
+            <div className="shimmer-bg h-8 w-20 rounded-full opacity-60 md:h-10 md:w-24" />
+            <div className="shimmer-bg h-8 w-28 rounded-full opacity-60 md:h-10 md:w-32" />
+            <div className="shimmer-bg h-8 w-16 rounded-full opacity-60 md:h-10 md:w-20" />
+            <div className="shimmer-bg h-8 w-22 rounded-full opacity-60 md:h-10 md:w-26" />
+          </>
+        )}
       </div>
     </div>
   );

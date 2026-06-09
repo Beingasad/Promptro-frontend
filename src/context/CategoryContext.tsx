@@ -11,6 +11,7 @@ export interface Category {
 
 interface CategoryContextType {
   categories: Category[];
+  loading: boolean;
   addCategory: (name: string, image?: File) => Promise<void>;
   deleteCategory: (id: number) => Promise<void>;
   updateCategory: (id: number, name: string, image?: File) => Promise<void>;
@@ -33,9 +34,11 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       return [];
     }
   });
+  const [loading, setLoading] = useState(true);
 
   const fetchCategories = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(API_URL);
       setCategories(response.data);
       try {
@@ -45,6 +48,8 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error('Failed to fetch categories', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,7 +102,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <CategoryContext.Provider value={{ categories, addCategory, deleteCategory, updateCategory }}>
+    <CategoryContext.Provider value={{ categories, loading, addCategory, deleteCategory, updateCategory }}>
       {children}
     </CategoryContext.Provider>
   );
