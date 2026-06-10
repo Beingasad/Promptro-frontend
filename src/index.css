@@ -362,17 +362,17 @@
   }
 
   .pill-glass {
-    backdrop-filter: blur(28px) saturate(190%) !important;
-    background: rgba(255, 255, 255, 0.12) !important;
-    border: none !important;
-    box-shadow: none !important;
+    backdrop-filter: blur(32px) saturate(190%) !important;
+    background: rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   [data-theme="dark"] .pill-glass {
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: none !important;
-    box-shadow: none !important;
+    background: rgba(23, 20, 33, 0.68) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.2) !important;
   }
 
   .modal-glass {

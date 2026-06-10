@@ -1826,7 +1826,7 @@ export default function TopNavbar() {
                 duration: 0.35,
                 ease: [0.32, 0.72, 0, 1]
               }}
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.45)_0%,rgba(250,246,255,0.4)_54%,rgba(255,246,252,0.42)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.18)] backdrop-blur-3xl dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.55)_0%,rgba(18,16,27,0.5)_54%,rgba(24,17,31,0.5)_100%)] will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-white/65 border-r border-white/45 dark:border-r-white/8 backdrop-blur-3xl dark:bg-[#171421]/68 will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
                 }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
