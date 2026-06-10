@@ -49,7 +49,7 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
   }, [active]);
 
   return (
-    <div ref={scrollerRef} className="flex h-11 w-full items-center overflow-x-auto hide-scrollbar rounded-full bg-white/70 px-1.5 shadow-[0_16px_38px_rgba(80,67,120,0.12)] backdrop-blur-2xl dark:bg-[#15111f] dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)] md:h-14 md:px-2">
+    <div ref={scrollerRef} className="pill-glass flex h-11 w-full items-center overflow-x-auto hide-scrollbar rounded-full px-1.5 md:h-14 md:px-2">
       <div className="flex w-max items-center gap-2.5 pr-1.5 md:pr-2">
         {categories.map((category) => (
           <button

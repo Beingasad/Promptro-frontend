@@ -201,7 +201,7 @@ export default function Home() {
           <>
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
               <div className="flex w-[calc((100%-0.625rem)/2)] min-w-0 items-center gap-2 text-[#171421] md:gap-3 lg:w-[calc((100%-1.75rem)/3)]">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/82 shadow-[0_14px_34px_rgba(255,106,61,0.18)] md:h-11 md:w-11">
+                <div className="pill-glass flex h-9 w-9 shrink-0 items-center justify-center rounded-full md:h-11 md:w-11">
                   <Flame className="h-5 w-5 text-[#ff6a3d] md:h-6 md:w-6" fill="currentColor" />
                 </div>
                 <h2 className="whitespace-nowrap text-[clamp(22px,6.2vw,28px)] font-bold leading-none md:text-[32px]">

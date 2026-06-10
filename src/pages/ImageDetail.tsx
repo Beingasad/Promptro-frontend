@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import ImageCard, { Prompt } from '../components/ImageCard';
 import { auth } from '../lib/firebase';
 import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, setLikedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
@@ -30,6 +30,17 @@ const formatCount = (value: number) => {
   return `${value}`;
 };
 
+const getModelUrl = (model: string): string => {
+  const name = model.toLowerCase();
+  if (name.includes('midjourney')) return 'https://www.midjourney.com';
+  if (name.includes('flux')) return 'https://blackforestlabs.ai';
+  if (name.includes('dall-e') || name.includes('dalle')) return 'https://openai.com/dall-e-3';
+  if (name.includes('stable diffusion') || name.includes('sdxl') || name.includes('sd3')) return 'https://stability.ai';
+  if (name.includes('leonardo')) return 'https://leonardo.ai';
+  if (name.includes('nijijourney') || name.includes('niji')) return 'https://nijijourney.com';
+  return `https://www.google.com/search?q=${encodeURIComponent(model)}`;
+};
+
 export default function ImageDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -45,6 +56,9 @@ export default function ImageDetail() {
   const [inCollection, setInCollection] = useState(false);
   const [shared, setShared] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
+  const [showHeart, setShowHeart] = useState(false);
+  const [heartKey, setHeartKey] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleShare = async () => {
     if (!prompt) return;
@@ -90,6 +104,7 @@ export default function ImageDetail() {
 
   // Disable browser scroll restoration and force scrollTo(0,0) immediately on route load
   useEffect(() => {
+    setImageLoaded(false);
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
@@ -223,6 +238,11 @@ export default function ImageDetail() {
     // Update local count for immediate feedback
     setPrompt(prev => prev ? { ...prev, likes: prev.likes + (nextLiked ? 1 : -1) } : null);
 
+    if (nextLiked) {
+      setHeartKey((prev) => prev + 1);
+      setShowHeart(true);
+    }
+
     try {
       const data = new FormData();
       data.append('liked', String(nextLiked));
@@ -232,6 +252,44 @@ export default function ImageDetail() {
       console.error('Failed to sync like:', err);
     }
   };
+
+  const handleImageDoubleClick = () => {
+    if (!liked) {
+      toggleLike();
+    } else {
+      setHeartKey((prev) => prev + 1);
+      setShowHeart(true);
+    }
+  };
+
+  const renderHeartPopup = () => (
+    <AnimatePresence>
+      {showHeart && (
+        <motion.div
+          key={heartKey}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ 
+            scale: [0, 1.4, 0.9, 1.1, 1],
+            opacity: [0, 1, 1, 0.9, 0],
+            rotate: [0, -10, 10, 0]
+          }}
+          exit={{ scale: 0, opacity: 0 }}
+          transition={{ 
+            duration: 0.8,
+            times: [0, 0.2, 0.4, 0.6, 1],
+            ease: "easeOut"
+          }}
+          onAnimationComplete={() => setShowHeart(false)}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+        >
+          <Heart 
+            className="w-20 h-20 md:w-24 md:h-24 text-red-500 fill-red-500 filter drop-shadow-[0_0_20px_rgba(239,68,68,0.75)] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" 
+            strokeWidth={1.5}
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   const handleCollectionClick = async () => {
     if (!prompt) return;
@@ -317,7 +375,15 @@ export default function ImageDetail() {
             onClick={toggleLike}
             className="flex items-center gap-1.5 text-xs md:text-sm font-bold transition-transform active:scale-95 hover:text-white/80"
           >
-            <Heart className={`h-4 w-4 md:h-5 md:w-5 transition-colors ${liked ? 'fill-current text-white' : 'text-white'}`} />
+            <motion.span
+              key={liked ? 'liked' : 'unliked'}
+              initial={liked ? { scale: 0.8 } : false}
+              animate={liked ? { scale: [0.8, 1.3, 1] } : { scale: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="flex items-center justify-center"
+            >
+              <Heart className="h-4 w-4 md:h-5 md:w-5 transition-colors" fill={liked ? '#ff4b72' : 'none'} stroke={liked ? '#ff4b72' : 'currentColor'} />
+            </motion.span>
             {formatCount(prompt.likes)}
           </button>
           <span className="h-3 md:h-3.5 w-px bg-white/22" />
@@ -343,15 +409,22 @@ export default function ImageDetail() {
           </div>
           <button
             onClick={() => copyText(promptText, 'prompt')}
-            className="flex items-center gap-2 rounded-full bg-white/70 dark:bg-white/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-white dark:hover:bg-white/20"
+            className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
           >
             {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
             {copiedPrompt ? 'Copied' : 'Copy'}
           </button>
         </div>
-        <div className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap">
+        <motion.div
+          animate={copiedPrompt ? {
+            scaleX: [1, 1.05, 0.95, 1.02, 0.98, 1],
+            scaleY: [1, 0.95, 1.05, 0.98, 1.02, 1],
+          } : {}}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative overflow-hidden rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap transition-all duration-300 shadow-[0_8px_32px_rgba(31,38,135,0.04)]"
+        >
           {promptText}
-        </div>
+        </motion.div>
       </section>
 
       {negativePrompt && (
@@ -365,15 +438,22 @@ export default function ImageDetail() {
             </div>
             <button
               onClick={() => copyText(negativePrompt, 'negative')}
-              className="flex items-center gap-2 rounded-full bg-white/70 dark:bg-white/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-white dark:hover:bg-white/20"
+              className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
             >
               {copiedNegative ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
               {copiedNegative ? 'Copied' : 'Copy'}
             </button>
           </div>
-          <div className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap">
+          <motion.div
+            animate={copiedNegative ? {
+              scaleX: [1, 1.05, 0.95, 1.02, 0.98, 1],
+              scaleY: [1, 0.95, 1.05, 0.98, 1.02, 1],
+            } : {}}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative overflow-hidden rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap transition-all duration-300 shadow-[0_8px_32px_rgba(31,38,135,0.04)]"
+          >
             {negativePrompt}
-          </div>
+          </motion.div>
         </section>
       )}
 
@@ -459,11 +539,20 @@ export default function ImageDetail() {
           {/* Left Column: Image */}
           <div className="w-full md:w-auto md:max-w-[55%] flex-shrink-0 md:h-full min-h-0 min-w-0 flex items-center justify-center md:justify-start">
             <section className="relative w-full overflow-hidden rounded-[1.75rem] bg-transparent shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem] md:w-fit md:h-fit max-w-full md:max-h-full">
-              <img
+              {!imageLoaded && (
+                <div className="absolute inset-0 shimmer-bg w-full h-full" />
+              )}
+              <motion.img
                 src={prompt.image_url}
                 alt={prompt.title}
-                className="w-full h-auto md:w-auto md:max-w-full md:max-h-[calc(100vh-100px)] md:object-contain block mx-auto"
+                initial={{ opacity: 0 }}
+                animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                onLoad={() => setImageLoaded(true)}
+                className="w-full h-auto md:w-auto md:max-w-full md:max-h-[calc(100vh-100px)] md:object-contain block mx-auto cursor-pointer"
+                onDoubleClick={handleImageDoubleClick}
               />
+              {renderHeartPopup()}
               {renderOverlays()}
             </section>
           </div>
@@ -475,7 +564,15 @@ export default function ImageDetail() {
                 {prompt.title}
               </h1>
               <p className="mt-3 text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
-                Generated with <span className="text-primary">{prompt.model}</span>
+                Generated with{' '}
+                <a
+                  href={getModelUrl(prompt.model)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline font-bold"
+                >
+                  {prompt.model}
+                </a>
               </p>
             </section>
 
@@ -487,11 +584,20 @@ export default function ImageDetail() {
       ) : (
         <>
           <section className="relative overflow-hidden rounded-[1.75rem] bg-transparent shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem]">
-            <img
+            {!imageLoaded && (
+              <div className="absolute inset-0 shimmer-bg w-full h-full" />
+            )}
+            <motion.img
               src={prompt.image_url}
               alt={prompt.title}
-              className="w-full h-auto block"
+              initial={{ opacity: 0 }}
+              animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              onLoad={() => setImageLoaded(true)}
+              className="w-full h-auto block cursor-pointer"
+              onDoubleClick={handleImageDoubleClick}
             />
+            {renderHeartPopup()}
             {renderOverlays()}
           </section>
 
@@ -500,7 +606,15 @@ export default function ImageDetail() {
               {prompt.title}
             </h1>
             <p className="mt-2 text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
-              Generated with <span className="text-primary">{prompt.model}</span>
+              Generated with{' '}
+              <a
+                href={getModelUrl(prompt.model)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline font-bold"
+              >
+                {prompt.model}
+              </a>
             </p>
           </section>
 

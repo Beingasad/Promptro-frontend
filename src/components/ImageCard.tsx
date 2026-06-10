@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Heart, Eye, Bookmark, GalleryVerticalEnd } from 'lucide-react';
+import { Heart, Eye, Bookmark, GalleryVerticalEnd, Share2, Check } from 'lucide-react';
 import CollectionSelectModal from './CollectionSelectModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
@@ -54,11 +54,13 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
+  const [shared, setShared] = useState(false);
   const lastClickTime = useRef(0);
   const clickTimeout = useRef<any>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
+  const isSavedOrCollections = location.pathname === '/saved' || location.pathname === '/collections';
 
   // Cleanup pending single-click timeout on unmount
   useEffect(() => {
@@ -204,6 +206,34 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
     }
   };
 
+  const handleShareClick = async (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const shareUrl = `${window.location.origin}/prompt/${prompt.id}`;
+    const shareText = `Check out this amazing AI prompt: "${prompt.title}" on Promptro! 🎨✨`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: prompt.title,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (err) {
+        console.error("Error sharing:", err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setShared(true);
+        setTimeout(() => setShared(false), 2000);
+      } catch (err) {
+        console.error("Failed to copy link:", err);
+      }
+    }
+  };
+
   const handleCategoryClick = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -221,7 +251,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
         to={`/prompt/${prompt.id}`}
         state={{ isPortrait }}
         onClick={handleCardClick}
-        className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_18px_42px_rgba(32,26,54,0.13)] glass-shine hover-glass-glow"
+        className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 glass-shine hover-glass-glow"
         style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
       >
       {/* Background Shimmer (behind image, showing during load) */}
@@ -327,7 +357,15 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
                 onClick={toggleLike}
                 aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
               >
-                <Heart className="w-4 h-4 text-white md:w-[22px] md:h-[22px]" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
+                <motion.span
+                  key={liked ? 'liked' : 'unliked'}
+                  initial={liked ? { scale: 0.8 } : false}
+                  animate={liked ? { scale: [0.8, 1.3, 1] } : { scale: 1 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="flex items-center justify-center"
+                >
+                  <Heart className="w-4 h-4 md:w-[22px] md:h-[22px] transition-colors" fill={liked ? '#ff4b72' : 'rgba(255,255,255,0.22)'} stroke={liked ? '#ff4b72' : 'currentColor'} />
+                </motion.span>
                 <span className="ml-1">{formatCount(likes)}</span>
               </button>
               
@@ -346,27 +384,55 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
         ) : (
           /* NEW MINIMAL EXPLORE / SAVED LAYOUT */
           <div className="flex items-center justify-around w-full rounded-full bg-black/20 px-2.5 py-1 text-white shadow-[0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] md:min-h-12 md:px-4 md:py-2.5">
-            <button
-              className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
-              onClick={toggleLike}
-              aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
-            >
-              <Heart className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" fill={liked ? 'currentColor' : 'rgba(255,255,255,0.22)'} />
-              <span className="ml-1">{formatCount(likes)}</span>
-            </button>
-            
-            <div className="h-3 w-px bg-white/20" />
+            {!isSavedOrCollections ? (
+              <>
+                <button
+                  className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+                  onClick={toggleLike}
+                  aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
+                >
+                  <motion.span
+                    key={liked ? 'liked' : 'unliked'}
+                    initial={liked ? { scale: 0.8 } : false}
+                    animate={liked ? { scale: [0.8, 1.3, 1] } : { scale: 1 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="flex items-center justify-center"
+                  >
+                    <Heart className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 transition-colors" fill={liked ? '#ff4b72' : 'rgba(255,255,255,0.22)'} stroke={liked ? '#ff4b72' : 'currentColor'} />
+                  </motion.span>
+                  <span className="ml-1">{formatCount(likes)}</span>
+                </button>
+                
+                <div className="h-3 w-px bg-white/20" />
 
-            <button
-              className="flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm"
-              onClick={stopCardNavigation}
-              aria-label={`${formatCount(prompt.views)} views`}
-            >
-              <Eye className="w-3.5 h-3.5 md:w-4.5 md:h-4.5" />
-              <span className="ml-1">{formatCount(prompt.views)}</span>
-            </button>
+                <button
+                  className="flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm"
+                  onClick={stopCardNavigation}
+                  aria-label={`${formatCount(prompt.views)} views`}
+                >
+                  <Eye className="w-3.5 h-3.5 md:w-4.5 md:h-4.5" />
+                  <span className="ml-1">{formatCount(prompt.views)}</span>
+                </button>
 
-            <div className="h-3 w-px bg-white/20" />
+                <div className="h-3 w-px bg-white/20" />
+              </>
+            ) : (
+              <>
+                <button
+                  className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+                  onClick={handleShareClick}
+                  aria-label="Share prompt"
+                >
+                  {shared ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-400 md:w-4.5 md:h-4.5" />
+                  ) : (
+                    <Share2 className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" />
+                  )}
+                </button>
+
+                <div className="h-3 w-px bg-white/20" />
+              </>
+            )}
 
             <button
               className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"

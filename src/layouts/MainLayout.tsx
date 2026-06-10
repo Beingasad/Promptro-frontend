@@ -137,7 +137,7 @@ export default function MainLayout() {
             {showPageSearch ? (
               <SearchPill />
             ) : pagePillLabel ? (
-              <span className="rounded-full bg-white/72 px-4 py-2 text-xs font-bold uppercase tracking-normal text-primary shadow-[0_14px_34px_rgba(72,56,118,0.12)] backdrop-blur-2xl dark:bg-[#171421]/78 dark:text-primary dark:shadow-[0_16px_38px_rgba(0,0,0,0.28)]">
+              <span className="pill-glass rounded-full px-4 py-2 text-xs font-bold uppercase tracking-normal text-primary">
                 {pagePillLabel}
               </span>
             ) : null}

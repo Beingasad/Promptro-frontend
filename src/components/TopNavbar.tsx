@@ -806,12 +806,6 @@ export default function TopNavbar() {
       action: 'recent',
     },
     {
-      icon: Moon,
-      title: 'Appearance',
-      description: 'Switch between light and dark mode',
-      action: 'appearance',
-    },
-    {
       icon: CircleHelp,
       title: 'Contact & Support',
       description: 'Get support, report bugs or contact us',
@@ -834,6 +828,12 @@ export default function TopNavbar() {
       title: 'Legal',
       description: 'Privacy Policy & Terms of Service',
       action: 'legal',
+    },
+    {
+      icon: Moon,
+      title: 'Appearance',
+      description: 'Switch between light and dark mode',
+      action: 'appearance',
     },
     ...(isLoggedIn ? [{
       icon: UserX,
@@ -1125,7 +1125,7 @@ export default function TopNavbar() {
             ]}
           />
           {privacySections.map((s) => (
-            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
+            <div key={s.id} className="pill-glass rounded-[1.25rem] p-4 glass-shine hover-glass-glow">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
               <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
                 {s.content}
@@ -1150,7 +1150,7 @@ export default function TopNavbar() {
             ]}
           />
           {termsSections.map((s) => (
-            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
+            <div key={s.id} className="pill-glass rounded-[1.25rem] p-4 glass-shine hover-glass-glow">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
               <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
                 {s.content}
@@ -1172,7 +1172,7 @@ export default function TopNavbar() {
                 setSelectedBlogPostSlug(post.slug);
                 setExpandedView('blog-post');
               }}
-              className="flex flex-col text-left rounded-[1.25rem] overflow-hidden bg-white/62 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_12px_24px_rgba(139,92,246,0.1)] transition-all hover:-translate-y-0.5 glass-shine hover-glass-glow"
+              className="pill-glass flex flex-col text-left rounded-[1.25rem] overflow-hidden transition-all hover:-translate-y-0.5 glass-shine hover-glass-glow"
             >
               <div className="aspect-[16/8] w-full overflow-hidden relative">
                 <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
@@ -1206,7 +1206,7 @@ export default function TopNavbar() {
       return (
         <div className="flex flex-col gap-4 pb-6">
           {/* Featured Image */}
-          <div className="rounded-[1.25rem] overflow-hidden aspect-[16/9] w-full border border-white/80 dark:border-white/10">
+          <div className="rounded-[1.25rem] overflow-hidden aspect-[16/9] w-full">
             <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
           </div>
 
@@ -1218,7 +1218,7 @@ export default function TopNavbar() {
           </div>
 
           {/* Excerpt */}
-          <p className="text-xs font-medium leading-relaxed text-primary bg-primary/5 border border-primary/10 rounded-[1rem] p-3">
+          <p className="text-xs font-medium leading-relaxed text-primary bg-primary/5 rounded-[1rem] p-3">
             {post.excerpt}
           </p>
 
@@ -1230,7 +1230,7 @@ export default function TopNavbar() {
 
           {/* FAQ Accordion */}
           {post.faqs.length > 0 && (
-            <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 mt-2 glass-shine hover-glass-glow">
+            <div className="pill-glass rounded-[1.25rem] p-4 mt-2 glass-shine hover-glass-glow">
               <h4 className="text-xs font-bold text-[#171421] dark:text-white mb-3">Frequently Asked Questions</h4>
               <div className="flex flex-col divide-y divide-white/35 dark:divide-white/5">
                 {post.faqs.map((faq, i) => (
@@ -1267,7 +1267,7 @@ export default function TopNavbar() {
               </div>
             ))
           ) : (
-            <div className="break-inside-avoid rounded-[1.35rem] bg-white/62 p-4 text-sm font-medium leading-6 text-[#6f6684] shadow-[0_16px_34px_rgba(72,56,118,0.1)]">
+            <div className="pill-glass break-inside-avoid rounded-[1.35rem] p-4 text-sm font-medium leading-6 text-[#6f6684]">
               Open a prompt detail page and it will appear here.
             </div>
           )}
@@ -1294,7 +1294,7 @@ export default function TopNavbar() {
       ];
       return (
         <div className="flex flex-col gap-3 pb-6">
-          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-transparent border border-primary/12 p-4 glass-shine hover-glass-glow">
+          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/8 to-transparent p-4 glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Legal Documents</p>
             <p className="text-[12px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
               Promptro is committed to transparency. Read our policies below.
@@ -1308,10 +1308,10 @@ export default function TopNavbar() {
                 const action = link.href === '/privacy-policy' ? 'privacy' : 'terms';
                 handleDrawerAction(action);
               }}
-              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5 text-left glass-shine hover-glass-glow"
+              className="pill-glass flex w-full items-center gap-3 rounded-[1.25rem] p-4 hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5 text-left glass-shine hover-glass-glow"
             >
-              <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${link.color} flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.1)]`}>
-                <link.icon className="h-5 w-5 text-white" />
+              <div className="h-10 w-10 shrink-0 flex items-center justify-center text-primary">
+                <link.icon className="h-5 w-5" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-[#171421] dark:text-white">{link.title}</p>
@@ -1320,7 +1320,7 @@ export default function TopNavbar() {
               <ChevronRight className="h-4 w-4 shrink-0 text-[#80779a]" />
             </button>
           ))}
-          <div className="rounded-[1.15rem] bg-white/40 dark:bg-white/5 p-3 text-center glass-shine hover-glass-glow">
+          <div className="pill-glass rounded-[1.15rem] p-3 text-center glass-shine hover-glass-glow">
             <p className="text-[10px] font-medium text-[#8a819d]">
               Questions? Email: <a href="mailto:support.promptro@gmail.com" className="text-primary font-bold hover:underline">support.promptro@gmail.com</a>
             </p>
@@ -1342,10 +1342,10 @@ export default function TopNavbar() {
             ]}
           />
           {/* Contact Email prominent */}
-          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4 border border-primary/15 glass-shine hover-glass-glow">
+          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4 glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Contact Email</p>
             <div className="flex items-center gap-2 mt-1">
-              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 shrink-0">
+              <span className="flex h-8 w-8 items-center justify-center shrink-0 text-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
               </span>
               <a href="mailto:support.promptro@gmail.com" className="text-xs font-bold text-primary hover:underline font-mono">support.promptro@gmail.com</a>
@@ -1354,7 +1354,7 @@ export default function TopNavbar() {
           </div>
 
           {/* Feedback form with tabs */}
-          <div className="rounded-[1.25rem] bg-white/62 dark:bg-white/5 p-4 shadow-[0_14px_32px_rgba(72,56,118,0.1)] glass-shine hover-glass-glow">
+          <div className="pill-glass rounded-[1.25rem] p-4 glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Send Message</p>
             <div className="flex flex-wrap gap-1.5 mb-3">
               {['Bug Report', 'Feature Request', 'General Feedback'].map((label) => (
@@ -1364,7 +1364,7 @@ export default function TopNavbar() {
                   onClick={() => {
                     setFeedbackSubject(label);
                   }}
-                  className="rounded-full border border-white/60 dark:border-white/10 bg-white/80 dark:bg-white/10 px-2.5 py-1 text-[10px] font-bold text-[#4e4566] dark:text-[#c6bddb] hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-colors"
+                  className="rounded-full bg-white/58 hover:bg-white/86 px-2.5 py-1 text-[10px] font-bold text-[#4e4566] dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08] hover:text-primary transition-colors"
                 >
                   {label}
                 </button>
@@ -1472,10 +1472,10 @@ export default function TopNavbar() {
                 href="https://instagram.com/promptro.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
+                className="pill-glass flex items-center gap-3 rounded-[1.25rem] p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
               >
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#f09433] to-[#e6683c] flex items-center justify-center shadow-md">
-                  <Instagram className="h-5 w-5 text-white" />
+                <div className="h-10 w-10 shrink-0 flex items-center justify-center text-[#e6683c]">
+                  <Instagram className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium">Instagram</p>
@@ -1485,10 +1485,10 @@ export default function TopNavbar() {
 
               {/* X / Twitter */}
               <div
-                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 opacity-70 cursor-not-allowed select-none"
+                className="pill-glass flex items-center gap-3 rounded-[1.25rem] p-3.5 opacity-70 cursor-not-allowed select-none"
               >
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#0d0d0d] to-[#2b2b2b] flex items-center justify-center shadow-md">
-                  <XIcon className="h-5 w-5 text-white" />
+                <div className="h-10 w-10 shrink-0 flex items-center justify-center text-[#171421] dark:text-white">
+                  <XIcon className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium">
@@ -1691,7 +1691,7 @@ export default function TopNavbar() {
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
             <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isHome ? 'opacity-45 md:hidden' : (isFocused ? 'opacity-100' : 'opacity-45')
               }`}></div>
-            <div className={`relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/78 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14 ${isHome ? 'md:shadow-none md:dark:shadow-none' : ''
+            <div className={`relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/58 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14 ${isHome ? 'md:shadow-none md:dark:shadow-none' : ''
               }`}>
               <div className="flex flex-grow items-center h-full min-w-0">
                 <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
@@ -1826,7 +1826,7 @@ export default function TopNavbar() {
                 duration: 0.35,
                 ease: [0.32, 0.72, 0, 1]
               }}
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(250,246,255,0.9)_54%,rgba(255,246,252,0.92)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.24)] backdrop-blur-xl dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.96)_0%,rgba(18,16,27,0.94)_54%,rgba(24,17,31,0.94)_100%)] will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.45)_0%,rgba(250,246,255,0.4)_54%,rgba(255,246,252,0.42)_100%)] px-3 pb-3 pt-5 shadow-[18px_0_58px_rgba(24,20,38,0.18)] backdrop-blur-3xl dark:bg-[linear-gradient(180deg,rgba(28,24,42,0.55)_0%,rgba(18,16,27,0.5)_54%,rgba(24,17,31,0.5)_100%)] will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
                 }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
@@ -1841,7 +1841,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/70 dark:bg-[#1c182a]/70 backdrop-blur-xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] border border-white/40 dark:border-white/10">
+                    <div className="pill-glass absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)]">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1857,13 +1857,13 @@ export default function TopNavbar() {
                             navigate('/', { state: { keepMenuOpen: true } });
                           }
                         }}
-                        className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 dark:bg-white/10 text-[#171421] dark:text-white shadow-[0_4px_12px_rgba(72,56,118,0.08)] dark:shadow-none hover:scale-105 transition-transform"
+                        className="pill-glass flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white hover:scale-105 transition-transform"
                         aria-label="Back to menu"
                       >
                         <ArrowLeft className="h-5 w-5" />
                       </button>
                       <h2 className="text-center text-base sm:text-lg font-bold text-[#171421] dark:text-white line-clamp-1 px-2">{expandedTitle}</h2>
-                      <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-white/10 shadow-[0_4px_12px_rgba(72,56,118,0.08)] dark:shadow-none">
+                      <div className="pill-glass flex h-11 w-11 items-center justify-center overflow-hidden rounded-full">
                         {expandedView === 'recent' ? (
                           <Clock3 className="h-5 w-5 text-primary" />
                         ) : expandedView === 'help' ? (
@@ -1883,8 +1883,10 @@ export default function TopNavbar() {
                         )}
                       </div>
                     </div>
-                    <div className="min-h-0 flex-1 overflow-y-auto pr-1 hide-scrollbar flex flex-col pt-20">
-                      {renderExpandedContent()}
+                    <div className="relative flex-1 min-h-0 rounded-t-[1.35rem] md:rounded-t-[1.75rem] overflow-hidden">
+                      <div className="w-full h-full overflow-y-auto hide-scrollbar flex flex-col pt-20">
+                        {renderExpandedContent()}
+                      </div>
                     </div>
                   </motion.div>
                 ) : (
@@ -1896,13 +1898,13 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="mb-3 shrink-0 rounded-[1.15rem] bg-white/62 p-3 shadow-[0_14px_34px_rgba(139,92,246,0.1)] backdrop-blur-2xl glass-shine hover-glass-glow">
+                    <div className="pill-glass mb-3 shrink-0 rounded-[1.15rem] p-3 glass-shine hover-glass-glow">
                       <div className="flex items-start gap-2 text-left">
                         <div className="min-w-0 w-full">
                           <p className="text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
                           <p className="mt-0.5 truncate text-[15px] font-bold leading-tight text-[#171421]">{displayName}</p>
                           <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
-                            <p className="truncate text-[11px] font-medium text-[#80779a]">{displayEmail}</p>
+                            <p className="truncate text-[11px] font-medium text-[#5f5774]">{displayEmail}</p>
                             {isLoggedIn && backendEmailVerified && (
                               <span className="inline-flex items-center text-emerald-500 ml-1">
                                 <BadgeCheck className="h-3.5 w-3.5" />
@@ -1923,21 +1925,18 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
+                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
                               ? 'bg-[#fff4f8]/72 shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
-                              : 'bg-white/62 dark:bg-white/5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
+                              : 'pill-glass hover:bg-white/40'
                             }`}
                         >
-                          <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${item.action === 'delete-account'
-                              ? 'bg-[#ffe5ef] text-[#f23672] dark:bg-[#f23672]/16 dark:text-[#ff8fb4]'
-                              : 'bg-primary/10 text-primary'
-                            }`}>
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105 text-primary">
                             <item.icon className="h-4 w-4" />
                           </span>
                           <span className="min-w-0 flex-1">
                             <span className={`block truncate text-[12px] font-medium leading-tight ${item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#242033] dark:text-white'
                               }`}>{item.title}</span>
-                            <span className="mt-0.5 block line-clamp-2 text-[10px] font-medium leading-snug text-[#80779a]">
+                            <span className="mt-0.5 block line-clamp-2 text-[10px] font-medium leading-snug text-[#5f5774]">
                               {item.action === 'appearance' ? `${item.description} (${appearanceMode})` : item.description}
                             </span>
                           </span>
@@ -1949,10 +1948,10 @@ export default function TopNavbar() {
                     </div>
  
                     <div className="shrink-0 pt-3 text-center">
-                      <div className="flex items-center justify-center gap-1 text-[10px] font-medium text-[#8a819d]">
+                      <div className="flex items-center justify-center gap-1 text-[10px] font-medium text-[#5f5774]">
                         Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                       </div>
-                      <p className="mt-1.5 text-[10px] font-medium text-[#8a819d]">v1.1.0</p>
+                      <p className="mt-1.5 text-[10px] font-medium text-[#5f5774]">v1.1.0</p>
                     </div>
                   </motion.div>
                 )}

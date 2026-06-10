@@ -342,9 +342,11 @@
     z-index: 50 !important;
     isolation: isolate !important;
     
-    backdrop-filter: blur(24px) saturate(190%) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
     
-    background: rgba(255, 255, 255, 0.90) !important;
+    background: rgba(255, 255, 255, 0.58) !important;
+    border: none !important;
+    box-shadow: 0 18px 46px rgba(72, 56, 118, 0.16) !important;
   }
 
   @media (min-width: 768px) {
@@ -354,14 +356,36 @@
   }
 
   [data-theme="dark"] .bottom-nav-glass {
-    background: rgba(28, 24, 42, 0.78) !important;
+    background: rgba(28, 24, 42, 0.62) !important;
+    border: none !important;
+    box-shadow: 0 22px 52px rgba(0, 0, 0, 0.38) !important;
+  }
+
+  .pill-glass {
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: none !important;
+    box-shadow: none !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="dark"] .pill-glass {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   @supports not (backdrop-filter: blur(1px)) {
     .bottom-nav-glass {
-      background: rgba(255, 255, 255, 0.85) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
     }
     [data-theme="dark"] .bottom-nav-glass {
+      background: rgba(28, 24, 42, 0.92) !important;
+    }
+    .pill-glass {
+      background: rgba(255, 255, 255, 0.92) !important;
+    }
+    [data-theme="dark"] .pill-glass {
       background: rgba(28, 24, 42, 0.92) !important;
     }
   }
