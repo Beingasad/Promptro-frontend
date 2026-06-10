@@ -87,7 +87,7 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
           {/* Backdrop */}
           <motion.button
             type="button"
-            className="fixed inset-0 backdrop-blur-[2px] cursor-default w-full h-full border-none outline-none"
+            className="fixed inset-0 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -101,7 +101,7 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/80 bg-white/70 shadow-[0_24px_60px_rgba(72,56,118,0.22)] backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/80 dark:text-white"
+            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] pill-glass"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 pt-5 pb-3.5 border-b border-[#e9e2f3] dark:border-white/5">

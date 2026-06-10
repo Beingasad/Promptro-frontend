@@ -62,7 +62,7 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
             className={`relative h-8 px-4 rounded-full whitespace-nowrap text-[13px] font-medium tracking-normal transition-all duration-300 md:h-10 md:px-5 md:text-sm ${
               active === category 
                 ? 'text-white shadow-[0_16px_34px_rgba(139,92,246,0.28)]' 
-                : 'bg-white/58 text-[#5f5774] backdrop-blur-xl hover:text-[#171421] hover:bg-white/86 dark:bg-white/[0.03] dark:text-[#c6bddb] dark:hover:bg-white/[0.07] dark:hover:text-white'
+                : 'pill-glass text-[#5f5774] dark:text-[#c6bddb] hover:text-[#171421] dark:hover:text-white'
             }`}
           >
             {active === category && (

@@ -250,13 +250,13 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
       {/* ── EXPANDED DETAILS MODAL ── */}
       <AnimatePresence>
         {showDetailsModal && (
-          <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm pointer-events-auto">
+          <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 backdrop-blur-md pointer-events-auto">
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 15 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 15 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-sm bg-white/95 dark:bg-[#0e0a16]/95 border border-[#e4e2ec] dark:border-white/10 backdrop-blur-2xl rounded-[2.25rem] p-6 shadow-[0_24px_60px_rgba(72,56,118,0.18)] dark:shadow-[0_24px_60px_rgba(109,77,236,0.18)] overflow-hidden text-center"
+              className="relative w-full max-w-sm rounded-[2.25rem] p-6 overflow-hidden text-center pill-glass"
             >
               {/* Premium Background Auras */}
               <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-primary/20 blur-3xl pointer-events-none" />

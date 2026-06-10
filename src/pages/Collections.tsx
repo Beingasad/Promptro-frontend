@@ -320,8 +320,8 @@ export default function Collections() {
         <AnimatePresence>
           {renameOpen && (
             <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-              <motion.button type="button" className="fixed inset-0 backdrop-blur-[2px] w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
-              <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] border border-white/80 bg-white/80 p-5 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white">
+              <motion.button type="button" className="fixed inset-0 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
+              <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] p-5 pill-glass">
                 <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white mb-3">Rename Board</h3>
                 <form onSubmit={handleRename} className="flex flex-col gap-3">
                   <input type="text" required value={renameColName} onChange={(e) => setRenameColName(e.target.value)} placeholder="Collection Name" maxLength={30} className="w-full h-10 px-3.5 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white" />
@@ -387,7 +387,7 @@ export default function Collections() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0 }}
               onClick={() => setCreateOpen(true)}
-              className="group relative flex aspect-[4/5] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.5rem] border-2 border-dashed border-[#cfc7dd] dark:border-white/10 bg-white/20 dark:bg-white/5 hover:bg-white/40 dark:hover:bg-white/8 hover:border-primary dark:hover:border-primary/50 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md"
+              className="group relative flex aspect-[4/5] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.5rem] border-2 border-dashed border-white/20 dark:border-white/5 pill-glass hover:bg-white/20 dark:hover:bg-white/10 hover:border-primary dark:hover:border-primary/50 transition-all duration-300 cursor-pointer"
             >
               <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-[0_8px_20px_rgba(109,77,236,0.08)]">
                 <Plus className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -409,7 +409,7 @@ export default function Collections() {
                 >
                   <div
                     onClick={() => setSelectedCollectionId(col.id)}
-                    className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5 cursor-pointer"
+                    className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] cursor-pointer pill-glass"
                   >
                     {/* Cover Image or Empty State */}
                     {coverImage ? (
@@ -484,12 +484,12 @@ export default function Collections() {
       <AnimatePresence>
         {createOpen && (
           <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-            <motion.button type="button" className="fixed inset-0 backdrop-blur-[2px] w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setCreateOpen(false)} />
+            <motion.button type="button" className="fixed inset-0 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setCreateOpen(false)} />
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 10 }}
-              className="relative w-full max-w-[22rem] rounded-[2.5rem] border border-white/80 bg-white/80 p-6 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white text-center"
+              className="relative w-full max-w-[22rem] rounded-[2.5rem] p-6 text-center pill-glass"
             >
               <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
                 <Folder className="w-6 h-6" />
@@ -534,12 +534,12 @@ export default function Collections() {
       <AnimatePresence>
         {renameOpen && (
           <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-            <motion.button type="button" className="fixed inset-0 backdrop-blur-[2px] w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
+            <motion.button type="button" className="fixed inset-0 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 10 }}
-              className="relative w-full max-w-[22rem] rounded-[2.5rem] border border-white/80 bg-white/80 p-6 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white text-center"
+              className="relative w-full max-w-[22rem] rounded-[2.5rem] p-6 text-center pill-glass"
             >
               <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
                 <Edit3 className="w-5 h-5" />

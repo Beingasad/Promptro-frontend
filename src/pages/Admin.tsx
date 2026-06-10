@@ -3382,13 +3382,13 @@ export default function Admin() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => !isLaunching && setShowCampaignModal(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[80]"
+              className="fixed inset-0 backdrop-blur-md z-[80]"
             />
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full bg-white dark:bg-[#171421] rounded-[2.5rem] shadow-2xl z-[90] overflow-hidden transition-all duration-300 ${
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full rounded-[2.5rem] z-[90] overflow-hidden transition-all duration-300 pill-glass ${
                 campaignStep === 3 ? 'max-w-3xl' : 'max-w-xl'
               }`}
             >
@@ -3643,13 +3643,13 @@ export default function Admin() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowBulkModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-2xl bg-white dark:bg-[#1c1a26] rounded-[2.5rem] shadow-2xl overflow-hidden border border-[#e9e2f3] dark:border-white/10"
+              className="relative w-full max-w-2xl rounded-[2.5rem] overflow-hidden pill-glass"
             >
               <div className="p-8 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
                 <div>
@@ -3739,13 +3739,13 @@ export default function Admin() {
         )}
 
         {confirmConfig.isOpen && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", duration: 0.4 }}
-              className="bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col p-8 relative"
+              className="w-full max-w-md rounded-[2.5rem] overflow-hidden flex flex-col p-8 relative pill-glass"
             >
               <button 
                 onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
@@ -3802,7 +3802,7 @@ export default function Admin() {
         )}
       </AnimatePresence>
 
-      <dialog id="banner-modal" className="modal backdrop:bg-black/60 backdrop:backdrop-blur-sm rounded-[2rem] p-0 w-full max-w-2xl bg-white dark:bg-[#1c1a26] shadow-2xl overflow-hidden border border-[#e9e2f3] dark:border-white/10 m-auto">
+      <dialog id="banner-modal" className="modal backdrop:backdrop-blur-sm rounded-[2rem] p-0 w-full max-w-2xl overflow-hidden m-auto pill-glass">
         <form method="dialog" className="p-8 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
           <div>
             <h3 className="text-2xl font-bold">{editingBanner ? 'Edit Banner' : 'Create Banner'}</h3>

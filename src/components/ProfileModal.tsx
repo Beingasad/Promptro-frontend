@@ -380,7 +380,7 @@ export default function ProfileModal({
           <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
             <motion.button
               type="button"
-              className="fixed inset-0 bg-[#0d0b14]/40 dark:bg-black/50 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
+              className="fixed inset-0 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -392,7 +392,7 @@ export default function ProfileModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[22rem] overflow-hidden rounded-[2.5rem] border border-white/50 dark:border-white/10 bg-white/75 dark:bg-[#171421]/80 p-6 text-center shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-3xl"
+              className="relative w-full max-w-[22rem] overflow-hidden rounded-[2.5rem] p-6 text-center pill-glass"
             >
               <div className="mx-auto flex h-14 w-14 items-center justify-center text-primary">
                 <User className="h-9 w-9" />
@@ -436,7 +436,7 @@ export default function ProfileModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-white/50 dark:border-white/10 bg-white/75 dark:bg-[#171421]/80 p-5 sm:p-7 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-3xl dark:text-white"
+            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-7 dark:text-white pill-glass"
           >
             {/* Ambient background glows */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.12),transparent_42%)]" />

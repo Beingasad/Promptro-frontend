@@ -2048,7 +2048,7 @@ export default function TopNavbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => !isGeneratingShowcase && setShowShowcaseModal(false)}
-              className="fixed inset-0 backdrop-blur-[2px] z-[80]"
+              className="fixed inset-0 backdrop-blur-md z-[80]"
             />
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -2341,7 +2341,7 @@ export default function TopNavbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => !isDeletingAccount && setShowDeleteConfirm(false)}
-              className="fixed inset-0 backdrop-blur-[2px] z-[99998]"
+              className="fixed inset-0 backdrop-blur-md z-[99998]"
             />
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
