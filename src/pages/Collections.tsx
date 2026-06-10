@@ -321,7 +321,7 @@ export default function Collections() {
           {renameOpen && (
             <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
               <motion.button type="button" className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
-              <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] p-5 pill-glass">
+              <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] p-5 modal-glass">
                 <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white mb-3">Rename Board</h3>
                 <form onSubmit={handleRename} className="flex flex-col gap-3">
                   <input type="text" required value={renameColName} onChange={(e) => setRenameColName(e.target.value)} placeholder="Collection Name" maxLength={30} className="w-full h-10 px-3.5 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white" />
@@ -489,7 +489,7 @@ export default function Collections() {
               initial={{ opacity: 0, scale: 0.94, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 10 }}
-              className="relative w-full max-w-[22rem] rounded-[2.5rem] p-6 text-center pill-glass"
+              className="relative w-full max-w-[22rem] rounded-[2.5rem] p-6 text-center modal-glass"
             >
               <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
                 <Folder className="w-6 h-6" />
@@ -539,7 +539,7 @@ export default function Collections() {
               initial={{ opacity: 0, scale: 0.94, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 10 }}
-              className="relative w-full max-w-[22rem] rounded-[2.5rem] p-6 text-center pill-glass"
+              className="relative w-full max-w-[22rem] rounded-[2.5rem] p-6 text-center modal-glass"
             >
               <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
                 <Edit3 className="w-5 h-5" />

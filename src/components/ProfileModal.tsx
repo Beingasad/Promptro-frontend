@@ -392,7 +392,7 @@ export default function ProfileModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[22rem] overflow-hidden rounded-[2.5rem] p-6 text-center pill-glass"
+              className="relative w-full max-w-[22rem] overflow-hidden rounded-[2.5rem] p-6 text-center modal-glass"
             >
               <div className="mx-auto flex h-14 w-14 items-center justify-center text-primary">
                 <User className="h-9 w-9" />
@@ -436,7 +436,7 @@ export default function ProfileModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-7 dark:text-white pill-glass"
+            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-7 dark:text-white modal-glass"
           >
             {/* Ambient background glows */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.12),transparent_42%)]" />

@@ -375,6 +375,20 @@
     box-shadow: none !important;
   }
 
+  .modal-glass {
+    backdrop-filter: blur(32px) saturate(190%) !important;
+    background: rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="dark"] .modal-glass {
+    background: rgba(23, 20, 33, 0.68) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 48px rgba(0, 0, 0, 0.3) !important;
+  }
+
   @supports not (backdrop-filter: blur(1px)) {
     .bottom-nav-glass {
       background: rgba(255, 255, 255, 0.92) !important;
@@ -387,6 +401,12 @@
     }
     [data-theme="dark"] .pill-glass {
       background: rgba(28, 24, 42, 0.92) !important;
+    }
+    .modal-glass {
+      background: rgba(255, 255, 255, 0.95) !important;
+    }
+    [data-theme="dark"] .modal-glass {
+      background: rgba(28, 24, 42, 0.95) !important;
     }
   }
 }

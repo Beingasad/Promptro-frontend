@@ -256,7 +256,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 15 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-sm rounded-[2.25rem] p-6 overflow-hidden text-center pill-glass"
+              className="relative w-full max-w-sm rounded-[2.25rem] p-6 overflow-hidden text-center modal-glass"
             >
               {/* Premium Background Auras */}
               <div className="absolute -top-20 -right-20 w-48 h-48 rounded-full bg-primary/20 blur-3xl pointer-events-none" />

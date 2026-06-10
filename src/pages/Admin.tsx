@@ -3388,7 +3388,7 @@ export default function Admin() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full rounded-[2.5rem] z-[90] overflow-hidden transition-all duration-300 pill-glass ${
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full rounded-[2.5rem] z-[90] overflow-hidden transition-all duration-300 modal-glass ${
                 campaignStep === 3 ? 'max-w-3xl' : 'max-w-xl'
               }`}
             >
@@ -3649,7 +3649,7 @@ export default function Admin() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-2xl rounded-[2.5rem] overflow-hidden pill-glass"
+              className="relative w-full max-w-2xl rounded-[2.5rem] overflow-hidden modal-glass"
             >
               <div className="p-8 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
                 <div>
@@ -3745,7 +3745,7 @@ export default function Admin() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", duration: 0.4 }}
-              className="w-full max-w-md rounded-[2.5rem] overflow-hidden flex flex-col p-8 relative pill-glass"
+              className="w-full max-w-md rounded-[2.5rem] overflow-hidden flex flex-col p-8 relative modal-glass"
             >
               <button 
                 onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
@@ -3802,7 +3802,7 @@ export default function Admin() {
         )}
       </AnimatePresence>
 
-      <dialog id="banner-modal" className="modal backdrop:bg-white/8 dark:backdrop:bg-white/3 backdrop:backdrop-blur-sm rounded-[2rem] p-0 w-full max-w-2xl overflow-hidden m-auto pill-glass">
+      <dialog id="banner-modal" className="modal backdrop:bg-white/8 dark:backdrop:bg-white/3 backdrop:backdrop-blur-sm rounded-[2rem] p-0 w-full max-w-2xl overflow-hidden m-auto modal-glass">
         <form method="dialog" className="p-8 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
           <div>
             <h3 className="text-2xl font-bold">{editingBanner ? 'Edit Banner' : 'Create Banner'}</h3>

@@ -2054,7 +2054,7 @@ export default function TopNavbar() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full rounded-[2rem] md:rounded-[2.5rem] z-[90] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[92vh] transition-all duration-300 pill-glass ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full rounded-[2rem] md:rounded-[2.5rem] z-[90] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[92vh] transition-all duration-300 modal-glass ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
                 }`}
             >
               <div className="p-5 md:p-8">
@@ -2347,7 +2347,7 @@ export default function TopNavbar() {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md rounded-[2rem] z-[99999] overflow-hidden pill-glass"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md rounded-[2rem] z-[99999] overflow-hidden modal-glass"
             >
               <div className="p-6 md:p-8 flex flex-col gap-6 items-center text-center">
                 {/* Warning Icon Container */}
