@@ -1920,7 +1920,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="mb-2 md:mb-3 w-full shrink-0 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-2.5 md:p-3 shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow">
+                    <div className="mb-2 md:mb-3 w-full shrink-0 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-3.5 md:p-4.5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow">
                       <div className="flex items-start gap-2 text-left">
                         <div className="min-w-0 w-full">
                           <p className="text-[9px] md:text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
@@ -1947,7 +1947,7 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full shrink-0 items-center gap-2 md:gap-3 rounded-[0.85rem] md:rounded-[1.15rem] px-2.5 py-1.5 md:px-3.5 md:py-3 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
+                          className={`group flex w-full shrink-0 items-center gap-2 md:gap-3 rounded-[0.85rem] md:rounded-[1.15rem] px-3.5 py-3 md:px-5 md:py-4.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
                               ? 'bg-[#fff4f8]/72 border border-rose-500/20 shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
                               : 'bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
                             }`}
