@@ -2054,7 +2054,7 @@ export default function TopNavbar() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full bg-white dark:bg-[#171421] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl z-[90] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[92vh] transition-all duration-300 ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full rounded-[2rem] md:rounded-[2.5rem] z-[90] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[92vh] transition-all duration-300 pill-glass ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
                 }`}
             >
               <div className="p-5 md:p-8">
@@ -2085,9 +2085,9 @@ export default function TopNavbar() {
                               setSelectedPromptsForShowcase(prev => [...prev, prompt.id]);
                             }
                           }}
-                          className={`flex items-center gap-4 p-3 rounded-2xl border transition-all cursor-pointer ${selectedPromptsForShowcase.includes(prompt.id)
-                            ? "border-primary bg-primary/5"
-                            : "border-[#e9e2f3] dark:border-white/10"
+                          className={`flex items-center gap-4 p-3 rounded-2xl transition-all cursor-pointer ${selectedPromptsForShowcase.includes(prompt.id)
+                            ? "bg-primary/20 dark:bg-primary/30"
+                            : "pill-glass hover:bg-white/20 dark:hover:bg-white/10"
                             }`}
                         >
                           <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
@@ -2097,9 +2097,9 @@ export default function TopNavbar() {
                             <p className="text-sm font-bold truncate text-[#171421] dark:text-white">{prompt.title}</p>
                             <p className="text-[10px] text-[#756d8d] mt-0.5 truncate">AI generated creative prompt</p>
                           </div>
-                          <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${selectedPromptsForShowcase.includes(prompt.id)
-                            ? "bg-primary border-primary text-white"
-                            : "border-[#e9e2f3] dark:border-white/10"
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${selectedPromptsForShowcase.includes(prompt.id)
+                            ? "bg-primary text-white"
+                            : "bg-white/10 dark:bg-white/5"
                             }`}>
                             {selectedPromptsForShowcase.includes(prompt.id) && <Check className="w-3 h-3" />}
                           </div>
@@ -2110,7 +2110,7 @@ export default function TopNavbar() {
                     <div className="flex items-center gap-4 pt-4">
                       <button
                         onClick={() => setShowShowcaseModal(false)}
-                        className="flex-1 h-12 rounded-2xl border border-[#e9e2f3] dark:border-white/10 font-bold text-sm text-[#171421] dark:text-white"
+                        className="pill-glass flex-1 h-12 rounded-2xl font-bold text-sm text-[#171421] dark:text-white hover:bg-white/20 dark:hover:bg-white/10"
                       >
                         Cancel
                       </button>
@@ -2126,9 +2126,9 @@ export default function TopNavbar() {
                             setIsGeneratingShowcase(false);
                           }, 2000);
                         }}
-                        className={`flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${selectedPromptsForShowcase.length >= 1
-                          ? "bg-primary text-white shadow-primary/20 hover:scale-105"
-                          : "bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] cursor-not-allowed"
+                        className={`flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${selectedPromptsForShowcase.length >= 1
+                          ? "bg-primary text-white hover:bg-primary/90 hover:scale-[1.02]"
+                          : "pill-glass text-[#756d8d] dark:text-[#afa6c8]/50 cursor-not-allowed"
                           }`}
                       >
                         {isGeneratingShowcase ? <Sparkles className="w-5 h-5 animate-spin" /> : <><Share2 className="w-4 h-4" /> Create Poster</>}
@@ -2139,9 +2139,9 @@ export default function TopNavbar() {
 
                 {showcaseStep === 2 && (
                   <div className="flex flex-col gap-3 md:gap-4">
-                    <div className="flex items-center justify-between border-b border-[#e9e2f3] dark:border-white/10 pb-3 md:pb-4">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3 md:pb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg shadow-green-500/25">
+                        <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">
                           <Check className="w-5 h-5" strokeWidth={3} />
                         </div>
                         <div>
@@ -2151,7 +2151,7 @@ export default function TopNavbar() {
                       </div>
                       <button
                         onClick={() => setShowShowcaseModal(false)}
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#e9e2f3] bg-[#f8f7fc]/80 text-[#171421] shadow-sm backdrop-blur-2xl transition-transform hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-[#171421]/80 dark:text-[#f7f2ff] dark:hover:text-white"
+                        className="pill-glass flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#171421] dark:text-[#f7f2ff] hover:scale-105 active:scale-95 hover:bg-white/20 dark:hover:bg-white/10"
                         aria-label="Close"
                       >
                         <X className="w-5 h-5" />
@@ -2282,35 +2282,35 @@ export default function TopNavbar() {
                           <button
                             onClick={downloadShowcasePoster}
                             title="Download Poster PNG"
-                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-primary/10 hover:border-primary/50 text-primary flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                            className="pill-glass flex-1 h-11 rounded-xl text-primary flex items-center justify-center transition-all hover:scale-105 hover:bg-primary/10 active:scale-95"
                           >
                             <Download className="w-5 h-5" />
                           </button>
                           <button
                             onClick={copyImageToClipboard}
                             title="Copy Image"
-                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-primary/10 hover:border-primary/50 text-primary flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                            className="pill-glass flex-1 h-11 rounded-xl text-primary flex items-center justify-center transition-all hover:scale-105 hover:bg-primary/10 active:scale-95"
                           >
                             <Copy className="w-5 h-5" />
                           </button>
                           <button
                             onClick={shareShowcaseNatively}
                             title="Share Poster"
-                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-green-50 dark:hover:bg-green-500/10 hover:border-green-500/50 text-green-500 flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                            className="pill-glass flex-1 h-11 rounded-xl text-green-500 flex items-center justify-center transition-all hover:scale-105 hover:bg-green-500/10 active:scale-95"
                           >
                             <Share2 className="w-5 h-5" />
                           </button>
                           <button
                             onClick={shareShowcaseToInstagram}
                             title="Instagram Story"
-                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-[#e1306c]/10 hover:border-[#e1306c]/50 text-[#e1306c] flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                            className="pill-glass flex-1 h-11 rounded-xl text-[#e1306c] flex items-center justify-center transition-all hover:scale-105 hover:bg-[#e1306c]/10 active:scale-95"
                           >
                             <Instagram className="w-5 h-5" />
                           </button>
                           <button
                             onClick={shareShowcaseToWhatsApp}
                             title="WhatsApp Send"
-                            className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 hover:bg-green-50 dark:hover:bg-green-500/10 hover:border-green-500/50 text-green-500 flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95"
+                            className="pill-glass flex-1 h-11 rounded-xl text-green-500 flex items-center justify-center transition-all hover:scale-105 hover:bg-green-500/10 active:scale-95"
                           >
                             <MessageCircle className="w-5 h-5" />
                           </button>
@@ -2318,7 +2318,7 @@ export default function TopNavbar() {
 
                         <button
                           onClick={copyShowcaseLink}
-                          className="w-full h-9 rounded-xl border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] hover:text-primary font-bold text-xs flex items-center justify-center gap-1.5"
+                          className="pill-glass w-full h-9 rounded-xl text-[#756d8d] dark:text-[#afa6c8] hover:text-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-white/20 dark:hover:bg-white/10"
                         >
                           <Copy className="w-3.5 h-3.5" /> Copy Showcase Link
                         </button>
@@ -2347,7 +2347,7 @@ export default function TopNavbar() {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md bg-white dark:bg-[#171421] rounded-[2rem] border border-[#ff6a3d]/20 dark:border-white/10 shadow-[0_30px_70px_rgba(255,106,61,0.14)] z-[99999] overflow-hidden"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md rounded-[2rem] z-[99999] overflow-hidden pill-glass"
             >
               <div className="p-6 md:p-8 flex flex-col gap-6 items-center text-center">
                 {/* Warning Icon Container */}
@@ -2374,7 +2374,7 @@ export default function TopNavbar() {
                   <button
                     onClick={() => setShowDeleteConfirm(false)}
                     disabled={isDeletingAccount}
-                    className="flex-1 h-11 rounded-xl border border-[#e9e2f3] dark:border-white/10 text-xs font-black text-[#756d8d] hover:bg-gray-50 dark:hover:bg-white/5 active:scale-95 transition-all cursor-pointer"
+                    className="pill-glass flex-1 h-11 rounded-xl text-xs font-black text-[#756d8d] dark:text-[#afa6c8] hover:bg-white/20 dark:hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
                   >
                     Cancel
                   </button>
