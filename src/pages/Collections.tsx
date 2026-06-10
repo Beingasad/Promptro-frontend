@@ -320,7 +320,7 @@ export default function Collections() {
         <AnimatePresence>
           {renameOpen && (
             <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-              <motion.button type="button" className="fixed inset-0 bg-[#0d0b14]/50 dark:bg-black/60 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
+              <motion.button type="button" className="fixed inset-0 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
               <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] border border-white/80 bg-white/80 p-5 shadow-2xl backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/90 dark:text-white">
                 <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white mb-3">Rename Board</h3>
                 <form onSubmit={handleRename} className="flex flex-col gap-3">
@@ -484,7 +484,7 @@ export default function Collections() {
       <AnimatePresence>
         {createOpen && (
           <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-            <motion.button type="button" className="fixed inset-0 bg-[#0d0b14]/50 dark:bg-black/60 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setCreateOpen(false)} />
+            <motion.button type="button" className="fixed inset-0 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setCreateOpen(false)} />
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -534,7 +534,7 @@ export default function Collections() {
       <AnimatePresence>
         {renameOpen && (
           <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-            <motion.button type="button" className="fixed inset-0 bg-[#0d0b14]/50 dark:bg-black/60 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
+            <motion.button type="button" className="fixed inset-0 backdrop-blur-md w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
             <motion.div
               initial={{ opacity: 0, scale: 0.94, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
