@@ -1125,7 +1125,7 @@ export default function TopNavbar() {
             ]}
           />
           {privacySections.map((s) => (
-            <div key={s.id} className="pill-glass rounded-[1.25rem] p-4 glass-shine hover-glass-glow">
+            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
               <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
                 {s.content}
@@ -1150,7 +1150,7 @@ export default function TopNavbar() {
             ]}
           />
           {termsSections.map((s) => (
-            <div key={s.id} className="pill-glass rounded-[1.25rem] p-4 glass-shine hover-glass-glow">
+            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
               <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
                 {s.content}
@@ -1172,7 +1172,7 @@ export default function TopNavbar() {
                 setSelectedBlogPostSlug(post.slug);
                 setExpandedView('blog-post');
               }}
-              className="pill-glass flex flex-col text-left rounded-[1.25rem] overflow-hidden transition-all hover:-translate-y-0.5 glass-shine hover-glass-glow"
+              className="flex flex-col text-left rounded-[1.25rem] overflow-hidden bg-white/62 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_12px_24px_rgba(139,92,246,0.1)] transition-all hover:-translate-y-0.5 glass-shine hover-glass-glow"
             >
               <div className="aspect-[16/8] w-full overflow-hidden relative">
                 <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
@@ -1230,7 +1230,7 @@ export default function TopNavbar() {
 
           {/* FAQ Accordion */}
           {post.faqs.length > 0 && (
-            <div className="pill-glass rounded-[1.25rem] p-4 mt-2 glass-shine hover-glass-glow">
+            <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 mt-2 glass-shine hover-glass-glow">
               <h4 className="text-xs font-bold text-[#171421] dark:text-white mb-3">Frequently Asked Questions</h4>
               <div className="flex flex-col divide-y divide-white/35 dark:divide-white/5">
                 {post.faqs.map((faq, i) => (
@@ -1267,7 +1267,7 @@ export default function TopNavbar() {
               </div>
             ))
           ) : (
-            <div className="pill-glass break-inside-avoid rounded-[1.35rem] p-4 text-sm font-medium leading-6 text-[#6f6684]">
+            <div className="break-inside-avoid rounded-[1.35rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 text-sm font-medium leading-6 text-[#6f6684]">
               Open a prompt detail page and it will appear here.
             </div>
           )}
@@ -1308,7 +1308,7 @@ export default function TopNavbar() {
                 const action = link.href === '/privacy-policy' ? 'privacy' : 'terms';
                 handleDrawerAction(action);
               }}
-              className="pill-glass flex w-full items-center gap-3 rounded-[1.25rem] p-4 hover:shadow-[0_16px_32px_rgba(139,92,246,0.12)] transition-all hover:-translate-y-0.5 text-left glass-shine hover-glass-glow"
+              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 hover:shadow-[0_12px_24px_rgba(139,92,246,0.1)] transition-all hover:-translate-y-0.5 text-left glass-shine hover-glass-glow"
             >
               <div className="h-10 w-10 shrink-0 flex items-center justify-center text-primary">
                 <link.icon className="h-5 w-5" />
@@ -1320,7 +1320,7 @@ export default function TopNavbar() {
               <ChevronRight className="h-4 w-4 shrink-0 text-[#80779a]" />
             </button>
           ))}
-          <div className="pill-glass rounded-[1.15rem] p-3 text-center glass-shine hover-glass-glow">
+          <div className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3 text-center glass-shine hover-glass-glow">
             <p className="text-[10px] font-medium text-[#8a819d]">
               Questions? Email: <a href="mailto:support.promptro@gmail.com" className="text-primary font-bold hover:underline">support.promptro@gmail.com</a>
             </p>
@@ -1354,7 +1354,7 @@ export default function TopNavbar() {
           </div>
 
           {/* Feedback form with tabs */}
-          <div className="pill-glass rounded-[1.25rem] p-4 glass-shine hover-glass-glow">
+          <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
             <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Send Message</p>
             <div className="flex flex-wrap gap-1.5 mb-3">
               {['Bug Report', 'Feature Request', 'General Feedback'].map((label) => (
@@ -1472,7 +1472,7 @@ export default function TopNavbar() {
                 href="https://instagram.com/promptro.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pill-glass flex items-center gap-3 rounded-[1.25rem] p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
+                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
               >
                 <div className="h-10 w-10 shrink-0 flex items-center justify-center text-[#e6683c]">
                   <Instagram className="h-5 w-5" />
@@ -1485,7 +1485,7 @@ export default function TopNavbar() {
 
               {/* X / Twitter */}
               <div
-                className="pill-glass flex items-center gap-3 rounded-[1.25rem] p-3.5 opacity-70 cursor-not-allowed select-none"
+                className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 opacity-70 cursor-not-allowed select-none"
               >
                 <div className="h-10 w-10 shrink-0 flex items-center justify-center text-[#171421] dark:text-white">
                   <XIcon className="h-5 w-5" />
@@ -1732,7 +1732,7 @@ export default function TopNavbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto hide-scrollbar rounded-2xl border border-white/80 bg-white/94 p-2.5 shadow-[0_24px_50px_rgba(72,56,118,0.24)] backdrop-blur-3xl dark:border-white/10 dark:bg-[#14111f]/94"
+                className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto hide-scrollbar rounded-[1.45rem] border border-white/50 dark:border-white/10 bg-white/75 dark:bg-[#171421]/80 p-2.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-3xl"
               >
                 <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#8c84a6]">Categories</p>
                 <div className="mt-1.5 flex flex-col gap-0.5">
@@ -1826,7 +1826,7 @@ export default function TopNavbar() {
                 duration: 0.35,
                 ease: [0.32, 0.72, 0, 1]
               }}
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-white/65 border-r border-white/45 dark:border-r-white/8 backdrop-blur-3xl dark:bg-[#171421]/68 will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-white/65 border-r border-white/45 dark:border-r-white/8 backdrop-blur-3xl dark:bg-[#171421]/68 px-3 pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
                 }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
@@ -1841,7 +1841,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="pill-glass absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)]">
+                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/70 dark:bg-[#1c182e]/80 backdrop-blur-xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)]">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1857,13 +1857,13 @@ export default function TopNavbar() {
                             navigate('/', { state: { keepMenuOpen: true } });
                           }
                         }}
-                        className="pill-glass flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white hover:scale-105 transition-transform"
+                        className="flex h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-[#2b2540] text-[#171421] dark:text-white shadow-[0_2px_10px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform"
                         aria-label="Back to menu"
                       >
                         <ArrowLeft className="h-5 w-5" />
                       </button>
                       <h2 className="text-center text-base sm:text-lg font-bold text-[#171421] dark:text-white line-clamp-1 px-2">{expandedTitle}</h2>
-                      <div className="pill-glass flex h-11 w-11 items-center justify-center overflow-hidden rounded-full">
+                      <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-[#2b2540] shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
                         {expandedView === 'recent' ? (
                           <Clock3 className="h-5 w-5 text-primary" />
                         ) : expandedView === 'help' ? (
@@ -1898,7 +1898,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="pill-glass mb-3 shrink-0 rounded-[1.15rem] p-3 glass-shine hover-glass-glow">
+                    <div className="mb-3 shrink-0 rounded-[1.15rem] bg-white/62 dark:bg-white/5 p-3 shadow-[0_14px_34px_rgba(139,92,246,0.1)] backdrop-blur-2xl glass-shine hover-glass-glow">
                       <div className="flex items-start gap-2 text-left">
                         <div className="min-w-0 w-full">
                           <p className="text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
@@ -1925,9 +1925,9 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
+                          className={`group flex w-full items-center gap-2.5 rounded-[1rem] px-2.5 py-1.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
                               ? 'bg-[#fff4f8]/72 shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
-                              : 'pill-glass hover:bg-white/40'
+                              : 'bg-white/62 dark:bg-white/5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
                             }`}
                         >
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105 text-primary">
