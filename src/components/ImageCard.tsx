@@ -1,8 +1,8 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Eye, Bookmark, GalleryVerticalEnd } from 'lucide-react';
 import CollectionSelectModal from './CollectionSelectModal';
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -52,9 +52,22 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
   const [likes, setLikes] = useState(prompt.likes);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
+  const [showHeart, setShowHeart] = useState(false);
+  const [heartKey, setHeartKey] = useState(0);
+  const lastClickTime = useRef(0);
+  const clickTimeout = useRef<any>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
+
+  // Cleanup pending single-click timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (clickTimeout.current) {
+        clearTimeout(clickTimeout.current);
+      }
+    };
+  }, []);
 
   const handleCollectionClick = async (event: MouseEvent) => {
     event.preventDefault();
@@ -136,12 +149,59 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
     setLikedPrompt(prompt.id, nextLiked);
     setLiked(nextLiked);
     setLikes(prompt.likes + (nextLiked ? 1 : 0));
+
+    // Show heart pop animation when liking via button click
+    if (nextLiked) {
+      setHeartKey((prev) => prev + 1);
+      setShowHeart(true);
+    }
+
     saveUserActivity(auth?.currentUser).catch(() => undefined);
     const data = new FormData();
     data.append('liked', String(nextLiked));
     axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/like`, data, { timeout: 15000 }).then((response) => {
       if (typeof response.data?.likes === 'number') setLikes(response.data.likes);
     }).catch(() => undefined);
+  };
+
+  const handleCardClick = (event: MouseEvent) => {
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 300;
+
+    if (now - lastClickTime.current < DOUBLE_PRESS_DELAY) {
+      // It's a double click!
+      event.preventDefault();
+      if (clickTimeout.current) {
+        clearTimeout(clickTimeout.current);
+        clickTimeout.current = null;
+      }
+
+      // Show heart pop animation
+      setHeartKey((prev) => prev + 1);
+      setShowHeart(true);
+
+      // Perform like if not already liked (Instagram style: double click only likes, never unlikes)
+      if (!liked) {
+        const nextLiked = true;
+        setLikedPrompt(prompt.id, nextLiked);
+        setLiked(nextLiked);
+        setLikes(prompt.likes + 1);
+        saveUserActivity(auth?.currentUser).catch(() => undefined);
+        const data = new FormData();
+        data.append('liked', String(nextLiked));
+        axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/like`, data, { timeout: 15000 }).then((response) => {
+          if (typeof response.data?.likes === 'number') setLikes(response.data.likes);
+        }).catch(() => undefined);
+      }
+    } else {
+      // It's a single click! Delay navigation to check if a double click follows
+      lastClickTime.current = now;
+      event.preventDefault();
+
+      clickTimeout.current = setTimeout(() => {
+        navigate(`/prompt/${prompt.id}`, { state: { isPortrait } });
+      }, DOUBLE_PRESS_DELAY);
+    }
   };
 
   const handleCategoryClick = (event: MouseEvent) => {
@@ -160,6 +220,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       <Link 
         to={`/prompt/${prompt.id}`}
         state={{ isPortrait }}
+        onClick={handleCardClick}
         className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_18px_42px_rgba(32,26,54,0.13)] glass-shine hover-glass-glow"
         style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
       >
@@ -187,6 +248,34 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
       />
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+      {/* Instagram-style double tap heart popup effect */}
+      <AnimatePresence>
+        {showHeart && (
+          <motion.div
+            key={heartKey}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ 
+              scale: [0, 1.4, 0.9, 1.1, 1],
+              opacity: [0, 1, 1, 0.9, 0],
+              rotate: [0, -10, 10, 0]
+            }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ 
+              duration: 0.8,
+              times: [0, 0.2, 0.4, 0.6, 1],
+              ease: "easeOut"
+            }}
+            onAnimationComplete={() => setShowHeart(false)}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+          >
+            <Heart 
+              className="w-20 h-20 md:w-24 md:h-24 text-red-500 fill-red-500 filter drop-shadow-[0_0_20px_rgba(239,68,68,0.75)] drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" 
+              strokeWidth={1.5}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
