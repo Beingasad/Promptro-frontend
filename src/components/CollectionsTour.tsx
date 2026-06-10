@@ -250,7 +250,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
       {/* ── EXPANDED DETAILS MODAL ── */}
       <AnimatePresence>
         {showDetailsModal && (
-          <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-white/8 dark:bg-white/3 backdrop-blur-md pointer-events-auto">
+          <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/5 backdrop-blur-[3px] pointer-events-auto">
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 15 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}

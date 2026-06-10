@@ -78,13 +78,12 @@ export default function CookieConsent() {
     <AnimatePresence>
       {isVisible && (
         <>
-          {/* Backdrop Blur Overlay */}
           <motion.div
             key="cookie-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[105] bg-black/5 backdrop-blur-[5px] pointer-events-auto"
+            className="fixed inset-0 z-[105] bg-transparent pointer-events-auto"
           />
 
           <motion.div

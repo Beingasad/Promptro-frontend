@@ -3177,7 +3177,7 @@ export default function Admin() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={resetForm}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60]"
+              className="fixed inset-0 bg-black/5 backdrop-blur-[3px] z-[60]"
             />
             <motion.div 
               initial={{ x: '100%' }}
@@ -3382,7 +3382,7 @@ export default function Admin() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => !isLaunching && setShowCampaignModal(false)}
-              className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md z-[80]"
+              className="fixed inset-0 bg-black/5 backdrop-blur-[3px] z-[80]"
             />
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -3643,7 +3643,7 @@ export default function Admin() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowBulkModal(false)}
-              className="absolute inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/5 backdrop-blur-[3px]"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -3739,7 +3739,7 @@ export default function Admin() {
         )}
 
         {confirmConfig.isOpen && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white/8 dark:bg-white/3 backdrop-blur-md">
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/5 backdrop-blur-[3px]">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}

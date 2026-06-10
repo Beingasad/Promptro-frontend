@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FolderPlus, Folder, Check, Plus, Loader2 } from 'lucide-react';
 import { 
@@ -30,6 +31,18 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
       setShowNewInput(false);
       setNewCollectionName('');
     }
+  }, [isOpen]);
+
+  // Prevent page scroll when the modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   const handleToggleCollection = async (collectionId: string) => {
@@ -80,14 +93,14 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
 
   const savedCount = collections.filter(c => c.prompts.some(p => p.id === prompt.id)).length;
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.button
             type="button"
-            className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
+            className="fixed inset-0 bg-black/5 backdrop-blur-[3px] cursor-default w-full h-full border-none outline-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -101,7 +114,7 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] modal-glass"
+            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 pt-5 pb-3.5 border-b border-[#e9e2f3] dark:border-white/5">
@@ -118,7 +131,7 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
             </div>
 
             {/* Collections List */}
-            <div className="px-5 py-4 max-h-60 overflow-y-auto hide-scrollbar flex flex-col gap-2">
+            <div className="px-5 py-4 max-h-60 overflow-y-auto hide-scrollbar flex flex-col gap-2 scroll-fade-mask">
               {collections.length > 0 ? (
                 collections.map((col) => {
                   const isSaved = col.prompts.some(p => p.id === prompt.id);
@@ -208,6 +221,7 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

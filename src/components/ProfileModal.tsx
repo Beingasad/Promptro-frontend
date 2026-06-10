@@ -380,7 +380,7 @@ export default function ProfileModal({
           <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
             <motion.button
               type="button"
-              className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
+              className="fixed inset-0 bg-black/5 backdrop-blur-[3px] cursor-default w-full h-full border-none outline-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -392,13 +392,13 @@ export default function ProfileModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[22rem] overflow-hidden rounded-[2.5rem] p-6 text-center modal-glass"
+              className="relative w-full max-w-[22rem] overflow-hidden rounded-[2.5rem] p-6 text-center profile-modal-glass"
             >
               <div className="mx-auto flex h-14 w-14 items-center justify-center text-primary">
                 <User className="h-9 w-9" />
               </div>
               <h3 className="mt-3 text-lg font-extrabold text-[#171421] dark:text-white">Welcome to Promptro</h3>
-              <p className="mt-1.5 text-xs text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
+              <p className="mt-1.5 text-xs text-[#5a5075] dark:text-[#b4aaca] leading-relaxed">
                 Connect your account to save prompts, customize your style, and join the Promptro creator community.
               </p>
               <a
@@ -422,7 +422,7 @@ export default function ProfileModal({
           {/* Backdrop overlay */}
           <motion.button
             type="button"
-            className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
+            className="fixed inset-0 bg-black/5 backdrop-blur-[3px] cursor-default w-full h-full border-none outline-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -436,7 +436,7 @@ export default function ProfileModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-7 dark:text-white modal-glass"
+            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-7 dark:text-white profile-modal-glass"
           >
             {/* Ambient background glows */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.12),transparent_42%)]" />
@@ -444,7 +444,7 @@ export default function ProfileModal({
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#e9e2f3] dark:border-white/10 bg-white/80 dark:bg-white/5 text-[#756d8d] dark:text-[#afa6c8] transition-transform hover:scale-105 active:scale-95"
+              className="absolute top-5 right-5 z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#e9e2f3] dark:border-white/10 bg-white/80 dark:bg-white/5 text-[#5a5075] dark:text-[#b4aaca] transition-transform hover:scale-105 active:scale-95"
               aria-label="Close modal"
             >
               <X className="w-4 h-4" />
@@ -490,8 +490,8 @@ export default function ProfileModal({
 
                   {/* Email & Verified Badge */}
                   <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-white/40 dark:bg-white/5 px-3 py-1 rounded-full border border-white/60 dark:border-white/5">
-                    <Mail className="h-3.5 w-3.5 text-[#8a819d] shrink-0" />
-                    <span className="text-xs font-medium text-[#5f5774] dark:text-[#c4bed6] truncate max-w-[12rem]">{currentUser.email}</span>
+                    <Mail className="h-3.5 w-3.5 text-[#70658a] dark:text-[#9e94bc] shrink-0" />
+                    <span className="text-xs font-medium text-[#4a3e68] dark:text-[#c4bed6] truncate max-w-[12rem]">{currentUser.email}</span>
                     {backendEmailVerified ? (
                       <span className="inline-flex items-center text-[10px] font-black text-emerald-500 ml-1">
                         <BadgeCheck className="h-3.5 w-3.5" />
@@ -508,7 +508,7 @@ export default function ProfileModal({
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/8 to-secondary/4 border border-primary/15 rounded-xl text-[11px] font-semibold text-[#5f5774] dark:text-[#c4bed6]"
+                    className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/8 to-secondary/4 border border-primary/15 rounded-xl text-[11px] font-semibold text-[#4a3e68] dark:text-[#c4bed6]"
                   >
                     <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                     <div>
@@ -541,7 +541,7 @@ export default function ProfileModal({
                       >
                         <div className="grid grid-cols-2 gap-3">
                           <label className="block text-left">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] ml-1 block mb-1">First Name</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#70658a] dark:text-[#9e94bc] ml-1 block mb-1">First Name</span>
                             <input
                               type="text"
                               value={firstName}
@@ -553,7 +553,7 @@ export default function ProfileModal({
                           </label>
 
                           <label className="block text-left">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] ml-1 block mb-1">Last Name</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#70658a] dark:text-[#9e94bc] ml-1 block mb-1">Last Name</span>
                             <input
                               type="text"
                               value={lastName}
@@ -565,7 +565,7 @@ export default function ProfileModal({
                         </div>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] ml-1 block mb-1">Username</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#70658a] dark:text-[#9e94bc] ml-1 block mb-1">Username</span>
                           <span className="relative flex items-center">
                             <span className="absolute left-3.5 text-xs font-bold text-primary">@</span>
                             <input
@@ -579,7 +579,7 @@ export default function ProfileModal({
                         </label>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] ml-1 block mb-1">Gender</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#70658a] dark:text-[#9e94bc] ml-1 block mb-1">Gender</span>
                           <div className="relative">
                             <select
                               value={gender}
@@ -592,7 +592,7 @@ export default function ProfileModal({
                               <option value="Other" className="bg-[#14111f]">Other</option>
                               <option value="Prefer not to say" className="bg-[#14111f]">Prefer not to say</option>
                             </select>
-                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8a819d] pointer-events-none" />
+                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#70658a] dark:text-[#9e94bc] pointer-events-none" />
                           </div>
                         </label>
 
@@ -643,7 +643,7 @@ export default function ProfileModal({
                         {/* Stats Grid */}
                         <div className="grid grid-cols-2 gap-2">
                           {/* Stat 1: Verification */}
-                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center">
+                          <div className="bg-white/60 dark:bg-white/8 border border-white/80 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center">
                             {backendEmailVerified ? (
                               <BadgeCheck className="w-5 h-5 text-emerald-500 shrink-0" />
                             ) : (
@@ -652,16 +652,16 @@ export default function ProfileModal({
                             <span className={`text-xs font-bold mt-1.5 ${backendEmailVerified ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                               {backendEmailVerified ? 'Verified' : 'Unverified'}
                             </span>
-                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a819d] opacity-60 mt-0.5">Verification</span>
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#70658a] dark:text-[#9e94bc] opacity-80 mt-0.5">Verification</span>
                           </div>
 
                           {/* Stat 2: Joined Date */}
-                          <div className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center">
+                          <div className="bg-white/60 dark:bg-white/8 border border-white/80 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center">
                             <Clock className="w-5 h-5 text-primary shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {profile ? formatDate(profile.created_at) : 'N/A'}
                             </span>
-                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a819d] opacity-60 mt-0.5">Joined Date</span>
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#70658a] dark:text-[#9e94bc] opacity-80 mt-0.5">Joined Date</span>
                           </div>
 
                           {/* Stat 3: Saved Count */}
@@ -671,13 +671,13 @@ export default function ProfileModal({
                               onClose();
                               navigate('/saved');
                             }}
-                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
+                            className="bg-white/60 dark:bg-white/8 border border-white/80 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/80 dark:hover:bg-white/12"
                           >
                             <Bookmark className="w-5 h-5 text-[#ff6a3d] shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {savedCount}
                             </span>
-                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a819d] opacity-60 mt-0.5">Saved Prompts</span>
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#70658a] dark:text-[#9e94bc] opacity-80 mt-0.5">Saved Prompts</span>
                           </button>
 
                           {/* Stat 4: Collections Count */}
@@ -687,13 +687,13 @@ export default function ProfileModal({
                               onClose();
                               navigate('/collections');
                             }}
-                            className="bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/5 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/60 dark:hover:bg-white/10"
+                            className="bg-white/60 dark:bg-white/8 border border-white/80 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/80 dark:hover:bg-white/12"
                           >
                             <GalleryVerticalEnd className="w-5 h-5 text-violet-500 shrink-0" />
                             <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {collectionsCount}
                             </span>
-                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#8a819d] opacity-60 mt-0.5">Collections</span>
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-[#70658a] dark:text-[#9e94bc] opacity-80 mt-0.5">Collections</span>
                           </button>
                         </div>
 
@@ -731,13 +731,13 @@ export default function ProfileModal({
                         )}
 
                         {/* Display list of details in minimal layout */}
-                        <div className="flex flex-col gap-2.5 mt-1 border-t border-[#e9e2f3] dark:border-white/5 pt-4 text-left text-xs font-semibold text-[#5f5774] dark:text-[#c4bed6]">
+                        <div className="flex flex-col gap-2.5 mt-1 border-t border-[#e9e2f3] dark:border-white/5 pt-4 text-left text-xs font-semibold text-[#4a3e68] dark:text-[#c4bed6]">
                           <div className="flex justify-between">
-                            <span className="text-[#8a819d]">Gender</span>
+                            <span className="text-[#70658a] dark:text-[#9e94bc]">Gender</span>
                             <span className="font-bold text-[#171421] dark:text-white">{gender || 'Not specified'}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-[#8a819d]">Login Provider</span>
+                            <span className="text-[#70658a] dark:text-[#9e94bc]">Login Provider</span>
                             <span className="font-bold text-[#171421] dark:text-white uppercase tracking-wider">{profile?.provider || 'email'}</span>
                           </div>
                         </div>

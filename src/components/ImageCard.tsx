@@ -351,7 +351,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
             >
               {prompt.category}
             </button>
-             <div className="flex items-center gap-2.5 md:gap-4 pr-1 md:pr-2.5">
+            <div className="flex items-center gap-2.5 md:gap-4 pr-1 md:pr-2.5">
               <button
                 className="flex items-center gap-1.5 text-xs font-bold tracking-normal transition-transform active:scale-90 md:gap-2 md:text-[15px]"
                 onClick={toggleLike}
