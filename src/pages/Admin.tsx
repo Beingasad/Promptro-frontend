@@ -3382,7 +3382,7 @@ export default function Admin() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => !isLaunching && setShowCampaignModal(false)}
-              className="fixed inset-0 backdrop-blur-md z-[80]"
+              className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md z-[80]"
             />
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -3643,7 +3643,7 @@ export default function Admin() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowBulkModal(false)}
-              className="absolute inset-0 backdrop-blur-sm"
+              className="absolute inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -3739,7 +3739,7 @@ export default function Admin() {
         )}
 
         {confirmConfig.isOpen && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 backdrop-blur-md">
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-white/8 dark:bg-white/3 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -3802,7 +3802,7 @@ export default function Admin() {
         )}
       </AnimatePresence>
 
-      <dialog id="banner-modal" className="modal backdrop:backdrop-blur-sm rounded-[2rem] p-0 w-full max-w-2xl overflow-hidden m-auto pill-glass">
+      <dialog id="banner-modal" className="modal backdrop:bg-white/8 dark:backdrop:bg-white/3 backdrop:backdrop-blur-sm rounded-[2rem] p-0 w-full max-w-2xl overflow-hidden m-auto pill-glass">
         <form method="dialog" className="p-8 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
           <div>
             <h3 className="text-2xl font-bold">{editingBanner ? 'Edit Banner' : 'Create Banner'}</h3>

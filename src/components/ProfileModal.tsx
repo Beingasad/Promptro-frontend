@@ -380,7 +380,7 @@ export default function ProfileModal({
           <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
             <motion.button
               type="button"
-              className="fixed inset-0 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
+              className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -422,7 +422,7 @@ export default function ProfileModal({
           {/* Backdrop overlay */}
           <motion.button
             type="button"
-            className="fixed inset-0 backdrop-blur-[2px] cursor-default w-full h-full border-none outline-none"
+            className="fixed inset-0 bg-white/8 dark:bg-white/3 backdrop-blur-md cursor-default w-full h-full border-none outline-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
