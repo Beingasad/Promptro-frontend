@@ -1764,7 +1764,7 @@ export default function TopNavbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto hide-scrollbar rounded-[1.45rem] border border-white/50 dark:border-white/10 bg-white/75 dark:bg-[#171421]/80 p-2.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-3xl"
+                className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto overscroll-contain hide-scrollbar rounded-[1.45rem] border border-white/50 dark:border-white/10 bg-white/75 dark:bg-[#171421]/80 p-2.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-3xl"
               >
                 <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#8c84a6]">Categories</p>
                 <div className="mt-1.5 flex flex-col gap-0.5">
