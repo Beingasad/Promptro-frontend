@@ -2047,7 +2047,7 @@ export default function TopNavbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setNotificationsOpen(false)}
-              className="fixed inset-0 z-[110] bg-black/5 backdrop-blur-[3px] cursor-default pointer-events-auto"
+              className="fixed inset-0 z-[110] bg-black/5 backdrop-blur-[3px] cursor-default pointer-events-auto touch-none"
             />
             <motion.div
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -2055,7 +2055,7 @@ export default function TopNavbar() {
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl"
             >
-              <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="mb-2 flex items-center justify-between gap-3 touch-none">
                 <button
                   type="button"
                   onClick={() => setNotificationsOpen(false)}
@@ -2067,7 +2067,7 @@ export default function TopNavbar() {
                 <h3 className="flex-1 text-sm font-bold text-[#171421] dark:text-white uppercase tracking-wider">Notifications</h3>
                 <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">{notifications.length} NEW</span>
               </div>
-              <div className="flex flex-col gap-1 max-h-[224px] overflow-y-auto pr-1 hide-scrollbar">
+              <div className="flex flex-col gap-1 max-h-[224px] overflow-y-auto overscroll-contain pr-1 hide-scrollbar">
                 {notifications.length > 0 ? (
                   notifications.map((notif) => (
                     <button
