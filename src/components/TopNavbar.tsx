@@ -183,11 +183,14 @@ export default function TopNavbar() {
   useEffect(() => {
     if (notificationsOpen && window.innerWidth < 768) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [notificationsOpen]);
 
@@ -195,11 +198,14 @@ export default function TopNavbar() {
   useEffect(() => {
     if (showShowcaseModal || showDeleteConfirm) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [showShowcaseModal, showDeleteConfirm]);
 
@@ -905,13 +911,17 @@ export default function TopNavbar() {
 
     setRecentPrompts(readLocalActivity().recentPrompts);
 
-    const originalOverflow = document.body.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
 
     return () => {
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
     };
-  }, [menuOpen]);
+  }, [menuOpen, expandedView, location.pathname]);
 
   useEffect(() => {
     const path = location.pathname;
@@ -1194,7 +1204,7 @@ export default function TopNavbar() {
                 setSelectedBlogPostSlug(post.slug);
                 setExpandedView('blog-post');
               }}
-              className="flex flex-col text-left rounded-[1.25rem] overflow-hidden bg-white/62 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_12px_24px_rgba(139,92,246,0.1)] transition-all hover:-translate-y-0.5 glass-shine hover-glass-glow"
+              className="flex flex-col text-left rounded-[1.25rem] overflow-hidden bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.12)] dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.22)] transition-all glass-shine hover-glass-glow"
             >
               <div className="aspect-[16/8] w-full overflow-hidden relative">
                 <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
@@ -1330,7 +1340,7 @@ export default function TopNavbar() {
                 const action = link.href === '/privacy-policy' ? 'privacy' : 'terms';
                 handleDrawerAction(action);
               }}
-              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 hover:shadow-[0_12px_24px_rgba(139,92,246,0.1)] transition-all hover:-translate-y-0.5 text-left glass-shine hover-glass-glow"
+              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-4 hover:bg-gradient-to-r hover:from-primary/8 hover:to-secondary/8 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)] transition-all text-left glass-shine hover-glass-glow"
             >
               <div className={`h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-gradient-to-br ${link.color} text-white shadow-[0_4px_12px_rgba(0,0,0,0.08)]`}>
                 <link.icon className="h-5 w-5" />
@@ -1828,7 +1838,7 @@ export default function TopNavbar() {
             <motion.button
               type="button"
               aria-label="Close menu backdrop"
-              className="fixed inset-0 z-[80] bg-black/5 backdrop-blur-[3px]"
+              className="fixed inset-0 z-[80] bg-black/5 backdrop-blur-[3px] touch-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -1848,8 +1858,11 @@ export default function TopNavbar() {
                 duration: 0.35,
                 ease: [0.32, 0.72, 0, 1]
               }}
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden bg-white/65 border-r border-white/45 dark:border-r-white/8 backdrop-blur-3xl dark:bg-[#171421]/68 px-3 pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 ${(windowWidth < 768 && (expandedView || isFullWidth)) ? 'rounded-none' : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
-                }`}
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/45 dark:border-r-white/8 pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 ${
+                (windowWidth < 768 && (expandedView || isFullWidth))
+                  ? 'bg-white dark:bg-[#0d0b14] rounded-none'
+                  : 'bg-white/65 dark:bg-[#171421]/68 backdrop-blur-3xl rounded-tr-[2.5rem] rounded-br-[2.5rem]'
+              }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
 
@@ -1863,7 +1876,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/70 dark:bg-[#1c182e]/80 backdrop-blur-xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)]">
+                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/70 dark:bg-[#1c182e]/80 backdrop-blur-xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] touch-none">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1906,7 +1919,7 @@ export default function TopNavbar() {
                       </div>
                     </div>
                     <div className="relative flex-1 min-h-0 rounded-t-[1.35rem] md:rounded-t-[1.75rem] overflow-hidden">
-                      <div className="w-full h-full overflow-y-auto hide-scrollbar flex flex-col pt-20">
+                      <div className="w-full h-full overflow-y-auto overscroll-contain hide-scrollbar flex flex-col px-3 pt-20">
                         {renderExpandedContent()}
                       </div>
                     </div>
@@ -1920,7 +1933,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="mb-2 md:mb-3 w-full shrink-0 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-3.5 md:p-4.5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow">
+                    <div className="mb-2 md:mb-3 shrink-0 mx-3 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-3.5 md:p-4.5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow touch-none">
                       <div className="flex items-start gap-2 text-left">
                         <div className="min-w-0 w-full">
                           <p className="text-[9px] md:text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
@@ -1938,7 +1951,7 @@ export default function TopNavbar() {
                     </div>
  
                     {/* Scrollable items container */}
-                    <div className="flex-1 overflow-y-auto hide-scrollbar min-h-0 flex flex-col gap-1.5 md:gap-3 pb-1">
+                    <div className="flex-1 overflow-y-auto overscroll-contain hide-scrollbar min-h-0 flex flex-col gap-1.5 md:gap-3 px-3 pb-1">
                       {mainDrawerItems.map((item) => (
                         <button
                           key={item.title}
@@ -1947,12 +1960,12 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full shrink-0 items-center gap-2 md:gap-3 rounded-[0.85rem] md:rounded-[1.15rem] px-3.5 py-3 md:px-5 md:py-4.5 text-left backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 glass-shine hover-glass-glow ${item.action === 'delete-account'
-                              ? 'bg-[#fff4f8]/72 border border-rose-500/20 shadow-[0_12px_24px_rgba(242,54,114,0.09)] hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
-                              : 'bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-white/82 hover:shadow-[0_14px_28px_rgba(139,92,246,0.12)]'
+                          className={`group flex w-full shrink-0 items-center gap-2 md:gap-3 rounded-[0.85rem] md:rounded-[1.15rem] px-3.5 py-3 md:px-5 md:py-4.5 text-left backdrop-blur-xl transition-all duration-300 glass-shine hover-glass-glow ${item.action === 'delete-account'
+                              ? 'bg-[#fff4f8]/72 border border-rose-500/20 hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
+                              : 'bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-gradient-to-r hover:from-primary/8 hover:to-secondary/8 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)]'
                             }`}
                         >
-                          <span className="flex h-6.5 w-6.5 md:h-8 md:w-8 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105 text-primary">
+                          <span className="flex h-6.5 w-6.5 md:h-8 md:w-8 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[6deg] text-primary">
                             <item.icon className="h-3.5 w-3.5 md:h-4 md:w-4" />
                           </span>
                           <div className="min-w-0 flex-1 flex flex-col justify-center">
@@ -1970,7 +1983,7 @@ export default function TopNavbar() {
                     </div>
 
                     {/* Quick Stats Section */}
-                    <div className="hidden md:block shrink-0 w-full mt-3 mb-3 rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-3 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover-glass-glow">
+                    <div className="hidden md:block shrink-0 mt-3 mb-3 mx-3 rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-3 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover-glass-glow touch-none">
                       <p className="text-[9px] font-black uppercase tracking-widest text-primary mb-2.5 text-left">Quick Stats ⚡</p>
                       <div className="grid grid-cols-3 gap-2">
                         <div className="flex flex-col items-center justify-center py-1">
@@ -2012,7 +2025,7 @@ export default function TopNavbar() {
                       </div>
                     </div>
 
-                    <div className="shrink-0 pt-1.5 md:pt-3 mb-4 md:mb-0 text-center">
+                    <div className="shrink-0 pt-1.5 md:pt-3 mb-4 md:mb-0 text-center touch-none">
                       <div className="flex items-center justify-center gap-1 text-[9px] md:text-[10px] font-medium text-[#5f5774]">
                         Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                       </div>
@@ -2135,7 +2148,7 @@ export default function TopNavbar() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[340px] md:max-h-[420px] overflow-y-auto pr-2 pb-4 scroll-fade-mask hide-scrollbar">
+                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[340px] md:max-h-[420px] overflow-y-auto pt-4 pb-8 scroll-fade-mask hide-scrollbar rounded-2xl">
                       {allPromptsForShowcase.map((prompt) => (
                         <div
                           key={prompt.id}
@@ -2172,7 +2185,7 @@ export default function TopNavbar() {
                       ))}
                     </div>
 
-                    <div className="flex items-center gap-4 pt-4">
+                    <div className="flex items-center gap-4 pt-2">
                       <button
                         onClick={() => setShowShowcaseModal(false)}
                         className="pill-glass flex-1 h-12 rounded-2xl font-bold text-sm text-[#171421] dark:text-white hover:bg-white/20 dark:hover:bg-white/10"

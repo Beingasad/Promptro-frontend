@@ -421,7 +421,7 @@ export default function ImageDetail() {
             scaleY: [1, 0.95, 1.05, 0.98, 1.02, 1],
           } : {}}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap transition-all duration-300 shadow-[0_8px_32px_rgba(31,38,135,0.04)]"
+          className="relative overflow-hidden rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap transition-all duration-300"
         >
           {promptText}
         </motion.div>
@@ -450,7 +450,7 @@ export default function ImageDetail() {
               scaleY: [1, 0.95, 1.05, 0.98, 1.02, 1],
             } : {}}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="relative overflow-hidden rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap transition-all duration-300 shadow-[0_8px_32px_rgba(31,38,135,0.04)]"
+            className="relative overflow-hidden rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap transition-all duration-300"
           >
             {negativePrompt}
           </motion.div>
