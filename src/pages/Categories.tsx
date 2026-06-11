@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Grid, LayoutGrid } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -9,6 +10,14 @@ const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57
 
 export default function Categories() {
   const { categories } = useCategories();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen pb-32 sm:pb-20 px-4 sm:px-6">
@@ -45,7 +54,7 @@ export default function Categories() {
           </motion.p>
         </header>
 
-        {categories.length === 0 ? (
+        {loading || categories.length === 0 ? (
           <CategoriesSkeleton />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0">

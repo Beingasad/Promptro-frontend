@@ -5,15 +5,26 @@ import MasonryGrid from '../components/MasonryGrid';
 import { Prompt } from '../components/ImageCard';
 import { onActivityUpdated, readLocalActivity } from '../lib/activity';
 import SEOMeta from '../components/common/SEOMeta';
+import { GridSkeleton } from '../components/common/Skeleton';
 
 export default function Saved() {
   const [savedPrompts, setSavedPrompts] = useState<Prompt[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const updateSavedPrompts = () => setSavedPrompts(readLocalActivity().savedPrompts);
     updateSavedPrompts();
 
-    return onActivityUpdated(updateSavedPrompts);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+
+    const unsubscribe = onActivityUpdated(updateSavedPrompts);
+
+    return () => {
+      clearTimeout(timer);
+      unsubscribe();
+    };
   }, []);
 
   return (
@@ -55,7 +66,9 @@ export default function Saved() {
         </motion.p>
       </header>
 
-      {savedPrompts.length ? (
+      {loading ? (
+        <GridSkeleton isHome={false} />
+      ) : savedPrompts.length ? (
         <MasonryGrid prompts={savedPrompts} isTwoColumns={true} />
       ) : (
         <div className="min-h-[48vh] rounded-[1.8rem] border border-white/70 bg-white/58 px-6 py-12 text-center shadow-[0_18px_46px_rgba(72,56,118,0.12)] backdrop-blur-2xl">
@@ -66,3 +79,4 @@ export default function Saved() {
     </motion.div>
   );
 }
+
