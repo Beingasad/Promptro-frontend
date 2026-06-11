@@ -23,28 +23,33 @@ const API_URL = `${API_BASE_URL}/api/categories`;
 
 export function CategoryProvider({ children }: { children: React.ReactNode }) {
   const [categories, setCategories] = useState<Category[]>(() => {
-    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
-    if (isInitial) {
-      return [];
-    }
     try {
-      const cached = sessionStorage.getItem('promptro_categories');
+      const cached = localStorage.getItem('promptro_categories');
       return cached ? JSON.parse(cached) : [];
     } catch {
       return [];
     }
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem('promptro_categories');
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
 
   const fetchCategories = async () => {
     try {
-      setLoading(true);
+      if (categories.length === 0) {
+        setLoading(true);
+      }
       const response = await axios.get(API_URL);
       setCategories(response.data);
       try {
-        sessionStorage.setItem('promptro_categories', JSON.stringify(response.data));
+        localStorage.setItem('promptro_categories', JSON.stringify(response.data));
       } catch (e) {
-        console.warn('sessionStorage error:', e);
+        console.warn('localStorage error:', e);
       }
     } catch (error) {
       console.error('Failed to fetch categories', error);
@@ -55,6 +60,10 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     fetchCategories();
+    window.addEventListener('online', fetchCategories);
+    return () => {
+      window.removeEventListener('online', fetchCategories);
+    };
   }, []);
 
   const addCategory = async (name: string, image?: File) => {

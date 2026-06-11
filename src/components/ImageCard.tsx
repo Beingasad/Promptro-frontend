@@ -27,6 +27,7 @@ export interface Prompt {
 interface ImageCardProps {
   prompt: Prompt;
   aspectRatio?: string;
+  priority?: boolean;
 }
 
 const formatCount = (value: number) => {
@@ -37,7 +38,7 @@ const formatCount = (value: number) => {
   return `${value}`;
 };
 
-export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
+export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
   const finalAspectRatio = aspectRatio || prompt.aspectRatio || prompt.aspect_ratio;
   let isPortrait = true;
   if (finalAspectRatio && finalAspectRatio.includes('/')) {
@@ -274,7 +275,7 @@ export default function ImageCard({ prompt, aspectRatio }: ImageCardProps) {
         viewport={{ once: true, margin: '120px' }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.055]`}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
       />
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100"></div>

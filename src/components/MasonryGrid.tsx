@@ -20,7 +20,7 @@ export default function MasonryGrid({ prompts, isTwoColumns }: MasonryGridProps)
     <div className={`w-full gap-2.5 md:gap-3.5 space-y-2.5 md:space-y-3.5 ${gridColumns}`}>
       {prompts.map((prompt, index) => (
         <div key={prompt.id} className="break-inside-avoid" style={{ animationDelay: `${index * 55}ms` }}>
-          <ImageCard prompt={prompt} />
+          <ImageCard prompt={prompt} priority={index < 4} />
         </div>
       ))}
     </div>

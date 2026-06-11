@@ -27,10 +27,10 @@ export default function Home() {
     selectedCategory && filterCategories.includes(selectedCategory) ? selectedCategory : 'All'
   ));
   
-  // Cache prompts in sessionStorage for instant load and scroll restoration
+  // Cache prompts in localStorage for instant load and scroll restoration
   const [prompts, setPrompts] = useState<Prompt[]>(() => {
     try {
-      const cached = sessionStorage.getItem('promptro_home_prompts');
+      const cached = localStorage.getItem('promptro_home_prompts');
       return cached ? JSON.parse(cached) : [];
     } catch {
       return [];
@@ -42,7 +42,7 @@ export default function Home() {
       return true;
     }
     try {
-      const cached = sessionStorage.getItem('promptro_home_prompts');
+      const cached = localStorage.getItem('promptro_home_prompts');
       return !cached;
     } catch {
       return true;
@@ -114,9 +114,9 @@ export default function Home() {
 
         setPrompts(enrichedApiPrompts);
         try {
-          sessionStorage.setItem('promptro_home_prompts', JSON.stringify(enrichedApiPrompts));
+          localStorage.setItem('promptro_home_prompts', JSON.stringify(enrichedApiPrompts));
         } catch (e) {
-          console.warn('sessionStorage error:', e);
+          console.warn('localStorage error:', e);
         }
       } catch (error) {
         console.error("Error fetching prompts:", error);
@@ -127,9 +127,16 @@ export default function Home() {
 
     fetchPrompts();
     
+    // Auto-retry fetching when the network comes online
+    window.addEventListener('online', fetchPrompts);
+    
     // Auto-refresh every 30 seconds to show new admin uploads automatically
     const interval = setInterval(fetchPrompts, 30000);
-    return () => clearInterval(interval);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('online', fetchPrompts);
+    };
   }, []);
 
   const visiblePrompts = prompts.filter((prompt) => {

@@ -37,24 +37,34 @@ interface MobileHeroCarouselProps {
 export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHeroCarouselProps) {
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
-      const cached = sessionStorage.getItem('promptro_mobile_banners');
+      const cached = localStorage.getItem('promptro_mobile_banners');
       return cached ? JSON.parse(cached) : [];
     } catch {
       return [];
     }
   });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [bannersLoading, setBannersLoading] = useState(true);
+  const [bannersLoading, setBannersLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem('promptro_mobile_banners');
+      return !cached;
+    } catch {
+      return true;
+    }
+  });
 
   useEffect(() => {
     const fetchBanners = async () => {
       try {
+        if (banners.length === 0) {
+          setBannersLoading(true);
+        }
         const res = await axios.get(`${API_BASE_URL}/api/banners?active_only=true`);
         setBanners(res.data);
         try {
-          sessionStorage.setItem('promptro_mobile_banners', JSON.stringify(res.data));
+          localStorage.setItem('promptro_mobile_banners', JSON.stringify(res.data));
         } catch (e) {
-          console.warn('sessionStorage error:', e);
+          console.warn('localStorage error:', e);
         }
       } catch (error) {
         console.error('Failed to fetch mobile banners:', error);
@@ -64,6 +74,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
     };
 
     fetchBanners();
+    window.addEventListener('online', fetchBanners);
+    return () => {
+      window.removeEventListener('online', fetchBanners);
+    };
   }, []);
 
   const loading = bannersLoading || promptsLoading;

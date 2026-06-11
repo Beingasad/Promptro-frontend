@@ -24,10 +24,10 @@ export default function Explore() {
   const selectedCategory = new URLSearchParams(location.search).get('category');
   const selectedFilter = new URLSearchParams(location.search).get('filter') as SortOption | null;
 
-  // Cache prompts in sessionStorage for instant load and scroll restoration
+  // Cache prompts in localStorage for instant load and scroll restoration
   const [prompts, setPrompts] = useState<Prompt[]>(() => {
     try {
-      const cached = sessionStorage.getItem('promptro_explore_prompts');
+      const cached = localStorage.getItem('promptro_explore_prompts');
       return cached ? JSON.parse(cached) : [];
     } catch {
       return [];
@@ -47,7 +47,7 @@ export default function Explore() {
       return true;
     }
     try {
-      const cached = sessionStorage.getItem('promptro_explore_prompts');
+      const cached = localStorage.getItem('promptro_explore_prompts');
       return !cached;
     } catch {
       return true;
@@ -105,9 +105,9 @@ export default function Explore() {
 
         setPrompts(enrichedApiPrompts);
         try {
-          sessionStorage.setItem('promptro_explore_prompts', JSON.stringify(enrichedApiPrompts));
+          localStorage.setItem('promptro_explore_prompts', JSON.stringify(enrichedApiPrompts));
         } catch (e) {
-          console.warn('sessionStorage error:', e);
+          console.warn('localStorage error:', e);
         }
       } catch (error) {
         console.error("Error fetching prompts:", error);
@@ -118,9 +118,16 @@ export default function Explore() {
 
     fetchPrompts();
     
+    // Auto-retry fetching when the network comes online
+    window.addEventListener('online', fetchPrompts);
+
     // Auto-refresh every 30 seconds to show new admin updates automatically
     const interval = setInterval(fetchPrompts, 30000);
-    return () => clearInterval(interval);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('online', fetchPrompts);
+    };
   }, []);
 
   useEffect(() => {
