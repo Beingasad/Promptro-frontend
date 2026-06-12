@@ -1996,7 +1996,7 @@ export default function TopNavbar() {
                       ))}
                       {/* Mobile Footer (visible only on mobile, placed inside scroll container to stay close to buttons) */}
                       {windowWidth < 768 && (
-                        <div className="pt-12 pb-6 mt-8 text-center touch-none">
+                        <div className="pt-12 pb-2 mt-8 text-center touch-none">
                           <div className="flex items-center justify-center gap-1 text-[9px] font-medium text-[#5f5774]">
                             Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                           </div>
