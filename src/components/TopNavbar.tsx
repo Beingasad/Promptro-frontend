@@ -92,14 +92,6 @@ export default function TopNavbar() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    if (menuOpen && windowWidth < 768) {
-      setMobileHeight(window.innerHeight);
-    } else if (!menuOpen) {
-      setMobileHeight(null);
-    }
-  }, [menuOpen, windowWidth]);
-
   const [menuOpen, setMenuOpen] = useState(() => {
     const pending = sessionStorage.getItem('promptro:sidebar-restore');
     return !!pending;
@@ -127,6 +119,14 @@ export default function TopNavbar() {
       } catch { }
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (menuOpen && windowWidth < 768) {
+      setMobileHeight(window.innerHeight);
+    } else if (!menuOpen) {
+      setMobileHeight(null);
+    }
+  }, [menuOpen, windowWidth]);
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
