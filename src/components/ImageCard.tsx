@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Eye, Bookmark, GalleryVerticalEnd, Share2, Check } from 'lucide-react';
 import CollectionSelectModal from './CollectionSelectModal';
+import AuthModal from './AuthModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import type { MouseEvent } from 'react';
@@ -54,6 +55,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
   const [likes, setLikes] = useState(prompt.likes);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
   const [shared, setShared] = useState(false);
@@ -76,6 +78,11 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
   const handleCollectionClick = async (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
+
+    if (!auth?.currentUser) {
+      setAuthModalOpen(true);
+      return;
+    }
 
     if (inCollection) {
       const activity = readLocalActivity();
@@ -142,20 +149,32 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
 
   useEffect(() => {
     const updateStates = () => {
+      const isGuest = !auth?.currentUser;
       const { savedPrompts, likedPrompts, collections } = readLocalActivity();
-      setSaved(savedPrompts.some((savedPrompt) => savedPrompt.id === prompt.id));
+      setSaved(!isGuest && savedPrompts.some((savedPrompt) => savedPrompt.id === prompt.id));
       setLiked(likedPrompts.includes(prompt.id));
       setLikes(prompt.likes + (likedPrompts.includes(prompt.id) ? 1 : 0));
-      setInCollection((collections || []).some(c => c.prompts.some(p => p.id === prompt.id)));
+      setInCollection(!isGuest && (collections || []).some(c => c.prompts.some(p => p.id === prompt.id)));
     };
     updateStates();
 
-    return onActivityUpdated(updateStates);
+    const unsubscribeActivity = onActivityUpdated(updateStates);
+    const unsubscribeAuth = auth ? auth.onAuthStateChanged(updateStates) : () => {};
+
+    return () => {
+      unsubscribeActivity();
+      unsubscribeAuth();
+    };
   }, [prompt]);
 
   const toggleSave = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
+
+    if (!auth?.currentUser) {
+      setAuthModalOpen(true);
+      return;
+    }
 
     const nextSaved = !saved;
     setSavedPrompt(prompt, nextSaved);
@@ -288,11 +307,15 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         state={{ isPortrait }}
         onClick={handleCardClick}
         className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 glass-shine hover-glass-glow"
-        style={finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}}
+        style={{
+          ...(finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}),
+          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+          isolation: 'isolate'
+        }}
       >
       {/* Background Shimmer (behind image, showing during load) */}
       {!imageLoaded && (
-        <div className="absolute inset-0 shimmer-bg w-full h-full" />
+        <div className="absolute inset-0 shimmer-bg w-full h-full rounded-[1.35rem] md:rounded-[1.75rem]" />
       )}
 
       <motion.img
@@ -313,12 +336,12 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         animate={imageLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.04 }}
         viewport={{ once: true, margin: '120px' }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.055]`}
+        className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.055] rounded-[1.35rem] md:rounded-[1.75rem]`}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
       />
       
-      <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100 rounded-[1.35rem] md:rounded-[1.75rem]"></div>
 
       {/* Instagram-style double tap heart popup effect */}
       <AnimatePresence>
@@ -354,7 +377,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
       {isHome && (
         <div className="absolute top-3 right-3 flex gap-1.5 transition-transform duration-300 group-hover:-translate-y-0.5">
           <button 
-            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
+            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/45 flex items-center justify-center hover:bg-black/60 text-white transition-colors"
             onClick={handleCollectionClick}
             aria-label="Add to Collection"
           >
@@ -365,7 +388,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
             />
           </button>
           <button 
-            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/20 backdrop-blur-2xl flex items-center justify-center hover:bg-black/35 text-white transition-colors"
+            className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/45 flex items-center justify-center hover:bg-black/60 text-white transition-colors"
             onClick={toggleSave}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
@@ -503,6 +526,10 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         isOpen={collectionModalOpen} 
         onClose={() => setCollectionModalOpen(false)} 
         prompt={prompt} 
+      />
+      <AuthModal 
+        isOpen={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)} 
       />
     </>
   );

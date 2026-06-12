@@ -11,7 +11,8 @@ import {
   Check,
   Loader2,
   GalleryVerticalEnd,
-  Share2
+  Share2,
+  Lock
 } from 'lucide-react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -26,12 +27,28 @@ import {
   Collection 
 } from '../lib/activity';
 import { auth } from '../lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import SEOMeta from '../components/common/SEOMeta';
 import { CollectionsSkeleton } from '../components/common/Skeleton';
 
 export default function Collections() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    if (!auth) {
+      setAuthLoading(false);
+      return;
+    }
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      setAuthLoading(false);
+    });
+    return () => unsubscribeAuth();
+  }, []);
+
   const queryParams = new URLSearchParams(location.search);
   const selectedCollectionId = queryParams.get('id');
   const setSelectedCollectionId = (id: string | null) => {
@@ -196,6 +213,90 @@ export default function Collections() {
       console.error("Failed to save shared collection:", err);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen pb-32 sm:pb-20 px-4 sm:px-6">
+        <SEOMeta
+          title="Prompt Collections | Promptro"
+          description="Organize and curate your favorite AI image prompts in boards."
+          robots="noindex, nofollow"
+        />
+        <div className="max-w-7xl mx-auto">
+          <header className="mb-6 md:mb-10">
+            <div className="flex flex-col items-start">
+              <span className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1">
+                <GalleryVerticalEnd className="h-3.5 w-3.5" />
+                YOUR BOARDS
+              </span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#171421] dark:text-white mb-2">
+                Your <span className="text-primary">Collections</span>
+              </h1>
+            </div>
+          </header>
+          <CollectionsSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen pb-32 sm:pb-20 px-4 sm:px-6">
+        <SEOMeta
+          title="Prompt Collections | Promptro"
+          description="Organize and curate your favorite AI image prompts in boards."
+          robots="noindex, nofollow"
+        />
+        <div className="max-w-7xl mx-auto">
+          <header className="mb-6 md:mb-10">
+            <div className="flex flex-col items-start">
+              <motion.span
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-primary dark:text-[#a78bfa] mb-1"
+              >
+                <GalleryVerticalEnd className="h-3.5 w-3.5" />
+                YOUR BOARDS
+              </motion.span>
+              <motion.h1
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#171421] dark:text-white mb-2"
+              >
+                Your <span className="text-primary">Collections</span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+              >
+                Curate and organize your favorite prompts into boards.
+              </motion.p>
+            </div>
+          </header>
+
+          <div className="min-h-[45vh] rounded-[2.25rem] border border-white/70 bg-white/45 dark:border-white/5 dark:bg-[#14111f]/45 p-8 text-center shadow-[0_24px_58px_rgba(72,56,118,0.08)] backdrop-blur-2xl flex flex-col justify-center items-center max-w-xl mx-auto mt-4">
+            <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mb-4 shadow-[0_10px_25px_rgba(109,77,236,0.12)]">
+              <Lock className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-black text-[#171421] dark:text-white">Authentication Required</h3>
+            <p className="mt-2 text-sm font-semibold text-[#6f6684] dark:text-[#afa6c8] max-w-sm leading-relaxed">
+              To use this feature, you need to signup or login
+            </p>
+            <button
+              onClick={() => navigate('/auth')}
+              className="mt-6 inline-flex items-center gap-2 h-11 rounded-full bg-gradient-to-r from-primary to-[#ff6a3d] text-white px-6 text-sm font-bold shadow-[0_12px_28px_rgba(109,77,236,0.26)] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+            >
+              Login / Sign Up
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ── DETAIL VIEW ──
   if (selectedCollectionId) {
@@ -410,13 +511,17 @@ export default function Collections() {
                   <div
                     onClick={() => setSelectedCollectionId(col.id)}
                     className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] cursor-pointer pill-glass"
+                    style={{
+                      WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+                      isolation: 'isolate'
+                    }}
                   >
                     {/* Cover Image or Empty State */}
                     {coverImage ? (
                       <img
                         src={coverImage}
                         alt={col.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 rounded-[1.5rem] sm:rounded-[2.5rem]"
                         loading="lazy"
                       />
                     ) : (
@@ -445,7 +550,7 @@ export default function Collections() {
                     {/* Delete Button (top-right, on hover) */}
                     <button
                       onClick={(e) => handleDelete(col.id, e)}
-                      className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-black/30 backdrop-blur-xl flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-rose-500/80"
+                      className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-black/45 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-rose-500/80"
                       aria-label="Delete collection"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

@@ -75,12 +75,16 @@ export default function Blog() {
         <Link
           to={`/blog/${featured.slug}`}
           className="group block rounded-[2rem] overflow-hidden bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_22px_56px_rgba(116,55,255,0.14)] transition-all glass-shine hover-glass-glow"
+          style={{
+            WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+            isolation: 'isolate'
+          }}
         >
-          <div className="relative aspect-[16/7] overflow-hidden">
+          <div className="relative aspect-[16/7] overflow-hidden rounded-t-[2rem]">
             <img
               src={featured.featuredImage}
               alt={featured.featuredImageAlt}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-t-[2rem]"
               loading="eager"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
@@ -138,12 +142,16 @@ export default function Blog() {
                 <Link
                   to={`/blog/${post.slug}`}
                   className="group flex flex-col rounded-[1.5rem] overflow-hidden bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 hover:shadow-[0_16px_40px_rgba(116,55,255,0.12)] transition-all h-full glass-shine hover-glass-glow"
+                  style={{
+                    WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+                    isolation: 'isolate'
+                  }}
                 >
-                  <div className="aspect-[16/9] overflow-hidden">
+                  <div className="aspect-[16/9] overflow-hidden rounded-t-[1.5rem]">
                     <img
                       src={post.featuredImage}
                       alt={post.featuredImageAlt}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-t-[1.5rem]"
                       loading="lazy"
                     />
                   </div>

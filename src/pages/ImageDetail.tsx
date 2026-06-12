@@ -2,6 +2,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
+import AuthModal from '../components/AuthModal';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -56,6 +57,7 @@ export default function ImageDetail() {
   const [inCollection, setInCollection] = useState(false);
   const [shared, setShared] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -162,14 +164,21 @@ export default function ImageDetail() {
   useEffect(() => {
     if (!id) return;
     const updateStates = () => {
+      const isGuest = !auth?.currentUser;
       const { savedPrompts, likedPrompts, collections } = readLocalActivity();
-      setSaved(savedPrompts.some((item) => item.id === id));
+      setSaved(!isGuest && savedPrompts.some((item) => item.id === id));
       setLiked(likedPrompts.includes(id));
-      setInCollection((collections || []).some(c => c.prompts.some(p => p.id === id)));
+      setInCollection(!isGuest && (collections || []).some(c => c.prompts.some(p => p.id === id)));
     };
     updateStates();
 
-    return onActivityUpdated(updateStates);
+    const unsubscribeActivity = onActivityUpdated(updateStates);
+    const unsubscribeAuth = auth ? auth.onAuthStateChanged(updateStates) : () => {};
+
+    return () => {
+      unsubscribeActivity();
+      unsubscribeAuth();
+    };
   }, [id]);
 
   useEffect(() => {
@@ -206,6 +215,11 @@ export default function ImageDetail() {
 
   const toggleSave = (event: React.MouseEvent) => {
     if (!prompt) return;
+
+    if (!auth?.currentUser) {
+      setAuthModalOpen(true);
+      return;
+    }
 
     const nextSaved = !saved;
     setSavedPrompt(prompt, nextSaved);
@@ -293,6 +307,11 @@ export default function ImageDetail() {
 
   const handleCollectionClick = async () => {
     if (!prompt) return;
+
+    if (!auth?.currentUser) {
+      setAuthModalOpen(true);
+      return;
+    }
 
     if (inCollection) {
       const activity = readLocalActivity();
@@ -648,6 +667,10 @@ export default function ImageDetail() {
         isOpen={collectionModalOpen} 
         onClose={() => setCollectionModalOpen(false)} 
         prompt={prompt} 
+      />
+      <AuthModal 
+        isOpen={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)} 
       />
     </motion.div>
   );
