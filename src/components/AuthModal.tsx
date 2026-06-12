@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface AuthModalProps {
@@ -52,22 +51,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           >
             <div className="p-5 md:p-8 flex flex-col gap-5 md:gap-6">
               {/* Header */}
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-[15px] sm:text-lg md:text-xl font-bold text-[#171421] dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
-                    Authentication Required
-                  </h2>
-                  <p className="text-[11px] md:text-xs text-[#756d8d] dark:text-[#afa6c8] mt-1 leading-relaxed">
-                    To use this feature, you need to signup or login
-                  </p>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="pill-glass flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#171421] dark:text-[#f7f2ff] hover:scale-105 active:scale-95 hover:bg-white/20 dark:hover:bg-white/10"
-                  aria-label="Close"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+              <div className="min-w-0">
+                <h2 className="text-[15px] sm:text-lg md:text-xl font-bold text-[#171421] dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
+                  Authentication Required
+                </h2>
+                <p className="text-[11px] md:text-xs text-[#756d8d] dark:text-[#afa6c8] mt-1 leading-relaxed">
+                  To use this feature, you need to signup or login
+                </p>
               </div>
 
               {/* Action Buttons */}
