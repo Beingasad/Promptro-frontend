@@ -127,24 +127,22 @@ export default function MainLayout() {
       // - Gesture must be completed within 400ms (fast swipe)
       if (Math.abs(deltaX) > 70 && Math.abs(deltaY) < Math.abs(deltaX) * 0.5 && duration < 400) {
         const currentPath = location.pathname;
+        const paths = ['/', '/explore', '/collections', '/saved', '/categories'];
+        const currentIndex = paths.indexOf(currentPath);
 
-        if (deltaX < 0) {
-          // Swipe Left (Go next: Home -> Explore -> Saved)
-          if (currentPath === '/') {
-            navigate('/explore');
-            window.scrollTo({ top: 0 });
-          } else if (currentPath === '/explore') {
-            navigate('/saved');
-            window.scrollTo({ top: 0 });
-          }
-        } else {
-          // Swipe Right (Go back: Saved -> Explore -> Home)
-          if (currentPath === '/saved') {
-            navigate('/explore');
-            window.scrollTo({ top: 0 });
-          } else if (currentPath === '/explore') {
-            navigate('/');
-            window.scrollTo({ top: 0 });
+        if (currentIndex !== -1) {
+          if (deltaX < 0) {
+            // Swipe Left (Go next: Home -> Explore -> Collections -> Saved -> Categories)
+            if (currentIndex < paths.length - 1) {
+              navigate(paths[currentIndex + 1]);
+              window.scrollTo({ top: 0 });
+            }
+          } else {
+            // Swipe Right (Go back: Categories -> Saved -> Collections -> Explore -> Home)
+            if (currentIndex > 0) {
+              navigate(paths[currentIndex - 1]);
+              window.scrollTo({ top: 0 });
+            }
           }
         }
       }
