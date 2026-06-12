@@ -8,6 +8,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { auth } from '../lib/firebase';
 import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
+import { optimizeImageUrl } from '../utils/image';
 
 export interface Prompt {
   id: string;
@@ -95,16 +96,49 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
     }
   };
 
-  // Instant pre-load check to handle browser-cached images without visual glitch
+  const [inView, setInView] = useState(priority || false);
+  const containerRef = useRef<HTMLAnchorElement>(null);
+
+  // Setup Intersection Observer for true lazy loading
   useEffect(() => {
-    if (prompt.image_url) {
+    if (priority) {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: '200px', // Pre-load when within 200px of viewport
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [priority]);
+
+  // Instant pre-load check to handle browser-cached images without visual glitch
+  // Only execute when the component has entered viewport (or is prioritized)
+  useEffect(() => {
+    if (inView && prompt.image_url) {
+      const optimizedUrl = optimizeImageUrl(prompt.image_url, priority ? 800 : 600);
       const img = new Image();
-      img.src = prompt.image_url;
+      img.src = optimizedUrl;
       if (img.complete) {
         setImageLoaded(true);
       }
     }
-  }, [prompt.image_url]);
+  }, [inView, prompt.image_url, priority]);
 
   useEffect(() => {
     const updateStates = () => {
@@ -249,6 +283,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
   return (
     <>
       <Link 
+        ref={containerRef}
         to={`/prompt/${prompt.id}`}
         state={{ isPortrait }}
         onClick={handleCardClick}
@@ -261,7 +296,11 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
       )}
 
       <motion.img
-        src={prompt.image_url || 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'}
+        src={
+          inView
+            ? (prompt.image_url ? optimizeImageUrl(prompt.image_url, priority ? 800 : 600) : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
+            : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+        }
         alt={prompt.title}
         onLoad={() => setImageLoaded(true)}
         onError={(e) => {
@@ -276,6 +315,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.055]`}
         loading={priority ? "eager" : "lazy"}
+        decoding="async"
       />
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100"></div>
