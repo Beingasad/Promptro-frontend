@@ -84,6 +84,54 @@ export default function MainLayout() {
     const handleTouchStart = (e: TouchEvent) => {
       if (window.innerWidth >= 768) return;
 
+      // Disable swipe navigation if any modal, popup, drawer, or dialog is open
+      const isModalOrPopupOpen = () => {
+        // Check standard body/html scroll lock (used when modals are open)
+        if (
+          document.body.style.overflow === 'hidden' ||
+          document.documentElement.style.overflow === 'hidden'
+        ) {
+          return true;
+        }
+
+        // Check for role dialog, alertdialog or HTML5 dialog element
+        if (document.querySelector('[role="dialog"], [role="alertdialog"], dialog[open]')) {
+          return true;
+        }
+
+        // Check for elements containing specific modal/popup keywords in classes
+        if (document.querySelector('[class*="modal-glass"], [class*="profile-modal-glass"], [class*="modal-container"], .modal, [class*="popup-container"]')) {
+          return true;
+        }
+
+        // Check for active fixed/absolute high z-index overlay backdrops (>= 50) that cover the screen
+        const overlays = document.querySelectorAll('.fixed, .absolute');
+        for (let i = 0; i < overlays.length; i++) {
+          const el = overlays[i] as HTMLElement;
+          // Ignore overlays inside top navbar or bottom navbar
+          if (el.closest('header, nav, #bottom-nav, .top-navbar, #top-navbar, .bottom-navbar')) {
+            continue;
+          }
+          // If it covers viewport (inset-0 or style covering full screen)
+          const isInset0 = el.classList.contains('inset-0') || 
+                            (el.classList.contains('inset-x-0') && el.classList.contains('inset-y-0')) ||
+                            (el.style.top === '0px' && el.style.left === '0px' && el.style.right === '0px' && el.style.bottom === '0px');
+                            
+          if (isInset0) {
+            const zIndex = window.getComputedStyle(el).zIndex;
+            const zIndexNum = parseInt(zIndex, 10);
+            if (!isNaN(zIndexNum) && zIndexNum >= 50) {
+              return true;
+            }
+          }
+        }
+        return false;
+      };
+
+      if (isModalOrPopupOpen()) {
+        return;
+      }
+
       const target = e.target as HTMLElement;
       if (!target) return;
 
