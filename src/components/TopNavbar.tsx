@@ -1980,6 +1980,15 @@ export default function TopNavbar() {
                           )}
                         </button>
                       ))}
+                      {/* Mobile Footer (visible only on mobile, placed inside scroll container to stay close to buttons) */}
+                      {windowWidth < 768 && (
+                        <div className="pt-4 pb-2 mt-2 text-center touch-none">
+                          <div className="flex items-center justify-center gap-1 text-[9px] font-medium text-[#5f5774]">
+                            Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
+                          </div>
+                          <p className="mt-0.5 text-[9px] font-medium text-[#5f5774]">v1.1.0</p>
+                        </div>
+                      )}
                     </div>
 
                     {/* Quick Stats Section */}
@@ -2025,12 +2034,14 @@ export default function TopNavbar() {
                       </div>
                     </div>
 
-                    <div className="shrink-0 pt-1.5 md:pt-3 mb-4 md:mb-0 text-center touch-none">
-                      <div className="flex items-center justify-center gap-1 text-[9px] md:text-[10px] font-medium text-[#5f5774]">
-                        Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
+                    {windowWidth >= 768 && (
+                      <div className="shrink-0 pt-1.5 md:pt-3 mb-4 md:mb-0 text-center touch-none">
+                        <div className="flex items-center justify-center gap-1 text-[9px] md:text-[10px] font-medium text-[#5f5774]">
+                          Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
+                        </div>
+                        <p className="mt-0.5 md:mt-1.5 text-[9px] md:text-[10px] font-medium text-[#5f5774]">v1.1.0</p>
                       </div>
-                      <p className="mt-0.5 md:mt-1.5 text-[9px] md:text-[10px] font-medium text-[#5f5774]">v1.1.0</p>
-                    </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

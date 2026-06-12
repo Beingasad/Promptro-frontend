@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import TopNavbar from '../components/TopNavbar';
@@ -27,6 +26,7 @@ interface FlyingCard {
 
 export default function MainLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [flyingCards, setFlyingCards] = useState<FlyingCard[]>([]);
 
   useEffect(() => {
@@ -74,6 +74,95 @@ export default function MainLayout() {
     };
     trackVisit();
   }, [location.pathname]);
+  
+  // Swipe navigation for mobile devices (screen width < 768px)
+  useEffect(() => {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (window.innerWidth >= 768) return;
+
+      const target = e.target as HTMLElement;
+      if (!target) return;
+
+      // Ignore interactive elements
+      if (target.closest('input, textarea, button, a, select, [role="button"], [contenteditable="true"]')) {
+        return;
+      }
+      
+      // Detect if swiping inside a horizontally scrollable element
+      let currentEl: HTMLElement | null = target;
+      while (currentEl && currentEl !== document.body) {
+        if (currentEl.classList.contains('no-swipe') || currentEl.getAttribute('data-no-swipe') === 'true') {
+          return;
+        }
+        const style = window.getComputedStyle(currentEl);
+        if ((style.overflowX === 'auto' || style.overflowX === 'scroll') && currentEl.scrollWidth > currentEl.clientWidth) {
+          return;
+        }
+        currentEl = currentEl.parentElement;
+      }
+
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchStartTime = Date.now();
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (window.innerWidth >= 768) return;
+      if (!touchStartX || !touchStartY) return;
+
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const duration = Date.now() - touchStartTime;
+
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+
+      // Thresholds:
+      // - Minimum horizontal swipe distance of 70px
+      // - Must be primarily horizontal (deltaX is significantly larger than deltaY)
+      // - Gesture must be completed within 400ms (fast swipe)
+      if (Math.abs(deltaX) > 70 && Math.abs(deltaY) < Math.abs(deltaX) * 0.5 && duration < 400) {
+        const currentPath = location.pathname;
+
+        if (deltaX < 0) {
+          // Swipe Left (Go next: Home -> Explore -> Saved)
+          if (currentPath === '/') {
+            navigate('/explore');
+            window.scrollTo({ top: 0 });
+          } else if (currentPath === '/explore') {
+            navigate('/saved');
+            window.scrollTo({ top: 0 });
+          }
+        } else {
+          // Swipe Right (Go back: Saved -> Explore -> Home)
+          if (currentPath === '/saved') {
+            navigate('/explore');
+            window.scrollTo({ top: 0 });
+          } else if (currentPath === '/explore') {
+            navigate('/');
+            window.scrollTo({ top: 0 });
+          }
+        }
+      }
+
+      // Reset
+      touchStartX = 0;
+      touchStartY = 0;
+      touchStartTime = 0;
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [location.pathname, navigate]);
 
   const isPromptDetail = location.pathname.startsWith('/prompt/');
   const isHome = 
