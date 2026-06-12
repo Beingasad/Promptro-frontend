@@ -87,8 +87,22 @@ export default function MainLayout() {
       const target = e.target as HTMLElement;
       if (!target) return;
 
-      // Ignore interactive elements
-      if (target.closest('input, textarea, button, a, select, [role="button"], [contenteditable="true"]')) {
+      const x = e.touches[0].clientX;
+      const y = e.touches[0].clientY;
+
+      // Exclude top header (y < 110px) and bottom navbar (y > window.innerHeight - 90px)
+      if (y < 110 || y > window.innerHeight - 90) {
+        return;
+      }
+
+      // Exclude 3% margin from left and right edges to avoid conflicting with OS/browser navigation
+      const edgeMargin = window.innerWidth * 0.03;
+      if (x < edgeMargin || x > window.innerWidth - edgeMargin) {
+        return;
+      }
+
+      // Ignore interactive form elements but allow swipes on links (<a>)
+      if (target.closest('input, textarea, button, select, [role="button"], [contenteditable="true"]')) {
         return;
       }
       
@@ -105,8 +119,8 @@ export default function MainLayout() {
         currentEl = currentEl.parentElement;
       }
 
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
+      touchStartX = x;
+      touchStartY = y;
       touchStartTime = Date.now();
     };
 
