@@ -84,12 +84,21 @@ export default function TopNavbar() {
     setCategoryDropdownOpen(false);
   };
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [mobileHeight, setMobileHeight] = useState<number | null>(null);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (menuOpen && windowWidth < 768) {
+      setMobileHeight(window.innerHeight);
+    } else if (!menuOpen) {
+      setMobileHeight(null);
+    }
+  }, [menuOpen, windowWidth]);
 
   const [menuOpen, setMenuOpen] = useState(() => {
     const pending = sessionStorage.getItem('promptro:sidebar-restore');
@@ -1858,6 +1867,11 @@ export default function TopNavbar() {
                 duration: 0.35,
                 ease: [0.32, 0.72, 0, 1]
               }}
+              style={
+                (windowWidth < 768 && mobileHeight)
+                  ? { height: `${mobileHeight}px`, bottom: 'auto' }
+                  : undefined
+              }
               className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/45 dark:border-r-white/8 pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 ${
                 (windowWidth < 768 && (expandedView || isFullWidth))
                   ? 'bg-white dark:bg-[#0d0b14] rounded-none'
