@@ -224,7 +224,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                   
                   {/* Secondary Image (Back) */}
                   {current.secondary_image && (
-                    <div className="absolute z-10 -left-3 top-2 h-[82px] w-[62px] rounded-xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_8px_16px_rgba(0,0,0,0.12)] transform -rotate-12 transition-all duration-500 group-hover:scale-105 group-hover:-translate-x-0.5 group-hover:-rotate-18">
+                    <div className="absolute z-10 -left-3 top-2 h-[82px] w-[56px] rounded-xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_8px_16px_rgba(0,0,0,0.12)] transform -rotate-12 transition-all duration-500 group-hover:scale-105 group-hover:-translate-x-0.5 group-hover:-rotate-18">
                       <img 
                         src={current.secondary_image} 
                         alt="" 
