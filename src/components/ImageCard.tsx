@@ -107,41 +107,11 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
     }
   };
 
-  const [inView, setInView] = useState(priority || alreadyCached);
   const containerRef = useRef<HTMLAnchorElement>(null);
 
-  // Setup Intersection Observer for true lazy loading
-  useEffect(() => {
-    if (priority || alreadyCached) {
-      setInView(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      {
-        rootMargin: '600px', // Pre-load when within 600px of viewport
-      }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [priority, alreadyCached]);
-
   // Instant pre-load check to handle browser-cached images without visual glitch
-  // Only execute when the component has entered viewport (or is prioritized)
   useEffect(() => {
-    if (inView && prompt.image_url) {
+    if (prompt.image_url) {
       const img = new Image();
       img.src = optimizedSrc;
       if (img.complete) {
@@ -149,7 +119,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         markImageLoaded(optimizedSrc);
       }
     }
-  }, [inView, prompt.image_url, optimizedSrc]);
+  }, [prompt.image_url, optimizedSrc]);
 
   useEffect(() => {
     const updateStates = () => {
@@ -332,11 +302,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         )}
 
         <motion.img
-          src={
-            inView
-              ? (prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
-              : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-          }
+          src={prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'}
           alt={prompt.title}
           onLoad={() => {
             setImageLoaded(true);
