@@ -218,11 +218,28 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               </div>
 
               {current.image_url && (
-                <div className="relative w-22 h-[110px] shrink-0 flex items-center justify-center z-10">
-                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl scale-75 group-hover:scale-110 transition-transform duration-700" />
+                <div className="relative h-[96px] w-[92px] shrink-0 flex items-center justify-end z-10">
+                  {/* Decorative Glow */}
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg scale-75 group-hover:scale-110 transition-transform duration-700" />
                   
-                  <div className="w-[78px] h-[106px] rounded-[1.25rem] overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_12px_28px_rgba(0,0,0,0.18)] rotate-3 group-hover:rotate-0 group-hover:scale-105 transition-all duration-500">
-                    <img src={current.image_url} alt="" className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700" />
+                  {/* Secondary Image (Back) */}
+                  {current.secondary_image && (
+                    <div className="absolute z-10 -left-3 top-1.5 h-[80px] w-[54px] rounded-xl overflow-hidden border border-white/60 dark:border-white/10 shadow-[0_8px_16px_rgba(0,0,0,0.12)] transform -rotate-12 transition-all duration-500 group-hover:scale-105 group-hover:-translate-x-0.5 group-hover:-rotate-18">
+                      <img 
+                        src={current.secondary_image} 
+                        alt="" 
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {/* Main Image (Front) */}
+                  <div className="relative z-20 h-[90px] w-[62px] rounded-xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.2)] transform rotate-3 transition-all duration-500 group-hover:rotate-6 group-hover:scale-105">
+                    <img 
+                      src={current.image_url} 
+                      alt="" 
+                      className="h-full w-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
+                    />
                   </div>
                 </div>
               )}
