@@ -15,6 +15,7 @@ import SEOMeta from '../components/common/SEOMeta';
 import AuthorCard from '../components/common/AuthorCard';
 import JsonLd from '../components/common/JsonLd';
 import { DetailSkeleton } from '../components/common/Skeleton';
+import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -186,6 +187,10 @@ export default function ImageDetail() {
 
     addRecentPrompt(prompt);
     saveUserActivity(auth?.currentUser).catch(() => undefined);
+
+    if (prompt.image_url && isImageLoaded(prompt.image_url)) {
+      setImageLoaded(true);
+    }
     
     const ratioStr = prompt.aspectRatio || prompt.aspect_ratio;
     if (ratioStr && ratioStr.includes('/')) {
@@ -567,7 +572,10 @@ export default function ImageDetail() {
                 initial={{ opacity: 0 }}
                 animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
-                onLoad={() => setImageLoaded(true)}
+                onLoad={() => {
+                  setImageLoaded(true);
+                  markImageLoaded(prompt.image_url);
+                }}
                 className="w-full h-auto md:w-auto md:max-w-full md:max-h-[calc(100vh-100px)] md:object-contain block mx-auto cursor-pointer"
                 onDoubleClick={handleImageDoubleClick}
               />
@@ -612,7 +620,10 @@ export default function ImageDetail() {
               initial={{ opacity: 0 }}
               animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
-              onLoad={() => setImageLoaded(true)}
+              onLoad={() => {
+                setImageLoaded(true);
+                markImageLoaded(prompt.image_url);
+              }}
               className="w-full h-auto block cursor-pointer"
               onDoubleClick={handleImageDoubleClick}
             />

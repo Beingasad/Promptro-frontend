@@ -125,7 +125,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
           observer.disconnect();
         }
       },
-      { rootMargin: '400px' }
+      { rootMargin: '1000px' }
     );
 
     if (containerRef.current) {
@@ -327,32 +327,30 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
           <div className="absolute inset-0 shimmer-bg w-full h-full" />
         )}
 
-        <motion.img
-          src={
-            inView
-              ? (prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
-              : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-          }
-          alt={prompt.title}
-          onLoad={() => {
-            setImageLoaded(true);
-            markImageLoaded(optimizedSrc);
-          }}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.onerror = null; // Prevent infinite loop
-            target.src = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
-            setImageLoaded(true);
-          }}
-          initial={{ opacity: alreadyCached ? 1 : 0 }}
-          animate={imageLoaded ? { opacity: 1 } : { opacity: alreadyCached ? 1 : 0 }}
-          viewport={{ once: true, margin: '120px' }}
-          transition={alreadyCached ? { duration: 0 } : { duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.05] origin-top`}
-          loading={priority ? "eager" : "lazy"}
-          decoding="async"
-          {...(priority ? { fetchPriority: 'high' as any } : {})}
-        />
+        {inView && (
+          <motion.img
+            src={prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'}
+            alt={prompt.title}
+            onLoad={() => {
+              setImageLoaded(true);
+              markImageLoaded(optimizedSrc);
+            }}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null; // Prevent infinite loop
+              target.src = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
+              setImageLoaded(true);
+            }}
+            initial={{ opacity: alreadyCached ? 1 : 0 }}
+            animate={imageLoaded ? { opacity: 1 } : { opacity: alreadyCached ? 1 : 0 }}
+            viewport={{ once: true, margin: '120px' }}
+            transition={alreadyCached ? { duration: 0 } : { duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.05] origin-top`}
+            loading="eager"
+            decoding="async"
+            {...(priority ? { fetchPriority: 'high' as any } : {})}
+          />
+        )}
       </div>
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100 rounded-[1.35rem] md:rounded-[1.75rem]"></div>

@@ -299,7 +299,7 @@ export default function MainLayout() {
           : isPromptDetail 
             ? 'pt-5 pb-8' 
             : isHome 
-              ? 'pt-[110px] pb-6 md:pt-[84px] md:pb-10' 
+              ? 'pt-[136px] pb-6 md:pt-[84px] md:pb-10' 
               : showPageSearch
                 ? 'pt-[78px] pb-6 md:pt-[84px] md:pb-10'
                 : 'pt-[68px] pb-6 md:pt-[72px] md:pb-10'
