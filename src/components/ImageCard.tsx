@@ -107,11 +107,37 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
     }
   };
 
+  const [inView, setInView] = useState(priority || alreadyCached);
   const containerRef = useRef<HTMLAnchorElement>(null);
+
+  // Lazy-load images with a generous 1200px margin (~3-4 screens ahead)
+  // Priority images and already-cached images bypass this entirely
+  useEffect(() => {
+    if (priority || alreadyCached) {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '1200px' }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [priority, alreadyCached]);
 
   // Instant pre-load check to handle browser-cached images without visual glitch
   useEffect(() => {
-    if (prompt.image_url) {
+    if (inView && prompt.image_url) {
       const img = new Image();
       img.src = optimizedSrc;
       if (img.complete) {
@@ -119,7 +145,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         markImageLoaded(optimizedSrc);
       }
     }
-  }, [prompt.image_url, optimizedSrc]);
+  }, [inView, prompt.image_url, optimizedSrc]);
 
   useEffect(() => {
     const updateStates = () => {
@@ -302,7 +328,11 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         )}
 
         <motion.img
-          src={prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'}
+          src={
+            inView
+              ? (prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
+              : undefined
+          }
           alt={prompt.title}
           onLoad={() => {
             setImageLoaded(true);
