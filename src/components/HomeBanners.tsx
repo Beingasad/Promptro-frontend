@@ -167,8 +167,9 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
             <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90 max-w-[195px] xl:max-w-[220px]">
               {banner.subtitle}
             </p>
-            <div className="mt-3 flex items-center text-[12px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-5 py-2 rounded-full w-fit shadow-[0_4px_14px_rgba(116,55,255,0.35)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_6px_20px_rgba(116,55,255,0.5)] active:scale-95 animate-shimmer-button">
+            <div className="mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/10 dark:bg-white/10 border border-primary/20 dark:border-white/15 px-5 py-2.5 rounded-full w-fit backdrop-blur-md shadow-[0_8px_32px_rgba(31,38,135,0.02)] transition-all duration-300 group-hover:bg-gradient-to-r group-hover:from-[#7437ff] group-hover:via-[#dd4bd2] group-hover:to-[#ff642d] group-hover:text-white group-hover:border-transparent group-hover:scale-[1.05] group-hover:shadow-[0_6px_20px_rgba(116,55,255,0.35)] active:scale-95">
               <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
+              <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover:translate-x-0.5 transition-transform duration-300" />
             </div>
           </div>
 
