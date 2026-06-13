@@ -123,7 +123,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         img = img || latest[0].image_url;
         secImg = latest[1].image_url;
         link = `/prompt/${latest[0].id}`;
-        title = latest[0].category;
+        title = 'Newly Added Prompt';
         subtitle = `New: ${latest[0].title}`;
       } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length >= 2) {
         img = img || loved[0].image_url;
