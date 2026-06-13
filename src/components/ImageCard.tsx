@@ -306,40 +306,50 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         to={`/prompt/${prompt.id}`}
         state={{ isPortrait }}
         onClick={handleCardClick}
-        className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 glass-shine hover-glass-glow"
+        className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 glass-shine hover:shadow-[0_20px_50px_rgba(139,92,246,0.22)] dark:hover:shadow-[0_24px_60px_rgba(0,0,0,0.6)] transition-shadow duration-500"
         style={{
           ...(finalAspectRatio ? { aspectRatio: finalAspectRatio } : {}),
           WebkitMaskImage: '-webkit-radial-gradient(white, black)',
           isolation: 'isolate'
         }}
       >
-      {/* Background Shimmer (behind image, showing during load) */}
-      {!imageLoaded && (
-        <div className="absolute inset-0 shimmer-bg w-full h-full rounded-[1.35rem] md:rounded-[1.75rem]" />
-      )}
-
-      <motion.img
-        src={
-          inView
-            ? (prompt.image_url ? optimizeImageUrl(prompt.image_url, priority ? 800 : 600) : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
-            : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-        }
-        alt={prompt.title}
-        onLoad={() => setImageLoaded(true)}
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.onerror = null; // Prevent infinite loop
-          target.src = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
-          setImageLoaded(true);
+      {/* Dedicated Image Container */}
+      <div 
+        className={`${finalAspectRatio ? 'absolute inset-0' : 'relative w-full h-auto'} overflow-hidden`}
+        style={{ 
+          borderRadius: 'inherit',
+          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+          isolation: 'isolate'
         }}
-        initial={{ opacity: 0, scale: 1.04 }}
-        animate={imageLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.04 }}
-        viewport={{ once: true, margin: '120px' }}
-        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.055] rounded-[1.35rem] md:rounded-[1.75rem]`}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-      />
+      >
+        {/* Background Shimmer (behind image, showing during load) */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 shimmer-bg w-full h-full" />
+        )}
+
+        <motion.img
+          src={
+            inView
+              ? (prompt.image_url ? optimizeImageUrl(prompt.image_url, priority ? 800 : 600) : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
+              : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          }
+          alt={prompt.title}
+          onLoad={() => setImageLoaded(true)}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.onerror = null; // Prevent infinite loop
+            target.src = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
+            setImageLoaded(true);
+          }}
+          initial={{ opacity: 0 }}
+          animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
+          viewport={{ once: true, margin: '120px' }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.05] origin-top`}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </div>
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent opacity-92 transition-opacity duration-300 group-hover:opacity-100 rounded-[1.35rem] md:rounded-[1.75rem]"></div>
 
