@@ -263,19 +263,19 @@ export function HomeBannersSkeleton() {
 
 export function MobileHeroCarouselSkeleton() {
   return (
-    <div className="lg:hidden w-full h-[120px] relative mt-2 mb-1 -mx-0.5 scale-[1.02] rounded-2xl bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_15px_35px_rgba(72,56,118,0.06)] overflow-hidden flex items-center justify-between p-5">
-      {/* Shimmer background */}
-      <div className="absolute inset-0 shimmer-bg w-full h-full" />
-      
-      {/* Left side text skeleton */}
-      <div className="flex-1 min-w-0 pr-4 relative z-10 flex flex-col gap-1.5">
-        <div className="h-4 w-20 bg-white/20 rounded-full animate-pulse" />
-        <div className="h-5 w-32 bg-white/20 rounded-md animate-pulse" />
-        <div className="h-4 w-44 bg-white/10 rounded-md animate-pulse" />
+    <div className="lg:hidden w-full h-[120px] relative mt-2 mb-1 -mx-0.5 scale-[1.02] flex items-center">
+      {/* Mimic the hero text slide layout */}
+      <div className="flex flex-col w-full gap-2">
+        {/* Skeleton for "Discover, Copy & Create" subtitle */}
+        <div className="h-4 w-44 rounded-md bg-[#e8e2f0]/50 animate-pulse" />
+        {/* Skeleton for "Trending AI Prompts" heading */}
+        <div className="h-9 w-64 rounded-lg bg-gradient-to-r from-[#e8e2f0]/60 to-[#e8e2f0]/30 animate-pulse sm:w-72" />
+        {/* Skeleton for description lines */}
+        <div className="flex flex-col gap-1.5 mt-0.5">
+          <div className="h-3.5 w-full max-w-[320px] rounded-md bg-[#e8e2f0]/35 animate-pulse" />
+          <div className="h-3.5 w-4/5 max-w-[260px] rounded-md bg-[#e8e2f0]/25 animate-pulse" />
+        </div>
       </div>
-
-      {/* Right side image placeholder skeleton */}
-      <div className="w-16 h-24 rounded-2xl bg-white/15 animate-pulse shadow-md shrink-0 relative z-10" />
     </div>
   );
 }
