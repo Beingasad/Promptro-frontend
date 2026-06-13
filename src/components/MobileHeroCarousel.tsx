@@ -202,11 +202,11 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               <div className="absolute -top-[30%] -left-[10%] w-28 h-28 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-2xl pointer-events-none dark:from-primary/20" />
               <div className="absolute -bottom-[30%] right-[20%] w-32 h-32 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
 
-              <div className="flex-1 min-w-0 pr-6 relative z-10">
+              <div className="flex-1 min-w-0 pr-4 relative z-10">
                 <span className="text-[9.5px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] block mb-1">
                   {current.tag_text}
                 </span>
-                <h3 className="text-[14px] font-[900] text-[#171421] dark:text-white leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
+                <h3 className="text-[14px] font-[900] text-[#171421] dark:text-white leading-tight whitespace-nowrap group-hover:text-primary transition-colors duration-300">
                   {current.title}
                 </h3>
                 <p className="text-[10px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-normal opacity-90 mt-0.5">
@@ -218,7 +218,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               </div>
 
               {current.image_url && (
-                <div className="relative h-[96px] w-[92px] shrink-0 flex items-center justify-end z-10">
+                <div className="relative h-[96px] w-[86px] shrink-0 flex items-center justify-end z-10">
                   {/* Decorative Glow */}
                   <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg scale-75 group-hover:scale-110 transition-transform duration-700" />
                   
