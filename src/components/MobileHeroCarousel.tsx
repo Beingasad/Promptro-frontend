@@ -123,14 +123,14 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         img = img || latest[0].image_url;
         secImg = latest[1].image_url;
         link = `/prompt/${latest[0].id}`;
-        title = latest[0].title;
-        subtitle = `Explore our latest ${latest[0].category} prompt design.`;
+        title = latest[0].category;
+        subtitle = `New: ${latest[0].title}`;
       } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length >= 2) {
         img = img || loved[0].image_url;
         secImg = loved[1].image_url;
         link = `/prompt/${loved[0].id}`;
-        title = loved[0].title;
-        subtitle = `Most loved prompt in ${loved[0].category} category.`;
+        title = 'Most Loved Prompts';
+        subtitle = banner.subtitle;
       }
 
       result.push({

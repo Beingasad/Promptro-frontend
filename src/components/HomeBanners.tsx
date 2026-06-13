@@ -103,8 +103,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
         );
         return {
           ...banner,
-          title: latest[0].title,
-          subtitle: `Explore our latest ${latest[0].category} prompt design.`,
+          title: latest[0].category,
+          subtitle: `New: ${latest[0].title}`,
           image_url: banner.image_url || latest[0].image_url,
           secondary_image: latest[1].image_url,
           button_link: `/prompt/${latest[0].id}`
@@ -118,8 +118,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
         );
         return {
           ...banner,
-          title: loved[0].title,
-          subtitle: `Most loved prompt in ${loved[0].category} category.`,
+          title: 'Most Loved Prompts',
+          subtitle: banner.subtitle,
           image_url: banner.image_url || loved[0].image_url,
           secondary_image: loved[1].image_url,
           button_link: `/prompt/${loved[0].id}`
