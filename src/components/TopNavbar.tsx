@@ -1859,7 +1859,7 @@ export default function TopNavbar() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
                   transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute right-0 top-full mt-3 z-[120] w-[19rem] rounded-[1.6rem] border border-white/50 dark:border-white/10 bg-white/94 dark:bg-[#171421]/94 p-5 text-center shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+                  className="absolute right-0 top-full mt-3 z-[120] w-[19rem] rounded-[1.6rem] p-5 text-center shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] profile-modal-glass"
                 >
                   <div className="mx-auto flex h-12 w-12 items-center justify-center text-primary bg-primary/10 rounded-full mb-3">
                     <CircleUserRound className="h-7 w-7" />
