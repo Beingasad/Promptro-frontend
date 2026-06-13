@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Clock, Calendar, ChevronRight, Tag, Sparkles } from 'lucide-react';
+import { BookOpen, Calendar, ChevronRight, Tag, Sparkles } from 'lucide-react';
 import SEOMeta from '../components/common/SEOMeta';
 import JsonLd from '../components/common/JsonLd';
 import posts from '../data/blogData';
@@ -115,7 +115,7 @@ export default function Blog() {
                 {formatDate(featured.publishDate)}
               </span>
               <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" />
+                <BookOpen className="h-3.5 w-3.5" />
                 {featured.readingTime}
               </span>
               <span className="ml-auto flex items-center gap-1 text-primary font-bold group-hover:gap-2 transition-all">
@@ -173,7 +173,7 @@ export default function Blog() {
                         {formatDate(post.publishDate)}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
+                        <BookOpen className="h-3 w-3" />
                         {post.readingTime}
                       </span>
                     </div>

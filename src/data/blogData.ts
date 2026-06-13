@@ -597,6 +597,7 @@ const posts: BlogPost[] = [
       { id: 'procession-tazia-prompts', title: 'Tazia & Mourning Procession Prompts', level: 2 },
       { id: 'arabic-calligraphy-prompts', title: 'Ya Hussain & Ashura Arabic Calligraphy Prompts', level: 2 },
       { id: 'best-parameters-tips', title: 'Best Parameters & Tips for Muharram AI Art', level: 2 },
+      { id: 'skip-the-grind-muharram', title: 'Generate Premium Muharram Art Instantly on Promptro', level: 2 },
     ],
     faqs: [
       {
@@ -659,6 +660,12 @@ const posts: BlogPost[] = [
     <li><strong>Use the style raw parameter:</strong> When using Midjourney, add <code>--style raw</code> at the end. This prevents the model from generating over-saturated or cartoonish colors and keeps the visual output realistic and respect-appropriate.</li>
     <li><strong>Control aspect ratios:</strong> Use <code>--ar 16:9</code> for banners and desktop backgrounds, or <code>--ar 2:3</code> for posters, status updates, and mobile wallpapers.</li>
   </ul>
+</section>
+
+<section id="skip-the-grind-muharram">
+  <h2>Generate Premium Muharram Art Instantly on Promptro</h2>
+  <p>Designing custom festival cards and event flyers during Muharram takes time. If you want to skip the prompt tweaking and trial-and-error, you can browse and copy hand-tested AI prompts directly from <strong><a href="https://promptro.in" target="_blank" rel="noopener noreferrer">Promptro</a></strong>.</p>
+  <p>Promptro is India&#39;s premier prompt directory. It features hundreds of curated, copy-paste prompts tailored for Midjourney V7, DALL-E 3, and Stable Diffusion. You can browse specific regional, religious, and commercial styling templates, copy them with one click, swap in your custom text, and generate breathtaking visuals instantly.</p>
 </section>
     `,
   },
