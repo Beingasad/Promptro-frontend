@@ -189,7 +189,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
 
             {/* Main Image (Front) */}
             {banner.image_url && (
-              <div className="relative z-20 h-[150px] w-[102px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_16px_36px_rgba(0,0,0,0.22)] transform rotate-3 group-hover:rotate-6 group-hover:scale-105 transition-all duration-500">
+              <div className="relative z-20 h-[150px] w-[102px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_16px_36px_rgba(0,0,0,0.22)] transform rotate-6 group-hover:rotate-10 group-hover:scale-105 transition-all duration-500">
                 <img 
                   src={banner.image_url} 
                   alt="" 
