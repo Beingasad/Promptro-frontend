@@ -265,15 +265,17 @@ export function MobileHeroCarouselSkeleton() {
   return (
     <div className="lg:hidden w-full h-[120px] relative mt-2 mb-1 -mx-0.5 scale-[1.02] flex items-center">
       {/* Mimic the hero text slide layout */}
-      <div className="flex flex-col w-full gap-2">
+      <div className="flex flex-col w-full">
         {/* Skeleton for "Discover, Copy & Create" subtitle */}
-        <div className="h-4 w-44 rounded-md bg-[#e8e2f0]/50 animate-pulse" />
-        {/* Skeleton for "Trending AI Prompts" heading */}
-        <div className="h-9 w-64 rounded-lg bg-gradient-to-r from-[#e8e2f0]/60 to-[#e8e2f0]/30 animate-pulse sm:w-72" />
+        <div className="h-[18px] w-48 rounded-md bg-[#c4b8d9]/40 animate-pulse" />
+        {/* Skeleton for "Trending AI Prompts" heading — with shimmer to mimic gradient */}
+        <div className="mt-2 h-10 w-[72%] rounded-lg bg-[#c4b8d9]/50 relative overflow-hidden sm:w-72">
+          <div className="absolute inset-0 shimmer-bg" />
+        </div>
         {/* Skeleton for description lines */}
-        <div className="flex flex-col gap-1.5 mt-0.5">
-          <div className="h-3.5 w-full max-w-[320px] rounded-md bg-[#e8e2f0]/35 animate-pulse" />
-          <div className="h-3.5 w-4/5 max-w-[260px] rounded-md bg-[#e8e2f0]/25 animate-pulse" />
+        <div className="flex flex-col gap-2 mt-3">
+          <div className="h-[14px] w-[90%] max-w-[340px] rounded-md bg-[#c4b8d9]/30 animate-pulse" />
+          <div className="h-[14px] w-[70%] max-w-[260px] rounded-md bg-[#c4b8d9]/22 animate-pulse" />
         </div>
       </div>
     </div>
