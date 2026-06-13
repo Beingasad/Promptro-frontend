@@ -213,7 +213,19 @@ export default function Home() {
 
       <div className="w-full">
         {loading ? (
-          <GridSkeleton isHome={true} />
+          <>
+            {/* Skeleton for Trending Now header */}
+            <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
+              <div className="flex min-w-0 items-center gap-2 md:gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e8e2f0]/40 md:h-11 md:w-11 animate-pulse">
+                  <Flame className="h-5 w-5 text-[#ff6a3d]/30 md:h-6 md:w-6" />
+                </div>
+                <div className="h-7 w-40 rounded-lg bg-[#e8e2f0]/50 animate-pulse md:h-8 md:w-48" />
+              </div>
+              <div className="h-8 w-20 rounded-full bg-[#e8e2f0]/40 animate-pulse md:w-24" />
+            </div>
+            <GridSkeleton isHome={true} />
+          </>
         ) : (
           <>
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
