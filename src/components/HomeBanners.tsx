@@ -178,7 +178,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
             
             {/* Secondary Image (Back) */}
             {banner.secondary_image && (
-              <div className="absolute z-10 -left-6 top-3 h-[132px] w-[90px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_12px_24px_rgba(0,0,0,0.12)] opacity-100 group-hover:scale-105 group-hover:-translate-x-1 group-hover:-rotate-18 transform -rotate-12 transition-all duration-500">
+              <div className="absolute z-10 -left-6 top-1.5 h-[142px] w-[90px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_12px_24px_rgba(0,0,0,0.12)] opacity-100 group-hover:scale-105 group-hover:-translate-x-1 group-hover:-rotate-18 transform -rotate-12 transition-all duration-500">
                 <img 
                   src={banner.secondary_image} 
                   alt="" 
