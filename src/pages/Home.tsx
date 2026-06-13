@@ -12,6 +12,8 @@ import MobileHeroCarousel from '../components/MobileHeroCarousel';
 import { useCategories } from '../context/CategoryContext';
 import SEOMeta from '../components/common/SEOMeta';
 import { GridSkeleton } from '../components/common/Skeleton';
+import { optimizeImageUrl } from '../utils/image';
+import { preloadImages } from '../utils/imageCache';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -105,7 +107,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/prompts?t=${Date.now()}`, { timeout: 15000 });
+        const response = await axios.get(`${API_BASE_URL}/api/prompts`, { timeout: 15000 });
         const apiPrompts = Array.isArray(response.data) ? response.data : [];
         const enrichedApiPrompts = apiPrompts.map((prompt: Prompt) => ({
           ...prompt,
@@ -113,6 +115,14 @@ export default function Home() {
         }));
 
         setPrompts(enrichedApiPrompts);
+
+        // Eagerly preload the first 15 thumbnail images
+        const thumbUrls = enrichedApiPrompts
+          .slice(0, 15)
+          .map((p: Prompt) => optimizeImageUrl(p.image_url, 800))
+          .filter(Boolean);
+        preloadImages(thumbUrls);
+
         try {
           localStorage.setItem('promptro_home_prompts', JSON.stringify(enrichedApiPrompts));
         } catch (e) {
@@ -130,8 +140,8 @@ export default function Home() {
     // Auto-retry fetching when the network comes online
     window.addEventListener('online', fetchPrompts);
     
-    // Auto-refresh every 30 seconds to show new admin uploads automatically
-    const interval = setInterval(fetchPrompts, 30000);
+    // Auto-refresh every 5 minutes to show new admin uploads without thrashing
+    const interval = setInterval(fetchPrompts, 300000);
     
     return () => {
       clearInterval(interval);

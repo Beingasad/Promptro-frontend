@@ -10,6 +10,7 @@ import { API_BASE_URL } from '../config';
 import { auth } from '../lib/firebase';
 import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
 import { optimizeImageUrl } from '../utils/image';
+import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
 
 export interface Prompt {
   id: string;
@@ -53,7 +54,10 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
   const [liked, setLiked] = useState(false);
   const [inCollection, setInCollection] = useState(false);
   const [likes, setLikes] = useState(prompt.likes);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // Check the global cache so re-mounted cards skip the skeleton entirely
+  const optimizedSrc = prompt.image_url ? optimizeImageUrl(prompt.image_url, priority ? 800 : 600) : '';
+  const alreadyCached = optimizedSrc ? isImageLoaded(optimizedSrc) : false;
+  const [imageLoaded, setImageLoaded] = useState(alreadyCached);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
@@ -103,12 +107,12 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
     }
   };
 
-  const [inView, setInView] = useState(priority || false);
+  const [inView, setInView] = useState(priority || alreadyCached);
   const containerRef = useRef<HTMLAnchorElement>(null);
 
   // Setup Intersection Observer for true lazy loading
   useEffect(() => {
-    if (priority) {
+    if (priority || alreadyCached) {
       setInView(true);
       return;
     }
@@ -121,7 +125,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         }
       },
       {
-        rootMargin: '200px', // Pre-load when within 200px of viewport
+        rootMargin: '600px', // Pre-load when within 600px of viewport
       }
     );
 
@@ -132,20 +136,20 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
     return () => {
       observer.disconnect();
     };
-  }, [priority]);
+  }, [priority, alreadyCached]);
 
   // Instant pre-load check to handle browser-cached images without visual glitch
   // Only execute when the component has entered viewport (or is prioritized)
   useEffect(() => {
     if (inView && prompt.image_url) {
-      const optimizedUrl = optimizeImageUrl(prompt.image_url, priority ? 800 : 600);
       const img = new Image();
-      img.src = optimizedUrl;
+      img.src = optimizedSrc;
       if (img.complete) {
         setImageLoaded(true);
+        markImageLoaded(optimizedSrc);
       }
     }
-  }, [inView, prompt.image_url, priority]);
+  }, [inView, prompt.image_url, optimizedSrc]);
 
   useEffect(() => {
     const updateStates = () => {
@@ -330,24 +334,28 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         <motion.img
           src={
             inView
-              ? (prompt.image_url ? optimizeImageUrl(prompt.image_url, priority ? 800 : 600) : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
+              ? (prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
               : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
           }
           alt={prompt.title}
-          onLoad={() => setImageLoaded(true)}
+          onLoad={() => {
+            setImageLoaded(true);
+            markImageLoaded(optimizedSrc);
+          }}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.onerror = null; // Prevent infinite loop
             target.src = 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop';
             setImageLoaded(true);
           }}
-          initial={{ opacity: 0 }}
-          animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
+          initial={{ opacity: alreadyCached ? 1 : 0 }}
+          animate={imageLoaded ? { opacity: 1 } : { opacity: alreadyCached ? 1 : 0 }}
           viewport={{ once: true, margin: '120px' }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          transition={alreadyCached ? { duration: 0 } : { duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.05] origin-top`}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
+          {...(priority ? { fetchPriority: 'high' as any } : {})}
         />
       </div>
       
