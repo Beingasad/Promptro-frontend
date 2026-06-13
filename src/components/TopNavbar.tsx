@@ -1800,7 +1800,7 @@ export default function TopNavbar() {
           </AnimatePresence>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 md:gap-3">
+        <div className="relative flex shrink-0 items-center gap-2 md:gap-3">
           <button
             className="relative flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white transition-all hover:scale-105 active:scale-95 hover:bg-white/75 dark:hover:bg-white/10 md:h-12 md:w-12"
             onClick={() => {
@@ -1842,6 +1842,43 @@ export default function TopNavbar() {
               <CircleUserRound className="w-[22px] h-[22px] md:w-[26px] md:h-[26px] text-[#171421] dark:text-white" />
             )}
           </button>
+
+          {/* Login Dropdown for Desktop View */}
+          <AnimatePresence>
+            {!isLoggedIn && profileOpen && windowWidth >= 768 && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setProfileOpen(false)}
+                  className="fixed inset-0 z-[110] bg-black/5 backdrop-blur-[3px] cursor-default pointer-events-auto touch-none"
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute right-0 top-full mt-3 z-[120] w-[19rem] rounded-[1.6rem] border border-white/50 dark:border-white/10 bg-white/94 dark:bg-[#171421]/94 p-5 text-center shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+                >
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center text-primary bg-primary/10 rounded-full mb-3">
+                    <CircleUserRound className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-base font-extrabold text-[#171421] dark:text-white leading-snug">Welcome to Promptro</h3>
+                  <p className="mt-1.5 text-xs text-[#5a5075] dark:text-[#b4aaca] leading-relaxed">
+                    Connect your account to save prompts, customize your style, and join the Promptro creator community.
+                  </p>
+                  <Link
+                    to="/auth"
+                    onClick={() => setProfileOpen(false)}
+                    className="mt-4 flex h-10 w-full items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-secondary px-4 text-xs font-bold text-white shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                  >
+                    Login / Sign Up
+                  </Link>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -2133,7 +2170,7 @@ export default function TopNavbar() {
       </AnimatePresence>
  
       <ProfileModal
-        isOpen={profileOpen}
+        isOpen={profileOpen && (isLoggedIn || windowWidth < 768)}
         onClose={() => setProfileOpen(false)}
         currentUser={currentUser}
         backendEmailVerified={backendEmailVerified}
