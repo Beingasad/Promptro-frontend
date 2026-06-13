@@ -212,9 +212,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                 <p className="text-[10px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-normal opacity-90 mt-0.5">
                   {current.subtitle}
                 </p>
-                <div className="mt-2.5 flex items-center gap-1 text-[11px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-4 py-1.5 rounded-full w-fit transition-all duration-300 group-hover:bg-gradient-to-r group-hover:from-[#7437ff] group-hover:via-[#dd4bd2] group-hover:to-[#ff642d] group-hover:text-white group-hover:border-transparent group-hover:scale-[1.03] group-hover:shadow-[0_4px_15px_rgba(116,55,255,0.25)] active:scale-95">
+                <div className="mt-2.5 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button">
                   <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
-                  <ChevronRight className="w-3.5 h-3.5 opacity-80" />
                 </div>
               </div>
 
