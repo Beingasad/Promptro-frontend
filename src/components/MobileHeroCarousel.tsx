@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Sparkles, Flame, Zap, Star } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { MobileHeroCarouselSkeleton } from './common/Skeleton';
 import { Prompt } from './ImageCard';
@@ -17,6 +17,7 @@ interface Banner {
   button_text?: string;
   button_link?: string;
   image_url?: string | null;
+  secondary_image?: string | null;
   bg_gradient?: string;
 }
 
@@ -27,6 +28,16 @@ const getDarkGradient = (lightGrad: string = '') => {
   if (lightGrad.includes('primary/10')) return 'dark:from-primary/20 dark:to-secondary/20';
   if (lightGrad.includes('1e1b4b')) return lightGrad; // Already dark
   return 'dark:from-[#1c1a26] dark:to-[#12101b]';
+};
+
+const getIcon = (iconName: string | null | undefined) => {
+  switch (iconName?.toLowerCase()) {
+    case 'sparkles': return <Sparkles className="w-3.5 h-3.5" />;
+    case 'flame': return <Flame className="w-3.5 h-3.5" />;
+    case 'zap': return <Zap className="w-3.5 h-3.5" />;
+    case 'star': return <Star className="w-3.5 h-3.5" />;
+    default: return null;
+  }
 };
 
 interface MobileHeroCarouselProps {
@@ -103,13 +114,16 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
     banners.slice(0, 2).forEach((banner: any) => {
       const tag = banner.tag_text.toUpperCase();
       let img = banner.image_url;
+      let secImg = banner.secondary_image;
       let link = banner.button_link;
 
-      if (tag.includes('NEW') && latest.length > 0) {
+      if (tag.includes('NEW') && latest.length >= 2) {
         img = img || latest[0].image_url;
+        secImg = latest[1].image_url;
         link = '/explore?filter=New Updates';
-      } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length > 0) {
+      } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length >= 2) {
         img = img || loved[0].image_url;
+        secImg = loved[1].image_url;
         link = '/explore?filter=Trending';
       }
 
@@ -117,6 +131,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         ...banner,
         type: 'banner',
         image_url: img,
+        secondary_image: secImg,
         button_link: link
       });
     });
@@ -139,7 +154,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
   const current = processedBanners[currentIndex];
 
   return (
-    <div className="lg:hidden w-full h-[120px] relative mt-2 mb-1 -mx-0.5 scale-[1.02]">
+    <div className="lg:hidden w-full h-[120px] relative mt-0 mb-0 -mx-0.5 scale-[1.02]">
       <AnimatePresence>
         <motion.div
           key={currentIndex}
@@ -151,10 +166,12 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
           style={{ willChange: 'transform, opacity' }}
         >
           {current.type === 'text' ? (
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full relative">
+              {/* Decorative Orb behind text */}
+              <div className="absolute -top-10 -left-6 w-32 h-32 bg-primary/10 rounded-full blur-[40px] pointer-events-none dark:bg-primary/15" />
               <p className="text-[15px] font-medium leading-6 text-[#6f6684] dark:text-[#afa6c8]">{current.tag_text}</p>
               <h1 className="mt-1 text-[8.5vw] sm:text-[44px] font-[900] leading-tight">
-                <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent drop-shadow-[0_4px_12px_rgba(116,55,255,0.15)]">
                   {current.title}
                 </span>
               </h1>
@@ -164,32 +181,41 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
             </div>
           ) : (
             <a 
-              href={current.button_link}
+              href={current.button_link || '#'}
               className={cn(
-                "relative flex w-full items-center justify-between p-5 rounded-2xl shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-2xl overflow-hidden bg-gradient-to-br min-h-[120px] border border-[#70639d]/22 dark:border-white/10 transition-all duration-300",
-                current.bg_gradient,
-                getDarkGradient(current.bg_gradient)
+                "group relative flex w-full items-center justify-between py-3 px-4 rounded-[1.35rem] shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-3xl overflow-hidden bg-gradient-to-br min-h-[120px] border border-[#70639d]/22 dark:border-black/40 transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10 animate-gradient-slow",
+                `${current.bg_gradient} ${getDarkGradient(current.bg_gradient)}`
               )}
             >
-              <div className="flex-1 min-w-0 pr-4">
-                <div className="flex items-center gap-1.5 mb-1.5">
-                  <span className="text-[14px]">{current.tag_icon || '✨'}</span>
-                  <span className="text-[9px] font-black uppercase tracking-widest text-primary/80 dark:text-primary">{current.tag_text}</span>
+              {/* Glassmorphic overlays */}
+              <div className="absolute inset-0 bg-white/5 dark:bg-black/15 pointer-events-none" />
+              
+              {/* Ambient lights */}
+              <div className="absolute -top-[30%] -left-[10%] w-28 h-28 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-2xl pointer-events-none dark:from-primary/20" />
+              <div className="absolute -bottom-[30%] right-[20%] w-32 h-32 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
+
+              <div className="flex-1 min-w-0 pr-3 relative z-10">
+                <div className="flex items-center gap-1.5 mb-1.5 px-2.5 py-1 rounded-full bg-white/70 dark:bg-white/10 w-fit backdrop-blur-md shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-white/40 dark:border-white/5">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-primary">{current.tag_text}</span>
                 </div>
-                <h3 className="text-[17px] font-[900] text-[#171421] dark:text-white leading-tight truncate">
+                <h3 className="text-[17px] font-[900] text-[#171421] dark:text-white leading-tight truncate group-hover:text-primary transition-colors duration-300">
                   {current.title}
                 </h3>
                 <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] truncate opacity-90 mt-1">
                   {current.subtitle}
                 </p>
-                <div className="mt-2.5 flex items-center gap-1 text-[12px] font-black text-primary">
-                  {current.button_text} <ChevronRight className="w-3.5 h-3.5" />
+                <div className="mt-2.5 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button">
+                  <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                 </div>
               </div>
 
               {current.image_url && (
-                <div className="w-16 h-24 rounded-2xl overflow-hidden shadow-xl shrink-0 border-none">
-                  <img src={current.image_url} alt="" className="w-full h-full object-cover" />
+                <div className="relative w-22 h-[110px] shrink-0 flex items-center justify-center z-10">
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl scale-75 group-hover:scale-110 transition-transform duration-700" />
+                  
+                  <div className="w-[78px] h-[106px] rounded-[1.25rem] overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_12px_28px_rgba(0,0,0,0.18)] rotate-3 group-hover:rotate-0 group-hover:scale-105 transition-all duration-500">
+                    <img src={current.image_url} alt="" className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700" />
+                  </div>
                 </div>
               )}
             </a>

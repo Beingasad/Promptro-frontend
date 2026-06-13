@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { ExternalLink, Sparkles, Flame, Zap, Star, Layout } from 'lucide-react';
+import { ChevronRight, Sparkles, Flame, Zap, Star } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { HomeBannersSkeleton } from './common/Skeleton';
 import { Prompt } from './ImageCard';
@@ -131,7 +131,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   }
 
   return (
-    <div className="hidden lg:grid grid-cols-2 gap-4 lg:flex-[1.8] min-w-0">
+    <div className="hidden lg:grid grid-cols-2 gap-5 lg:flex-[1.8] min-w-0">
       {processedBanners.slice(0, 2).map((banner: any, index) => (
         <motion.a
           key={banner.id}
@@ -140,64 +140,57 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
           className={cn(
-            "group relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br glass-shine hover-glass-glow border border-[#70639d]/22 dark:border-white/10",
+            "group relative flex items-center justify-between p-7 rounded-[1.75rem] overflow-hidden shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br border border-[#70639d]/22 dark:border-black/40 animate-gradient-slow",
             banner.bg_gradient,
             getDarkGradient(banner.bg_gradient)
           )}
         >
+          {/* Glassmorphic overlays */}
+          <div className="absolute inset-0 bg-white/5 dark:bg-black/15 pointer-events-none" />
+          
+          {/* Ambient lights */}
+          <div className="absolute -top-[30%] -left-[10%] w-36 h-36 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-2xl pointer-events-none dark:from-primary/20" />
+          <div className="absolute -bottom-[30%] right-[30%] w-40 h-40 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
+
           {/* Content side */}
-          <div className="relative z-10 flex flex-col gap-2 max-w-[52%]">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 dark:bg-white/10 w-fit backdrop-blur-md shadow-sm">
-              <span className="text-primary">{banner.tag_icon ? banner.tag_icon : <Sparkles className="w-3.5 h-3.5" />}</span>
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary/90">{banner.tag_text}</span>
+          <div className="relative z-10 flex flex-col gap-2.5 max-w-[48%]">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 dark:bg-white/10 w-fit backdrop-blur-md shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-white/40 dark:border-white/5">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary">{banner.tag_text}</span>
             </div>
             <h3 className="text-[20px] sm:text-[22px] font-[900] text-[#171421] dark:text-white leading-[1.1] tracking-tight group-hover:text-primary transition-colors duration-300">
               {banner.title}
             </h3>
-            <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90">
+            <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90 max-w-[195px] xl:max-w-[220px]">
               {banner.subtitle}
             </p>
-            <div className="mt-3 flex items-center gap-2 text-[13px] font-black text-primary group-hover:gap-3 transition-all duration-300">
-              <span className="relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all group-hover:after:w-full">
-                {banner.button_text}
-              </span>
-              <ExternalLink className="w-4 h-4" />
+            <div className="mt-3 flex items-center text-[12px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-5 py-2 rounded-full w-fit shadow-[0_4px_14px_rgba(116,55,255,0.35)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_6px_20px_rgba(116,55,255,0.5)] active:scale-95 animate-shimmer-button">
+              <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
             </div>
           </div>
 
           {/* Visual Side (Double Image Collage) */}
-          <div className="relative h-32 w-36 shrink-0 flex items-center justify-end">
-            {/* Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 bg-primary/25 rounded-full blur-[40px] group-hover:blur-[60px] group-hover:scale-150 transition-all duration-1000" />
+          <div className="relative h-[150px] w-40 shrink-0 flex items-center justify-end z-10">
             
+            {/* Secondary Image (Back) */}
+            {banner.secondary_image && (
+              <div className="absolute z-10 -left-6 top-3 h-[132px] w-[90px] rounded-2xl overflow-hidden border border-white/60 dark:border-white/10 shadow-[0_12px_24px_rgba(0,0,0,0.12)] opacity-100 group-hover:scale-105 group-hover:-translate-x-1 group-hover:-rotate-18 transform -rotate-12 transition-all duration-500">
+                <img 
+                  src={banner.secondary_image} 
+                  alt="" 
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
+
             {/* Main Image (Front) */}
             {banner.image_url && (
-              <motion.div 
-                whileHover={{ y: -8, rotate: 3, scale: 1.08 }}
-                className="relative z-20 h-32 w-22 rounded-2xl overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.25)] group-hover:border-primary/20 transition-colors duration-500"
-              >
+              <div className="relative z-20 h-[150px] w-[102px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/15 shadow-[0_16px_36px_rgba(0,0,0,0.22)] transform rotate-3 group-hover:rotate-6 group-hover:scale-105 transition-all duration-500">
                 <img 
                   src={banner.image_url} 
                   alt="" 
                   className="h-full w-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
                 />
-              </motion.div>
-            )}
-            
-            {/* Secondary Image (Back) */}
-            {banner.secondary_image && (
-              <motion.div 
-                initial={{ x: 30, opacity: 0, rotate: -12 }}
-                animate={{ x: 0, opacity: 1, rotate: -12 }}
-                whileHover={{ y: 8, rotate: -18, scale: 1.1 }}
-                className="absolute z-10 -left-8 top-6 h-28 w-20 rounded-2xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.2)] opacity-85 group-hover:opacity-100 transition-all duration-500"
-              >
-                <img 
-                  src={banner.secondary_image} 
-                  alt="" 
-                  className="h-full w-full object-cover transform scale-110 group-hover:scale-125 transition-transform duration-1000"
-                />
-              </motion.div>
+              </div>
             )}
           </div>
         </motion.a>

@@ -164,8 +164,8 @@ export default function Home() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full flex flex-col gap-4 md:gap-9"
+      transition={{ duration: 0.55 }}
+      className="w-full flex flex-col gap-5 md:gap-9"
     >
       <SEOMeta
         title="Promptro | AI Image Prompts Library"
@@ -174,7 +174,7 @@ export default function Home() {
         canonical="https://promptro.in"
       />
 
-      <section className="mt-3 px-2 sm:px-4 md:px-6 pt-1 md:mt-2 md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-[140px] sm:min-h-[160px] lg:min-h-0">
+      <section className="mt-5 px-2 sm:px-4 md:px-6 pt-0 md:mt-[10px] md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-0 lg:min-h-0">
         {/* Desktop View (Always visible on lg) */}
         <div className="hidden lg:block lg:max-w-[40%]">
           {loading ? (
@@ -232,9 +232,7 @@ export default function Home() {
             {/* Skeleton for Trending Now header */}
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
               <div className="flex min-w-0 items-center gap-2 md:gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e8e2f0]/40 md:h-11 md:w-11 animate-pulse">
-                  <Flame className="h-5 w-5 text-[#ff6a3d]/30 md:h-6 md:w-6" />
-                </div>
+                <div className="w-[clamp(22px,6.2vw,28px)] h-[clamp(22px,6.2vw,28px)] md:w-8 md:h-8 bg-[#e8e2f0]/40 animate-pulse rounded-md shrink-0" />
                 <div className="h-7 w-40 rounded-lg bg-[#e8e2f0]/50 animate-pulse md:h-8 md:w-48" />
               </div>
               <div className="h-8 w-20 rounded-full bg-[#e8e2f0]/40 animate-pulse md:w-24" />
@@ -245,9 +243,7 @@ export default function Home() {
           <>
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
               <div className="flex w-[calc((100%-0.625rem)/2)] min-w-0 items-center gap-2 text-[#171421] md:gap-3 lg:w-[calc((100%-1.75rem)/3)]">
-                <div className="pill-glass flex h-9 w-9 shrink-0 items-center justify-center rounded-full md:h-11 md:w-11">
-                  <Flame className="h-5 w-5 text-[#ff6a3d] md:h-6 md:w-6" fill="currentColor" />
-                </div>
+                <Flame className="w-[clamp(22px,6.2vw,28px)] h-[clamp(22px,6.2vw,28px)] md:w-8 md:h-8 text-[#ff6a3d] shrink-0" fill="currentColor" />
                 <h2 className="whitespace-nowrap text-[clamp(22px,6.2vw,28px)] font-bold leading-none md:text-[32px]">
                   {searchQuery ? 'Search Results' : 'Trending Now'}
                 </h2>

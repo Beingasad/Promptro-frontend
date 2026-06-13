@@ -233,7 +233,7 @@ export function HomeBannersSkeleton() {
       {Array.from({ length: 2 }).map((_, index) => (
         <div
           key={index}
-          className="relative overflow-hidden rounded-[2.5rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.06)] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 h-[178px]"
+          className="relative overflow-hidden rounded-[1.75rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.06)] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 h-[178px]"
         >
           {/* Shimmer overlay */}
           <div className="absolute inset-0 shimmer-bg w-full h-full" />
@@ -251,9 +251,9 @@ export function HomeBannersSkeleton() {
           </div>
 
           {/* Right side collage skeleton */}
-          <div className="relative h-32 w-36 shrink-0 flex items-center justify-end">
-            <div className="relative z-20 h-32 w-22 rounded-2xl bg-white/15 animate-pulse shadow-md" />
-            <div className="absolute z-10 -left-8 top-6 h-28 w-20 rounded-2xl bg-white/10 animate-pulse shadow-sm" style={{ transform: 'rotate(-12deg)' }} />
+          <div className="relative h-[150px] w-40 shrink-0 flex items-center justify-end">
+            <div className="relative z-20 h-[150px] w-[102px] rounded-2xl bg-white/15 animate-pulse shadow-md" />
+            <div className="absolute z-10 -left-6 top-3 h-[132px] w-[90px] rounded-2xl bg-white/10 animate-pulse shadow-sm" style={{ transform: 'rotate(-12deg)' }} />
           </div>
         </div>
       ))}
@@ -263,7 +263,7 @@ export function HomeBannersSkeleton() {
 
 export function MobileHeroCarouselSkeleton() {
   return (
-    <div className="lg:hidden w-full h-[120px] relative mt-2 mb-1 -mx-0.5 scale-[1.02] flex items-center">
+    <div className="lg:hidden w-full h-[120px] relative mt-0 mb-0 -mx-0.5 scale-[1.02] flex items-center">
       {/* Mimic the hero text slide layout */}
       <div className="flex flex-col w-full">
         {/* Skeleton for "Discover, Copy & Create" subtitle */}
