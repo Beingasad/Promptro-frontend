@@ -209,7 +209,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                 <h3 className="text-[15px] font-[900] text-[#171421] dark:text-white leading-tight truncate group-hover:text-primary transition-colors duration-300">
                   {current.title}
                 </h3>
-                <p className="text-[10px] font-semibold text-[#6f6684] dark:text-[#afa6c8] truncate opacity-90 mt-0.5">
+                <p className="text-[10px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-normal opacity-90 mt-0.5">
                   {current.subtitle}
                 </p>
                 <div className="mt-2.5 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button">
