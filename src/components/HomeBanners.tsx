@@ -103,7 +103,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
         );
         return {
           ...banner,
-          title: 'Newly Added Prompt',
+          title: 'Newly Added Prompts',
           subtitle: `New: ${latest[0].title}`,
           image_url: banner.image_url || latest[0].image_url,
           secondary_image: latest[1].image_url,
