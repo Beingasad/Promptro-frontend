@@ -110,7 +110,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
   const [inView, setInView] = useState(priority || alreadyCached);
   const containerRef = useRef<HTMLAnchorElement>(null);
 
-  // Lazy-load images with a generous 1200px margin (~3-4 screens ahead)
+  // Progressive lazy-load: load images ~1-2 cards ahead of scroll position
   // Priority images and already-cached images bypass this entirely
   useEffect(() => {
     if (priority || alreadyCached) {
@@ -125,7 +125,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
           observer.disconnect();
         }
       },
-      { rootMargin: '1200px' }
+      { rootMargin: '400px' }
     );
 
     if (containerRef.current) {
@@ -331,7 +331,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
           src={
             inView
               ? (prompt.image_url ? optimizedSrc : 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop')
-              : undefined
+              : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
           }
           alt={prompt.title}
           onLoad={() => {
