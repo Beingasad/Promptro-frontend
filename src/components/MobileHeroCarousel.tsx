@@ -206,10 +206,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                 <div className="flex items-center gap-1.5 mb-1.5 px-2.5 py-1 rounded-full bg-white/70 dark:bg-white/10 w-fit backdrop-blur-md shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-white/40 dark:border-white/5">
                   <span className="text-[9px] font-black uppercase tracking-widest text-primary">{current.tag_text}</span>
                 </div>
-                <h3 className="text-[17px] font-[900] text-[#171421] dark:text-white leading-tight truncate group-hover:text-primary transition-colors duration-300">
+                <h3 className="text-[15px] font-[900] text-[#171421] dark:text-white leading-tight truncate group-hover:text-primary transition-colors duration-300">
                   {current.title}
                 </h3>
-                <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] truncate opacity-90 mt-1">
+                <p className="text-[10px] font-semibold text-[#6f6684] dark:text-[#afa6c8] truncate opacity-90 mt-0.5">
                   {current.subtitle}
                 </p>
                 <div className="mt-2.5 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button">
