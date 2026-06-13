@@ -158,9 +158,9 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
 
           {/* Content side */}
           <div className="relative z-10 flex flex-col gap-2.5 max-w-[48%]">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 dark:bg-white/10 w-fit backdrop-blur-md shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-white/40 dark:border-white/5">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-primary">{banner.tag_text}</span>
-            </div>
+            <span className="text-[11px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] block mb-1">
+              {banner.tag_text}
+            </span>
             <h3 className="text-[20px] sm:text-[22px] font-[900] text-[#171421] dark:text-white leading-[1.1] tracking-tight group-hover:text-primary transition-colors duration-300">
               {banner.title}
             </h3>

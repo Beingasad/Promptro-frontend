@@ -203,9 +203,9 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               <div className="absolute -bottom-[30%] right-[20%] w-32 h-32 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
 
               <div className="flex-1 min-w-0 pr-3 relative z-10">
-                <div className="flex items-center gap-1.5 mb-1.5 px-2.5 py-1 rounded-full bg-white/70 dark:bg-white/10 w-fit backdrop-blur-md shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-white/40 dark:border-white/5">
-                  <span className="text-[9px] font-black uppercase tracking-widest text-primary">{current.tag_text}</span>
-                </div>
+                <span className="text-[9.5px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] block mb-1">
+                  {current.tag_text}
+                </span>
                 <h3 className="text-[15px] font-[900] text-[#171421] dark:text-white leading-tight truncate group-hover:text-primary transition-colors duration-300">
                   {current.title}
                 </h3>
