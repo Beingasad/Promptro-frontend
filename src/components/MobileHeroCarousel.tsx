@@ -112,24 +112,32 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
 
     // Slide 1 & 2 from API
     banners.slice(0, 2).forEach((banner: any) => {
-      const tag = banner.tag_text.toUpperCase();
+      const tag = (banner.tag_text || '').toUpperCase();
       let img = banner.image_url;
       let secImg = banner.secondary_image;
       let link = banner.button_link;
+      let title = banner.title;
+      let subtitle = banner.subtitle;
 
       if (tag.includes('NEW') && latest.length >= 2) {
         img = img || latest[0].image_url;
         secImg = latest[1].image_url;
-        link = '/explore?filter=New Updates';
+        link = `/prompt/${latest[0].id}`;
+        title = latest[0].title;
+        subtitle = `Explore our latest ${latest[0].category} prompt design.`;
       } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length >= 2) {
         img = img || loved[0].image_url;
         secImg = loved[1].image_url;
-        link = '/explore?filter=Trending';
+        link = `/prompt/${loved[0].id}`;
+        title = loved[0].title;
+        subtitle = `Most loved prompt in ${loved[0].category} category.`;
       }
 
       result.push({
         ...banner,
         type: 'banner',
+        title,
+        subtitle,
         image_url: img,
         secondary_image: secImg,
         button_link: link

@@ -575,6 +575,93 @@ const posts: BlogPost[] = [
 </section>
     `,
   },
+  {
+    slug: 'muharram-ai-image-prompts-guide',
+    title: 'Muharram AI Image Prompts: Cinematic Karbala & Calligraphy Templates (2026)',
+    metaTitle: 'Muharram AI Image Prompts: Cinematic Karbala & Calligraphy | Promptro',
+    metaDescription: 'Create emotional and high-quality Muharram images with our copy-paste Midjourney, DALL-E, and Stable Diffusion prompts. Includes Karbala scene templates and Arabic calligraphy guides.',
+    keywords: 'Muharram AI prompts, Ashura Midjourney prompts, Ya Hussain calligraphy AI, Karbala image prompts, Islamic AI art',
+    featuredImage: '/blog_muharram_prompts.png',
+    featuredImageAlt: 'A high-quality cinematic illustration of a Muharram procession under a moody dark sky',
+    author: 'Mohammad Asad Ansari',
+    authorTitle: 'Founder of Promptro',
+    publishDate: '2026-06-13T12:00:00Z',
+    updatedDate: '2026-06-13T12:00:00Z',
+    readingTime: '10 min read',
+    category: 'Prompt Libraries',
+    tags: ['Muharram', 'Midjourney', 'calligraphy', 'Karbala', 'prompts'],
+    excerpt: 'Learn how to write and copy high-quality AI prompts to generate cinematic Muharram art, Tazia processions, and beautiful Islamic calligraphy using Midjourney and DALL-E 3.',
+    toc: [
+      { id: 'importance-muharram-visuals', title: 'The Importance of Muharram Visuals in AI', level: 2 },
+      { id: 'cinematic-karbala-prompts', title: 'Cinematic Karbala & Ashura Scene Prompts', level: 2 },
+      { id: 'procession-tazia-prompts', title: 'Tazia & Mourning Procession Prompts', level: 2 },
+      { id: 'arabic-calligraphy-prompts', title: 'Ya Hussain & Ashura Arabic Calligraphy Prompts', level: 2 },
+      { id: 'best-parameters-tips', title: 'Best Parameters & Tips for Muharram AI Art', level: 2 },
+    ],
+    faqs: [
+      {
+        question: 'Which AI tool is best for generating Arabic Calligraphy for Muharram?',
+        answer: 'DALL-E 3 (via ChatGPT) is the most reliable tool for rendering correct letters. However, Midjourney V7 with --style raw can generate stunning stylized calligraphy backgrounds, which you can later touch up with design tools.',
+      },
+      {
+        question: 'How can I make the Muharram images look cinematic instead of cartoonish?',
+        answer: 'Use keywords like "cinematic lighting", "dust particles in light rays", "volumetric fog", "shot on 35mm film", and avoid words like "photorealistic" or "8K".',
+      },
+      {
+        question: 'Are these AI prompts free to use commercially?',
+        answer: 'Yes, you can copy, edit, and use these prompts for creating Muharram banners, posters, and social media posts for your clients or pages.',
+      },
+    ],
+    relatedSlugs: ['what-is-an-ai-image-prompt', 'best-midjourney-prompts-2026', 'how-to-use-negative-prompts'],
+    content: `
+<section id="importance-muharram-visuals">
+  <h2>The Importance of Muharram Visuals in AI</h2>
+  <p>Muharram marks the beginning of the Islamic Hijri calendar. It holds deep religious and historical significance for Muslims, especially Shia communities who commemorate the martyrdom of Imam Hussain (AS), the grandson of Prophet Muhammad, at the Battle of Karbala. The period of mourning (Aza) calls for solemn, respectful, and emotionally moving imagery.</p>
+  <p>With the rise of generative AI, creators, social media managers, and community leaders often look for stunning visuals representing this period of mourning. Whether you need a digital banner for a Majlis, a flyer for a procession, or respectful artistic illustrations of historical themes, using Midjourney, DALL-E, or Stable Diffusion can help you design beautiful, high-quality graphics. In this guide, we provide hand-tested prompts that respectfully capture the essence of Muharram.</p>
+</section>
+
+<section id="cinematic-karbala-prompts">
+  <h2>Cinematic Karbala &amp; Ashura Scene Prompts</h2>
+  <p>Karbala visual representations carry deep emotional weight. These prompts focus on cinematic landscape and symbolic representations of the desert of Karbala, the shrine of Imam Hussain, or historical symbols like a lone horse or tent under a dramatic sky.</p>
+  <ol>
+    <li><strong>The Shrine of Imam Hussain:</strong> <code>A cinematic wide shot of the holy shrine of Imam Hussain in Karbala at dusk, warm golden lights reflecting on the marble floor, dark cloudy sky with a crescent moon, atmospheric haze, volumetric lighting, shot on 35mm lens, high contrast, respect and solemn mood --ar 16:9 --v 7</code></li>
+    <li><strong>The Desert of Karbala:</strong> <code>A historical cinematic shot of a lone white tent standing in the middle of a vast sand desert under a dramatic dark red sunset sky, dust particles in the air, sunset glow, cinematic lighting, historical art direction, high detail, shot on RED camera --ar 16:9 --v 7</code></li>
+    <li><strong>Symbolic Zuljanah:</strong> <code>A highly detailed, emotional close-up shot of a majestic white horse standing in a desert, looking down in sorrow, dark storm clouds in the background, warm light breaking through the clouds, dramatic side lighting, cinematic composition, film grain --ar 16:9 --v 7</code></li>
+    <li><strong>The Golden Dome of Karbala:</strong> <code>A macro shot of the golden dome of Hazrat Abbas shrine, detailed calligraphy on the dome, warm ambient light, blue hour sky with stars, cinematic depth of field, photorealistic texture --ar 16:9 --v 7</code></li>
+  </ol>
+</section>
+
+<section id="procession-tazia-prompts">
+  <h2>Tazia &amp; Mourning Procession Prompts</h2>
+  <p>Tazias (models of the tomb of Imam Hussain) and Alam banners are prominent parts of Muharram processions (Julus). These prompts capture the atmospheric details of these processions with respect and accuracy.</p>
+  <ol>
+    <li><strong>The Alam Banner:</strong> <code>A powerful close-up of a black silk banner (Alam) with golden Arabic calligraphy, flapping in the wind, a metallic hand (Panjetan symbol) on top of the banner, dark moody sky with warm sun rays filtering through, shallow depth of field, high contrast, cinematic atmosphere --ar 2:3 --v 7</code></li>
+    <li><strong>Tazia Procession at Night:</strong> <code>An atmospheric documentary photograph of a large Tazia procession on the streets of Lucknow at night, warm yellow street lamps, crowds in dark clothing walking in silhouette, smoke and mist, shot on 50mm f/1.8 lens, analog film grain, authentic street photography style --ar 16:9 --v 7</code></li>
+    <li><strong>Majlis Gathering (Solemn Atmosphere):</strong> <code>A wide shot of a traditional Majlis (mourning assembly) inside an old Islamic hall, black carpets and tapestries on walls, people sitting respectfully in low-key warm lighting, shadows and depth, peaceful and solemn atmosphere, soft lighting --ar 16:9 --v 7</code></li>
+  </ol>
+</section>
+
+<section id="arabic-calligraphy-prompts">
+  <h2>Ya Hussain &amp; Ashura Arabic Calligraphy Prompts</h2>
+  <p>Text generation in AI has improved dramatically with models like DALL-E 3 and Midjourney V7. You can now generate beautiful calligraphic text in Arabic for Muharram banners.</p>
+  <ol>
+    <li><strong>"Ya Hussain" in Golden Thuluth Script:</strong> <code>Beautiful, intricate Arabic calligraphy of the words 'Ya Hussain' in glowing golden Thuluth script, set against a dark black textured stone background, dynamic red fluid light leaks, premium studio lighting, high contrast, clean vector style details --ar 1:1 --v 7</code></li>
+    <li><strong>"Ashura" Arabic Typography Poster:</strong> <code>A minimalist design poster featuring the word 'Ashura' written in elegant white Arabic calligraphy, centered on a deep red and charcoal black gradient background, fine paper texture, premium minimalist aesthetic, modern Islamic graphic design --ar 2:3 --v 7</code></li>
+    <li><strong>Islamic Calligraphy Banner:</strong> <code>A horizontal digital banner with beautiful Arabic calligraphy expressing condolences for Ashura, gold lettering, dark green silk texture background with soft patterns, high-end commercial graphic design look --ar 16:9 --v 7</code></li>
+  </ol>
+</section>
+
+<section id="best-parameters-tips">
+  <h2>Best Parameters &amp; Tips for Muharram AI Art</h2>
+  <p>To ensure your generated images remain respectful and look highly professional, follow these simple guidelines:</p>
+  <ul>
+    <li><strong>Keep the colors dark and rich:</strong> Muharram visuals rely on dark colors like black, charcoal grey, deep red, forest green, and gold. Specify these in your prompts to set the correct tone (e.g., *dark moody atmosphere*, *low-key lighting*).</li>
+    <li><strong>Use the style raw parameter:</strong> When using Midjourney, add <code>--style raw</code> at the end. This prevents the model from generating over-saturated or cartoonish colors and keeps the visual output realistic and respect-appropriate.</li>
+    <li><strong>Control aspect ratios:</strong> Use <code>--ar 16:9</code> for banners and desktop backgrounds, or <code>--ar 2:3</code> for posters, status updates, and mobile wallpapers.</li>
+  </ul>
+</section>
+    `,
+  },
 ];
 
 export default posts;
