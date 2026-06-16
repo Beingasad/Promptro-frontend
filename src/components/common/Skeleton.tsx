@@ -37,15 +37,15 @@ export function CardSkeleton({ isHome: propIsHome, aspectRatioClass }: CardSkele
 
         <div className={`flex items-center justify-around w-full rounded-full bg-black/15 text-white/60 shadow-[0_16px_38px_rgba(0,0,0,0.15)] backdrop-blur-[24px] ${
           isHome 
-            ? "px-3 py-2 md:px-5 md:py-3 md:min-h-[50px]" 
-            : "px-2.5 py-1.5 md:px-4 md:py-2.5 md:min-h-12"
+            ? "px-3 py-2.5 md:px-5 md:py-3.5" 
+            : "px-2.5 py-1.5 md:px-4 md:py-3"
         }`}>
           <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-          <div className="h-3 w-px bg-white/15" />
+          <div className="h-3.5 w-px bg-white/15" />
           <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-          <div className="h-3 w-px bg-white/15" />
+          <div className="h-3.5 w-px bg-white/15" />
           <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
-          <div className="h-3 w-px bg-white/15" />
+          <div className="h-3.5 w-px bg-white/15" />
           <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
         </div>
       </div>

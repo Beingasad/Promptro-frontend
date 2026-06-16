@@ -411,8 +411,8 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
         {/* MINIMAL EXPLORE / SAVED LAYOUT (Now applied to Home page cards too) */}
         <div className={`flex items-center justify-around w-full rounded-full bg-black/20 text-white shadow-[0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] ${
           isHome 
-            ? "px-3 py-2 md:px-5 md:py-3 md:min-h-[50px]" 
-            : "px-2.5 py-1 md:px-4 md:py-2.5 md:min-h-12"
+            ? "px-3 py-2.5 md:px-5 md:py-3.5" 
+            : "px-2.5 py-1.5 md:px-4 md:py-3"
         }`}>
           {!isSavedOrCollections ? (
             <>
@@ -428,23 +428,23 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className="flex items-center justify-center"
                 >
-                  <Heart className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 transition-colors" fill={liked ? '#ff4b72' : 'rgba(255,255,255,0.22)'} stroke={liked ? '#ff4b72' : 'currentColor'} />
+                  <Heart className="w-4 h-4 md:w-5 md:h-5 transition-colors" fill={liked ? '#ff4b72' : 'rgba(255,255,255,0.22)'} stroke={liked ? '#ff4b72' : 'currentColor'} />
                 </motion.span>
                 <span className="ml-1">{formatCount(likes)}</span>
               </button>
               
-              <div className="h-3 w-px bg-white/20" />
+              <div className="h-3.5 w-px bg-white/20" />
 
               <button
                 className="flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm"
                 onClick={stopCardNavigation}
                 aria-label={`${formatCount(prompt.views)} views`}
               >
-                <Eye className="w-3.5 h-3.5 md:w-4.5 md:h-4.5" />
+                <Eye className="w-4 h-4 md:w-5 md:h-5" />
                 <span className="ml-1">{formatCount(prompt.views)}</span>
               </button>
 
-              <div className="h-3 w-px bg-white/20" />
+              <div className="h-3.5 w-px bg-white/20" />
             </>
           ) : (
             <>
@@ -454,13 +454,13 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
                 aria-label="Share prompt"
               >
                 {shared ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-400 md:w-4.5 md:h-4.5" />
+                  <Check className="w-4 h-4 text-emerald-400 md:w-5 md:h-5" />
                 ) : (
-                  <Share2 className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" />
+                  <Share2 className="w-4 h-4 text-white md:w-5 md:h-5" />
                 )}
               </button>
 
-              <div className="h-3 w-px bg-white/20" />
+              <div className="h-3.5 w-px bg-white/20" />
             </>
           )}
 
@@ -470,19 +470,19 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
-              className="w-3.5 h-3.5 md:w-4.5 md:h-4.5 text-white"
+              className="w-4 h-4 md:w-5 md:h-5 text-white"
               fill={inCollection ? 'currentColor' : 'none'}
             />
           </button>
           
-          <div className="h-3 w-px bg-white/20" />
+          <div className="h-3.5 w-px bg-white/20" />
 
           <button
             className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
             onClick={toggleSave}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
-            <Bookmark className="w-3.5 h-3.5 text-white md:w-4.5 md:h-4.5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
+            <Bookmark className="w-4 h-4 text-white md:w-5 md:h-5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
           </button>
         </div>
       </div>
