@@ -24,8 +24,8 @@ export function CardSkeleton({ isHome: propIsHome, aspectRatioClass }: CardSkele
       <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
 
       {/* Category Pill Placeholder on Top Left */}
-      <div className={`absolute z-10 h-5 w-16 md:h-6 md:w-20 rounded-full bg-white/15 animate-pulse ${
-        isHome ? "top-2 left-2 md:top-3 md:left-3" : "hidden md:block md:top-3 md:left-3"
+      <div className={`absolute z-10 h-5 w-16 md:h-6 md:w-20 rounded-full bg-[#c5bad6]/60 dark:bg-white/20 animate-pulse ${
+        isHome ? "top-1.5 left-2 md:top-2 md:left-3" : "hidden md:block md:top-2 md:left-3"
       }`} />
 
       {/* Bottom Content Area */}

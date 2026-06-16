@@ -389,7 +389,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
 
       {/* Top Left: Floating Category Pill */}
       <div className={`absolute z-10 transition-transform duration-300 group-hover:-translate-y-0.5 ${
-        isHome ? "top-2 left-2 md:top-3 md:left-3" : "hidden md:block md:top-3 md:left-3"
+        isHome ? "top-1.5 left-2 md:top-2 md:left-3" : "hidden md:block md:top-2 md:left-3"
       }`}>
         <button 
           onClick={handleCategoryClick}
