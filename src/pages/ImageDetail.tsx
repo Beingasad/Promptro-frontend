@@ -456,6 +456,13 @@ export default function ImageDetail() {
             <Sparkles className="h-6 w-6 text-primary" />
             <h2 className="text-lg font-bold text-[#3a344c] dark:text-[#e4dcf5]">Prompt</h2>
           </div>
+          <button
+            onClick={() => copyText(promptText, 'prompt')}
+            className="flex md:hidden items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
+          >
+            {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+            {copiedPrompt ? 'Copied' : 'Copy'}
+          </button>
         </div>
         <motion.div
           animate={copiedPrompt ? {
@@ -615,7 +622,7 @@ export default function ImageDetail() {
                 </p>
                 <button
                   onClick={() => copyText(promptText, 'prompt')}
-                  className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
+                  className="hidden md:flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
                 >
                   {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                   {copiedPrompt ? 'Copied' : 'Copy'}
@@ -662,7 +669,7 @@ export default function ImageDetail() {
               </p>
               <button
                 onClick={() => copyText(promptText, 'prompt')}
-                className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
+                className="hidden md:flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
               >
                 {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                 {copiedPrompt ? 'Copied' : 'Copy'}
