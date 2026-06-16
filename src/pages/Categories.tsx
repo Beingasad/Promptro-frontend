@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Grid, LayoutGrid } from 'lucide-react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import { useCategories } from '../context/CategoryContext';
 import SEOMeta from '../components/common/SEOMeta';
 import { CategoriesSkeleton } from '../components/common/Skeleton';
@@ -10,13 +12,29 @@ const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57
 
 export default function Categories() {
   const { categories } = useCategories();
+  const [prompts, setPrompts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 450);
-    return () => clearTimeout(timer);
+    let isMounted = true;
+    const fetchPrompts = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/prompts`);
+        if (isMounted) {
+          setPrompts(Array.isArray(response.data) ? response.data : []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch prompts for categories page', err);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+    fetchPrompts();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -58,35 +76,40 @@ export default function Categories() {
           <CategoriesSkeleton />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0">
-            {categories.map((cat, i) => (
-              <motion.div
-                key={cat.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <Link 
-                  to={`/explore?category=${cat.name}`}
-                  className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5"
+            {categories.map((cat, i) => {
+              const latestPrompt = prompts.find(p => p.category === cat.name);
+              const coverImage = latestPrompt ? latestPrompt.image_url : (cat.image_url || DEFAULT_IMAGE);
+
+              return (
+                <motion.div
+                  key={cat.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
                 >
-                  <img 
-                    src={cat.image_url || DEFAULT_IMAGE} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
-                     <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{cat.name}</h3>
-                          <p className="text-white/60 text-[10px] sm:text-sm font-medium">Browse Prompts</p>
-                        </div>
-                        <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all shrink-0">
-                          <ArrowUpRight className="w-4 h-4 sm:w-6 sm:h-6" />
-                        </div>
-                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                  <Link 
+                    to={`/explore?category=${cat.name}`}
+                    className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5"
+                  >
+                    <img 
+                      src={coverImage} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
+                       <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{cat.name}</h3>
+                            <p className="text-white/60 text-[10px] sm:text-sm font-medium">Browse Prompts</p>
+                          </div>
+                          <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all shrink-0">
+                            <ArrowUpRight className="w-4 h-4 sm:w-6 sm:h-6" />
+                          </div>
+                       </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </div>
