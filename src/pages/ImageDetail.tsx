@@ -621,7 +621,7 @@ export default function ImageDetail() {
               </p>
             </section>
 
-            <div className="flex-1 min-h-0 flex flex-col gap-2 overflow-y-auto hide-scrollbar pb-2">
+            <div className="flex-1 min-h-0 flex flex-col gap-2 overflow-y-auto hide-scrollbar pb-2 rounded-t-[1.5rem] md:rounded-t-[2rem]">
               {renderPromptDetails()}
             </div>
           </div>
