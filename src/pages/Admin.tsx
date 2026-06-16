@@ -251,6 +251,7 @@ export default function Admin() {
     const saved = localStorage.getItem('promptro:admin_traffic_days');
     return saved ? Number(saved) : 7;
   });
+  const [showTrafficDropdown, setShowTrafficDropdown] = useState(false);
   const [selectedBar, setSelectedBar] = useState<number | null>(null);
   const [realAnalytics, setRealAnalytics] = useState<any>({
     totalVisits: 0,
@@ -1306,14 +1307,67 @@ export default function Admin() {
                         <h2 className="text-xl font-bold">Traffic Overview</h2>
                         <p className="text-xs text-[#756d8d] font-medium mt-1">Daily visitor statistics and engagement</p>
                       </div>
-                      <select 
-                        value={trafficDays}
-                        onChange={(e) => setTrafficDays(Number(e.target.value))}
-                        className="bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-xl px-4 py-2 text-xs font-bold outline-none cursor-pointer"
-                      >
-                        <option value={7}>Last 7 Days</option>
-                        <option value={30}>Last 30 Days</option>
-                      </select>
+                      <div className="relative dropdown-container">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowTrafficDropdown(!showTrafficDropdown);
+                          }}
+                          className="flex items-center gap-2 bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 hover:bg-primary/5 hover:text-primary dark:hover:bg-white/10 transition-all rounded-xl px-4 py-2 text-xs font-bold outline-none cursor-pointer text-[#171421] dark:text-white"
+                        >
+                          <span>{trafficDays === 7 ? 'Last 7 Days' : 'Last 30 Days'}</span>
+                          <ChevronDown className={cn("w-3.5 h-3.5 text-[#756d8d] transition-transform", showTrafficDropdown && "rotate-180")} />
+                        </button>
+
+                        <AnimatePresence>
+                          {showTrafficDropdown && (
+                            <>
+                              <div className="fixed inset-0 z-40" onClick={() => setShowTrafficDropdown(false)} />
+                              <motion.div
+                                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                                transition={{ duration: 0.15 }}
+                                className="absolute right-0 mt-2 w-40 rounded-2xl shadow-xl overflow-hidden z-50 p-1.5 modal-glass border border-[#e9e2f3] dark:border-white/10 text-left"
+                              >
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setTrafficDays(7);
+                                    setShowTrafficDropdown(false);
+                                  }}
+                                  className={cn(
+                                    "w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition-colors",
+                                    trafficDays === 7 
+                                      ? "bg-primary text-white" 
+                                      : "text-[#171421] dark:text-[#afa6c8] hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5"
+                                  )}
+                                >
+                                  Last 7 Days
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setTrafficDays(30);
+                                    setShowTrafficDropdown(false);
+                                  }}
+                                  className={cn(
+                                    "w-full text-left px-3 py-2 mt-0.5 rounded-xl text-xs font-bold transition-colors",
+                                    trafficDays === 30 
+                                      ? "bg-primary text-white" 
+                                      : "text-[#171421] dark:text-[#afa6c8] hover:bg-primary/5 hover:text-primary dark:hover:bg-white/5"
+                                  )}
+                                >
+                                  Last 30 Days
+                                </button>
+                              </motion.div>
+                            </>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
 
                     <div className={cn(
