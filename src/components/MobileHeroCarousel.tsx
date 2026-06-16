@@ -198,14 +198,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               </p>
             </div>
           ) : (
-            <a 
-              href={current.button_link || '#'}
-              onClick={(e) => {
-                if (current.prompt1 && current.prompt2) {
-                  e.preventDefault();
-                  setSelectedBannerForModal(current);
-                }
-              }}
+            <div 
               className={cn(
                 "group relative flex w-full items-center justify-between py-3 px-4 rounded-[1.35rem] shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-3xl overflow-hidden bg-gradient-to-br min-h-[120px] border-none transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10 animate-gradient-slow",
                 `${current.bg_gradient} ${getDarkGradient(current.bg_gradient)}`
@@ -228,9 +221,27 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                 <p className="text-[10px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-normal opacity-90 mt-0.5">
                   {current.subtitle}
                 </p>
-                <div className="mt-2 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 group-hover:scale-[1.05] group-hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button">
-                  <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
-                </div>
+                {current.prompt1 && current.prompt2 ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedBannerForModal(current);
+                    }}
+                    className="cursor-pointer mt-2 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 outline-none animate-shimmer-button"
+                  >
+                    <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
+                  </button>
+                ) : (
+                  <a
+                    href={current.button_link || '#'}
+                    onClick={(e) => e.stopPropagation()}
+                    className="cursor-pointer mt-2 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button"
+                  >
+                    <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
+                  </a>
+                )}
               </div>
 
               {current.image_url && (
@@ -259,7 +270,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                   </div>
                 </div>
               )}
-            </a>
+            </div>
           )}
         </motion.div>
       </AnimatePresence>
