@@ -393,7 +393,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
       }`}>
         <button 
           onClick={handleCategoryClick}
-          className="rounded-full bg-gradient-to-r from-[#6d4dec] to-[#ff6a3d] px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white transition-transform active:scale-95 md:px-3 md:py-1 md:text-[10px] shadow-sm whitespace-nowrap"
+          className="rounded-full bg-gradient-to-r from-[#6d4dec]/90 to-[#ff6a3d]/90 px-2.5 py-[3px] text-[9px] font-bold uppercase tracking-wider text-white transition-transform active:scale-95 md:px-3 md:py-[3.5px] md:text-[10px] shadow-sm whitespace-nowrap opacity-90 backdrop-blur-[4px] border border-white/10"
           aria-label={`View category ${prompt.category}`}
         >
           {prompt.category}
