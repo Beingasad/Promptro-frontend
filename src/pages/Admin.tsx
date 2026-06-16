@@ -2574,115 +2574,121 @@ export default function Admin() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {categories.map((cat) => (
-                    <div key={cat.id} className="relative glass-panel p-6 rounded-[2rem] flex flex-col group hover:border-primary/30 hover-glass-glow transition-all overflow-hidden">
-                      {uploadingCatId === cat.id && (
-                        <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
-                          <Loader2 className="w-8 h-8 text-white animate-spin mb-2" />
-                          <span className="text-[10px] font-black uppercase tracking-wider text-white">{uploadingCatText}</span>
-                        </div>
-                      )}
-                      {cat.image_url && (
-                        <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity">
-                          <img 
-                            src={cat.image_url} 
-                            className="w-full h-full object-cover" 
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.onerror = null;
-                              target.src = FALLBACK_IMAGE;
-                            }}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#171421] to-transparent" />
-                        </div>
-                      )}
-                      <div className="relative z-10 flex items-center justify-between w-full mb-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-lg shrink-0">
-                            {cat.name.charAt(0)}
+                  {categories.map((cat) => {
+                    const categoryPrompts = prompts.filter(p => p.category === cat.name);
+                    const latestPrompt = categoryPrompts[0];
+                    const coverImage = latestPrompt ? latestPrompt.image_url : cat.image_url;
+
+                    return (
+                      <div key={cat.id} className="relative glass-panel p-6 rounded-[2rem] flex flex-col group hover:border-primary/30 hover-glass-glow transition-all overflow-hidden">
+                        {uploadingCatId === cat.id && (
+                          <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
+                            <Loader2 className="w-8 h-8 text-white animate-spin mb-2" />
+                            <span className="text-[10px] font-black uppercase tracking-wider text-white">{uploadingCatText}</span>
                           </div>
-                          <div>
-                            <p className="font-bold text-[#171421] dark:text-white">{cat.name}</p>
-                            <p className="text-[10px] font-bold text-[#756d8d] uppercase tracking-wider">
-                              {prompts.filter(p => p.category === cat.name).length} Prompts
-                            </p>
+                        )}
+                        {coverImage && (
+                          <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity">
+                            <img 
+                              src={coverImage} 
+                              className="w-full h-full object-cover" 
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null;
+                                target.src = FALLBACK_IMAGE;
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#171421] to-transparent" />
                           </div>
-                        </div>
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                          <button 
-                            onClick={() => {
-                              const newName = prompt('Enter new name for ' + cat.name, cat.name);
-                              if (newName && newName !== cat.name) {
-                                updateCategory(cat.id, newName);
-                                addLog('Category Renamed', 'Admin', `Successfully renamed category "${cat.name}" to "${newName}"`, 'Success');
-                              }
-                            }}
-                            className="w-8 h-8 rounded-lg flex items-center justify-center text-[#756d8d] hover:bg-[#756d8d]/10"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
-                          <button 
-                            onClick={() => {
-                              triggerConfirm({
-                                title: 'Delete Category',
-                                message: `Are you sure you want to delete "${cat.name}" category permanently?`,
-                                type: 'danger',
-                                onConfirm: async () => {
-                                  try {
-                                    await deleteCategory(cat.id);
-                                    addLog('Category Deleted', 'Admin', `Successfully deleted category "${cat.name}"`, 'Success');
-                                  } catch {
-                                    addLog('Category Deletion Failed', 'Admin', `Failed to delete category "${cat.name}"`, 'Failed');
-                                  }
+                        )}
+                        <div className="relative z-10 flex items-center justify-between w-full mb-4">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-lg shrink-0">
+                              {cat.name.charAt(0)}
+                            </div>
+                            <div>
+                              <p className="font-bold text-[#171421] dark:text-white">{cat.name}</p>
+                              <p className="text-[10px] font-bold text-[#756d8d] uppercase tracking-wider">
+                                {categoryPrompts.length} Prompts
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                            <button 
+                              onClick={() => {
+                                const newName = prompt('Enter new name for ' + cat.name, cat.name);
+                                if (newName && newName !== cat.name) {
+                                  updateCategory(cat.id, newName);
+                                  addLog('Category Renamed', 'Admin', `Successfully renamed category "${cat.name}" to "${newName}"`, 'Success');
                                 }
-                              });
-                            }}
-                            className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                              }}
+                              className="w-8 h-8 rounded-lg flex items-center justify-center text-[#756d8d] hover:bg-[#756d8d]/10"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => {
+                                triggerConfirm({
+                                  title: 'Delete Category',
+                                  message: `Are you sure you want to delete "${cat.name}" category permanently?`,
+                                  type: 'danger',
+                                  onConfirm: async () => {
+                                    try {
+                                      await deleteCategory(cat.id);
+                                      addLog('Category Deleted', 'Admin', `Successfully deleted category "${cat.name}"`, 'Success');
+                                    } catch {
+                                      addLog('Category Deletion Failed', 'Admin', `Failed to delete category "${cat.name}"`, 'Failed');
+                                    }
+                                  }
+                                });
+                              }}
+                              className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                      <div className="relative z-10">
-                        <label className="text-xs font-bold text-primary flex items-center gap-2 cursor-pointer w-max hover:underline">
-                          <ImageIcon className="w-4 h-4" />
-                          Update Cover
-                          <input 
-                            type="file" 
-                            accept="image/*" 
-                            className="hidden" 
-                            disabled={uploadingCatId !== null}
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                try {
-                                  setUploadingCatId(cat.id);
-                                  setUploadingCatText('Optimizing cover...');
-                                  let compressedFile = file;
+                        <div className="relative z-10">
+                          <label className="text-xs font-bold text-primary flex items-center gap-2 cursor-pointer w-max hover:underline">
+                            <ImageIcon className="w-4 h-4" />
+                            Update Cover
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              className="hidden" 
+                              disabled={uploadingCatId !== null}
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
                                   try {
-                                    compressedFile = await compressImage(file);
-                                  } catch (compressErr: any) {
-                                    alert(compressErr.message || 'Image optimization failed.');
+                                    setUploadingCatId(cat.id);
+                                    setUploadingCatText('Optimizing cover...');
+                                    let compressedFile = file;
+                                    try {
+                                      compressedFile = await compressImage(file);
+                                    } catch (compressErr: any) {
+                                      alert(compressErr.message || 'Image optimization failed.');
+                                      setUploadingCatId(null);
+                                      return;
+                                    }
+                                    setUploadingCatText('Uploading...');
+                                    await updateCategory(cat.id, cat.name, compressedFile);
+                                    addLog('Category Cover Updated', 'Admin', `Successfully updated cover for category "${cat.name}"`, 'Success');
+                                  } catch (err) {
+                                    addLog('Category Cover Update Failed', 'Admin', `Failed to update cover for category "${cat.name}"`, 'Failed');
+                                    alert("Failed to upload category cover image.");
+                                  } finally {
                                     setUploadingCatId(null);
-                                    return;
+                                    setUploadingCatText('Uploading Cover...');
                                   }
-                                  setUploadingCatText('Uploading...');
-                                  await updateCategory(cat.id, cat.name, compressedFile);
-                                  addLog('Category Cover Updated', 'Admin', `Successfully updated cover for category "${cat.name}"`, 'Success');
-                                } catch (err) {
-                                  addLog('Category Cover Update Failed', 'Admin', `Failed to update cover for category "${cat.name}"`, 'Failed');
-                                  alert("Failed to upload category cover image.");
-                                } finally {
-                                  setUploadingCatId(null);
-                                  setUploadingCatText('Uploading Cover...');
                                 }
-                              }
-                            }}
-                          />
-                        </label>
+                              }}
+                            />
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
