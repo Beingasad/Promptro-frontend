@@ -247,7 +247,10 @@ export default function Admin() {
   const [deviceUsageMobile, setDeviceUsageMobile] = useState(72);
   const [realtimeViewsOffset, setRealtimeViewsOffset] = useState(0);
   const [realtimeLikesOffset, setRealtimeLikesOffset] = useState(0);
-  const [trafficDays, setTrafficDays] = useState<number>(7);
+  const [trafficDays, setTrafficDays] = useState<number>(() => {
+    const saved = localStorage.getItem('promptro:admin_traffic_days');
+    return saved ? Number(saved) : 7;
+  });
   const [selectedBar, setSelectedBar] = useState<number | null>(null);
   const [realAnalytics, setRealAnalytics] = useState<any>({
     totalVisits: 0,
@@ -800,6 +803,7 @@ export default function Admin() {
 
   useEffect(() => {
     fetchAnalytics(trafficDays);
+    localStorage.setItem('promptro:admin_traffic_days', String(trafficDays));
     setSelectedBar(null);
   }, [trafficDays]);
 
@@ -845,7 +849,7 @@ export default function Admin() {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [prompts]);
+  }, [prompts, trafficDays]);
 
   const updateForm = (key: keyof PromptForm, value: any) => {
     setForm((current) => ({ ...current, [key]: value }));
