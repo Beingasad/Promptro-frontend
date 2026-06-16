@@ -451,14 +451,14 @@ export default function ImageDetail() {
   const renderPromptDetails = () => (
     <>
       <section className="shrink-0 flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3 px-1">
+        <div className={`flex items-center justify-between gap-3 px-2 z-20 bg-[#faf8ff]/95 dark:bg-[#0d0b14]/95 backdrop-blur-md transition-all ${isPortrait ? 'sticky top-0 py-2 -mx-2 rounded-t-2xl' : 'px-1'}`}>
           <div className="flex items-center gap-3">
             <Sparkles className="h-6 w-6 text-primary" />
             <h2 className="text-lg font-bold text-[#3a344c] dark:text-[#e4dcf5]">Prompt</h2>
           </div>
           <button
             onClick={() => copyText(promptText, 'prompt')}
-            className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
+            className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 cursor-pointer"
           >
             {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
             {copiedPrompt ? 'Copied' : 'Copy'}
@@ -478,7 +478,7 @@ export default function ImageDetail() {
 
       {negativePrompt && (
         <section className="shrink-0 flex flex-col gap-3 mt-4">
-          <div className="flex items-center justify-between gap-3 px-1">
+          <div className={`flex items-center justify-between gap-3 px-2 z-20 bg-[#faf8ff]/95 dark:bg-[#0d0b14]/95 backdrop-blur-md transition-all ${isPortrait ? 'sticky top-0 py-2 -mx-2' : 'px-1'}`}>
             <div className="flex items-center gap-3">
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f05aa8]/12 text-[#f05aa8]">
                 <Minus className="h-5 w-5" />
@@ -487,7 +487,7 @@ export default function ImageDetail() {
             </div>
             <button
               onClick={() => copyText(negativePrompt, 'negative')}
-              className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
+              className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 cursor-pointer"
             >
               {copiedNegative ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
               {copiedNegative ? 'Copied' : 'Copy'}
@@ -621,7 +621,7 @@ export default function ImageDetail() {
               </p>
             </section>
 
-            <div className="flex-1 min-h-0 flex flex-col gap-2 overflow-y-auto hide-scrollbar pb-2">
+            <div className="flex-grow min-h-0 flex flex-col gap-2 overflow-y-auto hide-scrollbar pb-2 rounded-t-[1.5rem]">
               {renderPromptDetails()}
             </div>
           </div>
