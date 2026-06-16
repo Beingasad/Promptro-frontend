@@ -143,15 +143,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   return (
     <div className="hidden lg:grid grid-cols-2 gap-5 lg:flex-[1.8] min-w-0">
       {processedBanners.slice(0, 2).map((banner: any, index) => (
-        <motion.a
+        <motion.div
           key={banner.id}
-          href={banner.button_link}
-          onClick={(e) => {
-            if (banner.prompt1 && banner.prompt2) {
-              e.preventDefault();
-              setSelectedBannerForModal(banner);
-            }
-          }}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
@@ -179,10 +172,29 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
             <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-relaxed opacity-90 max-w-[195px] xl:max-w-[220px]">
               {banner.subtitle}
             </p>
-            <div className="group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95">
-              <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
-              <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform duration-300" />
-            </div>
+            {banner.prompt1 && banner.prompt2 ? (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelectedBannerForModal(banner);
+                }}
+                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95 outline-none"
+              >
+                <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
+                <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform duration-300" />
+              </button>
+            ) : (
+              <a
+                href={banner.button_link}
+                onClick={(e) => e.stopPropagation()}
+                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95"
+              >
+                <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
+                <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform duration-300" />
+              </a>
+            )}
           </div>
 
           {/* Visual Side (Double Image Collage) */}
@@ -210,7 +222,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
               </div>
             )}
           </div>
-        </motion.a>
+        </motion.div>
       ))}
 
       {createPortal(
@@ -235,11 +247,11 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                 exit={{ opacity: 0, scale: 0.94, y: 15 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl p-5 text-left"
+                className="relative w-full max-w-[28rem] overflow-hidden rounded-[2rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl p-5 text-left"
               >
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#e9e2f3] dark:border-white/5">
                   <div>
-                    <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white truncate max-w-[14rem]">{selectedBannerForModal.title}</h3>
+                    <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white truncate max-w-[20rem]">{selectedBannerForModal.title}</h3>
                     <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium mt-0.5">Select a prompt to view details</p>
                   </div>
                   <button 
