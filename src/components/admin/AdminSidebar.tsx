@@ -32,7 +32,7 @@ interface AdminSidebarProps {
 export function AdminSidebar({ activeTab, onTabChange, isOpen, onClose }: AdminSidebarProps) {
   return (
     <aside className={cn(
-      "fixed lg:static inset-y-0 left-0 w-72 h-full bg-white dark:bg-[#0d0b14] border-r border-[#e9e2f3] dark:border-white/5 flex flex-col p-5 z-[200] overflow-y-auto hide-scrollbar shrink-0 transition-transform duration-300 ease-in-out shadow-2xl lg:shadow-none",
+      "fixed lg:static inset-y-0 left-0 w-72 h-full bg-white/70 dark:bg-[#0d0b14]/70 backdrop-blur-2xl border-r border-white/20 dark:border-white/10 flex flex-col p-5 z-[200] overflow-y-auto hide-scrollbar shrink-0 transition-transform duration-300 ease-in-out shadow-2xl lg:shadow-none",
       isOpen ? "translate-x-0" : "-translate-x-full lg:hidden"
     )}>
       <div className="flex items-center justify-between gap-2 mb-6">
@@ -98,7 +98,7 @@ export function AdminSidebar({ activeTab, onTabChange, isOpen, onClose }: AdminS
           </div>
         </div>
 
-        <div className="px-4 py-4 rounded-2xl bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10">
+        <div className="px-4 py-4 rounded-2xl pill-glass border border-white/10">
           <p className="text-[9px] font-bold text-[#756d8d] uppercase tracking-wider mb-3">System Status</p>
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center justify-between">
@@ -116,7 +116,7 @@ export function AdminSidebar({ activeTab, onTabChange, isOpen, onClose }: AdminS
       </nav>
 
       <div className="mt-auto pt-4 flex flex-col gap-2">
-        <div className="p-4 rounded-[1.25rem] bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 flex flex-col gap-2 relative overflow-hidden group">
+        <div className="p-4 rounded-[1.25rem] pill-glass border border-white/10 flex flex-col gap-2 relative overflow-hidden group">
           <div className="flex items-center gap-2 text-primary">
             <Eye className="w-3.5 h-3.5" />
             <span className="text-[9px] font-bold uppercase tracking-wider">Preview Live</span>

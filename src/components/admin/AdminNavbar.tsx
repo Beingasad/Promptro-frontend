@@ -89,7 +89,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
         <button 
           onClick={onToggleSidebar}
           className={cn(
-            "w-10 h-10 rounded-xl flex items-center justify-center bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 text-[#756d8d] dark:text-[#afa6c8] hover:bg-primary/10 hover:text-primary transition-all shadow-sm",
+            "w-10 h-10 rounded-xl flex items-center justify-center bg-white/50 dark:bg-white/5 border border-white/20 dark:border-white/10 backdrop-blur-md text-[#756d8d] dark:text-[#afa6c8] hover:bg-primary/10 hover:text-primary transition-all shadow-sm",
             isSidebarOpen ? "lg:hidden" : "lg:flex"
           )}
           title="Toggle Sidebar"
@@ -136,7 +136,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute right-0 mt-3 w-80 bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden z-50"
+                  className="absolute right-0 mt-3 w-80 rounded-3xl shadow-2xl overflow-hidden z-50 modal-glass"
                 >
                   <div className="p-5 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
                     <h3 className="font-bold">Notifications</h3>
@@ -177,7 +177,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
               setShowProfileMenu(!showProfileMenu);
               setShowNotifications(false);
             }}
-            className="flex items-center gap-1.5 sm:gap-3 p-0.5 sm:p-1 sm:pr-3 rounded-xl border border-transparent sm:border-[#e9e2f3] dark:border-transparent sm:dark:border-white/10 bg-transparent sm:bg-white sm:dark:bg-white/5 transition-all group cursor-pointer"
+            className="flex items-center gap-1.5 sm:gap-3 p-0.5 sm:p-1 sm:pr-3 rounded-xl border border-transparent bg-transparent transition-all group cursor-pointer sm:pill-glass"
           >
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden shadow-sm">
               <img 
@@ -201,7 +201,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute right-0 mt-3 w-48 bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 p-1.5"
+                  className="absolute right-0 mt-3 w-48 rounded-2xl shadow-2xl overflow-hidden z-50 p-1.5 modal-glass"
                 >
                   <button 
                     onClick={handleSignOut}

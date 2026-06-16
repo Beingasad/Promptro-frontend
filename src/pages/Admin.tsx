@@ -245,6 +245,8 @@ export default function Admin() {
   const [deviceUsageMobile, setDeviceUsageMobile] = useState(72);
   const [realtimeViewsOffset, setRealtimeViewsOffset] = useState(0);
   const [realtimeLikesOffset, setRealtimeLikesOffset] = useState(0);
+  const [trafficDays, setTrafficDays] = useState<number>(7);
+  const [selectedBar, setSelectedBar] = useState<number | null>(null);
   const [realAnalytics, setRealAnalytics] = useState<any>({
     totalVisits: 0,
     uniqueVisitors: 0,
@@ -715,9 +717,9 @@ export default function Admin() {
     }
   };
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = async (days = trafficDays) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/analytics/summary`);
+      const response = await axios.get(`${API_BASE_URL}/api/analytics/summary`, { params: { days } });
       setRealAnalytics(response.data);
     } catch {
       console.error('Failed to fetch analytics');
@@ -791,60 +793,26 @@ export default function Admin() {
     fetchSupportStats();
     fetchBanners();
     fetchAdminNotifications();
-    fetchAnalytics();
     fetchUsers();
   }, []);
 
   useEffect(() => {
+    fetchAnalytics(trafficDays);
+    setSelectedBar(null);
+  }, [trafficDays]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      // 1. Fluctuating Active Users
-      setActiveUsersNow(prev => {
-        const change = Math.floor(Math.random() * 5) - 2; // -2 to +2
-        return Math.max(10, Math.min(100, prev + change));
-      });
+      // 1. Fetch fresh real analytics from the backend database periodically
+      fetchAnalytics(trafficDays);
 
-      // 2. Fluctuating CTR
-      setAvgCTR(prev => {
-        const change = (Math.random() * 0.4) - 0.2; // -0.2 to +0.2
-        return parseFloat(Math.max(1.0, Math.min(10.0, prev + change)).toFixed(2));
-      });
-
-      // 3. Fluctuating Conversion Rate
-      setConversionRate(prev => {
-        const change = (Math.random() * 0.6) - 0.3; // -0.3 to +0.3
-        return parseFloat(Math.max(5.0, Math.min(25.0, prev + change)).toFixed(2));
-      });
-
-      // 4. Fluctuating Traffic Sources (making sure they sum to 100)
-      setTrafficSources(prev => {
-        const directChange = Math.floor(Math.random() * 3) - 1; // -1, 0, 1
-        const socialChange = Math.floor(Math.random() * 3) - 1;
-        const searchChange = Math.floor(Math.random() * 3) - 1;
-        
-        let newDirect = Math.max(30, Math.min(60, prev[0].value + directChange));
-        let newSocial = Math.max(15, Math.min(45, prev[1].value + socialChange));
-        let newSearch = Math.max(5, Math.min(30, prev[2].value + searchChange));
-        let newOthers = 100 - (newDirect + newSocial + newSearch);
-        if (newOthers < 2) {
-          newOthers = 2;
-          newDirect = 100 - (newSocial + newSearch + newOthers);
-        }
-
-        return [
-          { ...prev[0], value: newDirect },
-          { ...prev[1], value: newSocial },
-          { ...prev[2], value: newSearch },
-          { ...prev[3], value: newOthers }
-        ];
-      });
-
-      // 5. Fluctuating Mobile Device Usage
+      // 2. Fluctuating Mobile Device Usage
       setDeviceUsageMobile(prev => {
         const change = Math.floor(Math.random() * 3) - 1; // -1 to +1
         return Math.max(60, Math.min(85, prev + change));
       });
 
-      // 6. Fluctuating New Users
+      // 3. Fluctuating New Users
       setNewUsers(prev => {
         if (Math.random() > 0.7) {
           return prev + 1;
@@ -852,7 +820,7 @@ export default function Admin() {
         return prev;
       });
 
-      // 7. Append simulated user action log
+      // 4. Append simulated user action log
       if (prompts.length > 0) {
         const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
         const actions = [
@@ -1252,10 +1220,23 @@ export default function Admin() {
     { label: 'Total Likes', value: formatNumber(totalLikesCalculated), icon: Heart, color: 'text-pink-500', bg: 'bg-pink-500/10', trend: '+5.2%', isUp: true },
     { label: 'Total Visits', value: formatNumber(totalVisits), icon: Globe, color: 'text-primary', bg: 'bg-primary/10', trend: '+14.2%', isUp: true },
     { label: 'Unique Visitors', value: formatNumber(uniqueVisitors), icon: Users, color: 'text-[#8b5cf6]', bg: 'bg-[#8b5cf6]/10', trend: '+11.8%', isUp: true },
-    { label: 'Avg. CTR', value: `${avgCTR}%`, icon: MousePointer2, color: 'text-amber-500', bg: 'bg-amber-500/10', trend: '-1.2%', isUp: false },
+    { label: 'Avg. CTR', value: `${realAnalytics.avgCTR ?? 4.2}%`, icon: MousePointer2, color: 'text-amber-500', bg: 'bg-amber-500/10', trend: '-1.2%', isUp: false },
   ];
 
   const trafficData = realAnalytics.trafficSources;
+
+  const getBarLabel = (index: number, totalDays: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (totalDays - 1 - index));
+    if (totalDays === 7) {
+      return d.toLocaleDateString('en-US', { weekday: 'short' });
+    } else {
+      if (index % 5 === 0 || index === totalDays - 1) {
+        return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+      }
+      return '';
+    }
+  };
 
   return (
     <ErrorBoundary>
@@ -1291,7 +1272,7 @@ export default function Admin() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-6">
                   {mainStats.map((stat, i) => (
-                    <div key={i} className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-6 rounded-3xl flex flex-col gap-4 group hover:shadow-xl hover:shadow-primary/5 transition-all">
+                    <div key={i} className="glass-panel p-6 rounded-3xl flex flex-col gap-4 group hover-glass-glow glass-shine transition-all">
                       <div className="flex items-center justify-between">
                         <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-12", stat.bg, stat.color)}>
                           <stat.icon className="w-6 h-6" />
@@ -1310,42 +1291,71 @@ export default function Admin() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
-                  <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2.5rem] p-8">
+                  <div 
+                    onClick={() => setSelectedBar(null)}
+                    className="glass-panel rounded-[2.5rem] p-8"
+                  >
                     <div className="flex items-center justify-between mb-8">
                       <div>
                         <h2 className="text-xl font-bold">Traffic Overview</h2>
                         <p className="text-xs text-[#756d8d] font-medium mt-1">Daily visitor statistics and engagement</p>
                       </div>
-                      <select className="bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-xl px-4 py-2 text-xs font-bold outline-none">
-                        <option>Last 7 Days</option>
-                        <option>Last 30 Days</option>
+                      <select 
+                        value={trafficDays}
+                        onChange={(e) => setTrafficDays(Number(e.target.value))}
+                        className="bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-xl px-4 py-2 text-xs font-bold outline-none cursor-pointer"
+                      >
+                        <option value={7}>Last 7 Days</option>
+                        <option value={30}>Last 30 Days</option>
                       </select>
                     </div>
 
-                    <div className="h-64 flex items-end justify-between gap-2 px-2">
+                    <div className={cn(
+                      "h-64 flex items-end justify-between px-1 sm:px-2",
+                      trafficDays === 30 ? "gap-[3.5px] sm:gap-2" : "gap-2 sm:gap-4"
+                    )}>
                        {dailyVisits.map((v: number, i: number) => {
-                         const h = barHeights[i];
-                         return (
-                           <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
-                             <div className="w-full h-48 relative flex items-end">
-                               <motion.div 
-                                 initial={{ height: 0 }}
-                                 animate={{ height: `${h}%` }}
-                                 className="w-full max-w-[40px] mx-auto bg-gradient-to-t from-primary/40 to-primary rounded-t-xl group-hover:to-secondary transition-all cursor-pointer relative"
-                               >
-                                 <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#171421] text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 shadow-md">
-                                   {formatNumber(v)} visits
-                                 </div>
-                               </motion.div>
-                             </div>
-                             <span className="text-[10px] font-bold text-[#756d8d] uppercase">{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}</span>
-                           </div>
-                         );
+                          const h = barHeights[i];
+                          return (
+                            <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
+                              <div className="w-full h-48 relative flex items-end">
+                                <motion.div 
+                                  initial={{ height: 0 }}
+                                  animate={{ height: `${h}%` }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSelectedBar(prev => prev === i ? null : i);
+                                  }}
+                                  className="w-full max-w-[40px] mx-auto bg-gradient-to-t from-primary/40 to-primary rounded-t-xl group-hover:to-secondary transition-all cursor-pointer relative"
+                                >
+                                  <div className={cn(
+                                    "absolute -top-10 left-1/2 -translate-x-1/2 bg-[#171421] text-white text-[10px] font-bold px-2 py-1 rounded transition-opacity whitespace-nowrap z-30 shadow-md pointer-events-none",
+                                    selectedBar === i ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                  )}>
+                                    {formatNumber(v)} visits
+                                  </div>
+                                </motion.div>
+                              </div>
+                              <span className="text-[9px] sm:text-[10px] font-bold text-[#756d8d] uppercase tracking-tighter sm:tracking-normal">{getBarLabel(i, trafficDays)}</span>
+                            </div>
+                          );
                        })}
                     </div>
+                    {selectedBar !== null && dailyVisits[selectedBar] !== undefined && (
+                      <div className="mt-6 flex justify-center items-center animate-fade-in">
+                        <div className="text-[11px] sm:text-xs font-bold text-primary dark:text-secondary bg-primary/10 dark:bg-secondary/10 px-4 py-2 rounded-full border border-primary/20 dark:border-secondary/20 shadow-sm">
+                          {(() => {
+                            const d = new Date();
+                            d.setDate(d.getDate() - (trafficDays - 1 - selectedBar));
+                            const formattedDate = d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                            return `${formattedDate}: ${formatNumber(dailyVisits[selectedBar])} visits`;
+                          })()}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2.5rem] p-8 flex flex-col gap-6">
+                  <div className="glass-panel rounded-[2.5rem] p-8 flex flex-col gap-6">
                     <div>
                       <h2 className="text-xl font-bold">Traffic Sources</h2>
                       <p className="text-xs text-[#756d8d] font-medium mt-1">Where your visitors come from</p>
@@ -1384,15 +1394,15 @@ export default function Admin() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[2.5rem] p-8">
+                  <div className="glass-panel rounded-[2.5rem] p-8">
                      <h3 className="text-lg font-bold mb-6">Real-time Insights</h3>
                      <div className="flex flex-col gap-6">
                         {[
-                          { icon: Users, label: 'Active Users Now', value: String(activeUsersNow), color: 'text-primary' },
-                          { icon: Clock, label: 'Avg. Session Duration', value: '4m 32s', color: 'text-blue-400' },
-                          { icon: TrendingUp, label: 'Conversion Rate', value: `${conversionRate}%`, color: 'text-green-500' },
+                          { icon: Users, label: 'Active Users Now', value: String(realAnalytics.activeUsers ?? 1), color: 'text-primary' },
+                          { icon: Clock, label: 'Avg. Session Duration', value: realAnalytics.avgSessionDuration ?? '4m 32s', color: 'text-blue-400' },
+                          { icon: TrendingUp, label: 'Conversion Rate', value: `${realAnalytics.conversionRate ?? 12.4}%`, color: 'text-green-500' },
                         ].map((item, i) => (
-                          <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-[#f8f7fc] dark:bg-white/5">
+                          <div key={i} className="flex items-center justify-between p-4 rounded-2xl pill-glass border border-white/10">
                             <div className="flex items-center gap-4">
                                <div className={cn("w-10 h-10 rounded-xl bg-white dark:bg-white/10 flex items-center justify-center", item.color)}>
                                   <item.icon className="w-5 h-5" />
@@ -1437,23 +1447,23 @@ export default function Admin() {
 
                 {/* Users statistics row */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                  <div className="glass-panel p-5 rounded-[1.5rem]">
                     <span className="text-[10px] font-bold text-[#756d8d] uppercase tracking-wider">Total Users</span>
                     <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">{users.length}</p>
                   </div>
-                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                  <div className="glass-panel p-5 rounded-[1.5rem]">
                     <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Verified Users</span>
                     <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">
                       {users.filter(u => u.email_verified).length}
                     </p>
                   </div>
-                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                  <div className="glass-panel p-5 rounded-[1.5rem]">
                     <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Google Login</span>
                     <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">
                       {users.filter(u => u.provider === 'google').length}
                     </p>
                   </div>
-                  <div className="p-5 rounded-[1.5rem] bg-white dark:bg-[#1c1a26] border border-[#e9e2f3] dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.04)]">
+                  <div className="glass-panel p-5 rounded-[1.5rem]">
                     <span className="text-[10px] font-bold text-purple-500 uppercase tracking-wider">OTP Login</span>
                     <p className="text-3xl font-black text-[#171421] dark:text-white mt-1">
                       {users.filter(u => u.provider === 'email').length}
@@ -1461,7 +1471,7 @@ export default function Admin() {
                   </div>
                 </div>
 
-                <div className="rounded-[2rem] border border-[#e9e2f3] dark:border-white/10 bg-white/50 dark:bg-white/5 p-6 backdrop-blur-md overflow-hidden">
+                <div className="glass-panel rounded-[2rem] p-6 overflow-hidden">
                   <div className="flex items-center justify-between mb-6">
                     <span className="text-lg font-black text-[#171421] dark:text-white">Registered Users ({users.length})</span>
                     <button 
@@ -1600,12 +1610,12 @@ export default function Admin() {
 
                 <div className="grid grid-cols-1 gap-6">
                   {banners.length === 0 ? (
-                    <div className="p-10 text-center rounded-[2rem] border border-[#e9e2f3] dark:border-white/10 bg-white/50 dark:bg-white/5">
+                    <div className="glass-panel p-10 text-center rounded-[2rem]">
                       <p className="text-[#756d8d] font-bold">No banners created yet.</p>
                     </div>
                   ) : (
                     banners.map(banner => (
-                      <div key={banner.id} className={cn("rounded-[2rem] border border-[#e9e2f3] dark:border-white/10 p-6 flex gap-6 items-center", banner.is_active ? "bg-white dark:bg-[#1c1a26]" : "bg-[#f8f7fc] opacity-60")}>
+                      <div key={banner.id} className={cn("glass-panel rounded-[2rem] p-6 flex gap-6 items-center", !banner.is_active && "opacity-60")}>
                         {banner.image_url ? (
                           <div className={cn("w-32 h-20 rounded-xl bg-gradient-to-br flex-shrink-0 flex items-center justify-center overflow-hidden", banner.bg_gradient)}>
                             <img src={banner.image_url} alt="banner" className="h-[90%] w-auto object-contain drop-shadow-2xl" />
@@ -2116,7 +2126,7 @@ export default function Admin() {
                       </div>
                       
                       <div 
-                        className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[1.8rem] overflow-hidden group shadow-sm transition-all duration-500"
+                        className="glass-panel rounded-[1.8rem] overflow-hidden group shadow-sm transition-all duration-500"
                         style={cssRatio ? { aspectRatio: cssRatio } : {}}
                       >
                         <div className={cn("relative overflow-hidden w-full h-full", !cssRatio && "aspect-square")}>
@@ -2171,7 +2181,7 @@ export default function Admin() {
                           </div>
                         </div>
 
-                        <div className="rounded-[1.75rem] border border-white/70 dark:border-white/10 bg-white/60 dark:bg-white/5 p-5 shadow-sm backdrop-blur-xl">
+                        <div className="glass-panel rounded-[1.75rem] p-5 shadow-sm">
                           <div className="mb-4 flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                               <img src="/brand/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
@@ -2182,12 +2192,12 @@ export default function Admin() {
                               Copy
                             </div>
                           </div>
-                          <div className="rounded-[1.3rem] border border-[#ebe6f4] dark:border-white/5 bg-white/50 dark:bg-black/20 p-4.5 text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#afa6c8] min-h-[130px]">
+                          <div className="rounded-[1.3rem] pill-glass border border-white/10 p-4.5 text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#afa6c8] min-h-[130px]">
                             {form.prompt_text || 'Your main prompt will appear here...'}
                           </div>
                         </div>
 
-                        <div className="rounded-[1.75rem] border border-white/70 dark:border-white/10 bg-white/60 dark:bg-white/5 p-4.5 shadow-sm backdrop-blur-xl">
+                        <div className="glass-panel rounded-[1.75rem] p-4.5 shadow-sm">
                           <div className="mb-3.5 flex items-center justify-between gap-3">
                             <div className="flex items-center gap-2.5">
                               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#f05aa8]/12 text-[#f05aa8]">
@@ -2200,7 +2210,7 @@ export default function Admin() {
                               Copy
                             </div>
                           </div>
-                          <div className="rounded-[1.3rem] border border-[#ebe6f4] dark:border-white/5 bg-white/50 dark:bg-black/20 p-4.5 text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#afa6c8] min-h-[80px]">
+                          <div className="rounded-[1.3rem] pill-glass border border-white/10 p-4.5 text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#afa6c8] min-h-[80px]">
                             {form.negative_prompt || 'No negative prompt provided...'}
                           </div>
                         </div>
@@ -2279,7 +2289,7 @@ export default function Admin() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
-                        className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[1.5rem] overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
+                        className="glass-panel rounded-[1.5rem] overflow-hidden group hover-glass-glow transition-all duration-500"
                       >
                         <div className="aspect-square relative overflow-hidden">
                           <ImageGallery
@@ -2352,7 +2362,7 @@ export default function Admin() {
                     <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#171421] dark:text-white bg-clip-text bg-gradient-to-r from-[#171421] via-primary to-[#ff6a3d] dark:from-white dark:to-[#afa6c8]">Categories</h1>
                     <p className="text-[#756d8d] dark:text-[#afa6c8] font-medium mt-1">Manage prompt categories and taxonomy</p>
                   </div>
-                  <div className="flex items-center gap-3 bg-white dark:bg-white/5 p-2 rounded-2xl border border-[#e9e2f3] dark:border-white/10 shadow-sm w-full sm:w-auto justify-between sm:justify-start">
+                  <div className="flex items-center gap-3 pill-glass p-2 rounded-2xl border border-white/10 w-full sm:w-auto justify-between sm:justify-start">
                     <label className="relative flex items-center justify-center cursor-pointer shrink-0">
                       {newCatImagePreview ? (
                         <div className="relative group w-10 h-10 rounded-xl overflow-hidden shadow-md">
@@ -2470,7 +2480,7 @@ export default function Admin() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {categories.map((cat) => (
-                    <div key={cat.id} className="relative bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-6 rounded-[2rem] flex flex-col group hover:border-primary/30 transition-all overflow-hidden">
+                    <div key={cat.id} className="relative glass-panel p-6 rounded-[2rem] flex flex-col group hover:border-primary/30 hover-glass-glow transition-all overflow-hidden">
                       {uploadingCatId === cat.id && (
                         <div className="absolute inset-0 z-20 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-center p-4">
                           <Loader2 className="w-8 h-8 text-white animate-spin mb-2" />
@@ -3299,7 +3309,7 @@ export default function Admin() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-full max-w-2xl bg-white dark:bg-[#171421] shadow-2xl z-[70] overflow-y-auto"
+              className="fixed top-0 right-0 h-full w-full max-w-2xl bg-white/70 dark:bg-[#171421]/72 backdrop-blur-3xl border-l border-white/20 dark:border-white/10 shadow-2xl z-[70] overflow-y-auto"
             >
               <div className="p-8 flex flex-col gap-8">
                 <div className="flex items-center justify-between">
