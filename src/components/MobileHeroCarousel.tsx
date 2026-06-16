@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { ChevronRight, Sparkles, Flame, Zap, Star } from 'lucide-react';
+import { ChevronRight, Sparkles, Flame, Zap, Star, X } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { MobileHeroCarouselSkeleton } from './common/Skeleton';
 import { Prompt } from './ImageCard';
@@ -46,6 +46,7 @@ interface MobileHeroCarouselProps {
 }
 
 export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHeroCarouselProps) {
+  const [selectedBannerForModal, setSelectedBannerForModal] = useState<any | null>(null);
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
       const cached = localStorage.getItem('promptro_mobile_banners');
@@ -118,6 +119,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
       let link = banner.button_link;
       let title = banner.title;
       let subtitle = banner.subtitle;
+      let prompt1: any = null;
+      let prompt2: any = null;
 
       if (tag.includes('NEW') && latest.length >= 2) {
         img = img || latest[0].image_url;
@@ -125,12 +128,16 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         link = `/prompt/${latest[0].id}`;
         title = 'Newly Added Prompts';
         subtitle = `New: ${latest[0].title}`;
+        prompt1 = latest[0];
+        prompt2 = latest[1];
       } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length >= 2) {
         img = img || loved[0].image_url;
         secImg = loved[1].image_url;
         link = `/prompt/${loved[0].id}`;
         title = 'Most Loved Prompts';
         subtitle = banner.subtitle;
+        prompt1 = loved[0];
+        prompt2 = loved[1];
       }
 
       result.push({
@@ -140,7 +147,9 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         subtitle,
         image_url: img,
         secondary_image: secImg,
-        button_link: link
+        button_link: link,
+        prompt1,
+        prompt2
       });
     });
 
@@ -190,6 +199,12 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
           ) : (
             <a 
               href={current.button_link || '#'}
+              onClick={(e) => {
+                if (current.prompt1 && current.prompt2) {
+                  e.preventDefault();
+                  setSelectedBannerForModal(current);
+                }
+              }}
               className={cn(
                 "group relative flex w-full items-center justify-between py-3 px-4 rounded-[1.35rem] shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-3xl overflow-hidden bg-gradient-to-br min-h-[120px] border border-[#70639d]/22 dark:border-black/40 transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10 animate-gradient-slow",
                 `${current.bg_gradient} ${getDarkGradient(current.bg_gradient)}`
@@ -246,6 +261,87 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
             </a>
           )}
         </motion.div>
+      </AnimatePresence>
+
+      {/* Double Image Selector Modal */}
+      <AnimatePresence>
+        {selectedBannerForModal && (
+          <>
+            <div 
+              onClick={() => setSelectedBannerForModal(null)} 
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[200] flex items-center justify-center p-4"
+            >
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-xs sm:max-w-sm rounded-3xl modal-glass border border-white/20 dark:border-white/10 p-5 relative overflow-hidden text-left"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="text-base font-bold text-[#171421] dark:text-white">{selectedBannerForModal.title}</h3>
+                    <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium mt-0.5">Select a prompt to view details</p>
+                  </div>
+                  <button 
+                    onClick={() => setSelectedBannerForModal(null)}
+                    className="w-7 h-7 rounded-full flex items-center justify-center bg-[#f8f7fc] dark:bg-white/5 hover:bg-primary/10 hover:text-primary transition-all text-[#756d8d] dark:text-[#afa6c8] cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Prompt 1 */}
+                  {selectedBannerForModal.prompt1 && (
+                    <a 
+                      href={`/prompt/${selectedBannerForModal.prompt1.id}`}
+                      onClick={() => setSelectedBannerForModal(null)}
+                      className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
+                    >
+                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md">
+                        <img 
+                          src={selectedBannerForModal.prompt1.image_url} 
+                          alt={selectedBannerForModal.prompt1.title} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="px-0.5 text-left">
+                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option 1</span>
+                        <h4 className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
+                          {selectedBannerForModal.prompt1.title}
+                        </h4>
+                      </div>
+                    </a>
+                  )}
+
+                  {/* Prompt 2 */}
+                  {selectedBannerForModal.prompt2 && (
+                    <a 
+                      href={`/prompt/${selectedBannerForModal.prompt2.id}`}
+                      onClick={() => setSelectedBannerForModal(null)}
+                      className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
+                    >
+                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md">
+                        <img 
+                          src={selectedBannerForModal.prompt2.image_url} 
+                          alt={selectedBannerForModal.prompt2.title} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="px-0.5 text-left">
+                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option 2</span>
+                        <h4 className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
+                          {selectedBannerForModal.prompt2.title}
+                        </h4>
+                      </div>
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
       </AnimatePresence>
     </div>
   );

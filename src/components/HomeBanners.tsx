@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { ChevronRight, Sparkles, Flame, Zap, Star } from 'lucide-react';
+import { ChevronRight, Sparkles, Flame, Zap, Star, X } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { HomeBannersSkeleton } from './common/Skeleton';
 import { Prompt } from './ImageCard';
@@ -45,6 +45,7 @@ interface HomeBannersProps {
 }
 
 export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProps) {
+  const [selectedBannerForModal, setSelectedBannerForModal] = useState<any | null>(null);
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
       const cached = localStorage.getItem('promptro_home_banners');
@@ -107,7 +108,9 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           subtitle: `New: ${latest[0].title}`,
           image_url: banner.image_url || latest[0].image_url,
           secondary_image: latest[1].image_url,
-          button_link: `/prompt/${latest[0].id}`
+          button_link: `/prompt/${latest[0].id}`,
+          prompt1: latest[0],
+          prompt2: latest[1]
         };
       }
       
@@ -122,7 +125,9 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           subtitle: banner.subtitle,
           image_url: banner.image_url || loved[0].image_url,
           secondary_image: loved[1].image_url,
-          button_link: `/prompt/${loved[0].id}`
+          button_link: `/prompt/${loved[0].id}`,
+          prompt1: loved[0],
+          prompt2: loved[1]
         };
       }
 
@@ -140,6 +145,12 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
         <motion.a
           key={banner.id}
           href={banner.button_link}
+          onClick={(e) => {
+            if (banner.prompt1 && banner.prompt2) {
+              e.preventDefault();
+              setSelectedBannerForModal(banner);
+            }
+          }}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
@@ -200,6 +211,93 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           </div>
         </motion.a>
       ))}
+
+      {/* Double Image Selector Modal */}
+      <AnimatePresence>
+        {selectedBannerForModal && (
+          <>
+            <div 
+              onClick={() => setSelectedBannerForModal(null)} 
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[200] flex items-center justify-center p-4"
+            >
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-lg rounded-3xl modal-glass border border-white/20 dark:border-white/10 p-6 md:p-8 relative overflow-hidden text-left"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-xl font-bold text-[#171421] dark:text-white">{selectedBannerForModal.title}</h3>
+                    <p className="text-xs text-[#756d8d] dark:text-[#afa6c8] font-medium mt-1">Select a prompt to view details</p>
+                  </div>
+                  <button 
+                    onClick={() => setSelectedBannerForModal(null)}
+                    className="w-8 h-8 rounded-full flex items-center justify-center bg-[#f8f7fc] dark:bg-white/5 hover:bg-primary/10 hover:text-primary transition-all text-[#756d8d] dark:text-[#afa6c8] cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                  {/* Prompt 1 */}
+                  {selectedBannerForModal.prompt1 && (
+                    <a 
+                      href={`/prompt/${selectedBannerForModal.prompt1.id}`}
+                      onClick={() => setSelectedBannerForModal(null)}
+                      className="group flex flex-col gap-3 p-3 rounded-2xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
+                    >
+                      <div className="aspect-[4/5] w-full rounded-xl overflow-hidden shadow-md">
+                        <img 
+                          src={selectedBannerForModal.prompt1.image_url} 
+                          alt={selectedBannerForModal.prompt1.title} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="px-1 text-left">
+                        <span className="text-[9px] font-black uppercase text-primary tracking-wider block">Option 1</span>
+                        <h4 className="text-sm font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
+                          {selectedBannerForModal.prompt1.title}
+                        </h4>
+                        <span className="text-[10px] font-medium text-[#756d8d] dark:text-[#afa6c8] block mt-0.5">
+                          {selectedBannerForModal.prompt1.category}
+                        </span>
+                      </div>
+                    </a>
+                  )}
+
+                  {/* Prompt 2 */}
+                  {selectedBannerForModal.prompt2 && (
+                    <a 
+                      href={`/prompt/${selectedBannerForModal.prompt2.id}`}
+                      onClick={() => setSelectedBannerForModal(null)}
+                      className="group flex flex-col gap-3 p-3 rounded-2xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
+                    >
+                      <div className="aspect-[4/5] w-full rounded-xl overflow-hidden shadow-md">
+                        <img 
+                          src={selectedBannerForModal.prompt2.image_url} 
+                          alt={selectedBannerForModal.prompt2.title} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="px-1 text-left">
+                        <span className="text-[9px] font-black uppercase text-primary tracking-wider block">Option 2</span>
+                        <h4 className="text-sm font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
+                          {selectedBannerForModal.prompt2.title}
+                        </h4>
+                        <span className="text-[10px] font-medium text-[#756d8d] dark:text-[#afa6c8] block mt-0.5">
+                          {selectedBannerForModal.prompt2.category}
+                        </span>
+                      </div>
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
