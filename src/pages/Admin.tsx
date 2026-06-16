@@ -52,6 +52,8 @@ import {
   MailOpen,
   Mail,
   CircleDot,
+  Smartphone,
+  Monitor,
 } from 'lucide-react';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
 import SEOMeta from '../components/common/SEOMeta';
@@ -2694,31 +2696,45 @@ export default function Admin() {
                     </div>
                   </div>
 
-                  <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-8 rounded-[2.5rem]">
-                    <h3 className="text-xl font-bold mb-8">Device Usage</h3>
-                    <div className="flex items-center justify-center py-4">
-                      <div className="relative w-48 h-48 rounded-full border-8 border-primary flex items-center justify-center">
-                        <div className="text-center">
-                          <p className="text-3xl font-bold">{deviceUsageMobile}%</p>
-                          <p className="text-[10px] font-bold text-[#756d8d] uppercase">Mobile</p>
-                        </div>
-                        <div className="absolute top-0 left-0 w-full h-full border-8 border-transparent border-t-blue-500 rounded-full rotate-45" />
-                      </div>
+                  <div className="glass-panel p-8 rounded-[2.5rem] flex flex-col gap-6 justify-between">
+                    <div>
+                      <h3 className="text-xl font-bold">Device Usage</h3>
+                      <p className="text-xs text-[#756d8d] font-medium mt-1">Breakdown of visitor device platforms</p>
                     </div>
-                    <div className="flex items-center justify-center gap-8 mt-8">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-primary" />
-                        <span className="text-[11px] font-bold">Mobile ({deviceUsageMobile}%)</span>
+
+                    <div className="flex flex-col gap-5 py-4">
+                      {/* Mobile Usage */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between text-xs font-bold">
+                          <div className="flex items-center gap-2 text-[#171421] dark:text-white">
+                            <Smartphone className="w-4.5 h-4.5 text-primary" />
+                            <span>Mobile Viewers</span>
+                          </div>
+                          <span className="text-[#171421] dark:text-white">{deviceUsageMobile}%</span>
+                        </div>
+                        <div className="h-2.5 w-full bg-[#f8f7fc] dark:bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full bg-gradient-to-r from-primary to-[#ff6a3d]" style={{ width: `${deviceUsageMobile}%` }} />
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-blue-500" />
-                        <span className="text-[11px] font-bold">Desktop ({100 - deviceUsageMobile}%)</span>
+
+                      {/* Desktop Usage */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between text-xs font-bold">
+                          <div className="flex items-center gap-2 text-[#171421] dark:text-white">
+                            <Monitor className="w-4.5 h-4.5 text-blue-400" />
+                            <span>Desktop Viewers</span>
+                          </div>
+                          <span className="text-[#171421] dark:text-white">{100 - deviceUsageMobile}%</span>
+                        </div>
+                        <div className="h-2.5 w-full bg-[#f8f7fc] dark:bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400" style={{ width: `${100 - deviceUsageMobile}%` }} />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 p-8 rounded-[2.5rem]">
+                <div className="glass-panel p-8 rounded-[2.5rem]">
                   <div className="flex items-center justify-between mb-8">
                     <h3 className="text-xl font-bold">Top Performing Prompts</h3>
                     <div className="flex items-center gap-2">
