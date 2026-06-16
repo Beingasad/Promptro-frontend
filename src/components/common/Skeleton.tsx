@@ -23,17 +23,10 @@ export function CardSkeleton({ isHome: propIsHome, aspectRatioClass }: CardSkele
       {/* Shadow overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
 
-      {/* Floating Save & Collection Buttons (Only for Home layout) */}
-      {isHome && (
-        <div className="absolute top-3 right-3 flex gap-1.5">
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/10 backdrop-blur-md flex items-center justify-center text-white/30">
-            <GalleryVerticalEnd className="w-4 h-4 md:w-5 md:h-5 opacity-30" />
-          </div>
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-black/10 backdrop-blur-md flex items-center justify-center text-white/30">
-            <Bookmark className="w-4 h-4 md:w-5 md:h-5 opacity-30" />
-          </div>
-        </div>
-      )}
+      {/* Category Pill Placeholder on Top Left */}
+      <div className={`absolute z-10 h-5 w-16 md:h-6 md:w-20 rounded-full bg-white/15 animate-pulse ${
+        isHome ? "top-2 left-2 md:top-3 md:left-3" : "hidden md:block md:top-3 md:left-3"
+      }`} />
 
       {/* Bottom Content Area */}
       <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 flex flex-col gap-2">
@@ -42,29 +35,19 @@ export function CardSkeleton({ isHome: propIsHome, aspectRatioClass }: CardSkele
           <div className="h-4 w-3/5 rounded-md bg-white/20 backdrop-blur-sm ml-1 px-1.5 animate-pulse" />
         )}
 
-        {isHome ? (
-          /* HOME CARDS LAYOUT */
-          <div className="flex min-h-10 items-center justify-between w-full rounded-[1.2rem] bg-black/15 px-2 py-2 text-white/60 shadow-[0_16px_38px_rgba(0,0,0,0.15)] backdrop-blur-[24px] md:min-h-12 md:rounded-[1.35rem] md:px-4 md:py-2.5">
-            {/* Category badge skeleton */}
-            <div className="h-5 w-16 md:h-6 md:w-20 rounded-full bg-white/15 animate-pulse" />
-            
-            {/* Likes and Views Skeleton */}
-            <div className="flex items-center gap-2 md:gap-3.5 pr-1 md:pr-1.5">
-              <div className="h-4 w-10 bg-white/15 rounded-md animate-pulse" />
-              <div className="h-3.5 w-px bg-white/15" />
-              <div className="h-4 w-10 bg-white/15 rounded-md animate-pulse" />
-            </div>
-          </div>
-        ) : (
-          /* MINIMAL EXPLORE / SAVED LAYOUT */
-          <div className="flex items-center justify-around w-full rounded-full bg-black/15 px-2.5 py-1.5 text-white/60 shadow-[0_16px_38px_rgba(0,0,0,0.15)] backdrop-blur-[24px] md:min-h-12 md:px-4 md:py-2.5">
-            <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-            <div className="h-3 w-px bg-white/15" />
-            <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-            <div className="h-3 w-px bg-white/15" />
-            <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
-          </div>
-        )}
+        <div className={`flex items-center justify-around w-full rounded-full bg-black/15 text-white/60 shadow-[0_16px_38px_rgba(0,0,0,0.15)] backdrop-blur-[24px] ${
+          isHome 
+            ? "px-3 py-2 md:px-5 md:py-3 md:min-h-[50px]" 
+            : "px-2.5 py-1.5 md:px-4 md:py-2.5 md:min-h-12"
+        }`}>
+          <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
+          <div className="h-3 w-px bg-white/15" />
+          <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
+          <div className="h-3 w-px bg-white/15" />
+          <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
+          <div className="h-3 w-px bg-white/15" />
+          <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
+        </div>
       </div>
     </div>
   );
