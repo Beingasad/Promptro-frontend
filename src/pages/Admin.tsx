@@ -201,6 +201,12 @@ export default function Admin() {
   const [uploadingCatId, setUploadingCatId] = useState<number | null>(null);
   const [newCatImagePreview, setNewCatImagePreview] = useState<string>('');
   const [newCatImageFile, setNewCatImageFile] = useState<File | null>(null);
+  const [editingCategory, setEditingCategory] = useState<any | null>(null);
+  const [editCatName, setEditCatName] = useState('');
+  const [editCatImageFile, setEditCatImageFile] = useState<File | null>(null);
+  const [editCatImagePreview, setEditCatImagePreview] = useState('');
+  const [updatingCat, setUpdatingCat] = useState(false);
+  const [updatingCatText, setUpdatingCatText] = useState('Updating...');
   const { categories, addCategory, deleteCategory, updateCategory } = useCategories();
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [supportFilter, setSupportFilter] = useState<'all' | 'unread' | 'replied' | 'resolved'>('all');
@@ -233,6 +239,44 @@ export default function Admin() {
       localStorage.setItem('promptro:system_logs', JSON.stringify(updated));
       return updated;
     });
+  };
+
+  const handleUpdateCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCategory) return;
+    if (!editCatName.trim()) {
+      alert("Category name cannot be empty");
+      return;
+    }
+    
+    setUpdatingCat(true);
+    setUpdatingCatText('Updating...');
+    try {
+      let file = editCatImageFile;
+      if (file) {
+        setUpdatingCatText('Optimizing...');
+        try {
+          file = await compressImage(file);
+        } catch (compressErr: any) {
+          alert(compressErr.message || 'Image optimization failed.');
+          setUpdatingCat(false);
+          return;
+        }
+        setUpdatingCatText('Uploading...');
+      }
+      
+      await updateCategory(editingCategory.id, editCatName.trim(), file || undefined);
+      addLog('Category Updated', 'Admin', `Successfully updated category "${editCatName}"`, 'Success');
+      setEditingCategory(null);
+      setEditCatName('');
+      setEditCatImageFile(null);
+      setEditCatImagePreview('');
+    } catch (err) {
+      addLog('Category Update Failed', 'Admin', `Failed to update category "${editCatName}"`, 'Failed');
+      alert("Failed to update category");
+    } finally {
+      setUpdatingCat(false);
+    }
   };
 
   const [activeUsersNow, setActiveUsersNow] = useState(42);
@@ -2577,7 +2621,7 @@ export default function Admin() {
                   {categories.map((cat) => {
                     const categoryPrompts = prompts.filter(p => p.category === cat.name);
                     const latestPrompt = categoryPrompts[0];
-                    const coverImage = latestPrompt ? latestPrompt.image_url : cat.image_url;
+                    const coverImage = latestPrompt ? latestPrompt.image_url : (cat.image_url || FALLBACK_IMAGE);
 
                     return (
                       <div key={cat.id} className="relative glass-panel p-6 rounded-[2rem] flex flex-col group hover:border-primary/30 hover-glass-glow transition-all overflow-hidden">
@@ -2616,11 +2660,10 @@ export default function Admin() {
                           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
                             <button 
                               onClick={() => {
-                                const newName = prompt('Enter new name for ' + cat.name, cat.name);
-                                if (newName && newName !== cat.name) {
-                                  updateCategory(cat.id, newName);
-                                  addLog('Category Renamed', 'Admin', `Successfully renamed category "${cat.name}" to "${newName}"`, 'Success');
-                                }
+                                setEditingCategory(cat);
+                                setEditCatName(cat.name);
+                                setEditCatImageFile(null);
+                                setEditCatImagePreview(cat.image_url || '');
                               }}
                               className="w-8 h-8 rounded-lg flex items-center justify-center text-[#756d8d] hover:bg-[#756d8d]/10"
                             >
@@ -3412,6 +3455,134 @@ export default function Admin() {
           </div>
         )}
       </AdminLayout>
+
+      {/* Edit Category Modal */}
+      <AnimatePresence>
+        {editingCategory && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !updatingCat && setEditingCategory(null)}
+              className="fixed inset-0 bg-black/10 backdrop-blur-[3px] z-[80]"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="fixed left-[5%] right-[5%] md:left-auto md:right-auto md:w-[480px] top-1/2 -translate-y-1/2 md:-translate-x-1/2 md:left-1/2 z-[90] glass-panel p-6 rounded-[2.5rem] flex flex-col max-h-[90vh] overflow-y-auto"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-xl font-bold text-[#171421] dark:text-white">Edit Category</h3>
+                  <p className="text-xs text-[#756d8d] dark:text-[#afa6c8] mt-0.5">Modify category name and cover image</p>
+                </div>
+                <button 
+                  onClick={() => !updatingCat && setEditingCategory(null)}
+                  className="w-10 h-10 rounded-full bg-[#e8e2f0]/50 dark:bg-white/10 flex items-center justify-center hover:scale-105 active:scale-95 transition-all"
+                  disabled={updatingCat}
+                >
+                  <X className="w-5 h-5 text-[#171421] dark:text-white" />
+                </button>
+              </div>
+
+              <form onSubmit={handleUpdateCategory} className="flex flex-col gap-5">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-bold text-[#171421] dark:text-white">Category Name</label>
+                  <input 
+                    type="text" 
+                    value={editCatName} 
+                    onChange={e => setEditCatName(e.target.value)} 
+                    placeholder="Enter category name..." 
+                    className="w-full glass-input"
+                    required
+                    disabled={updatingCat}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-[#171421] dark:text-white">Cover Image</label>
+                  <div className="relative w-full h-48 rounded-[1.5rem] overflow-hidden border border-dashed border-[#cfc7dd] dark:border-white/10 bg-[#e8e2f0]/20 dark:bg-white/5 flex items-center justify-center group">
+                    {editCatImagePreview ? (
+                      <>
+                        <img 
+                          src={editCatImagePreview} 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = FALLBACK_IMAGE;
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setEditCatImageFile(null);
+                            setEditCatImagePreview('');
+                          }}
+                          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center text-white hover:scale-110 transition-transform"
+                          disabled={updatingCat}
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </>
+                    ) : (
+                      <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer hover:bg-[#e8e2f0]/30 dark:hover:bg-white/10 transition-colors">
+                        <ImageIcon className="w-8 h-8 text-[#756d8d] mb-2" />
+                        <span className="text-xs font-bold text-[#756d8d]">Upload Cover Image</span>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setEditCatImageFile(file);
+                              setEditCatImagePreview(URL.createObjectURL(file));
+                            }
+                          }}
+                          disabled={updatingCat}
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 pt-2">
+                  <button 
+                    type="submit"
+                    disabled={updatingCat}
+                    className="flex-1 h-12 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {updatingCat ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        {updatingCatText}
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-5 h-5" />
+                        Save Changes
+                      </>
+                    )}
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setEditingCategory(null)}
+                    disabled={updatingCat}
+                    className="px-5 h-12 rounded-2xl border border-[#cfc7dd] dark:border-white/10 font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-[#171421] dark:text-white"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {editingPrompt && (

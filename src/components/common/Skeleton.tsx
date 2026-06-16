@@ -229,31 +229,33 @@ export function DetailSkeleton({ isPortrait = true }: { isPortrait?: boolean }) 
 
 export function HomeBannersSkeleton() {
   return (
-    <div className="hidden lg:grid grid-cols-2 gap-4 lg:flex-[1.8] min-w-0">
+    <div className="hidden lg:grid grid-cols-2 gap-5 lg:flex-[1.8] min-w-0">
       {Array.from({ length: 2 }).map((_, index) => (
         <div
           key={index}
-          className="relative overflow-hidden rounded-[1.75rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.06)] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 h-[178px]"
+          className="relative overflow-hidden rounded-[1.75rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.06)] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 h-[206px]"
         >
           {/* Shimmer overlay */}
           <div className="absolute inset-0 shimmer-bg w-full h-full" />
           
           {/* Left side text skeleton */}
           <div className="relative z-10 flex flex-col gap-2.5 w-[52%]">
-            {/* Tag pill */}
-            <div className="h-6 w-24 bg-white/20 rounded-full animate-pulse" />
-            {/* Title */}
-            <div className="h-6 w-40 bg-white/20 rounded-md animate-pulse mt-1" />
-            {/* Subtitle */}
-            <div className="h-4 w-full bg-white/10 rounded-md animate-pulse" />
-            {/* Button */}
-            <div className="h-4 w-20 bg-white/25 rounded-md animate-pulse mt-2" />
+            {/* Tag line placeholder */}
+            <div className="h-3.5 w-20 bg-[#c5bad6] dark:bg-white/20 rounded-md animate-pulse mb-1" />
+            {/* Title placeholder */}
+            <div className="h-6.5 w-44 bg-[#b5a8c9] dark:bg-white/25 rounded-lg animate-pulse" />
+            {/* Subtitle placeholder */}
+            <div className="h-4 w-full bg-[#c5bad6]/70 dark:bg-white/15 rounded-md animate-pulse" />
+            {/* Pill Button placeholder */}
+            <div className="h-9.5 w-24 bg-[#c5bad6] dark:bg-white/20 rounded-full animate-pulse mt-3" />
           </div>
 
           {/* Right side collage skeleton */}
           <div className="relative h-[150px] w-40 shrink-0 flex items-center justify-end">
-            <div className="relative z-20 h-[150px] w-[102px] rounded-2xl bg-white/15 animate-pulse shadow-md" />
-            <div className="absolute z-10 -left-6 top-3 h-[132px] w-[90px] rounded-2xl bg-white/10 animate-pulse shadow-sm" style={{ transform: 'rotate(-12deg)' }} />
+            {/* Front card skeleton */}
+            <div className="relative z-20 h-[150px] w-[102px] rounded-2xl bg-[#c5bad6] dark:bg-white/20 animate-pulse shadow-md" />
+            {/* Back card skeleton (rotated) */}
+            <div className="absolute z-10 -left-6 top-3 h-[136px] w-[98px] rounded-2xl bg-[#c5bad6]/70 dark:bg-white/10 animate-pulse shadow-sm" style={{ transform: 'rotate(-12deg)' }} />
           </div>
         </div>
       ))}

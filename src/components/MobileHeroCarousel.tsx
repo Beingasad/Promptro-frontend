@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -264,28 +265,38 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
       </AnimatePresence>
 
       {/* Double Image Selector Modal */}
-      <AnimatePresence>
-        {selectedBannerForModal && (
-          <>
-            <div 
-              onClick={() => setSelectedBannerForModal(null)} 
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[200] flex items-center justify-center p-4"
-            >
+      {createPortal(
+        <AnimatePresence>
+          {selectedBannerForModal && (
+            <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
+              {/* Backdrop */}
+              <motion.button
+                type="button"
+                className="fixed inset-0 bg-black/5 backdrop-blur-[3px] cursor-default w-full h-full border-none outline-none animate-fade-in"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedBannerForModal(null)}
+                aria-label="Close modal"
+              />
+
+              {/* Modal Container */}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                initial={{ opacity: 0, scale: 0.94, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                exit={{ opacity: 0, scale: 0.94, y: 15 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-xs sm:max-w-sm rounded-3xl modal-glass border border-white/20 dark:border-white/10 p-5 relative overflow-hidden text-left"
+                className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl p-5 text-left"
               >
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#e9e2f3] dark:border-white/5">
                   <div>
-                    <h3 className="text-base font-bold text-[#171421] dark:text-white">{selectedBannerForModal.title}</h3>
+                    <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white truncate max-w-[14rem]">{selectedBannerForModal.title}</h3>
                     <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium mt-0.5">Select a prompt to view details</p>
                   </div>
                   <button 
                     onClick={() => setSelectedBannerForModal(null)}
-                    className="w-7 h-7 rounded-full flex items-center justify-center bg-[#f8f7fc] dark:bg-white/5 hover:bg-primary/10 hover:text-primary transition-all text-[#756d8d] dark:text-[#afa6c8] cursor-pointer"
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-[#e9e2f3] dark:border-white/10 bg-white/80 dark:bg-white/5 text-[#756d8d] dark:text-[#afa6c8] hover:scale-105 transition-transform cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -299,7 +310,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                       onClick={() => setSelectedBannerForModal(null)}
                       className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
                     >
-                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md">
+                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md bg-[#e8e2f0]/20">
                         <img 
                           src={selectedBannerForModal.prompt1.image_url} 
                           alt={selectedBannerForModal.prompt1.title} 
@@ -322,7 +333,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                       onClick={() => setSelectedBannerForModal(null)}
                       className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
                     >
-                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md">
+                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md bg-[#e8e2f0]/20">
                         <img 
                           src={selectedBannerForModal.prompt2.image_url} 
                           alt={selectedBannerForModal.prompt2.title} 
@@ -340,10 +351,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                 </div>
               </motion.div>
             </div>
-          </>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
-

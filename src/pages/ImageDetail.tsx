@@ -143,16 +143,52 @@ export default function ImageDetail() {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/prompts/${id}`, { timeout: 15000 });
         const apiPrompt = response.data;
-        setPrompt(apiPrompt);
         
-        // Also fetch related prompts
-        const relatedRes = await axios.get(`${API_BASE_URL}/api/prompts`, { params: { category: apiPrompt.category, limit: 5 }, timeout: 15000 });
-        const relatedPrompts = Array.isArray(relatedRes.data) ? relatedRes.data : [];
-        setRelated(relatedPrompts.filter(p => p.id !== id));
+        // Determine aspect ratio and orientation immediately
+        const ratioStr = apiPrompt.aspectRatio || apiPrompt.aspect_ratio;
+        let portraitDetected = false;
+        let ratioParsed = false;
+
+        if (ratioStr && ratioStr.includes('/')) {
+          const [w, h] = ratioStr.split('/').map(Number);
+          if (!isNaN(w) && !isNaN(h)) {
+            portraitDetected = w < h;
+            ratioParsed = true;
+          }
+        }
+
+        const finalizeLoad = (isPort: boolean) => {
+          setIsPortrait(isPort);
+          setPrompt(apiPrompt);
+          setLoading(false);
+        };
+
+        if (ratioParsed) {
+          finalizeLoad(portraitDetected);
+        } else {
+          // If no aspect ratio metadata is in the database, preload the image first
+          // to determine natural dimensions before dismissing the skeleton loader.
+          const img = new Image();
+          img.onload = () => {
+            finalizeLoad(img.naturalWidth < img.naturalHeight);
+          };
+          img.onerror = () => {
+            finalizeLoad(false); // Fallback
+          };
+          img.src = apiPrompt.image_url;
+        }
+
+        // Fetch related prompts in parallel
+        try {
+          const relatedRes = await axios.get(`${API_BASE_URL}/api/prompts`, { params: { category: apiPrompt.category, limit: 5 }, timeout: 15000 });
+          const relatedPrompts = Array.isArray(relatedRes.data) ? relatedRes.data : [];
+          setRelated(relatedPrompts.filter(p => p.id !== id));
+        } catch (relatedErr) {
+          console.error("Failed to fetch related prompts:", relatedErr);
+        }
       } catch (error) {
         console.error("Error fetching prompt details:", error);
         setPrompt(null);
-      } finally {
         setLoading(false);
       }
     };
@@ -185,21 +221,6 @@ export default function ImageDetail() {
 
     addRecentPrompt(prompt);
     saveUserActivity(auth?.currentUser).catch(() => undefined);
-
-
-    
-    const ratioStr = prompt.aspectRatio || prompt.aspect_ratio;
-    if (ratioStr && ratioStr.includes('/')) {
-      const [w, h] = ratioStr.split('/').map(Number);
-      if (!isNaN(w) && !isNaN(h)) {
-        setIsPortrait(w < h);
-        return;
-      }
-    }
-
-    const img = new Image();
-    img.onload = () => setIsPortrait(img.naturalWidth < img.naturalHeight);
-    img.src = prompt.image_url;
   }, [prompt]);
 
   const copyText = async (text: string, type: 'prompt' | 'negative') => {
