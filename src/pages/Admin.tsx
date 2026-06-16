@@ -61,6 +61,7 @@ import { AdminTab } from '../components/admin/AdminSidebar';
 import { cn } from '../utils/cn';
 import { API_BASE_URL } from '../config';
 import { compressImage } from '../utils/imageCompressor';
+import ImageGallery from '../components/ImageGallery';
 
 type AdminPrompt = {
   id: string;
@@ -79,7 +80,14 @@ type AdminPrompt = {
   aspect_ratio?: string;
   visibility?: 'Public' | 'Hidden';
   tool?: string;
+  images?: string[];
 };
+
+interface GalleryImageItem {
+  id: string;
+  url: string;
+  file: File | null;
+}
 
 type PromptForm = {
   title: string;
@@ -170,9 +178,9 @@ export default function Admin() {
   const [bannerImagePreview, setBannerImagePreview] = useState('');
   const [prompts, setPrompts] = useState<AdminPrompt[]>([]);
   const [form, setForm] = useState<PromptForm>(emptyForm);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState('');
   const [editingPrompt, setEditingPrompt] = useState<AdminPrompt | null>(null);
+  const [galleryItems, setGalleryItems] = useState<GalleryImageItem[]>([]);
+  const activeImagePreview = galleryItems.length > 0 ? galleryItems[0].url : '';
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savingText, setSavingText] = useState('');
@@ -341,6 +349,7 @@ export default function Admin() {
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const editFileInputRef = useRef<HTMLInputElement>(null);
 
   // topPrompts is no longer used since campaign launcher selections are fully interactive starting with empty selection
 
@@ -874,21 +883,80 @@ export default function Admin() {
 
   const resetForm = () => {
     setForm(emptyForm);
-    setImageFile(null);
-    setImagePreview('');
     setEditingPrompt(null);
+    setGalleryItems([]);
     setDetectedRatio('Not Uploaded');
     setCssRatio('');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const selectImage = (file: File | null) => {
-    if (file) {
-      setImageFile(file);
-      const url = URL.createObjectURL(file);
-      setImagePreview(url);
 
-      // Detect Aspect Ratio
+
+  const addGalleryImages = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    
+    const maxAllowed = 5;
+    const remainingSlots = maxAllowed - galleryItems.length;
+    if (remainingSlots <= 0) {
+      alert("You can upload a maximum of 5 images per prompt.");
+      return;
+    }
+
+    const filesToProcess = Array.from(files).slice(0, remainingSlots);
+    const newItems: GalleryImageItem[] = filesToProcess.map(file => {
+      const url = URL.createObjectURL(file);
+      return {
+        id: Math.random().toString(36).substring(2),
+        url,
+        file
+      };
+    });
+
+    setGalleryItems(prev => {
+      const updated = [...prev, ...newItems];
+      if (updated.length > 0 && !cssRatio) {
+        const firstItem = updated[0];
+        const img = new Image();
+        img.onload = () => {
+          const ratio = img.width / img.height;
+          let ratioText = '';
+          if (Math.abs(ratio - 1) < 0.1) ratioText = '1:1 (Square)';
+          else if (Math.abs(ratio - 0.66) < 0.1) ratioText = '2:3 (Portrait)';
+          else if (Math.abs(ratio - 0.75) < 0.1) ratioText = '3:4 (Portrait)';
+          else if (Math.abs(ratio - 1.5) < 0.1) ratioText = '3:2 (Landscape)';
+          else if (Math.abs(ratio - 1.77) < 0.1) ratioText = '16:9 (Landscape)';
+          else if (ratio > 1.1) ratioText = 'Landscape';
+          else if (ratio < 0.9) ratioText = 'Portrait';
+          else ratioText = 'Custom';
+          
+          setDetectedRatio(`${img.width}x${img.height} • ${ratioText}`);
+          setCssRatio(`${img.width} / ${img.height}`);
+        };
+        img.src = firstItem.url;
+      }
+      return updated;
+    });
+  };
+
+  const removeGalleryImage = (id: string) => {
+    setGalleryItems(prev => {
+      const updated = prev.filter(item => item.id !== id);
+      const removed = prev.find(item => item.id === id);
+      if (removed && removed.url.startsWith('blob:')) {
+        URL.revokeObjectURL(removed.url);
+      }
+      return updated;
+    });
+  };
+
+  const setGalleryImagePrimary = (index: number) => {
+    setGalleryItems(prev => {
+      if (index <= 0 || index >= prev.length) return prev;
+      const updated = [...prev];
+      const [item] = updated.splice(index, 1);
+      updated.unshift(item);
+      
+      const firstItem = updated[0];
       const img = new Image();
       img.onload = () => {
         const ratio = img.width / img.height;
@@ -905,14 +973,22 @@ export default function Admin() {
         setDetectedRatio(`${img.width}x${img.height} • ${ratioText}`);
         setCssRatio(`${img.width} / ${img.height}`);
       };
-      img.src = url;
-    }
+      img.src = firstItem.url;
+      
+      return updated;
+    });
   };
 
   const editPrompt = (prompt: AdminPrompt) => {
     setEditingPrompt(prompt);
-    setImageFile(null);
-    setImagePreview(prompt.image_url);
+    
+    const initialImages = prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url];
+    setGalleryItems(initialImages.filter(Boolean).map(url => ({
+      id: url,
+      url,
+      file: null
+    })));
+
     const ratio = prompt.aspect_ratio || prompt.aspectRatio;
     if (ratio) {
        setCssRatio(ratio);
@@ -930,10 +1006,9 @@ export default function Admin() {
       visibility: prompt.visibility || 'Public',
       tool: prompt.model,
     });
-    // Removed window.scrollTo since we use a side panel now
   };
 
-  const buildFormData = (overrideImageFile?: File | null) => {
+  const buildFormData = (compressedFiles: File[], existingUrls: string[]) => {
     const data = new FormData();
     data.append('title', form.title.trim());
     data.append('category', form.category);
@@ -946,11 +1021,19 @@ export default function Admin() {
     data.append('visibility', form.visibility);
     if (cssRatio) data.append('aspectRatio', cssRatio);
     
-    const fileToUse = overrideImageFile !== undefined ? overrideImageFile : imageFile;
-    if (fileToUse) {
-      data.append('image', fileToUse);
-    } else if (imagePreview && !imagePreview.startsWith('blob:')) {
-      data.append('image_url', imagePreview);
+    // Add existing URLs
+    data.append('image_urls', JSON.stringify(existingUrls));
+
+    // Add newly uploaded files
+    compressedFiles.forEach(file => {
+      data.append('images', file);
+    });
+
+    // Backwards compatibility: set primary image if available
+    if (existingUrls.length > 0) {
+      data.append('image_url', existingUrls[0]);
+    } else if (compressedFiles.length > 0) {
+      data.append('image', compressedFiles[0]);
     }
     
     return data;
@@ -962,22 +1045,29 @@ export default function Admin() {
     setError('');
     setMessage('');
 
-    if (!editingPrompt && !imageFile) {
+    if (galleryItems.length === 0) {
       setSaving(false);
-      setError('Please upload an image before publishing a new prompt.');
+      setError('Please upload at least one image before publishing.');
       return;
     }
 
     try {
-      let finalImageFile = imageFile;
-      if (imageFile) {
-        setSavingText('Optimizing image...');
-        try {
-          finalImageFile = await compressImage(imageFile);
-        } catch (compressErr: any) {
-          setSaving(false);
-          setError(compressErr.message || 'Image compression failed.');
-          return;
+      setSavingText('Optimizing images...');
+      const compressedFiles: File[] = [];
+      const existingUrls: string[] = [];
+
+      for (const item of galleryItems) {
+        if (item.file) {
+          try {
+            const compressed = await compressImage(item.file);
+            compressedFiles.push(compressed);
+          } catch (compressErr: any) {
+            setSaving(false);
+            setError(compressErr.message || 'Image compression failed.');
+            return;
+          }
+        } else {
+          existingUrls.push(item.url);
         }
       }
 
@@ -987,12 +1077,14 @@ export default function Admin() {
         timeout: 120000 // 120 seconds upload timeout
       };
 
+      const formData = buildFormData(compressedFiles, existingUrls);
+
       if (editingPrompt) {
-        await axios.put(`${API_URL}/${editingPrompt.id}`, buildFormData(finalImageFile), axiosConfig);
+        await axios.put(`${API_URL}/${editingPrompt.id}`, formData, axiosConfig);
         addLog('Prompt Updated', 'Admin', `Successfully updated prompt "${form.title}"`, 'Success');
         setMessage('Prompt updated successfully.');
       } else {
-        await axios.post(API_URL, buildFormData(finalImageFile), axiosConfig);
+        await axios.post(API_URL, formData, axiosConfig);
         addLog('Prompt Published', 'Admin', `Successfully published prompt "${form.title}"`, 'Success');
         setMessage('Prompt published successfully.');
       }
@@ -1231,7 +1323,7 @@ export default function Admin() {
                     </div>
 
                     <div className="h-64 flex items-end justify-between gap-2 px-2">
-                       {dailyVisits.map((v, i) => {
+                       {dailyVisits.map((v: number, i: number) => {
                          const h = barHeights[i];
                          return (
                            <div key={i} className="flex-1 flex flex-col items-center gap-3 group">
@@ -1260,7 +1352,7 @@ export default function Admin() {
                     </div>
 
                     <div className="flex flex-col gap-5">
-                       {trafficData.map((item, i) => (
+                       {trafficData.map((item: any, i: number) => (
                          <div key={i} className="flex flex-col gap-2">
                            <div className="flex items-center justify-between text-[11px] font-bold">
                              <span className="text-[#171421] dark:text-white">{item.label}</span>
@@ -1739,61 +1831,92 @@ export default function Admin() {
                             <Info className="w-4 h-4 text-[#756d8d] opacity-40" />
                           </div>
 
-                          <div className="p-4 rounded-[2rem] border-2 border-dashed border-[#e9e2f3] dark:border-white/10 bg-[#f8f7fc]/50 dark:bg-white/5">
-                            <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-8 items-center">
-                              <label 
-                                className={cn(
-                                  "h-24 rounded-2xl border-2 border-white dark:border-white/10 shadow-xl shadow-primary/5 cursor-pointer group relative overflow-hidden flex flex-col items-center justify-center bg-white dark:bg-white/10 transition-all hover:scale-[1.02]",
-                                  imagePreview ? "ring-2 ring-primary/20" : ""
-                                )}
-                              >
-                                <input 
-                                  type="file" 
-                                  ref={fileInputRef} 
-                                  className="hidden" 
-                                  accept="image/*" 
-                                  onChange={(e) => selectImage(e.target.files?.[0] || null)} 
-                                />
-                                {imagePreview ? (
-                                  <div className="relative w-full h-full group/preview">
-                                    <img 
-                                      src={imagePreview || 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop'} 
-                                      alt="Preview" 
-                                      className="w-full h-full object-cover" 
-                                    />
-                                    <button 
+                          <div className="p-6 rounded-[2rem] border-2 border-dashed border-[#e9e2f3] dark:border-white/10 bg-[#f8f7fc]/50 dark:bg-white/5 flex flex-col gap-4">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-[#756d8d] uppercase tracking-wider">
+                                Gallery Images ({galleryItems.length} / 5)
+                              </span>
+                              {galleryItems.length > 1 && (
+                                <span className="text-[10px] text-primary font-bold">
+                                  Tip: Drag or click to change order. The first image is the cover.
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                              {galleryItems.map((item, idx) => (
+                                <div 
+                                  key={item.id} 
+                                  className={cn(
+                                    "relative aspect-[3/4] rounded-2xl border-2 overflow-hidden bg-white dark:bg-[#1a1726] group shadow-md transition-all hover:scale-[1.02]",
+                                    idx === 0 ? "border-primary shadow-primary/10 ring-2 ring-primary/20" : "border-[#e9e2f3] dark:border-white/10"
+                                  )}
+                                >
+                                  <img 
+                                    src={item.url} 
+                                    alt={`Gallery ${idx + 1}`} 
+                                    className="w-full h-full object-cover" 
+                                    onError={(e) => {
+                                      const target = e.target as HTMLImageElement;
+                                      target.onerror = null;
+                                      target.src = FALLBACK_IMAGE;
+                                    }}
+                                  />
+                                  
+                                  {/* Badges */}
+                                  <div className="absolute top-2 left-2 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-black/60 text-white text-[11px] font-black backdrop-blur-sm">
+                                    {idx + 1}
+                                  </div>
+
+                                  {idx === 0 && (
+                                    <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-full bg-primary text-white text-[9px] font-black uppercase tracking-wider shadow-md shadow-primary/30">
+                                      Cover
+                                    </div>
+                                  )}
+
+                                  {/* Hover Controls */}
+                                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 z-20">
+                                    {idx > 0 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setGalleryImagePrimary(idx)}
+                                        className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold shadow-md hover:scale-105 active:scale-95 transition-transform"
+                                      >
+                                        Make Cover
+                                      </button>
+                                    )}
+                                    
+                                    <button
                                       type="button"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        setImageFile(null);
-                                        setImagePreview('');
-                                        setDetectedRatio('Not Uploaded');
-                                        setCssRatio('');
-                                        if (fileInputRef.current) fileInputRef.current.value = '';
-                                      }}
-                                      className="absolute top-1 right-1 z-30 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all shadow-lg hover:scale-110"
+                                      onClick={() => removeGalleryImage(item.id)}
+                                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                                      aria-label="Delete image"
                                     >
-                                      <X className="w-3 h-3" />
+                                      <X className="w-3.5 h-3.5" />
                                     </button>
                                   </div>
-                                ) : (
-                                  <div className="flex flex-col items-center text-center p-2">
-                                    <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary mb-3">
-                                      <Plus className="w-6 h-6" />
-                                    </div>
-                                    <p className="text-[11px] font-bold text-[#171421] dark:text-white">Click to upload</p>
-                                    <p className="text-[9px] font-medium text-[#756d8d] mt-1 uppercase">PNG, JPG up to 10MB</p>
-                                  </div>
-                                )}
-                              </label>
-
-                              <div className="flex flex-col gap-4">
-                                <div>
-                                  <p className="text-sm font-bold text-[#171421] dark:text-white">PNG, JPG up to 10MB</p>
-                                  <p className="text-[11px] font-medium text-[#756d8d] mt-2">Recommended size:<br />1024x1536 or higher</p>
                                 </div>
-                              </div>
+                              ))}
+
+                              {galleryItems.length < 5 && (
+                                <button
+                                  type="button"
+                                  onClick={() => fileInputRef.current?.click()}
+                                  className="aspect-[3/4] rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center cursor-pointer transition-all hover:bg-primary/10 hover:border-primary/40 p-4 text-center group"
+                                >
+                                  <input 
+                                    type="file" 
+                                    ref={fileInputRef} 
+                                    className="hidden" 
+                                    accept="image/*" 
+                                    multiple
+                                    onChange={(e) => addGalleryImages(e.target.files)} 
+                                  />
+                                  <Plus className="w-8 h-8 text-primary group-hover:scale-110 transition-transform mb-2" />
+                                  <span className="text-[11px] font-black text-primary leading-tight">Add Image</span>
+                                  <span className="text-[9px] font-semibold text-[#756d8d] mt-1">PNG, JPG up to 10MB</span>
+                                </button>
+                              )}
                             </div>
                           </div>
 
@@ -1997,16 +2120,12 @@ export default function Admin() {
                         style={cssRatio ? { aspectRatio: cssRatio } : {}}
                       >
                         <div className={cn("relative overflow-hidden w-full h-full", !cssRatio && "aspect-square")}>
-                          {imagePreview ? (
-                            <img 
-                              src={imagePreview} 
-                              alt="Preview" 
-                              className="w-full h-full object-cover" 
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.onerror = null;
-                                target.src = FALLBACK_IMAGE;
-                              }}
+                          {galleryItems.length > 0 ? (
+                            <ImageGallery
+                              images={galleryItems.map(item => item.url)}
+                              title={form.title || 'Preview'}
+                              aspectRatio={cssRatio || '1/1'}
+                              isPortrait={cssRatio ? !cssRatio.startsWith('16:') && !cssRatio.startsWith('3:2') : true}
                             />
                           ) : (
                             <div className="w-full h-full bg-[#f8f7fc] dark:bg-white/5 flex flex-col items-center justify-center text-[#756d8d] p-6 text-center">
@@ -2015,7 +2134,7 @@ export default function Admin() {
                             </div>
                           )}
                           
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-4 flex flex-col justify-end">
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent p-4 flex flex-col justify-end pointer-events-none z-10">
                             <div className="flex items-center justify-between gap-3 mb-2">
                                <h4 className="text-sm font-bold text-white truncate flex-1">{form.title || 'Your Prompt Title'}</h4>
                                <div className="px-2 py-0.5 rounded-md bg-primary text-white text-[9px] font-bold uppercase">
@@ -2163,17 +2282,13 @@ export default function Admin() {
                         className="bg-white dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 rounded-[1.5rem] overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
                       >
                         <div className="aspect-square relative overflow-hidden">
-                          <img 
-                            src={prompt.image_url} 
-                            alt={prompt.title} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.onerror = null;
-                              target.src = FALLBACK_IMAGE;
-                            }}
+                          <ImageGallery
+                            images={prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url]}
+                            title={prompt.title}
+                            aspectRatio={prompt.aspect_ratio || prompt.aspectRatio || '1/1'}
+                            isPortrait={false}
                           />
-                          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-white/80 dark:bg-black/60 backdrop-blur-md text-[9px] font-bold text-[#171421] dark:text-white uppercase">
+                          <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-white/80 dark:bg-black/60 backdrop-blur-md text-[9px] font-bold text-[#171421] dark:text-white uppercase pointer-events-none z-10">
                             {prompt.category}
                           </div>
                         </div>
@@ -3201,48 +3316,114 @@ export default function Admin() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                  <div 
-                    onClick={() => fileInputRef.current?.click()}
-                    className="aspect-video rounded-3xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative group"
-                  >
-                    <input 
-                      type="file" 
-                      ref={fileInputRef} 
-                      className="hidden" 
-                      accept="image/*" 
-                      onChange={(e) => selectImage(e.target.files?.[0] || null)} 
-                    />
-                    {imagePreview ? (
-                      <div className="relative w-full h-full group/edit-preview">
-                        <img 
-                          src={imagePreview} 
-                          alt="Preview" 
-                          className="w-full h-full object-cover" 
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.onerror = null;
-                            target.src = FALLBACK_IMAGE;
-                          }}
-                        />
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setImageFile(null);
-                            setImagePreview('');
-                            setDetectedRatio('Not Uploaded');
-                            setCssRatio('');
-                          }}
-                          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/edit-preview:opacity-100 transition-all shadow-lg hover:scale-110 z-10"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/edit-preview:opacity-100 transition-opacity flex items-center justify-center text-white font-bold text-sm">
-                          Change Image
-                        </div>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2.5">
+                      <span className="text-xs font-bold text-[#756d8d] uppercase tracking-wider">
+                        Live Gallery Preview
+                      </span>
+                      <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden border border-[#e9e2f3] dark:border-white/10 relative bg-[#f8f7fc]/50 dark:bg-white/5">
+                        {galleryItems.length > 0 ? (
+                          <ImageGallery
+                            images={galleryItems.map(item => item.url)}
+                            title={form.title || 'Preview'}
+                            aspectRatio={cssRatio || '4/3'}
+                            isPortrait={false}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-[#756d8d] p-6 text-center">
+                            <ImagePlus className="w-10 h-10 mb-2 opacity-20" />
+                            <p className="text-xs font-bold opacity-40">Add images to see preview</p>
+                          </div>
+                        )}
                       </div>
-                    ) : (
-                      <Upload className="w-8 h-8 text-primary" />
-                    )}
+                    </div>
+
+                    <div className="flex items-center justify-between mt-2">
+                      <span className="text-xs font-bold text-[#756d8d] uppercase tracking-wider">
+                        Gallery Images ({galleryItems.length} / 5)
+                      </span>
+                      {galleryItems.length > 1 && (
+                        <span className="text-[10px] text-primary font-bold">
+                          The first image is the cover. Click to change cover.
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                      {galleryItems.map((item, idx) => (
+                        <div 
+                          key={item.id} 
+                          className={cn(
+                            "relative aspect-[3/4] rounded-2xl border-2 overflow-hidden bg-white dark:bg-[#1a1726] group shadow-md transition-all hover:scale-[1.02]",
+                            idx === 0 ? "border-primary shadow-primary/10 ring-2 ring-primary/20" : "border-[#e9e2f3] dark:border-white/10"
+                          )}
+                        >
+                          <img 
+                            src={item.url} 
+                            alt={`Gallery ${idx + 1}`} 
+                            className="w-full h-full object-cover" 
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.onerror = null;
+                              target.src = FALLBACK_IMAGE;
+                            }}
+                          />
+                          
+                          {/* Badges */}
+                          <div className="absolute top-2 left-2 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-black/60 text-white text-[11px] font-black backdrop-blur-sm">
+                            {idx + 1}
+                          </div>
+
+                          {idx === 0 && (
+                            <div className="absolute bottom-2 left-2 z-10 px-2 py-0.5 rounded-full bg-primary text-white text-[9px] font-black uppercase tracking-wider shadow-md shadow-primary/30">
+                              Cover
+                            </div>
+                          )}
+
+                          {/* Hover Controls */}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 z-20">
+                            {idx > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => setGalleryImagePrimary(idx)}
+                                className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold shadow-md hover:scale-105 active:scale-95 transition-transform"
+                              >
+                                Make Cover
+                              </button>
+                            )}
+                            
+                            <button
+                              type="button"
+                              onClick={() => removeGalleryImage(item.id)}
+                              className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                              aria-label="Delete image"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+
+                      {galleryItems.length < 5 && (
+                        <button
+                          type="button"
+                          onClick={() => editFileInputRef.current?.click()}
+                          className="aspect-[3/4] rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center cursor-pointer transition-all hover:bg-primary/10 hover:border-primary/40 p-4 text-center group"
+                        >
+                          <input 
+                            type="file" 
+                            ref={editFileInputRef} 
+                            className="hidden" 
+                            accept="image/*" 
+                            multiple
+                            onChange={(e) => addGalleryImages(e.target.files)} 
+                          />
+                          <Plus className="w-8 h-8 text-primary group-hover:scale-110 transition-transform mb-2" />
+                          <span className="text-[11px] font-black text-primary leading-tight">Add Image</span>
+                          <span className="text-[9px] font-semibold text-[#756d8d] mt-1">PNG, JPG up to 10MB</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">

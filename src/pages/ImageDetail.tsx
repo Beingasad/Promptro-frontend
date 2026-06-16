@@ -12,10 +12,9 @@ import { addRecentPrompt, readLocalActivity, saveUserActivity, setSavedPrompt, s
 import { useSearch } from '../context/SearchContext';
 import { useIsMobileDevice } from '../utils/device';
 import SEOMeta from '../components/common/SEOMeta';
-import AuthorCard from '../components/common/AuthorCard';
 import JsonLd from '../components/common/JsonLd';
 import { DetailSkeleton } from '../components/common/Skeleton';
-import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
+import ImageGallery from '../components/ImageGallery';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -61,7 +60,7 @@ export default function ImageDetail() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleShare = async () => {
     if (!prompt) return;
@@ -107,7 +106,6 @@ export default function ImageDetail() {
 
   // Disable browser scroll restoration and force scrollTo(0,0) immediately on route load
   useEffect(() => {
-    setImageLoaded(false);
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
@@ -188,9 +186,7 @@ export default function ImageDetail() {
     addRecentPrompt(prompt);
     saveUserActivity(auth?.currentUser).catch(() => undefined);
 
-    if (prompt.image_url && isImageLoaded(prompt.image_url)) {
-      setImageLoaded(true);
-    }
+
     
     const ratioStr = prompt.aspectRatio || prompt.aspect_ratio;
     if (ratioStr && ratioStr.includes('/')) {
@@ -354,17 +350,25 @@ export default function ImageDetail() {
 
   const promptText = prompt.prompt_text || '';
   const negativePrompt = prompt.negative_prompt || '';
+  const galleryImages = prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url];
 
   const renderOverlays = () => (
     <>
       <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-start justify-between">
-        <button
-          onClick={handleBack}
-          className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
-        </button>
+        <div className="flex flex-col items-center gap-2">
+          <button
+            onClick={handleBack}
+            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
+          </button>
+          {galleryImages.length > 1 && (
+            <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white font-bold text-[10px] shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none">
+              {currentImageIndex + 1}/{galleryImages.length}
+            </div>
+          )}
+        </div>
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={handleShare}
@@ -563,21 +567,14 @@ export default function ImageDetail() {
           {/* Left Column: Image */}
           <div className="w-full md:w-auto md:max-w-[55%] flex-shrink-0 md:h-full min-h-0 min-w-0 flex items-center justify-center md:justify-start">
             <section className="relative w-full overflow-hidden rounded-[1.75rem] bg-transparent shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem] md:w-fit md:h-fit max-w-full md:max-h-full">
-              {!imageLoaded && (
-                <div className="absolute inset-0 shimmer-bg w-full h-full" />
-              )}
-              <motion.img
-                src={prompt.image_url}
-                alt={prompt.title}
-                initial={{ opacity: 0 }}
-                animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
-                onLoad={() => {
-                  setImageLoaded(true);
-                  markImageLoaded(prompt.image_url);
-                }}
-                className="w-full h-auto md:w-auto md:max-w-full md:max-h-[calc(100vh-100px)] md:object-contain block mx-auto cursor-pointer"
+              <ImageGallery
+                images={galleryImages}
+                title={prompt.title}
+                aspectRatio={prompt.aspectRatio || prompt.aspect_ratio}
                 onDoubleClick={handleImageDoubleClick}
+                isPortrait={true}
+                onIndexChange={setCurrentImageIndex}
+                showNumbering={false}
               />
               {renderHeartPopup()}
               {renderOverlays()}
@@ -611,21 +608,14 @@ export default function ImageDetail() {
       ) : (
         <>
           <section className="relative overflow-hidden rounded-[1.75rem] bg-transparent shadow-[0_22px_56px_rgba(32,26,54,0.18)] md:rounded-[2rem]">
-            {!imageLoaded && (
-              <div className="absolute inset-0 shimmer-bg w-full h-full" />
-            )}
-            <motion.img
-              src={prompt.image_url}
-              alt={prompt.title}
-              initial={{ opacity: 0 }}
-              animate={imageLoaded ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
-              onLoad={() => {
-                setImageLoaded(true);
-                markImageLoaded(prompt.image_url);
-              }}
-              className="w-full h-auto block cursor-pointer"
+            <ImageGallery
+              images={galleryImages}
+              title={prompt.title}
+              aspectRatio={prompt.aspectRatio || prompt.aspect_ratio}
               onDoubleClick={handleImageDoubleClick}
+              isPortrait={false}
+              onIndexChange={setCurrentImageIndex}
+              showNumbering={false}
             />
             {renderHeartPopup()}
             {renderOverlays()}
