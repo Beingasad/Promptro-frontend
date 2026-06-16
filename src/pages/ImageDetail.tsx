@@ -456,13 +456,6 @@ export default function ImageDetail() {
             <Sparkles className="h-6 w-6 text-primary" />
             <h2 className="text-lg font-bold text-[#3a344c] dark:text-[#e4dcf5]">Prompt</h2>
           </div>
-          <button
-            onClick={() => copyText(promptText, 'prompt')}
-            className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
-          >
-            {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-            {copiedPrompt ? 'Copied' : 'Copy'}
-          </button>
         </div>
         <motion.div
           animate={copiedPrompt ? {
@@ -604,21 +597,30 @@ export default function ImageDetail() {
 
           {/* Right Column: Details */}
           <div className="w-full md:flex-1 flex flex-col gap-5 md:h-full min-h-0 min-w-0">
-            <section className="px-1 shrink-0">
+            <section className="px-1 shrink-0 flex flex-col gap-1">
               <h1 className="text-2xl font-bold leading-tight tracking-tight text-[#171421] dark:text-white md:text-4xl lg:text-5xl line-clamp-3">
                 {prompt.title}
               </h1>
-              <p className="mt-3 text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
-                Generated with{' '}
-                <a
-                  href={getModelUrl(prompt.model)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline font-bold"
+              <div className="flex items-center justify-between gap-3 mt-1.5">
+                <p className="text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
+                  Generated with{' '}
+                  <a
+                    href={getModelUrl(prompt.model)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline font-bold"
+                  >
+                    {prompt.model}
+                  </a>
+                </p>
+                <button
+                  onClick={() => copyText(promptText, 'prompt')}
+                  className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
                 >
-                  {prompt.model}
-                </a>
-              </p>
+                  {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                  {copiedPrompt ? 'Copied' : 'Copy'}
+                </button>
+              </div>
             </section>
 
             <div className="flex-1 min-h-0 flex flex-col gap-2 overflow-y-auto hide-scrollbar pb-2 rounded-t-[1.5rem] md:rounded-t-[2rem]">
@@ -642,21 +644,30 @@ export default function ImageDetail() {
             {renderOverlays()}
           </section>
 
-          <section className="px-1 mt-2">
+          <section className="px-1 mt-2 flex flex-col gap-1">
             <h1 className="text-2xl font-bold tracking-tight text-[#171421] dark:text-white md:text-4xl">
               {prompt.title}
             </h1>
-            <p className="mt-2 text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
-              Generated with{' '}
-              <a
-                href={getModelUrl(prompt.model)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline font-bold"
+            <div className="flex items-center justify-between gap-3 mt-1">
+              <p className="text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
+                Generated with{' '}
+                <a
+                  href={getModelUrl(prompt.model)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline font-bold"
+                >
+                  {prompt.model}
+                </a>
+              </p>
+              <button
+                onClick={() => copyText(promptText, 'prompt')}
+                className="flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
               >
-                {prompt.model}
-              </a>
-            </p>
+                {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                {copiedPrompt ? 'Copied' : 'Copy'}
+              </button>
+            </div>
           </section>
 
           <div className="flex flex-col gap-2 mt-2">
