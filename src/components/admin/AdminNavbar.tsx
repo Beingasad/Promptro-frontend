@@ -21,6 +21,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
@@ -29,22 +30,35 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
         const response = await axios.get(`${API_BASE_URL}/api/feedback`);
         const recentFeedbacks = Array.isArray(response.data) ? response.data.slice(0, 5) : [];
         
+        let readIds: string[] = [];
+        try {
+          const cached = localStorage.getItem('promptro:read_notification_ids');
+          readIds = cached ? JSON.parse(cached) : [];
+        } catch (e) {
+          console.warn('Failed to parse read notification IDs:', e);
+        }
+
         const mapped = recentFeedbacks.map((f: any) => ({
-          id: f.id,
+          id: String(f.id),
           text: `New feedback: ${f.subject}`,
           time: new Date(f.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           type: 'feedback',
-          icon: MessageSquare
+          icon: MessageSquare,
+          status: f.status || 'unread'
         }));
 
         if (mapped.length > 0) {
           setNotifications(mapped);
-          setHasUnread(true);
+          const activeUnread = mapped.filter(n => n.status === 'unread' && !readIds.includes(n.id));
+          setHasUnread(activeUnread.length > 0);
+          setUnreadCount(activeUnread.length);
         } else {
           // Fallback if no feedback exists
           setNotifications([
-            { id: 'd1', text: 'Welcome to Promptro Admin', time: 'Just now', type: 'info', icon: CheckCircle2 }
+            { id: 'd1', text: 'Welcome to Promptro Admin', time: 'Just now', type: 'info', icon: CheckCircle2, status: 'read' }
           ]);
+          setHasUnread(false);
+          setUnreadCount(0);
         }
       } catch (err) {
         console.error('Failed to fetch notifications', err);
@@ -56,9 +70,31 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
     return () => clearInterval(interval);
   }, []);
 
-  const handleMarkAllRead = () => {
+  const handleMarkAllRead = async () => {
+    const unreadFeedbacks = notifications.filter(n => n.type === 'feedback' && n.status === 'unread');
+    const currentIds = notifications.map(n => n.id);
+    try {
+      localStorage.setItem('promptro:read_notification_ids', JSON.stringify(currentIds));
+    } catch (e) {
+      console.warn('Failed to save read notification IDs:', e);
+    }
+    
+    // Optimistic UI updates
     setHasUnread(false);
+    setUnreadCount(0);
+    setNotifications(prev => prev.map(n => n.status === 'unread' ? { ...n, status: 'read' } : n));
     setShowNotifications(false);
+
+    // Update status to 'read' on the backend for all unread feedbacks
+    try {
+      await Promise.all(
+        unreadFeedbacks.map(n => 
+          axios.patch(`${API_BASE_URL}/api/feedback/${n.id}/status`, { status: 'read' })
+        )
+      );
+    } catch (err) {
+      console.error('Failed to mark notifications read on backend:', err);
+    }
   };
 
   const handleSignOut = () => {
@@ -124,7 +160,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
           >
             <Bell className="w-5 h-5 text-[#756d8d] group-hover:text-primary transition-colors" />
             {hasUnread && (
-              <span className="absolute top-2.5 right-2.5 w-4 h-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white dark:border-[#0d0b14]">{notifications.length}</span>
+              <span className="absolute top-2.5 right-2.5 w-4 h-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white dark:border-[#0d0b14]">{unreadCount}</span>
             )}
           </button>
 
@@ -136,7 +172,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute right-0 mt-3 w-80 rounded-3xl shadow-2xl overflow-hidden z-50 modal-glass"
+                  className="fixed sm:absolute top-[72px] sm:top-auto left-1/2 sm:left-auto right-auto sm:right-0 -translate-x-1/2 sm:translate-x-0 mt-3 w-[calc(100vw-32px)] sm:w-80 max-w-[340px] rounded-3xl shadow-2xl overflow-hidden z-50 modal-glass"
                 >
                   <div className="p-5 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
                     <h3 className="font-bold">Notifications</h3>
@@ -158,9 +194,14 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
                            n.type === 'feedback' ? <MessageSquare className="w-4 h-4" /> :
                            <CheckCircle2 className="w-4 h-4" />}
                         </div>
-                        <div>
-                          <p className="text-xs font-bold text-[#171421] dark:text-white">{n.text}</p>
-                          <p className="text-[10px] text-[#756d8d] mt-1 font-medium">{n.time}</p>
+                        <div className="flex-grow min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="text-xs font-bold text-[#171421] dark:text-white leading-tight break-words">{n.text}</p>
+                            {n.status === 'unread' && (
+                              <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-1" title="Unread" />
+                            )}
+                          </div>
+                          <p className="text-[10px] text-[#756d8d] mt-1.5 font-medium">{n.time}</p>
                         </div>
                       </div>
                     ))}

@@ -727,9 +727,12 @@
 }
 
 .shimmer-bg {
-  position: relative !important;
   overflow: hidden !important;
   background-color: #edeaf5 !important;
+}
+
+.shimmer-bg:not(.absolute):not(.fixed) {
+  position: relative !important;
 }
 
 .shimmer-bg::after {
