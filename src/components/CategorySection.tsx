@@ -77,12 +77,12 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
         ))}
         {loading && globalCategories.length === 0 && (
           <>
-            <div className="shimmer-bg h-8 w-16 rounded-full opacity-60 md:h-10 md:w-20" />
-            <div className="shimmer-bg h-8 w-24 rounded-full opacity-60 md:h-10 md:w-28" />
-            <div className="shimmer-bg h-8 w-20 rounded-full opacity-60 md:h-10 md:w-24" />
-            <div className="shimmer-bg h-8 w-28 rounded-full opacity-60 md:h-10 md:w-32" />
-            <div className="shimmer-bg h-8 w-16 rounded-full opacity-60 md:h-10 md:w-20" />
-            <div className="shimmer-bg h-8 w-22 rounded-full opacity-60 md:h-10 md:w-26" />
+            <div className="relative overflow-hidden shimmer-bg h-8 w-16 rounded-full opacity-60 md:h-10 md:w-20" />
+            <div className="relative overflow-hidden shimmer-bg h-8 w-24 rounded-full opacity-60 md:h-10 md:w-28" />
+            <div className="relative overflow-hidden shimmer-bg h-8 w-20 rounded-full opacity-60 md:h-10 md:w-24" />
+            <div className="relative overflow-hidden shimmer-bg h-8 w-28 rounded-full opacity-60 md:h-10 md:w-32" />
+            <div className="relative overflow-hidden shimmer-bg h-8 w-16 rounded-full opacity-60 md:h-10 md:w-20" />
+            <div className="relative overflow-hidden shimmer-bg h-8 w-22 rounded-full opacity-60 md:h-10 md:w-26" />
           </>
         )}
       </div>

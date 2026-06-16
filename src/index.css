@@ -728,11 +728,7 @@
 
 .shimmer-bg {
   overflow: hidden !important;
-  background-color: #edeaf5 !important;
-}
-
-.shimmer-bg:not(.absolute):not(.fixed) {
-  position: relative !important;
+  background-color: rgba(232, 226, 240, 0.35) !important;
 }
 
 .shimmer-bg::after {
@@ -754,7 +750,7 @@
 }
 
 [data-theme="dark"] .shimmer-bg {
-  background-color: #171421 !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
 }
 
 [data-theme="dark"] .shimmer-bg::after {
