@@ -374,6 +374,41 @@ export default function Admin() {
     return prompts.filter(p => selectedPromptsForCampaign.includes(p.id));
   }, [prompts, selectedPromptsForCampaign]);
 
+  const topPerformingPrompts = useMemo(() => {
+    return [...prompts]
+      .sort((a, b) => {
+        const perfA = (a.views || 0) + (a.likes || 0) * 3;
+        const perfB = (b.views || 0) + (b.likes || 0) * 3;
+        return perfB - perfA;
+      })
+      .slice(0, 5);
+  }, [prompts]);
+
+  const handleDownloadTopPrompts = () => {
+    if (topPerformingPrompts.length === 0) {
+      alert("No data available to download.");
+      return;
+    }
+
+    const data = topPerformingPrompts.map((p, index) => ({
+      'Rank': index + 1,
+      'Prompt Title': p.title,
+      'Category': p.category,
+      'Views': p.views || 0,
+      'Likes': p.likes || 0,
+      'Model': p.model || 'Unknown',
+      'Prompt Text': p.prompt_text || '',
+      'Tags': Array.isArray(p.tags) ? p.tags.join(', ') : '',
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Top Performing Prompts');
+    XLSX.writeFile(workbook, 'top_performing_prompts.xlsx');
+    
+    addLog('Export Successful', 'Admin', 'Exported Top Performing Prompts to Excel', 'Success');
+  };
+
   const shareToTwitter = () => {
     const text = encodeURIComponent(
       `Check out my trending AI prompts on Promptro! 🎨✨\n\nUnlock high-quality prompt templates for Midjourney, Stable Diffusion & more!\n\n👉 Discover here: https://promptro.web/explore`
@@ -2796,7 +2831,11 @@ export default function Admin() {
                   <div className="flex items-center justify-between mb-8">
                     <h3 className="text-xl font-bold">Top Performing Prompts</h3>
                     <div className="flex items-center gap-2">
-                      <button className="p-2 rounded-xl bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 hover:text-primary transition-all">
+                      <button 
+                        onClick={handleDownloadTopPrompts}
+                        title="Download Top Performing Prompts Report"
+                        className="p-2 rounded-xl bg-[#f8f7fc] dark:bg-white/5 border border-[#e9e2f3] dark:border-white/10 hover:text-primary transition-all cursor-pointer"
+                      >
                         <Download className="w-4 h-4" />
                       </button>
                       <button 
@@ -2819,7 +2858,7 @@ export default function Admin() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-[#e9e2f3] dark:divide-white/5">
-                        {prompts.slice(0, 5).map((p, i) => (
+                        {topPerformingPrompts.map((p, i) => (
                           <tr key={i} className="group hover:bg-primary/5 transition-colors">
                             <td className="py-4 pl-2">
                               <div className="flex items-center gap-3">
