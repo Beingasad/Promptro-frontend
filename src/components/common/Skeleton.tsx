@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Share2, Heart, Eye, Sparkles, GalleryVerticalEnd } from 'lucide-react';
+import { ArrowLeft, Bookmark, Share2, Heart, Eye, Sparkles, GalleryVerticalEnd, Download } from 'lucide-react';
 
 interface CardSkeletonProps {
   isHome?: boolean;
@@ -96,8 +96,16 @@ export function GridSkeleton({ isHome, count = 12 }: GridSkeletonProps) {
 export function DetailSkeleton({ isPortrait = true }: { isPortrait?: boolean }) {
   const renderSkeletonOverlays = () => (
     <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-start justify-between">
-      <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-        <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
+          <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
+        </div>
+        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
+          <Download className="h-4 w-4 md:h-5 md:w-5" />
+        </div>
+        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/20 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px] font-bold text-[10px] md:text-[12px] select-none">
+          -/-
+        </div>
       </div>
       <div className="flex flex-col items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">

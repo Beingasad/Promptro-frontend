@@ -32,6 +32,21 @@ export default function ImageGallery({
   const dragStartOffset = useRef(0);
   const delayTimerRef = useRef<any>(null);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+
   // Auto-play logic: runs exactly once
   useEffect(() => {
     if (!isAutoplay || images.length <= 1) return;
@@ -171,6 +186,7 @@ export default function ImageGallery({
 
   return (
     <div 
+      ref={containerRef}
       className={cn(
         "relative w-full h-full select-none overflow-hidden bg-[#1c182d]/5 dark:bg-black/10 rounded-[inherit]",
         isPortrait ? "md:max-h-[calc(100vh-100px)]" : "max-h-[80vh]"
@@ -182,8 +198,8 @@ export default function ImageGallery({
         className="flex w-full h-full touch-pan-y"
         animate={
           showSwipeIndicator 
-            ? { x: ["0%", "-8%", "3%", "0%", "0%", "-8%", "3%", "0%"] } 
-            : { x: `-${currentIndex * 100}%` }
+            ? { x: [0, -containerWidth * 0.08, containerWidth * 0.03, 0, 0, -containerWidth * 0.08, containerWidth * 0.03, 0] } 
+            : { x: -currentIndex * containerWidth }
         }
         transition={
           showSwipeIndicator
@@ -191,16 +207,24 @@ export default function ImageGallery({
             : { type: "tween", ease: "easeOut", duration: 0.35 }
         }
         drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
+        dragConstraints={{
+          left: currentIndex === images.length - 1 
+            ? -currentIndex * containerWidth 
+            : -(currentIndex + 1) * containerWidth,
+          right: currentIndex === 0 
+            ? 0 
+            : -(currentIndex - 1) * containerWidth
+        }}
         dragElastic={{
-          left: currentIndex === images.length - 1 ? 0 : 0.25,
-          right: currentIndex === 0 ? 0 : 0.25
+          left: currentIndex === images.length - 1 ? 0 : 0.2,
+          right: currentIndex === 0 ? 0 : 0.2
         }}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         style={{ cursor: "grab" }}
         whileTap={{ cursor: "grabbing" }}
       >
+
         {optimizedImages.map((src, idx) => {
           const isCached = isImageLoaded(src);
           const isLoaded = loadedImages[idx] || isCached;
