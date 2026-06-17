@@ -409,6 +409,13 @@ export default function ImageDetail() {
           >
             <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
           </button>
+          <button
+            onClick={handleDownload}
+            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            aria-label="Download image"
+          >
+            <Download className="h-4 w-4 md:h-5 md:w-5 text-white" />
+          </button>
           {galleryImages.length > 1 && (
             <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white font-bold text-[10px] shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none">
               {currentImageIndex + 1}/{galleryImages.length}
@@ -439,13 +446,6 @@ export default function ImageDetail() {
               className="h-4 w-4 md:h-5 md:w-5 text-white"
               fill={inCollection ? 'currentColor' : 'none'}
             />
-          </button>
-          <button
-            onClick={handleDownload}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
-            aria-label="Download image"
-          >
-            <Download className="h-4 w-4 md:h-5 md:w-5 text-white" />
           </button>
         </div>
       </div>
