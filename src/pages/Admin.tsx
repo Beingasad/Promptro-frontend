@@ -3820,7 +3820,7 @@ export default function Admin() {
                     </label>
                   </div>
 
-                  <div className="flex items-center gap-4 pt-4 sticky bottom-0 bg-white/95 dark:bg-[#171421]/95 backdrop-blur-md pb-8 z-50 border-t border-[#e2dbe8]/50 dark:border-white/5">
+                  <div className="flex items-center gap-4 pt-4 sticky bottom-0 bg-transparent dark:bg-transparent md:bg-white/95 md:dark:bg-[#171421]/95 backdrop-blur-none md:backdrop-blur-md pb-8 z-50 border-t-0 md:border-t border-[#e2dbe8]/50 dark:border-white/5">
                     <button 
                       type="submit"
                       disabled={saving}
