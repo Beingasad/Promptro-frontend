@@ -1037,7 +1037,8 @@ export default function Admin() {
     setEditingPrompt(prompt);
     
     const initialImages = prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url];
-    setGalleryItems(initialImages.filter(Boolean).map(url => ({
+    const uniqueInitialImages = Array.from(new Set(initialImages)).filter(Boolean);
+    setGalleryItems(uniqueInitialImages.map(url => ({
       id: url,
       url,
       file: null

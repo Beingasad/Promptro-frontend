@@ -1,5 +1,5 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd } from 'lucide-react';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
 import AuthModal from '../components/AuthModal';
@@ -79,15 +79,39 @@ export default function ImageDetail() {
         console.error("Error sharing:", err);
       }
     } else {
-      try {
-        await navigator.clipboard.writeText(shareUrl);
-        setShared(true);
-        setTimeout(() => setShared(false), 2000);
-      } catch (err) {
-        console.error("Failed to copy link:", err);
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          setShared(true);
+          setTimeout(() => setShared(false), 2000);
+        } catch (err) {
+          console.error("Failed to copy link:", err);
+        }
       }
-    }
-  };
+    };
+  
+    const handleDownload = async () => {
+      if (!prompt) return;
+      try {
+        const imageUrl = galleryImages[currentImageIndex];
+        const cleanTitle = prompt.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const filename = `${cleanTitle}-${currentImageIndex + 1}.png`;
+  
+        const response = await fetch(imageUrl, { mode: 'cors' });
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+  
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        console.warn("Direct blob download failed, opening in new window:", err);
+        window.open(galleryImages[currentImageIndex], '_blank');
+      }
+    };
 
   const handleTagClick = (tag: string) => {
     setSearchQuery(tag);
@@ -371,7 +395,8 @@ export default function ImageDetail() {
 
   const promptText = prompt.prompt_text || '';
   const negativePrompt = prompt.negative_prompt || '';
-  const galleryImages = prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url];
+  const rawImages = prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url];
+  const galleryImages = Array.from(new Set(rawImages)).filter(Boolean);
 
   const renderOverlays = () => (
     <>
@@ -414,6 +439,13 @@ export default function ImageDetail() {
               className="h-4 w-4 md:h-5 md:w-5 text-white"
               fill={inCollection ? 'currentColor' : 'none'}
             />
+          </button>
+          <button
+            onClick={handleDownload}
+            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            aria-label="Download image"
+          >
+            <Download className="h-4 w-4 md:h-5 md:w-5 text-white" />
           </button>
         </div>
       </div>

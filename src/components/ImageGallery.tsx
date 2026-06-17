@@ -179,7 +179,7 @@ export default function ImageGallery({
     >
       {/* Slider Container */}
       <motion.div
-        className="flex w-full h-full"
+        className="flex w-full h-full touch-pan-y"
         animate={
           showSwipeIndicator 
             ? { x: ["0%", "-8%", "3%", "0%", "0%", "-8%", "3%", "0%"] } 
@@ -188,7 +188,7 @@ export default function ImageGallery({
         transition={
           showSwipeIndicator
             ? { duration: 3.8, times: [0, 0.15, 0.3, 0.4, 0.6, 0.75, 0.9, 1.0], ease: "easeInOut" }
-            : { type: "spring", stiffness: 260, damping: 28 }
+            : { type: "tween", ease: "easeOut", duration: 0.35 }
         }
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
@@ -203,11 +203,9 @@ export default function ImageGallery({
           const isLoaded = loadedImages[idx] || isCached;
 
           return (
-            <motion.div 
+            <div 
               key={idx} 
               className="w-full h-full shrink-0 relative flex items-center justify-center overflow-hidden"
-              animate={{ opacity: idx === currentIndex ? 1 : 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               {/* Shimmer background displayed while loading */}
               {!isLoaded && (
@@ -219,8 +217,9 @@ export default function ImageGallery({
                 alt={`${title} - Gallery Image ${idx + 1}`}
                 onLoad={() => handleImageLoad(idx, src)}
                 onClick={handleImageClick}
+                draggable={false}
                 className={cn(
-                  "w-full h-full object-cover transition-opacity duration-300 pointer-events-none",
+                  "w-full h-full object-cover transition-opacity duration-300",
                   isLoaded ? "opacity-100" : "opacity-0",
                   // In portrait split view, allow fitting
                   isPortrait ? "md:object-contain md:max-h-[calc(100vh-100px)]" : "object-cover"
@@ -228,7 +227,7 @@ export default function ImageGallery({
                 loading={idx === 0 ? "eager" : "lazy"}
                 decoding="async"
               />
-            </motion.div>
+            </div>
           );
         })}
       </motion.div>
