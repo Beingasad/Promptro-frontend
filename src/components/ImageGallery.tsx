@@ -31,6 +31,22 @@ export default function ImageGallery({
   const lastTap = useRef(0);
   const dragStartOffset = useRef(0);
   const delayTimerRef = useRef<any>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    if (parentRef.current) {
+      setContainerWidth(parentRef.current.offsetWidth);
+      
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          setContainerWidth(entry.contentRect.width);
+        }
+      });
+      resizeObserver.observe(parentRef.current);
+      return () => resizeObserver.disconnect();
+    }
+  }, []);
 
   // Auto-play logic: runs exactly once
   useEffect(() => {
@@ -171,6 +187,7 @@ export default function ImageGallery({
 
   return (
     <div 
+      ref={parentRef}
       className={cn(
         "relative w-full h-full select-none overflow-hidden bg-[#1c182d]/5 dark:bg-black/10 rounded-[inherit]",
         isPortrait ? "md:max-h-[calc(100vh-100px)]" : "max-h-[80vh]"
@@ -191,8 +208,11 @@ export default function ImageGallery({
             : { type: "tween", ease: "easeOut", duration: 0.35 }
         }
         drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.4}
+        dragConstraints={{
+          left: currentIndex === images.length - 1 ? 0 : -containerWidth,
+          right: currentIndex === 0 ? 0 : containerWidth
+        }}
+        dragElastic={0.2}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         style={{ cursor: "grab" }}
