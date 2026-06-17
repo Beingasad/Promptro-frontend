@@ -257,7 +257,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
       event.preventDefault();
 
       clickTimeout.current = setTimeout(() => {
-        navigate(`/prompt/${prompt.id}`, { state: { isPortrait } });
+        navigate(`/prompt/${prompt.id}`, { state: { isPortrait, hasMultipleImages: prompt.images && prompt.images.length > 1 } });
       }, DOUBLE_PRESS_DELAY);
     }
   };
@@ -306,7 +306,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
       <Link 
         ref={containerRef}
         to={`/prompt/${prompt.id}`}
-        state={{ isPortrait }}
+        state={{ isPortrait, hasMultipleImages: prompt.images && prompt.images.length > 1 }}
         onClick={handleCardClick}
         className="relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 glass-shine hover:shadow-[0_20px_50px_rgba(139,92,246,0.22)] dark:hover:shadow-[0_24px_60px_rgba(0,0,0,0.6)] transition-shadow duration-500"
         style={{

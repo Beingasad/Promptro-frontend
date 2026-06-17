@@ -380,10 +380,12 @@ export default function ImageDetail() {
 
   const location = useLocation();
   const stateIsPortrait = location.state?.isPortrait;
+  const stateHasMultipleImages = location.state?.hasMultipleImages;
 
   if (loading) {
-    return <DetailSkeleton isPortrait={stateIsPortrait ?? true} />;
+    return <DetailSkeleton isPortrait={stateIsPortrait ?? true} hasMultipleImages={stateHasMultipleImages ?? false} />;
   }
+
 
   if (!prompt) {
     return (
