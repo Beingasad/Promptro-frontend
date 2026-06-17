@@ -4,7 +4,7 @@
  * - Cloudinary: Inserts formatting and quality compression (f_auto,q_auto) along with width transformations.
  */
 
-export function optimizeImageUrl(url: string, targetWidth: number = 600): string {
+export function optimizeImageUrl(url: string, targetWidth: number = 800): string {
   if (!url) return url;
 
   // Unsplash Optimization
@@ -32,7 +32,7 @@ export function optimizeImageUrl(url: string, targetWidth: number = 600): string
       // If suffix matches a version prefix or direct subpath (e.g. "v1570979139/sample.jpg")
       const versionRegex = /^v\d+/;
       if (versionRegex.test(suffix) || suffix.includes('/v')) {
-        return `${prefix}f_auto,q_auto,w_${targetWidth}/${suffix}`;
+        return `${prefix}f_auto,q_auto:best,w_${targetWidth}/${suffix}`;
       }
     }
   }

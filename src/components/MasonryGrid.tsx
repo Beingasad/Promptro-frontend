@@ -24,7 +24,7 @@ export default function MasonryGrid({ prompts, isTwoColumns }: MasonryGridProps)
 
     const urls = prompts
       .slice(0, PRIORITY_COUNT)
-      .map((p) => optimizeImageUrl(p.image_url, 800))
+      .map((p) => optimizeImageUrl(p.image_url, 1200))
       .filter(Boolean);
 
     preloadImages(urls);

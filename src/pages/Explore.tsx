@@ -110,7 +110,7 @@ export default function Explore() {
         // Eagerly preload the first 15 thumbnail images
         const thumbUrls = enrichedApiPrompts
           .slice(0, 15)
-          .map((p: Prompt) => optimizeImageUrl(p.image_url, 800))
+          .map((p: Prompt) => optimizeImageUrl(p.image_url, 1200))
           .filter(Boolean);
         preloadImages(thumbUrls);
 

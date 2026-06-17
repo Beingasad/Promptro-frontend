@@ -57,7 +57,7 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
   const [inCollection, setInCollection] = useState(false);
   const [likes, setLikes] = useState(prompt.likes);
   // Check the global cache so re-mounted cards skip the skeleton entirely
-  const optimizedSrc = prompt.image_url ? optimizeImageUrl(prompt.image_url, priority ? 800 : 600) : '';
+  const optimizedSrc = prompt.image_url ? optimizeImageUrl(prompt.image_url, priority ? 1200 : 800) : '';
   const alreadyCached = optimizedSrc ? isImageLoaded(optimizedSrc) : false;
   const [imageLoaded, setImageLoaded] = useState(alreadyCached);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);

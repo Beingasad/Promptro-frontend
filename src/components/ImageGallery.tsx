@@ -166,7 +166,7 @@ export default function ImageGallery({
 
   // Pre-calculate image URLs using optimizeImageUrl
   const optimizedImages = images.map((img) => 
-    optimizeImageUrl(img, isPortrait ? 800 : 1200)
+    optimizeImageUrl(img, isPortrait ? 1200 : 1800)
   );
 
   return (
