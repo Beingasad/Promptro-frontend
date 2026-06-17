@@ -2024,27 +2024,26 @@ export default function Admin() {
                                     </div>
                                   )}
 
-                                  {/* Hover Controls */}
-                                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 z-20">
-                                    {idx > 0 && (
-                                      <button
-                                        type="button"
-                                        onClick={() => setGalleryImagePrimary(idx)}
-                                        className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold shadow-md hover:scale-105 active:scale-95 transition-transform"
-                                      >
-                                        Make Cover
-                                      </button>
-                                    )}
-                                    
+                                  {/* Always Visible Delete Button */}
+                                  <button
+                                    type="button"
+                                    onClick={() => removeGalleryImage(item.id)}
+                                    className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500/80 hover:bg-red-600 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all z-30 animate-fade-in"
+                                    aria-label="Delete image"
+                                  >
+                                    <X className="w-3.5 h-3.5" />
+                                  </button>
+
+                                  {/* Always Visible Make Cover Button for non-cover images */}
+                                  {idx > 0 && (
                                     <button
                                       type="button"
-                                      onClick={() => removeGalleryImage(item.id)}
-                                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                                      aria-label="Delete image"
+                                      onClick={() => setGalleryImagePrimary(idx)}
+                                      className="absolute bottom-2 left-1.5 right-1.5 py-1 rounded-lg bg-black/60 hover:bg-primary active:scale-95 text-white text-[9px] font-bold shadow-md transition-all text-center z-30"
                                     >
-                                      <X className="w-3.5 h-3.5" />
+                                      Make Cover
                                     </button>
-                                  </div>
+                                  )}
                                 </div>
                               ))}
 
@@ -3556,7 +3555,7 @@ export default function Admin() {
                   <button 
                     type="submit"
                     disabled={updatingCat}
-                    className="flex-1 h-12 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="flex-1 h-12 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 hover:opacity-95 hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     {updatingCat ? (
                       <>
@@ -3574,7 +3573,7 @@ export default function Admin() {
                     type="button"
                     onClick={() => setEditingCategory(null)}
                     disabled={updatingCat}
-                    className="px-5 h-12 rounded-2xl border border-[#cfc7dd] dark:border-white/10 font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-[#171421] dark:text-white"
+                    className="px-6 h-12 rounded-2xl border border-[#e2dbe8] dark:border-white/10 font-bold text-[#6f6684] dark:text-[#afa6c8] hover:bg-black/5 dark:hover:bg-white/5 active:scale-[0.98] transition-all"
                   >
                     Cancel
                   </button>
@@ -3681,27 +3680,26 @@ export default function Admin() {
                             </div>
                           )}
 
-                          {/* Hover Controls */}
-                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 z-20">
-                            {idx > 0 && (
-                              <button
-                                type="button"
-                                onClick={() => setGalleryImagePrimary(idx)}
-                                className="px-2 py-1 rounded-lg bg-primary text-white text-[10px] font-bold shadow-md hover:scale-105 active:scale-95 transition-transform"
-                              >
-                                Make Cover
-                              </button>
-                            )}
-                            
+                          {/* Always Visible Delete Button */}
+                          <button
+                            type="button"
+                            onClick={() => removeGalleryImage(item.id)}
+                            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500/80 hover:bg-red-600 active:scale-90 text-white flex items-center justify-center shadow-lg transition-all z-30 animate-fade-in"
+                            aria-label="Delete image"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+
+                          {/* Always Visible Make Cover Button for non-cover images */}
+                          {idx > 0 && (
                             <button
                               type="button"
-                              onClick={() => removeGalleryImage(item.id)}
-                              className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                              aria-label="Delete image"
+                              onClick={() => setGalleryImagePrimary(idx)}
+                              className="absolute bottom-2 left-1.5 right-1.5 py-1 rounded-lg bg-black/60 hover:bg-primary active:scale-95 text-white text-[9px] font-bold shadow-md transition-all text-center z-30"
                             >
-                              <X className="w-3.5 h-3.5" />
+                              Make Cover
                             </button>
-                          </div>
+                          )}
                         </div>
                       ))}
 
@@ -3826,12 +3824,12 @@ export default function Admin() {
                     <button 
                       type="submit"
                       disabled={saving}
-                      className="flex-1 h-14 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="flex-1 h-14 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 hover:opacity-95 hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none"
                     >
                       {saving ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
-                          {savingText || 'Update Changes'}
+                          {savingText || 'Updating...'}
                         </>
                       ) : (
                         <>
@@ -3843,7 +3841,7 @@ export default function Admin() {
                     <button 
                       type="button"
                       onClick={resetForm}
-                      className="px-6 h-14 rounded-2xl border border-white/10 font-bold hover:bg-white/5 transition-colors"
+                      className="px-8 h-14 rounded-2xl border border-[#e2dbe8] dark:border-white/10 font-bold text-[#6f6684] dark:text-[#afa6c8] hover:bg-black/5 dark:hover:bg-white/5 active:scale-[0.98] transition-all"
                     >
                       Cancel
                     </button>
@@ -4366,8 +4364,18 @@ export default function Admin() {
             </div>
           </div>
           <div className="mt-4 flex justify-end gap-3 pt-6 border-t border-[#e9e2f3] dark:border-white/10">
-            <button type="button" onClick={() => document.getElementById('banner-modal')?.closest('dialog')?.close()} className="px-6 py-2.5 rounded-full font-bold text-[#756d8d] hover:bg-[#f8f7fc] transition-colors">Cancel</button>
-            <button type="submit" disabled={saving} className="px-8 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform disabled:opacity-50">
+            <button 
+              type="button" 
+              onClick={() => document.getElementById('banner-modal')?.closest('dialog')?.close()} 
+              className="px-6 py-3 rounded-2xl border border-[#e2dbe8] dark:border-white/10 font-bold text-[#6f6684] dark:text-[#afa6c8] hover:bg-black/5 dark:hover:bg-white/5 active:scale-[0.98] transition-all"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              disabled={saving} 
+              className="px-8 py-3 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold shadow-lg shadow-primary/20 hover:opacity-95 hover:shadow-primary/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none"
+            >
               {saving ? (savingText || 'Saving...') : 'Save Banner'}
             </button>
           </div>
