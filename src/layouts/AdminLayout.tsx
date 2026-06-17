@@ -1,4 +1,4 @@
-import { ReactNode, Suspense, useState } from 'react';
+import { ReactNode, Suspense, useState, useEffect } from 'react';
 import { AdminSidebar, AdminTab } from '../components/admin/AdminSidebar';
 import { AdminNavbar } from '../components/admin/AdminNavbar';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
@@ -8,7 +8,18 @@ interface AdminLayoutProps {
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const [activeTab, setActiveTab] = useState<AdminTab>('Dashboard');
+  const [activeTab, setActiveTab] = useState<AdminTab>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('promptro_admin_active_tab');
+      if (saved) return saved as AdminTab;
+    }
+    return 'Dashboard';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('promptro_admin_active_tab', activeTab);
+  }, [activeTab]);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== 'undefined') {
       return window.innerWidth >= 1024;
