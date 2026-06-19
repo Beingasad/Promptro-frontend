@@ -1,8 +1,40 @@
+import { useEffect, useState, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, Compass, Bookmark, GalleryVerticalEnd, LayoutGrid } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export default function BottomNav() {
+  const [isVisible, setIsVisible] = useState(true);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only hide on scroll for desktop/tablet views (window width >= 768px)
+      if (window.innerWidth < 768) {
+        setIsVisible(true);
+        return;
+      }
+
+      setIsVisible(false);
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsVisible(true);
+      }, 250); // Show again 250ms after scroll stops
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: Compass, label: 'Explore', path: '/explore' },
@@ -12,7 +44,10 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="bottom-nav-glass rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between shadow-[0_18px_46px_rgba(72,56,118,0.16)] w-[86%] max-w-[410px] md:max-w-[520px]">
+    <div className={cn(
+      "bottom-nav-glass rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between shadow-[0_18px_46px_rgba(72,56,118,0.16)] w-[86%] max-w-[410px] md:max-w-[520px]",
+      !isVisible && "nav-hidden"
+    )}>
       {navItems.map((item) => (
         <NavLink
           key={item.path}
