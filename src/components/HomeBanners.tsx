@@ -202,7 +202,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
             
             {/* Secondary Image (Back) */}
             {banner.secondary_image && (
-              <div className="absolute z-10 -left-6 top-3 h-[136px] w-[98px] rounded-2xl overflow-hidden border-2 border-white shadow-[0_12px_24px_rgba(0,0,0,0.12)] opacity-100 group-hover:scale-105 group-hover:-translate-x-1 group-hover:-rotate-18 transform -rotate-12 transition-all duration-500">
+              <div className="absolute z-10 -left-6 top-3 h-[136px] w-[98px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_12px_24px_rgba(0,0,0,0.12)] opacity-100 group-hover:scale-105 group-hover:-translate-x-1 group-hover:-rotate-18 transform -rotate-12 transition-all duration-500">
                 <img 
                   src={banner.secondary_image} 
                   alt="" 
@@ -213,7 +213,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
 
             {/* Main Image (Front) */}
             {banner.image_url && (
-              <div className="relative z-20 h-[150px] w-[102px] rounded-2xl overflow-hidden border-2 border-white shadow-[0_16px_36px_rgba(0,0,0,0.22)] transform rotate-6 group-hover:rotate-10 group-hover:scale-105 transition-all duration-500">
+              <div className="relative z-20 h-[150px] w-[102px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_16px_36px_rgba(0,0,0,0.22)] transform rotate-6 group-hover:rotate-10 group-hover:scale-105 transition-all duration-500">
                 <img 
                   src={banner.image_url} 
                   alt="" 
