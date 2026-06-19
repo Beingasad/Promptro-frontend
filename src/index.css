@@ -366,6 +366,15 @@
     }
   }
 
+  @media (min-width: 1024px) {
+    .bottom-nav-glass {
+      bottom: auto !important;
+      left: 2rem !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+    }
+  }
+
   [data-theme="dark"] .bottom-nav-glass {
     background: rgba(28, 24, 42, 0.62) !important;
     border: none !important;
