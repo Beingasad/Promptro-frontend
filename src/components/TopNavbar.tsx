@@ -2370,17 +2370,17 @@ export default function TopNavbar() {
                         {/* Dynamic prompt collage stack */}
                         <div className="relative flex items-center justify-center h-44 md:h-58 w-full my-auto z-10">
                           {selectedPrompts.length === 1 && (
-                            <div className="w-24 h-36 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white dark:border-white/35 z-20 shadow-[0_12px_28px_rgba(99,34,242,0.18)] bg-white dark:bg-[#0B0914]">
+                            <div className="w-24 h-36 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white z-20 shadow-[0_12px_28px_rgba(99,34,242,0.18)] bg-white dark:bg-[#0B0914]">
                               <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                             </div>
                           )}
 
                           {selectedPrompts.length === 2 && (
                             <div className="relative flex items-center justify-center w-full h-full">
-                              <div className="w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/35 -rotate-[8deg] translate-x-3 opacity-80 shadow-md bg-white dark:bg-[#0B0914]">
+                              <div className="w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 -rotate-[8deg] translate-x-3 opacity-80 shadow-md bg-white dark:bg-[#0B0914]">
                                 <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                               </div>
-                              <div className="w-22 h-34 md:w-28 md:h-46 rounded-xl overflow-hidden border border-white dark:border-white/40 rotate-[8deg] -translate-x-3 z-20 shadow-lg bg-white dark:bg-[#0B0914]">
+                              <div className="w-22 h-34 md:w-28 md:h-46 rounded-xl overflow-hidden border border-white rotate-[8deg] -translate-x-3 z-20 shadow-lg bg-white dark:bg-[#0B0914]">
                                 <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
                               </div>
                             </div>
@@ -2388,15 +2388,15 @@ export default function TopNavbar() {
 
                           {selectedPrompts.length === 3 && (
                             <>
-                              <div className="absolute left-3 md:left-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/35 -rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
+                              <div className="absolute left-3 md:left-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 -rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
                                 <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
                               </div>
 
-                              <div className="absolute right-3 md:right-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/35 rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
+                              <div className="absolute right-3 md:right-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
                                 <img src={selectedPrompts[2]?.image_url} className="w-full h-full object-cover" />
                               </div>
 
-                              <div className="absolute w-24 h-37 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white dark:border-white/40 z-20 shadow-[0_20px_45px_rgba(99,34,242,0.25)] bg-white dark:bg-[#0B0914] -translate-y-1">
+                              <div className="absolute w-24 h-37 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white z-20 shadow-[0_20px_45px_rgba(99,34,242,0.25)] bg-white dark:bg-[#0B0914] -translate-y-1">
                                 <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
                               </div>
                             </>
