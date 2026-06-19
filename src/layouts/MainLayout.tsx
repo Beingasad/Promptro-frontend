@@ -332,7 +332,7 @@ export default function MainLayout() {
 
       <main 
         style={isHome && isMobile ? { paddingTop: `${navbarHeight}px` } : undefined}
-        className={`flex-grow relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 ${showBottomNav ? 'lg:pl-28' : ''} ${
+        className={`flex-grow relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 ${
           isAuth 
             ? 'flex min-h-svh items-center py-3 sm:py-4' 
             : isPromptDetail 
@@ -348,7 +348,7 @@ export default function MainLayout() {
       </main>
 
       {!isAuth && (
-        <footer className={`relative z-10 text-center ${showBottomNav ? 'pb-24 md:pb-32 lg:pb-8 lg:pl-28' : 'pb-6 md:pb-8'}`}>
+        <footer className={`relative z-10 text-center ${showBottomNav ? 'pb-24 md:pb-32' : 'pb-6 md:pb-8'}`}>
           <p className="text-[10px] font-medium text-[#8d86a0]/50">
             &copy; {new Date().getFullYear()} Promptro. All rights reserved.
           </p>

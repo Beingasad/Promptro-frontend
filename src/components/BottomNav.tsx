@@ -12,7 +12,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="bottom-nav-glass rounded-full px-3 py-2 md:px-8 md:py-3.5 flex lg:flex-col items-center justify-between lg:justify-center shadow-[0_18px_46px_rgba(72,56,118,0.16)] w-[86%] max-w-[410px] md:max-w-[520px] lg:max-w-none lg:w-auto lg:h-auto lg:px-3.5 lg:py-8 lg:gap-6">
+    <div className="bottom-nav-glass rounded-full px-3 py-2 md:px-8 md:py-3.5 flex items-center justify-between shadow-[0_18px_46px_rgba(72,56,118,0.16)] w-[86%] max-w-[410px] md:max-w-[520px]">
       {navItems.map((item) => (
         <NavLink
           key={item.path}
@@ -22,8 +22,8 @@ export default function BottomNav() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className={({ isActive }) =>
             cn(
-              "flex flex-col items-center justify-center gap-1 md:gap-1.5 relative rounded-full min-w-14 md:min-w-20 lg:min-w-0 lg:w-16 lg:h-16 px-2.5 py-1.5 md:px-4 md:py-2 lg:p-0 transition-all duration-300 lg:rounded-2xl lg:hover:bg-primary/5 dark:lg:hover:bg-white/5",
-              isActive ? "text-primary lg:bg-primary/8 dark:lg:bg-white/8" : "text-[#6f6684] hover:text-[#171421]"
+              "flex flex-col items-center justify-center gap-1 md:gap-1.5 relative rounded-full min-w-14 md:min-w-20 px-2.5 py-1.5 md:px-4 md:py-2 transition-all duration-300",
+              isActive ? "text-primary" : "text-[#6f6684] hover:text-[#171421]"
             )
           }
         >
