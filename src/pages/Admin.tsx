@@ -1930,7 +1930,7 @@ export default function Admin() {
 
                             <button
                               onClick={() => handleDeleteNotification(notif.id)}
-                              className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                              className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-500/10 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -2514,7 +2514,7 @@ export default function Admin() {
                               setNewCatImageFile(null);
                               setNewCatImagePreview('');
                             }}
-                            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"
+                            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity rounded-xl"
                           >
                             <X className="w-4 h-4 text-white" />
                           </button>
@@ -2657,7 +2657,7 @@ export default function Admin() {
                               </p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                          <div className="flex items-center gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all">
                             <button 
                               onClick={() => {
                                 setEditingCategory(cat);
