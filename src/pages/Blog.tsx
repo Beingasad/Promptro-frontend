@@ -86,6 +86,9 @@ export default function Blog() {
               alt={featured.featuredImageAlt}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-t-[2rem]"
               loading="eager"
+              decoding="async"
+              width={1100}
+              height={480}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute top-4 left-4">
@@ -153,6 +156,9 @@ export default function Blog() {
                       alt={post.featuredImageAlt}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-t-[1.5rem]"
                       loading="lazy"
+                      decoding="async"
+                      width={400}
+                      height={225}
                     />
                   </div>
                   <div className="p-4 md:p-5 flex flex-col gap-2 flex-1">

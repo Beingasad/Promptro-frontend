@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import ImageCard, { Prompt } from './ImageCard';
 import { useIsMobileDevice } from '../utils/device';
 import { optimizeImageUrl } from '../utils/image';
@@ -12,7 +12,7 @@ interface MasonryGridProps {
 /** Number of leading cards that receive eager / priority loading. */
 const PRIORITY_COUNT = 15;
 
-export default function MasonryGrid({ prompts, isTwoColumns }: MasonryGridProps) {
+function MasonryGrid({ prompts, isTwoColumns }: MasonryGridProps) {
   const isMobile = useIsMobileDevice();
   const preloadedRef = useRef(false);
 
@@ -53,3 +53,5 @@ export default function MasonryGrid({ prompts, isTwoColumns }: MasonryGridProps)
     </div>
   );
 }
+
+export default memo(MasonryGrid);

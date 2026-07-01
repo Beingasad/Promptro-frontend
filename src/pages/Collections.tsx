@@ -282,7 +282,7 @@ export default function Collections() {
             <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mb-4 shadow-[0_10px_25px_rgba(109,77,236,0.12)]">
               <Lock className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-black text-[#171421] dark:text-white">Authentication Required</h3>
+            <h2 className="text-xl font-black text-[#171421] dark:text-white">Authentication Required</h2>
             <p className="mt-2 text-sm font-semibold text-[#6f6684] dark:text-[#afa6c8] max-w-sm leading-relaxed">
               To use this feature, you need to signup or login
             </p>
@@ -345,6 +345,10 @@ export default function Collections() {
               src={coverImage}
               alt={activeCollection.name}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+              width={1200}
+              height={320}
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary/10 via-[#ff6a3d]/5 to-transparent flex items-center justify-center">
@@ -423,7 +427,7 @@ export default function Collections() {
             <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
               <motion.button type="button" className="fixed inset-0 bg-black/5 backdrop-blur-[3px] w-full h-full border-none outline-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setRenameOpen(null)} />
               <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.94 }} className="relative w-full max-w-[20rem] rounded-[2rem] p-5 modal-glass">
-                <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white mb-3">Rename Board</h3>
+                <h2 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white mb-3">Rename Board</h2>
                 <form onSubmit={handleRename} className="flex flex-col gap-3">
                   <input type="text" required value={renameColName} onChange={(e) => setRenameColName(e.target.value)} placeholder="Collection Name" maxLength={30} className="w-full h-10 px-3.5 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white" />
                   <div className="flex gap-2">
@@ -523,6 +527,9 @@ export default function Collections() {
                         alt={col.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 rounded-[1.5rem] sm:rounded-[2.5rem]"
                         loading="lazy"
+                        decoding="async"
+                        width={400}
+                        height={500}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/8 via-transparent to-[#ff6a3d]/8">
@@ -536,7 +543,7 @@ export default function Collections() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1 line-clamp-1">{col.name}</h3>
+                          <h2 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1 line-clamp-1">{col.name}</h2>
                           <p className="text-white/60 text-[10px] sm:text-sm font-medium">
                             {col.prompts.length} {col.prompts.length === 1 ? 'Prompt' : 'Prompts'}
                           </p>
@@ -570,7 +577,7 @@ export default function Collections() {
             <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mb-4 shadow-[0_10px_25px_rgba(109,77,236,0.12)]">
               <Folder className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-black text-[#171421] dark:text-white">No collections yet</h3>
+            <h2 className="text-xl font-black text-[#171421] dark:text-white">No collections yet</h2>
             <p className="mt-2 text-sm font-semibold text-[#6f6684] dark:text-[#afa6c8] max-w-sm leading-relaxed">
               Create a board to organize prompts by style, project, or mood. Start fresh and compile your favorites!
             </p>
@@ -599,7 +606,7 @@ export default function Collections() {
               <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
                 <Folder className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-black text-[#171421] dark:text-white mb-1">Create Board</h3>
+              <h2 className="text-base font-black text-[#171421] dark:text-white mb-1">Create Board</h2>
               <p className="text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8] mb-4">Give your new prompt board a unique name.</p>
               <form onSubmit={handleCreate} className="flex flex-col gap-3.5">
                 <input
@@ -649,7 +656,7 @@ export default function Collections() {
               <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
                 <Edit3 className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-black text-[#171421] dark:text-white mb-1">Rename Board</h3>
+              <h2 className="text-base font-black text-[#171421] dark:text-white mb-1">Rename Board</h2>
               <p className="text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8] mb-4">Provide a new name for your prompt board.</p>
               <form onSubmit={handleRename} className="flex flex-col gap-3.5">
                 <input

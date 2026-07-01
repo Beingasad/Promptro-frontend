@@ -170,9 +170,12 @@ export default function BlogPost() {
           <div className="rounded-[1.5rem] overflow-hidden aspect-[16/9] shadow-[0_16px_48px_rgba(0,0,0,0.1)] dark:shadow-[0_16px_48px_rgba(0,0,0,0.3)]">
             <img
               src={post.featuredImage}
-              alt={post.featuredImageAlt}
+              alt={post.featuredImageAlt || post.title}
               className="w-full h-full object-cover"
               loading="eager"
+              decoding="async"
+              width={800}
+              height={450}
             />
           </div>
 
@@ -271,7 +274,15 @@ export default function BlogPost() {
                     className="group flex gap-3.5 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 hover:shadow-[0_12px_28px_rgba(116,55,255,0.12)] transition-all glass-shine hover-glass-glow"
                   >
                     <div className="h-16 w-20 shrink-0 rounded-xl overflow-hidden">
-                      <img src={r.featuredImage} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img 
+                        src={r.featuredImage} 
+                        alt={r.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                        loading="lazy"
+                        decoding="async"
+                        width={80}
+                        height={64}
+                      />
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">{r.category}</p>

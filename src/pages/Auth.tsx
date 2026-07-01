@@ -596,7 +596,15 @@ export default function Auth() {
 
             <div>
               <div className="mb-5 flex h-16 w-16 items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/90 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-                <img src="/brand/logo.png" alt="" className="h-14 w-auto object-contain" />
+                <img 
+                  src="/brand/logo.png" 
+                  alt="Promptro Logo" 
+                  className="h-14 w-auto object-contain" 
+                  loading="eager"
+                  decoding="async"
+                  width={56}
+                  height={56}
+                />
               </div>
               <p className="text-sm font-medium uppercase text-white/62">Promptro account</p>
               <h1 className="mt-3 text-4xl font-bold leading-tight text-white">
@@ -633,7 +641,15 @@ export default function Auth() {
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_10px_24px_rgba(72,56,118,0.1)]">
-              <img src="/brand/logo.png" alt="" className="h-8 w-auto object-contain" />
+              <img 
+                src="/brand/logo.png" 
+                alt="Promptro Logo" 
+                className="h-8 w-auto object-contain" 
+                loading="eager"
+                decoding="async"
+                width={32}
+                height={32}
+              />
             </div>
           </div>
 

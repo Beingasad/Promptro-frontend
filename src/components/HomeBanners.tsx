@@ -207,6 +207,10 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                   src={banner.secondary_image} 
                   alt="" 
                   className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width={98}
+                  height={136}
                 />
               </div>
             )}
@@ -216,8 +220,12 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
               <div className="relative z-20 h-[150px] w-[102px] rounded-2xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_16px_36px_rgba(0,0,0,0.22)] transform rotate-6 group-hover:rotate-10 group-hover:scale-105 transition-all duration-500">
                 <img 
                   src={banner.image_url} 
-                  alt="" 
+                  alt={banner.title} 
                   className="h-full w-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
+                  loading="lazy"
+                  decoding="async"
+                  width={102}
+                  height={150}
                 />
               </div>
             )}
@@ -275,6 +283,10 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                           src={selectedBannerForModal.prompt1.image_url} 
                           alt={selectedBannerForModal.prompt1.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                          decoding="async"
+                          width={180}
+                          height={225}
                         />
                       </div>
                       <div className="px-0.5 text-left">
@@ -298,6 +310,10 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                           src={selectedBannerForModal.prompt2.image_url} 
                           alt={selectedBannerForModal.prompt2.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                          decoding="async"
+                          width={180}
+                          height={225}
                         />
                       </div>
                       <div className="px-0.5 text-left">

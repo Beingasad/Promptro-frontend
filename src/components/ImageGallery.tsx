@@ -184,6 +184,22 @@ export default function ImageGallery({
     optimizeImageUrl(img, isPortrait ? 1200 : 1800)
   );
 
+  let imgWidth = 800;
+  let imgHeight = 800;
+  if (aspectRatio) {
+    let cleanRatio = aspectRatio;
+    if (aspectRatio.includes(':')) {
+      cleanRatio = aspectRatio.replace(':', '/');
+    }
+    if (cleanRatio.includes('/')) {
+      const [w, h] = cleanRatio.split('/').map(Number);
+      if (!isNaN(w) && !isNaN(h) && w > 0 && h > 0) {
+        imgWidth = 800;
+        imgHeight = Math.round((800 * h) / w);
+      }
+    }
+  }
+
   return (
     <div 
       ref={containerRef}
@@ -253,6 +269,8 @@ export default function ImageGallery({
                 )}
                 loading={idx === 0 ? "eager" : "lazy"}
                 decoding="async"
+                width={imgWidth}
+                height={imgHeight}
               />
             </div>
           );

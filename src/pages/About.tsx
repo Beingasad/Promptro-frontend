@@ -115,7 +115,15 @@ export default function About() {
         <div className="relative z-10">
           {/* Logo */}
           <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-white dark:bg-white/10 shadow-[0_20px_50px_rgba(116,55,255,0.22)] p-2">
-            <img src="/brand/logo.png" alt="Promptro" className="h-full w-auto object-contain" />
+            <img 
+              src="/brand/logo.png" 
+              alt="Promptro" 
+              className="h-full w-auto object-contain" 
+              loading="lazy"
+              decoding="async"
+              width={64}
+              height={64}
+            />
           </div>
 
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/12 border border-primary/20 px-4 py-1.5 mb-4">

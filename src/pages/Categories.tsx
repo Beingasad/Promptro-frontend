@@ -94,11 +94,16 @@ export default function Categories() {
                     <img 
                       src={coverImage} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                      loading="lazy"
+                      decoding="async"
+                      width={400}
+                      height={500}
+                      alt={cat.name}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
                        <div className="flex items-center justify-between">
                           <div>
-                            <h3 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{cat.name}</h3>
+                            <h2 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{cat.name}</h2>
                             <p className="text-white/60 text-[10px] sm:text-sm font-medium">Browse Prompts</p>
                           </div>
                           <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all shrink-0">

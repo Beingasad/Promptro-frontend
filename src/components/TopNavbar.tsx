@@ -54,8 +54,7 @@ import ProfileModal from './ProfileModal';
 
 import { useSearch } from '../context/SearchContext';
 import { useCategories } from '../context/CategoryContext';
-import { sections as privacySections } from '../pages/PrivacyPolicy';
-import { sections as termsSections } from '../pages/TermsOfService';
+import { privacySections, termsSections } from '../data/legalData';
 import blogPosts from '../data/blogData';
 import { ChevronDown } from 'lucide-react';
 
@@ -1220,7 +1219,15 @@ export default function TopNavbar() {
               className="flex flex-col text-left rounded-[1.25rem] overflow-hidden bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.12)] dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.22)] transition-all glass-shine hover-glass-glow"
             >
               <div className="aspect-[16/8] w-full overflow-hidden relative">
-                <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
+                <img 
+                  src={post.featuredImage} 
+                  alt={post.featuredImageAlt || post.title} 
+                  className="w-full h-full object-cover" 
+                  loading="lazy"
+                  decoding="async"
+                  width={240}
+                  height={120}
+                />
                 <div className="absolute top-2 left-2">
                   <span className="inline-block rounded-full bg-primary/90 px-2 py-0.5 text-[9px] font-bold text-white uppercase tracking-wider">
                     {post.category}
@@ -1252,7 +1259,15 @@ export default function TopNavbar() {
         <div className="flex flex-col gap-4 pb-6">
           {/* Featured Image */}
           <div className="rounded-[1.25rem] overflow-hidden aspect-[16/9] w-full">
-            <img src={post.featuredImage} alt={post.featuredImageAlt} className="w-full h-full object-cover" />
+            <img 
+              src={post.featuredImage} 
+              alt={post.featuredImageAlt || post.title} 
+              className="w-full h-full object-cover" 
+              loading="lazy"
+              decoding="async"
+              width={320}
+              height={180}
+            />
           </div>
 
           {/* Meta */}
@@ -1709,18 +1724,30 @@ export default function TopNavbar() {
           <Link to="/" onClick={() => setSearchQuery('')} className="flex shrink-0 items-center gap-1.5 md:gap-2" aria-label="Promptro home">
             <img
               src="/brand/logo.png"
-              alt=""
+              alt="Promptro Logo"
               className="-ml-1 h-14 w-auto object-contain md:-ml-2 md:h-[4.5rem]"
+              loading="eager"
+              decoding="async"
+              width={56}
+              height={56}
             />
             <img
               src="/brand/text-light.png"
               alt="Promptro"
               className="-ml-1 mt-0.5 md:mt-[3px] h-9 w-auto max-w-[6.8rem] object-contain dark:hidden md:-ml-2 md:h-11 md:max-w-[8.6rem]"
+              loading="eager"
+              decoding="async"
+              width={110}
+              height={36}
             />
             <img
               src="/brand/text-dark.png"
               alt="Promptro"
               className="hidden -ml-1 mt-0.5 md:mt-[3px] h-9 w-auto max-w-[6.8rem] object-contain dark:block md:-ml-2 md:h-11 md:max-w-[8.6rem]"
+              loading="eager"
+              decoding="async"
+              width={110}
+              height={36}
             />
           </Link>
         </div>
@@ -1833,6 +1860,10 @@ export default function TopNavbar() {
                 alt={displayName}
                 className="h-8 w-8 rounded-full object-cover shadow-[0_2px_8px_rgba(23,20,33,0.14)] md:h-9 md:w-9"
                 referrerPolicy="no-referrer"
+                loading="eager"
+                decoding="async"
+                width={32}
+                height={32}
               />
             ) : isLoggedIn ? (
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs md:text-sm font-black text-primary md:h-9 md:w-9">
@@ -2235,7 +2266,15 @@ export default function TopNavbar() {
                             }`}
                         >
                           <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                            <img src={prompt.image_url} className="w-full h-full object-cover" />
+                            <img 
+                              src={prompt.image_url} 
+                              alt={prompt.title} 
+                              className="w-full h-full object-cover" 
+                              loading="lazy"
+                              decoding="async"
+                              width={48}
+                              height={48}
+                            />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold truncate text-[#171421] dark:text-white">{prompt.title}</p>
@@ -2371,17 +2410,41 @@ export default function TopNavbar() {
                         <div className="relative flex items-center justify-center h-44 md:h-58 w-full my-auto z-10">
                           {selectedPrompts.length === 1 && (
                             <div className="w-24 h-36 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white dark:border-white/30 z-20 shadow-[0_12px_28px_rgba(99,34,242,0.18)] bg-white dark:bg-[#0B0914]">
-                              <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
+                              <img 
+                                src={selectedPrompts[0]?.image_url} 
+                                alt={selectedPrompts[0]?.title || ""} 
+                                className="w-full h-full object-cover" 
+                                loading="lazy"
+                                decoding="async"
+                                width={120}
+                                height={180}
+                              />
                             </div>
                           )}
 
                           {selectedPrompts.length === 2 && (
                             <div className="relative flex items-center justify-center w-full h-full">
                               <div className="w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/25 -rotate-[8deg] translate-x-3 opacity-80 shadow-md bg-white dark:bg-[#0B0914]">
-                                <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
+                                <img 
+                                  src={selectedPrompts[0]?.image_url} 
+                                  alt={selectedPrompts[0]?.title || ""} 
+                                  className="w-full h-full object-cover" 
+                                  loading="lazy"
+                                  decoding="async"
+                                  width={104}
+                                  height={160}
+                                />
                               </div>
                               <div className="w-22 h-34 md:w-28 md:h-46 rounded-xl overflow-hidden border border-white dark:border-white/30 rotate-[8deg] -translate-x-3 z-20 shadow-lg bg-white dark:bg-[#0B0914]">
-                                <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
+                                <img 
+                                  src={selectedPrompts[1]?.image_url} 
+                                  alt={selectedPrompts[1]?.title || ""} 
+                                  className="w-full h-full object-cover" 
+                                  loading="lazy"
+                                  decoding="async"
+                                  width={112}
+                                  height={180}
+                                />
                               </div>
                             </div>
                           )}
@@ -2389,15 +2452,39 @@ export default function TopNavbar() {
                           {selectedPrompts.length === 3 && (
                             <>
                               <div className="absolute left-3 md:left-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/25 -rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
-                                <img src={selectedPrompts[0]?.image_url} className="w-full h-full object-cover" />
+                                <img 
+                                  src={selectedPrompts[0]?.image_url} 
+                                  alt={selectedPrompts[0]?.title || ""} 
+                                  className="w-full h-full object-cover" 
+                                  loading="lazy"
+                                  decoding="async"
+                                  width={104}
+                                  height={160}
+                                />
                               </div>
 
                               <div className="absolute right-3 md:right-5 w-20 h-32 md:w-26 md:h-42 rounded-xl overflow-hidden border border-white/80 dark:border-white/25 rotate-[10deg] translate-y-3 opacity-75 shadow-lg bg-white dark:bg-[#0B0914] z-10">
-                                <img src={selectedPrompts[2]?.image_url} className="w-full h-full object-cover" />
+                                <img 
+                                  src={selectedPrompts[2]?.image_url} 
+                                  alt={selectedPrompts[2]?.title || ""} 
+                                  className="w-full h-full object-cover" 
+                                  loading="lazy"
+                                  decoding="async"
+                                  width={104}
+                                  height={160}
+                                />
                               </div>
 
                               <div className="absolute w-24 h-37 md:w-30 md:h-48 rounded-2xl overflow-hidden border border-white dark:border-white/30 z-20 shadow-[0_20px_45px_rgba(99,34,242,0.25)] bg-white dark:bg-[#0B0914] -translate-y-1">
-                                <img src={selectedPrompts[1]?.image_url} className="w-full h-full object-cover" />
+                                <img 
+                                  src={selectedPrompts[1]?.image_url} 
+                                  alt={selectedPrompts[1]?.title || ""} 
+                                  className="w-full h-full object-cover" 
+                                  loading="lazy"
+                                  decoding="async"
+                                  width={120}
+                                  height={180}
+                                />
                               </div>
                             </>
                           )}

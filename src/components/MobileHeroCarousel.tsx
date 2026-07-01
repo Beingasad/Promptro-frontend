@@ -256,6 +256,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                         src={current.secondary_image} 
                         alt="" 
                         className="h-full w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        width={58}
+                        height={82}
                       />
                     </div>
                   )}
@@ -264,8 +268,12 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                   <div className="relative z-20 h-[90px] w-[62px] rounded-xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_10px_24px_rgba(0,0,0,0.2)] transform rotate-6 transition-all duration-500 group-hover:rotate-10 group-hover:scale-105">
                     <img 
                       src={current.image_url} 
-                      alt="" 
+                      alt={current.title} 
                       className="h-full w-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
+                      loading="lazy"
+                      decoding="async"
+                      width={62}
+                      height={90}
                     />
                   </div>
                 </div>
@@ -326,6 +334,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                           src={selectedBannerForModal.prompt1.image_url} 
                           alt={selectedBannerForModal.prompt1.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                          decoding="async"
+                          width={150}
+                          height={187}
                         />
                       </div>
                       <div className="px-0.5 text-left">
@@ -349,6 +361,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                           src={selectedBannerForModal.prompt2.image_url} 
                           alt={selectedBannerForModal.prompt2.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                          decoding="async"
+                          width={150}
+                          height={187}
                         />
                       </div>
                       <div className="px-0.5 text-left">

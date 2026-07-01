@@ -3,7 +3,7 @@ import { Heart, Eye, Bookmark, GalleryVerticalEnd, Share2, Check } from 'lucide-
 import CollectionSelectModal from './CollectionSelectModal';
 import AuthModal from './AuthModal';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, memo } from 'react';
 import type { MouseEvent } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
@@ -43,8 +43,18 @@ const formatCount = (value: number) => {
   return `${value}`;
 };
 
-export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
+function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
   const finalAspectRatio = aspectRatio || prompt.aspectRatio || prompt.aspect_ratio;
+  let imgWidth = 400;
+  let imgHeight = 500;
+  if (finalAspectRatio && finalAspectRatio.includes('/')) {
+    const [w, h] = finalAspectRatio.split('/').map(Number);
+    if (!isNaN(w) && !isNaN(h) && w > 0 && h > 0) {
+      imgWidth = 400;
+      imgHeight = Math.round((400 * h) / w);
+    }
+  }
+
   let isPortrait = true;
   if (finalAspectRatio && finalAspectRatio.includes('/')) {
     const [w, h] = finalAspectRatio.split('/').map(Number);
@@ -348,8 +358,10 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
             viewport={{ once: true, margin: '120px' }}
             transition={alreadyCached ? { duration: 0 } : { duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
             className={`w-full ${finalAspectRatio ? 'h-full object-cover' : 'h-auto'} block transition-transform duration-700 ease-out group-hover:scale-[1.05] origin-top`}
-            loading="eager"
+            loading={priority ? "eager" : "lazy"}
             decoding="async"
+            width={imgWidth}
+            height={imgHeight}
             {...(priority ? { fetchPriority: 'high' as any } : {})}
           />
         )}
@@ -499,4 +511,12 @@ export default function ImageCard({ prompt, aspectRatio, priority }: ImageCardPr
     </>
   );
 }
+
+export default memo(ImageCard, (prevProps, nextProps) => {
+  return prevProps.prompt.id === nextProps.prompt.id &&
+         prevProps.prompt.likes === nextProps.prompt.likes &&
+         prevProps.prompt.views === nextProps.prompt.views &&
+         prevProps.priority === nextProps.priority &&
+         prevProps.aspectRatio === nextProps.aspectRatio;
+});
 
