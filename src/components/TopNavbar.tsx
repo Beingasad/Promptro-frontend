@@ -1962,7 +1962,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/30 dark:bg-white/[0.05] border border-white/60 dark:border-white/10 backdrop-blur-2xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] touch-none">
+                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 sidebar-header-glass rounded-full px-1.5 touch-none">
                       <button
                         type="button"
                         onClick={(e) => {
