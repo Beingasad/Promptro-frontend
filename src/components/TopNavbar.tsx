@@ -1169,7 +1169,7 @@ export default function TopNavbar() {
             ]}
           />
           {privacySections.map((s) => (
-            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
+            <div key={s.id} className="rounded-[1.25rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-4 glass-shine hover-glass-glow backdrop-blur-md">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
               <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
                 {s.content}
@@ -1194,7 +1194,7 @@ export default function TopNavbar() {
             ]}
           />
           {termsSections.map((s) => (
-            <div key={s.id} className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 glass-shine hover-glass-glow">
+            <div key={s.id} className="rounded-[1.25rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-4 glass-shine hover-glass-glow backdrop-blur-md">
               <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
               <div className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] leading-relaxed">
                 {s.content}
@@ -1290,7 +1290,7 @@ export default function TopNavbar() {
 
           {/* FAQ Accordion */}
           {post.faqs.length > 0 && (
-            <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 mt-2 glass-shine hover-glass-glow">
+            <div className="rounded-[1.25rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-4 mt-2 glass-shine hover-glass-glow backdrop-blur-md">
               <h4 className="text-xs font-bold text-[#171421] dark:text-white mb-3">Frequently Asked Questions</h4>
               <div className="flex flex-col divide-y divide-white/35 dark:divide-white/5">
                 {post.faqs.map((faq, i) => (
@@ -1327,7 +1327,7 @@ export default function TopNavbar() {
               </div>
             ))
           ) : (
-            <div className="break-inside-avoid rounded-[1.35rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-4 text-sm font-medium leading-6 text-[#6f6684]">
+            <div className="break-inside-avoid rounded-[1.35rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-4 text-sm font-medium leading-6 text-[#6f6684] backdrop-blur-md">
               Open a prompt detail page and it will appear here.
             </div>
           )}
@@ -1368,7 +1368,7 @@ export default function TopNavbar() {
                 const action = link.href === '/privacy-policy' ? 'privacy' : 'terms';
                 handleDrawerAction(action);
               }}
-              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-4 hover:bg-gradient-to-r hover:from-primary/8 hover:to-secondary/8 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)] transition-all text-left glass-shine hover-glass-glow"
+              className="flex w-full items-center gap-3 rounded-[1.25rem] bg-white/35 dark:bg-white/[0.06] border border-white/45 dark:border-white/10 p-4 hover:bg-gradient-to-r hover:from-primary/8 hover:to-secondary/8 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)] transition-all text-left glass-shine hover-glass-glow backdrop-blur-md"
             >
               <div className={`h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-gradient-to-br ${link.color} text-white shadow-[0_4px_12px_rgba(0,0,0,0.08)]`}>
                 <link.icon className="h-5 w-5" />
@@ -1380,7 +1380,7 @@ export default function TopNavbar() {
               <ChevronRight className="h-4 w-4 shrink-0 text-[#80779a]" />
             </button>
           ))}
-          <div className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3 text-center glass-shine hover-glass-glow">
+          <div className="rounded-[1.15rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-3 text-center glass-shine hover-glass-glow backdrop-blur-md">
             <p className="text-[10px] font-medium text-[#8a819d]">
               Questions? Email: <a href="mailto:support.promptro@gmail.com" className="text-primary font-bold hover:underline">support.promptro@gmail.com</a>
             </p>
@@ -1603,7 +1603,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Founder */}
-        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 flex items-center justify-between gap-3 glass-shine hover-glass-glow">
+        <div className="rounded-[1.25rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-4 flex items-center justify-between gap-3 glass-shine hover-glass-glow backdrop-blur-md">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#7437ff] to-[#ff642d] flex items-center justify-center shadow-[0_6px_16px_rgba(116,55,255,0.3)]">
               <span className="text-sm font-black text-white">MA</span>
@@ -1630,7 +1630,7 @@ export default function TopNavbar() {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-2">
           {stats.map((stat, i) => (
-            <div key={i} className="rounded-[1.15rem] bg-white/60 dark:bg-white/5 p-3 text-center glass-shine hover-glass-glow">
+            <div key={i} className="rounded-[1.15rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-3 text-center glass-shine hover-glass-glow backdrop-blur-md">
               <p className="text-[10px] font-bold uppercase tracking-wider text-[#8a819d]">{stat.label}</p>
               <span className={`mt-1 block text-base font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                 {stat.value}
@@ -1640,7 +1640,7 @@ export default function TopNavbar() {
         </div>
 
         {/* Mission */}
-        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 glass-shine hover-glass-glow">
+        <div className="rounded-[1.25rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-4 glass-shine hover-glass-glow backdrop-blur-md">
           <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Mission</p>
           <p className="text-[12px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6]">
             Help creators discover, save and share high-quality AI prompts — for free, forever.
@@ -1652,7 +1652,7 @@ export default function TopNavbar() {
           href="https://instagram.com/promptro.in"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 rounded-[1.25rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99]"
+          className="flex items-center gap-3 rounded-[1.25rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-3.5 glass-shine hover-glass-glow hover:shadow-[0_8px_20px_rgba(116,55,255,0.1)] transition-all hover:scale-[1.01] active:scale-[0.99] backdrop-blur-md"
         >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#f09433] to-[#e6683c] shadow-[0_4px_12px_rgba(230,104,60,0.3)]">
             <Instagram className="h-4.5 w-4.5 text-white" />
@@ -1665,7 +1665,7 @@ export default function TopNavbar() {
         </a>
 
         {/* Coming Soon Features */}
-        <div className="rounded-[1.25rem] bg-white/60 dark:bg-white/5 p-4 glass-shine hover-glass-glow">
+        <div className="rounded-[1.25rem] bg-white/30 dark:bg-white/[0.06] border border-white/60 dark:border-white/10 p-4 glass-shine hover-glass-glow backdrop-blur-md">
           <p className="text-[10px] font-black uppercase tracking-widest text-[#8a819d] mb-3">Coming Soon ✨</p>
           <div className="flex flex-col gap-1.5">
             {comingSoon.map((feature) => (
@@ -1919,7 +1919,7 @@ export default function TopNavbar() {
             <motion.button
               type="button"
               aria-label="Close menu backdrop"
-              className="fixed inset-0 z-[80] bg-black/5 backdrop-blur-[3px] touch-none"
+              className="fixed inset-0 z-[80] bg-black/10 dark:bg-black/35 backdrop-blur-[4px] touch-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -1944,10 +1944,10 @@ export default function TopNavbar() {
                   ? { height: `${mobileHeight}px`, bottom: 'auto' }
                   : undefined
               }
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/45 dark:border-r-white/8 pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 ${
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/50 dark:border-r-white/10 pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 bg-white/20 dark:bg-[#0d0b14]/30 backdrop-blur-[35px] shadow-[10px_0_50px_rgba(72,56,118,0.12)] dark:shadow-[10px_0_50px_rgba(0,0,0,0.5)] ${
                 (windowWidth < 768 && (expandedView || isFullWidth))
-                  ? 'bg-white dark:bg-[#0d0b14] rounded-none'
-                  : 'bg-white/65 dark:bg-[#171421]/68 backdrop-blur-3xl rounded-tr-[2.5rem] rounded-br-[2.5rem]'
+                  ? 'rounded-none'
+                  : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
               }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
@@ -1962,7 +1962,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/70 dark:bg-[#1c182e]/80 backdrop-blur-xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] touch-none">
+                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/45 dark:bg-[#1c182e]/60 backdrop-blur-2xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] touch-none">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -2019,7 +2019,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="mb-2 md:mb-3 shrink-0 mx-3 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-3.5 md:p-4.5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow touch-none">
+                    <div className="mb-2 md:mb-3 shrink-0 mx-3 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/35 dark:bg-white/[0.07] border border-white/45 dark:border-white/10 p-3.5 md:p-4.5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow touch-none">
                       <div className="flex items-start gap-2 text-left">
                         <div className="min-w-0 w-full">
                           <p className="text-[9px] md:text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
@@ -2048,7 +2048,7 @@ export default function TopNavbar() {
                           }}
                           className={`group flex w-full shrink-0 items-center gap-2 md:gap-3 rounded-[0.85rem] md:rounded-[1.15rem] px-3.5 py-3 md:px-5 md:py-4.5 text-left backdrop-blur-xl transition-all duration-300 glass-shine hover-glass-glow ${item.action === 'delete-account'
                               ? 'bg-[#fff4f8]/72 border border-rose-500/20 hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
-                              : 'bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-gradient-to-r hover:from-primary/8 hover:to-secondary/8 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)]'
+                              : 'bg-white/35 dark:bg-white/[0.07] border border-white/45 dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-gradient-to-r hover:from-primary/8 hover:to-secondary/8 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)]'
                             }`}
                         >
                           <span className="flex h-6.5 w-6.5 md:h-8 md:w-8 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[6deg] text-primary">
