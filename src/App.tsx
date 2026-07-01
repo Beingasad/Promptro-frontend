@@ -6,6 +6,8 @@ import { CategoryProvider } from './context/CategoryContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import GlobalAlert from './components/common/GlobalAlert';
 import { useEffect } from 'react';
+import Admin from './pages/Admin';
+import AdminLogin from './pages/AdminLogin';
 
 // Lazy-load page components for optimal code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -14,8 +16,6 @@ const Saved = lazy(() => import('./pages/Saved'));
 const Collections = lazy(() => import('./pages/Collections'));
 const Categories = lazy(() => import('./pages/Categories'));
 const ImageDetail = lazy(() => import('./pages/ImageDetail'));
-const Admin = lazy(() => import('./pages/Admin'));
-const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const Auth = lazy(() => import('./pages/Auth'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
