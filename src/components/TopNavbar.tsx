@@ -1962,7 +1962,7 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/45 dark:bg-[#1c182e]/60 backdrop-blur-2xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] touch-none">
+                    <div className="absolute top-2 inset-x-2 z-30 grid grid-cols-[2.75rem_1fr_2.75rem] items-center h-14 bg-white/30 dark:bg-white/[0.05] border border-white/60 dark:border-white/10 backdrop-blur-2xl rounded-full px-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.16)] touch-none">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -1978,13 +1978,13 @@ export default function TopNavbar() {
                             navigate('/', { state: { keepMenuOpen: true } });
                           }
                         }}
-                        className="flex h-11 w-11 items-center justify-center rounded-full bg-white dark:bg-[#2b2540] text-[#171421] dark:text-white shadow-[0_2px_10px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform"
+                        className="flex h-11 w-11 items-center justify-center rounded-full bg-white/40 dark:bg-white/10 border border-white/60 dark:border-white/15 text-[#171421] dark:text-white shadow-[0_2px_10px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform backdrop-blur-md"
                         aria-label="Back to menu"
                       >
                         <ArrowLeft className="h-5 w-5" />
                       </button>
                       <h2 className="text-center text-base sm:text-lg font-bold text-[#171421] dark:text-white line-clamp-1 px-2">{expandedTitle}</h2>
-                      <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white dark:bg-[#2b2540] shadow-[0_2px_10px_rgba(0,0,0,0.08)]">
+                      <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white/40 dark:bg-white/10 border border-white/60 dark:border-white/15 shadow-[0_2px_10px_rgba(0,0,0,0.08)] backdrop-blur-md">
                         {expandedView === 'recent' ? (
                           <Clock3 className="h-5 w-5 text-primary" />
                         ) : expandedView === 'help' ? (

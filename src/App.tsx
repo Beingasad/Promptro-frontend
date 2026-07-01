@@ -45,9 +45,21 @@ function App() {
           <Router>
             <GlobalAlert />
             <Suspense fallback={
-              <div className="min-h-[60vh] flex flex-col justify-center items-center">
-                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-xs font-bold text-[#8a819d] mt-3">Loading page...</p>
+              <div className="fixed inset-0 z-[9999] flex flex-col justify-center items-center bg-[#f8f7fc]/45 dark:bg-[#0d0b14]/45 backdrop-blur-[6px]">
+                <div className="relative flex flex-col items-center p-8 rounded-[2rem] bg-white/30 dark:bg-white/[0.03] border border-white/60 dark:border-white/10 shadow-[0_30px_60px_rgba(72,56,118,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+                  {/* Glowing Premium Loader Orb */}
+                  <div className="relative w-16 h-16 flex items-center justify-center">
+                    <div className="absolute inset-0 border-2 border-primary/20 rounded-full"></div>
+                    <div className="absolute inset-0 border-2 border-t-primary border-r-secondary rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary opacity-20 animate-pulse"></div>
+                    <img src="/brand/logo.png" className="absolute w-5 h-5 object-contain" alt="Logo" />
+                  </div>
+                  {/* Sliding Progress Indicator */}
+                  <div className="h-1.5 w-24 bg-[#cfc7dd]/30 dark:bg-white/10 rounded-full overflow-hidden mt-6 relative">
+                    <div className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-r from-primary to-secondary rounded-full animate-loading-bar"></div>
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-primary mt-4">Promptro</p>
+                </div>
               </div>
             }>
               <Routes>
