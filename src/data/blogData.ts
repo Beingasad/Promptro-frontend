@@ -734,6 +734,9 @@ const posts: BlogPost[] = [
   },
 ];
 
+// Sort posts by publishDate descending (latest first)
+posts.sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
+
 export default posts;
 
 export function getPostBySlug(slug: string): BlogPost | undefined {

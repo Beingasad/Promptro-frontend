@@ -718,6 +718,11 @@
   background-color: rgba(255, 255, 255, 0.02);
 }
 
+.prose-custom img {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
 /* Global utility classes outside of Tailwind layers to ensure they are never stripped */
 .hide-scrollbar::-webkit-scrollbar {
   display: none !important;
