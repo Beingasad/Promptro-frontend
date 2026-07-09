@@ -1242,7 +1242,7 @@ export default function TopNavbar() {
                   {post.excerpt}
                 </p>
                 <div className="mt-3 pt-2 border-t border-white/30 dark:border-white/5 flex items-center justify-between text-[8px] font-bold text-[#8d86a0] uppercase tracking-wider">
-                  <span>{new Date(post.publishDate).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                  <span>{new Date(post.publishDate).toLocaleString('en-IN', { month: 'short', day: 'numeric' })}</span>
                   <span className="text-primary font-bold flex items-center gap-0.5">Read <ChevronRight className="h-3 w-3" /></span>
                 </div>
               </div>
@@ -1274,7 +1274,7 @@ export default function TopNavbar() {
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{post.category}</span>
             <h3 className="text-sm font-black text-[#171421] dark:text-white leading-tight">{post.title}</h3>
-            <p className="text-[9px] font-medium text-[#8d86a0]">By {post.author} • {new Date(post.publishDate).toLocaleString('en-IN', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+            <p className="text-[9px] font-medium text-[#8d86a0]">By {post.author} • {new Date(post.publishDate).toLocaleString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
 
           {/* Excerpt */}
