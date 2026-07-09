@@ -209,11 +209,13 @@ export default function BlogPost() {
           </details>
 
           {/* Article Content */}
-          <div
-            ref={contentRef}
-            className="prose-custom"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          <div className="bg-white dark:bg-[#0f0d15] rounded-[2rem] p-6 md:p-10 lg:p-12 shadow-[0_8px_32px_rgba(72,56,118,0.06)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_8px_32px_rgba(0,0,0,0.4)] border border-[#e8e2f0] dark:border-white/5">
+            <div
+              ref={contentRef}
+              className="prose-custom"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+          </div>
 
           {/* Author Card */}
           <div className="pt-6 mt-2 border-t border-[#e8e2f0] dark:border-white/10">
