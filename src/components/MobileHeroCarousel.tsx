@@ -172,7 +172,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
   const current = processedBanners[currentIndex];
 
   return (
-    <div className="lg:hidden w-full h-[120px] relative mt-0 mb-0 -mx-0.5 scale-[1.02]">
+    <div className="lg:hidden w-full h-[130px] md:h-[220px] relative mt-0 mb-0 -mx-0.5 md:mx-0 scale-[1.02] md:scale-100">
       <AnimatePresence>
         <motion.div
           key={currentIndex}
@@ -200,7 +200,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
           ) : (
             <div 
               className={cn(
-                "group relative flex w-full items-center justify-between py-3 px-4 rounded-[1.35rem] shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-3xl overflow-hidden bg-gradient-to-br min-h-[120px] border-none transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10 animate-gradient-slow",
+                "group relative flex w-full items-center justify-between py-3 px-4 md:py-6 md:px-8 rounded-[1.35rem] md:rounded-[2rem] shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-3xl overflow-hidden bg-gradient-to-br min-h-[130px] md:min-h-[220px] border-none transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10 animate-gradient-slow",
                 `${current.bg_gradient} ${getDarkGradient(current.bg_gradient)}`
               )}
             >
@@ -212,13 +212,13 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               <div className="absolute -bottom-[30%] right-[20%] w-32 h-32 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
 
               <div className="flex-1 min-w-0 pr-4 relative z-10">
-                <span className="text-[9.5px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] block mb-1">
+                <span className="text-[9.5px] md:text-[13px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] block mb-1 md:mb-2">
                   {current.tag_text}
                 </span>
-                <h3 className="text-[14px] font-[900] text-[#171421] dark:text-white leading-tight whitespace-nowrap group-hover:text-primary transition-colors duration-300">
+                <h3 className="text-[15px] md:text-[28px] font-[900] text-[#171421] dark:text-white leading-tight whitespace-nowrap group-hover:text-primary transition-colors duration-300">
                   {current.title}
                 </h3>
-                <p className="text-[10px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 leading-normal opacity-90 mt-0.5">
+                <p className="text-[10px] md:text-[15px] font-semibold text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 md:line-clamp-3 leading-normal opacity-90 mt-0.5 md:mt-2.5 md:max-w-[85%]">
                   {current.subtitle}
                 </p>
                 {current.prompt1 && current.prompt2 ? (
@@ -229,7 +229,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                       e.stopPropagation();
                       setSelectedBannerForModal(current);
                     }}
-                    className="cursor-pointer mt-2 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 outline-none animate-shimmer-button"
+                    className="cursor-pointer mt-2 md:mt-4 flex items-center text-[11px] md:text-[13px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 md:px-6 md:py-2.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] md:shadow-[0_4px_16px_rgba(116,55,255,0.4)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 outline-none animate-shimmer-button"
                   >
                     <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                   </button>
@@ -237,7 +237,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                   <a
                     href={current.button_link || '#'}
                     onClick={(e) => e.stopPropagation()}
-                    className="cursor-pointer mt-2 flex items-center text-[11px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button"
+                    className="cursor-pointer mt-2 md:mt-4 flex items-center text-[11px] md:text-[13px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 md:px-6 md:py-2.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] md:shadow-[0_4px_16px_rgba(116,55,255,0.4)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button"
                   >
                     <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                   </a>
@@ -245,13 +245,13 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               </div>
 
               {current.image_url && (
-                <div className="relative h-[96px] w-[86px] shrink-0 flex items-center justify-end z-10">
+                <div className="relative h-[104px] w-[92px] md:h-[180px] md:w-[150px] shrink-0 flex items-center justify-end z-10">
                   {/* Decorative Glow */}
-                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg scale-75 group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg md:blur-2xl scale-75 group-hover:scale-110 transition-transform duration-700" />
                   
                   {/* Secondary Image (Back) */}
                   {current.secondary_image && (
-                    <div className="absolute z-10 -left-3 top-2 h-[82px] w-[58px] rounded-xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.12)] transform -rotate-12 transition-all duration-500 group-hover:scale-105 group-hover:-translate-x-0.5 group-hover:-rotate-18">
+                    <div className="absolute z-10 -left-3 md:-left-6 top-2 md:top-4 h-[86px] w-[62px] md:h-[140px] md:w-[100px] rounded-xl md:rounded-2xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_8px_16px_rgba(0,0,0,0.12)] md:shadow-[0_12px_24px_rgba(0,0,0,0.15)] transform -rotate-12 transition-all duration-500 group-hover:scale-105 group-hover:-translate-x-0.5 group-hover:-rotate-18">
                       <img 
                         src={current.secondary_image} 
                         alt="" 
@@ -265,7 +265,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                   )}
 
                   {/* Main Image (Front) */}
-                  <div className="relative z-20 h-[90px] w-[62px] rounded-xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_10px_24px_rgba(0,0,0,0.2)] transform rotate-6 transition-all duration-500 group-hover:rotate-10 group-hover:scale-105">
+                  <div className="relative z-20 h-[96px] w-[68px] md:h-[160px] md:w-[110px] rounded-xl md:rounded-2xl overflow-hidden border-2 border-white dark:border-white/30 shadow-[0_10px_24px_rgba(0,0,0,0.2)] md:shadow-[0_16px_32px_rgba(0,0,0,0.25)] transform rotate-6 transition-all duration-500 group-hover:rotate-10 group-hover:scale-105">
                     <img 
                       src={current.image_url} 
                       alt={current.title} 
