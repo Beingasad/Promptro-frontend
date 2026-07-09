@@ -669,6 +669,69 @@ const posts: BlogPost[] = [
 </section>
     `,
   },
+  {
+    slug: 'top-ai-prompts-for-virtual-travel-cityscapes',
+    title: 'Top AI Prompts for Virtual Travel & Cityscapes',
+    metaTitle: 'Best AI Travel Prompts for Midjourney & DALL-E | Promptro',
+    metaDescription: 'Discover the best AI prompts for creating stunning virtual travel destinations, futuristic cityscapes, and minimalist architecture.',
+    keywords: 'AI travel prompts, cityscapes, Midjourney travel, DALL-E architecture, Promptro',
+    featuredImage: 'https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop',
+    featuredImageAlt: 'Futuristic Cyberpunk Cityscape at night',
+    author: 'Mohammad Asad Ansari',
+    authorTitle: 'Founder of Promptro',
+    publishDate: '2026-07-09T00:00:00Z',
+    updatedDate: '2026-07-09T00:00:00Z',
+    readingTime: '5 min read',
+    category: 'Inspiration',
+    tags: ['Travel', 'Architecture', 'Sci-Fi', 'Cityscapes'],
+    excerpt: 'Want to travel the world (and the future) without leaving your desk? Here are the top travel and cityscape AI prompts directly from the Promptro community.',
+    toc: [
+      { id: 'intro', title: 'Virtual Travel with AI', level: 2 },
+      { id: 'cyberpunk-city', title: 'The Cyberpunk Cityscape', level: 2 },
+      { id: 'minimalist-arch', title: 'Minimalist Architecture Escapes', level: 2 },
+    ],
+    faqs: [
+      {
+        question: 'How do I use these travel prompts?',
+        answer: 'Simply copy the prompt text and paste it into your favorite AI image generator like Midjourney or DALL-E 3.',
+      }
+    ],
+    relatedSlugs: ['what-is-an-ai-image-prompt'],
+    content: `
+<section id="intro">
+  <h2>Virtual Travel with AI</h2>
+  <p>AI image generation has opened up a whole new world of virtual travel. Whether you want to visualize a highly advanced futuristic Tokyo or a serene, minimalist concrete villa in the hills, AI can take you there in seconds. In this post, we showcase some of the most loved travel and architecture prompts uploaded right here on Promptro.</p>
+</section>
+
+<section id="cyberpunk-city">
+  <h2>The Cyberpunk Cityscape</h2>
+  <p>If you're a fan of Sci-Fi travel, this prompt is a must-try. It generates incredibly detailed, neon-drenched futuristic cities that look straight out of a high-budget movie.</p>
+  <figure>
+    <img src="https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000&auto=format&fit=crop" alt="Cyberpunk Cityscape" />
+    <figcaption>A highly detailed cyberpunk cityscape at night.</figcaption>
+  </figure>
+  <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 my-6">
+    <h4 class="text-sm font-bold text-primary mb-2">Prompt:</h4>
+    <code class="text-sm text-[#4a445f] dark:text-[#c4bed6] block p-3 bg-white/50 dark:bg-black/20 rounded-lg">A highly detailed cyberpunk cityscape at night, flying cars, neon lights reflecting on wet streets, cinematic lighting, 8k resolution, unreal engine 5 render --ar 16:9 --v 6.0</code>
+    <a href="/prompt/82cbce5b-14ce-406f-8d89-36293aa3dca1" class="mt-4 inline-block text-xs font-bold text-white bg-primary px-4 py-2 rounded-full hover:bg-primary/90 transition-colors">View Prompt Details</a>
+  </div>
+</section>
+
+<section id="minimalist-arch">
+  <h2>Minimalist Architecture Escapes</h2>
+  <p>For those who prefer a calm, modern aesthetic for their virtual getaways, this minimalist architecture prompt delivers clean lines and beautiful concrete textures. Perfect for visualizing a modern luxury travel destination.</p>
+  <figure>
+    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop" alt="Minimalist Architecture" />
+    <figcaption>Clean minimalist concrete architecture.</figcaption>
+  </figure>
+  <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 my-6">
+    <h4 class="text-sm font-bold text-primary mb-2">Prompt:</h4>
+    <code class="text-sm text-[#4a445f] dark:text-[#c4bed6] block p-3 bg-white/50 dark:bg-black/20 rounded-lg">Clean minimalist concrete architecture, modern villa overlooking the ocean, golden hour lighting, architectural photography, hyper-realistic, 8k --ar 16:9</code>
+    <a href="/prompt/e970645d-9699-47df-ad52-b45974007b1b" class="mt-4 inline-block text-xs font-bold text-white bg-primary px-4 py-2 rounded-full hover:bg-primary/90 transition-colors">View Prompt Details</a>
+  </div>
+</section>
+    `,
+  },
 ];
 
 export default posts;
