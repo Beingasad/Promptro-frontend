@@ -119,10 +119,6 @@ export default function Blog() {
                 <Calendar className="h-3.5 w-3.5" />
                 {formatDate(featured.publishDate)}
               </span>
-              <span className="flex items-center gap-1">
-                <BookOpen className="h-3.5 w-3.5" />
-                {featured.readingTime}
-              </span>
               <span className="ml-auto flex items-center gap-1 text-primary font-bold group-hover:gap-2 transition-all">
                 Read article
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -179,10 +175,6 @@ export default function Blog() {
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {formatDate(post.publishDate)}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <BookOpen className="h-3 w-3" />
-                        {post.readingTime}
                       </span>
                     </div>
                   </div>

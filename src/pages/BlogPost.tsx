@@ -150,10 +150,6 @@ export default function BlogPost() {
               <Calendar className="h-3.5 w-3.5" />
               {formatDate(post.publishDate)}
             </span>
-            <span className="flex items-center gap-1">
-              <BookOpen className="h-3.5 w-3.5" />
-              {post.readingTime}
-            </span>
             {post.updatedDate !== post.publishDate && (
               <span className="text-[10px] opacity-60 italic">
                 Updated {formatDate(post.updatedDate)}
@@ -293,7 +289,7 @@ export default function BlogPost() {
                       <p className="text-xs font-semibold text-[#171421] dark:text-white line-clamp-2 leading-snug group-hover:text-primary transition-colors">
                         {r.title}
                       </p>
-                      <p className="text-[10px] text-[#8d86a0]/70 mt-1">{r.readingTime}</p>
+                      <p className="text-[10px] text-[#8d86a0]/70 mt-1">{formatDate(r.publishDate)}</p>
                     </div>
                   </Link>
                 ))}
