@@ -1944,10 +1944,10 @@ export default function TopNavbar() {
                   ? { height: `${mobileHeight}px`, bottom: 'auto' }
                   : undefined
               }
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden border-r border-white/50 dark:border-r-white/10 pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 bg-white/25 dark:bg-[#0d0b14]/30 backdrop-blur-[35px] shadow-[10px_0_50px_rgba(72,56,118,0.12)] dark:shadow-[10px_0_50px_rgba(0,0,0,0.5)] ${
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 profile-modal-glass border-l-0 ${
                 (windowWidth < 768 && (expandedView || isFullWidth))
-                  ? 'rounded-none'
-                  : 'rounded-tr-[2.5rem] rounded-br-[2.5rem]'
+                  ? 'rounded-none border-t-0 border-b-0'
+                  : 'rounded-tr-[2.5rem] rounded-br-[2.5rem] border-y-0'
               }`}
             >
               <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
