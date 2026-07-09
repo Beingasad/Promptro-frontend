@@ -2145,7 +2145,7 @@ export default function TopNavbar() {
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 p-3.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] p-3.5 profile-modal-glass shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)]"
             >
               <div className="mb-2 flex items-center justify-between gap-3 touch-none">
                 <button

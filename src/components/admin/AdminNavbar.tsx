@@ -41,7 +41,7 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
         const mapped = recentFeedbacks.map((f: any) => ({
           id: String(f.id),
           text: `New feedback: ${f.subject}`,
-          time: new Date(f.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          time: new Date(f.created_at).toLocaleString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
           type: 'feedback',
           icon: MessageSquare,
           status: f.status || 'unread'

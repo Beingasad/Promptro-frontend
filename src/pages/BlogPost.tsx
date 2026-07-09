@@ -8,10 +8,12 @@ import AuthorCard from '../components/common/AuthorCard';
 import { getPostBySlug, getRelatedPosts } from '../data/blogData';
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-IN', {
+  return new Date(iso).toLocaleString('en-IN', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
   });
 }
 
