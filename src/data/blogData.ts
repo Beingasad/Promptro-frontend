@@ -713,7 +713,7 @@ const posts: BlogPost[] = [
   <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 my-6">
     <h4 class="text-sm font-bold text-primary mb-2">Prompt Highlights:</h4>
     <p class="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] mb-3">ULTRA-REALISTIC 8K CINEMATIC PORTRAIT OF A STYLISH YOUNG INDIAN MAN. USE THE UPLOADED IMAGE AS THE ONLY IDENTITY, HAIR, AND OUTFIT REFERENCE...</p>
-    <a href="/prompt/5b4afe62-e2da-4e8a-bf8a-8024c929d1e6" class="mt-2 inline-block text-xs font-bold text-white bg-primary px-4 py-2 rounded-full hover:bg-primary/90 transition-colors">View Full Prompt Details</a>
+    <a href="/prompt/5b4afe62-e2da-4e8a-bf8a-8024c929d1e6" class="mt-2 inline-block text-xs font-bold !text-white bg-primary px-4 py-2 rounded-full hover:bg-primary/90 transition-colors">View Full Prompt Details</a>
   </div>
 </section>
 
@@ -727,7 +727,7 @@ const posts: BlogPost[] = [
   <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 my-6">
     <h4 class="text-sm font-bold text-primary mb-2">Prompt Highlights:</h4>
     <p class="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] mb-3">Ultra-realistic 8K editorial-style travel portrait. He stands in a stylish confident pose... on a giant floating 3D map above the ocean.</p>
-    <a href="/prompt/5f74aec4-3ce0-4420-aca2-0bcd88d0abca" class="mt-2 inline-block text-xs font-bold text-white bg-primary px-4 py-2 rounded-full hover:bg-primary/90 transition-colors">View Full Prompt Details</a>
+    <a href="/prompt/5f74aec4-3ce0-4420-aca2-0bcd88d0abca" class="mt-2 inline-block text-xs font-bold !text-white bg-primary px-4 py-2 rounded-full hover:bg-primary/90 transition-colors">View Full Prompt Details</a>
   </div>
 </section>
     `,
