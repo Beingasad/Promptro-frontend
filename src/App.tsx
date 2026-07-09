@@ -9,19 +9,20 @@ import { useEffect } from 'react';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 
-// Lazy-load page components for optimal code splitting
-const Home = lazy(() => import('./pages/Home'));
-const Explore = lazy(() => import('./pages/Explore'));
-const Saved = lazy(() => import('./pages/Saved'));
-const Collections = lazy(() => import('./pages/Collections'));
-const Categories = lazy(() => import('./pages/Categories'));
-const ImageDetail = lazy(() => import('./pages/ImageDetail'));
+import Home from './pages/Home';
+import Explore from './pages/Explore';
+import Saved from './pages/Saved';
+import Collections from './pages/Collections';
+import Categories from './pages/Categories';
+import ImageDetail from './pages/ImageDetail';
+import Profile from './pages/Profile';
+
+// Lazy-load non-core pages for code splitting
 const Auth = lazy(() => import('./pages/Auth'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
-const Profile = lazy(() => import('./pages/Profile'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
@@ -44,7 +45,7 @@ function App() {
         <CategoryProvider>
           <Router>
             <GlobalAlert />
-            <Suspense fallback={null}>
+            <Suspense fallback={<div className="fixed inset-0 flex items-center justify-center z-[200] bg-background/50 backdrop-blur-sm"><div className="h-8 w-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin"></div></div>}>
               <Routes>
                 <Route path="/" element={<MainLayout />}>
                   <Route index element={<Home />} />
