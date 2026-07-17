@@ -21,6 +21,9 @@ interface Banner {
   image_url?: string | null;
   secondary_image?: string | null;
   bg_gradient?: string;
+  prompt1?: any;
+  prompt2?: any;
+  prompts_list?: any[];
 }
 
 const getDarkGradient = (lightGrad: string = '') => {
@@ -102,7 +105,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
 
     const latest = [...prompts].sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime());
     const loved = [...prompts].sort((a, b) => ((b.likes || 0) + (b.views || 0)) - ((a.likes || 0) + (a.views || 0)));
-    const editorsPick = [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)))[0];
+    const editorsPick = [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)));
 
     const result: Banner[] = [
       // Slide 0: Main Hero Text
@@ -115,18 +118,22 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
       }
     ];
 
-    if (editorsPick) {
+    if (editorsPick.length >= 2) {
       result.push({
         id: 'editors-pick',
         type: 'banner',
-        title: editorsPick.title,
-        subtitle: editorsPick.prompt_text || '',
+        title: 'Editor\'s Pick',
+        subtitle: editorsPick[0].prompt_text || '',
         tag_text: 'Editor\'s Pick',
         tag_icon: 'star',
-        button_text: 'View Prompt',
-        button_link: `/prompt/${editorsPick.id}`,
-        image_url: editorsPick.image_url,
+        button_text: 'View Prompts',
+        button_link: `/prompt/${editorsPick[0].id}`,
+        image_url: editorsPick[0].image_url,
+        secondary_image: editorsPick[1].image_url,
         bg_gradient: 'from-[#f7f5ff] to-[#fff5f8]',
+        prompt1: editorsPick[0],
+        prompt2: editorsPick[1],
+        prompts_list: editorsPick.slice(0, 6),
       } as Banner);
     }
 
@@ -140,6 +147,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
       let subtitle = banner.subtitle;
       let prompt1: any = null;
       let prompt2: any = null;
+      let prompts_list: any[] = [];
 
       if (tag.includes('NEW') && latest.length >= 2) {
         img = img || latest[0].image_url;
@@ -149,6 +157,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         subtitle = `New: ${latest[0].title}`;
         prompt1 = latest[0];
         prompt2 = latest[1];
+        prompts_list = latest.slice(0, 6);
       } else if ((tag.includes('TRENDING') || tag.includes('LOVED')) && loved.length >= 2) {
         img = img || loved[0].image_url;
         secImg = loved[1].image_url;
@@ -157,6 +166,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         subtitle = banner.subtitle;
         prompt1 = loved[0];
         prompt2 = loved[1];
+        prompts_list = loved.slice(0, 6);
       }
 
       result.push({
@@ -168,7 +178,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         secondary_image: secImg,
         button_link: link,
         prompt1,
-        prompt2
+        prompt2,
+        prompts_list
       });
     });
 
@@ -351,18 +362,22 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Prompt 1 */}
-                  {selectedBannerForModal.prompt1 && (
-                    <a 
-                      href={`/prompt/${selectedBannerForModal.prompt1.id}`}
-                      onClick={() => setSelectedBannerForModal(null)}
-                      className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
+                <div className="grid grid-cols-2 gap-3 max-h-[55vh] overflow-y-auto pr-1.5 pb-2 custom-scrollbar">
+                  {(selectedBannerForModal.prompts_list?.length > 0 ? selectedBannerForModal.prompts_list : [selectedBannerForModal.prompt1, selectedBannerForModal.prompt2].filter(Boolean)).map((prompt: any, index: number) => (
+                    <button
+                      key={prompt.id}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedBannerForModal(null);
+                        navigate(`/prompt/${prompt.id}`);
+                      }}
+                      className="cursor-pointer group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 outline-none text-left"
                     >
                       <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md bg-[#e8e2f0]/20">
                         <img 
-                          src={selectedBannerForModal.prompt1.image_url} 
-                          alt={selectedBannerForModal.prompt1.title} 
+                          src={prompt.image_url} 
+                          alt={prompt.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           loading="lazy"
                           decoding="async"
@@ -370,41 +385,14 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                           height={187}
                         />
                       </div>
-                      <div className="px-0.5 text-left">
-                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option 1</span>
+                      <div className="px-0.5 w-full">
+                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option {index + 1}</span>
                         <h4 className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
-                          {selectedBannerForModal.prompt1.title}
+                          {prompt.title}
                         </h4>
                       </div>
-                    </a>
-                  )}
-
-                  {/* Prompt 2 */}
-                  {selectedBannerForModal.prompt2 && (
-                    <a 
-                      href={`/prompt/${selectedBannerForModal.prompt2.id}`}
-                      onClick={() => setSelectedBannerForModal(null)}
-                      className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
-                    >
-                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md bg-[#e8e2f0]/20">
-                        <img 
-                          src={selectedBannerForModal.prompt2.image_url} 
-                          alt={selectedBannerForModal.prompt2.title} 
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                          decoding="async"
-                          width={150}
-                          height={187}
-                        />
-                      </div>
-                      <div className="px-0.5 text-left">
-                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option 2</span>
-                        <h4 className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
-                          {selectedBannerForModal.prompt2.title}
-                        </h4>
-                      </div>
-                    </a>
-                  )}
+                    </button>
+                  ))}
                 </div>
               </motion.div>
             </div>

@@ -18,8 +18,12 @@ interface Banner {
   button_text: string;
   button_link: string;
   image_url: string | null;
+  secondary_image?: string | null;
   bg_gradient: string;
   is_active: boolean;
+  prompt1?: any;
+  prompt2?: any;
+  prompts_list?: any[];
 }
 
 const getIcon = (iconName: string | null) => {
@@ -97,7 +101,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   const processedBanners = useMemo(() => {
     if (loading || banners.length === 0 || prompts.length === 0) return [];
 
-    const editorsPick = [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)))[0];
+    const editorsPick = [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)));
     
     const mapped = banners.map((banner: Banner) => {
       const tag = banner.tag_text.toUpperCase();
@@ -115,7 +119,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           secondary_image: latest[1].image_url,
           button_link: `/prompt/${latest[0].id}`,
           prompt1: latest[0],
-          prompt2: latest[1]
+          prompt2: latest[1],
+          prompts_list: latest.slice(0, 6)
         };
       }
       
@@ -132,24 +137,29 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           secondary_image: loved[1].image_url,
           button_link: `/prompt/${loved[0].id}`,
           prompt1: loved[0],
-          prompt2: loved[1]
+          prompt2: loved[1],
+          prompts_list: loved.slice(0, 6)
         };
       }
 
       return banner;
     });
 
-    if (editorsPick) {
+    if (editorsPick.length >= 2) {
       mapped.unshift({
         id: 'editors-pick' as any,
         tag_text: 'Editor\'s Pick',
         tag_icon: 'star',
-        title: editorsPick.title,
-        subtitle: editorsPick.prompt_text || '',
-        button_text: 'View Prompt',
-        button_link: `/prompt/${editorsPick.id}`,
-        image_url: editorsPick.image_url,
+        title: 'Editor\'s Pick',
+        subtitle: editorsPick[0].prompt_text || '',
+        button_text: 'View Prompts',
+        button_link: `/prompt/${editorsPick[0].id}`,
+        image_url: editorsPick[0].image_url,
+        secondary_image: editorsPick[1].image_url,
         bg_gradient: 'from-[#f7f5ff] to-[#fff5f8]',
+        prompt1: editorsPick[0],
+        prompt2: editorsPick[1],
+        prompts_list: editorsPick.slice(0, 6),
         is_active: true
       });
     }
@@ -308,60 +318,37 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Prompt 1 */}
-                  {selectedBannerForModal.prompt1 && (
-                    <a 
-                      href={`/prompt/${selectedBannerForModal.prompt1.id}`}
-                      onClick={() => setSelectedBannerForModal(null)}
-                      className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
+                <div className="grid grid-cols-2 gap-3 max-h-[55vh] overflow-y-auto pr-1.5 pb-2 custom-scrollbar">
+                  {(selectedBannerForModal.prompts_list?.length > 0 ? selectedBannerForModal.prompts_list : [selectedBannerForModal.prompt1, selectedBannerForModal.prompt2].filter(Boolean)).map((prompt: any, index: number) => (
+                    <button
+                      key={prompt.id}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedBannerForModal(null);
+                        navigate(`/prompt/${prompt.id}`);
+                      }}
+                      className="cursor-pointer group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 outline-none text-left"
                     >
                       <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md bg-[#e8e2f0]/20">
                         <img 
-                          src={selectedBannerForModal.prompt1.image_url} 
-                          alt={selectedBannerForModal.prompt1.title} 
+                          src={prompt.image_url} 
+                          alt={prompt.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           loading="lazy"
                           decoding="async"
-                          width={180}
-                          height={225}
+                          width={150}
+                          height={187}
                         />
                       </div>
-                      <div className="px-0.5 text-left">
-                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option 1</span>
+                      <div className="px-0.5 w-full">
+                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option {index + 1}</span>
                         <h4 className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
-                          {selectedBannerForModal.prompt1.title}
+                          {prompt.title}
                         </h4>
                       </div>
-                    </a>
-                  )}
-
-                  {/* Prompt 2 */}
-                  {selectedBannerForModal.prompt2 && (
-                    <a 
-                      href={`/prompt/${selectedBannerForModal.prompt2.id}`}
-                      onClick={() => setSelectedBannerForModal(null)}
-                      className="group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300"
-                    >
-                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md bg-[#e8e2f0]/20">
-                        <img 
-                          src={selectedBannerForModal.prompt2.image_url} 
-                          alt={selectedBannerForModal.prompt2.title} 
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                          decoding="async"
-                          width={180}
-                          height={225}
-                        />
-                      </div>
-                      <div className="px-0.5 text-left">
-                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option 2</span>
-                        <h4 className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
-                          {selectedBannerForModal.prompt2.title}
-                        </h4>
-                      </div>
-                    </a>
-                  )}
+                    </button>
+                  ))}
                 </div>
               </motion.div>
             </div>
