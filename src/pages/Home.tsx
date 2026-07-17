@@ -159,11 +159,6 @@ export default function Home() {
     return matchesCategory && matchesSearch;
   });
 
-  const editorsPick = useMemo(() => {
-    if (prompts.length === 0) return null;
-    return [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)))[0];
-  }, [prompts]);
-
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -246,52 +241,6 @@ export default function Home() {
           </>
         ) : (
           <>
-            {editorsPick && !searchQuery && activeCategory === 'All' && (
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                onClick={() => navigate(`/prompt/${editorsPick.id}`)}
-                className="cursor-pointer mb-8 group relative flex flex-col md:flex-row w-full items-center justify-between p-6 md:p-10 rounded-[2rem] overflow-hidden shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br from-[#1c1a26] to-[#12101b] border border-[#70639d]/22 dark:border-black/40"
-              >
-                {/* Background image with overlay */}
-                <div className="absolute inset-0 z-0 opacity-30">
-                  <img src={editorsPick.image_url || undefined} alt="" className="w-full h-full object-cover blur-md scale-110" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#1c1a26] via-[#1c1a26]/90 to-[#1c1a26]/40" />
-                </div>
-                
-                <div className="relative z-10 flex flex-col gap-3 max-w-xl w-full">
-                  <div className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-[#ffd700] fill-[#ffd700]" />
-                    <span className="text-[12px] font-black uppercase tracking-[0.18em] text-[#ffd700] block">
-                      Editor's Pick
-                    </span>
-                  </div>
-                  <h3 className="text-[28px] md:text-[36px] font-[900] text-white leading-[1.2] tracking-tight group-hover:text-primary transition-colors duration-300">
-                    {editorsPick.title}
-                  </h3>
-                  <p className="text-[14px] md:text-[16px] font-medium text-white/70 line-clamp-2 md:line-clamp-3 leading-relaxed">
-                    {editorsPick.prompt_text}
-                  </p>
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/prompt/${editorsPick.id}`);
-                    }}
-                    className="mt-4 flex items-center gap-2 text-[13px] md:text-[14px] font-black text-[#1c1a26] bg-white px-6 py-3 rounded-full w-fit hover:scale-[1.03] transition-transform duration-300 hover:shadow-[0_8px_20px_rgba(255,255,255,0.3)] active:scale-95"
-                  >
-                    View Prompt
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="relative z-10 mt-8 md:mt-0 md:ml-8 shrink-0 self-center md:self-auto w-full md:w-auto flex justify-center">
-                  <div className="w-[180px] md:w-[220px] aspect-[4/5] rounded-2xl overflow-hidden border-4 border-white/10 shadow-[0_16px_36px_rgba(0,0,0,0.5)] transform rotate-3 group-hover:rotate-6 group-hover:scale-105 transition-all duration-500">
-                    <img src={editorsPick.image_url || undefined} alt={editorsPick.title} className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700" loading="lazy" />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
               <div className="flex w-[calc((100%-0.625rem)/2)] min-w-0 items-center gap-2 text-[#171421] md:gap-3 lg:w-[calc((100%-1.75rem)/3)]">
                 <Flame className="w-[clamp(22px,6.2vw,28px)] h-[clamp(22px,6.2vw,28px)] md:w-8 md:h-8 text-[#ff6a3d] shrink-0" fill="currentColor" />

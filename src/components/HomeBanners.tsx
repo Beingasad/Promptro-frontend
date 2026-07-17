@@ -97,7 +97,9 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   const processedBanners = useMemo(() => {
     if (loading || banners.length === 0 || prompts.length === 0) return [];
 
-    return banners.map((banner: Banner) => {
+    const editorsPick = [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)))[0];
+    
+    const mapped = banners.map((banner: Banner) => {
       const tag = banner.tag_text.toUpperCase();
       
       // Logic for Latest Prompt (NEW UPDATE)
@@ -136,6 +138,23 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
 
       return banner;
     });
+
+    if (editorsPick) {
+      mapped.unshift({
+        id: 'editors-pick' as any,
+        tag_text: 'Editor\'s Pick',
+        tag_icon: 'star',
+        title: editorsPick.title,
+        subtitle: editorsPick.prompt_text || '',
+        button_text: 'View Prompt',
+        button_link: `/prompt/${editorsPick.id}`,
+        image_url: editorsPick.image_url,
+        bg_gradient: 'from-[#1c1a26] to-[#12101b]',
+        is_active: true
+      });
+    }
+
+    return mapped;
   }, [banners, prompts, loading]);
 
   if (loading || processedBanners.length === 0) {
@@ -143,8 +162,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   }
 
   return (
-    <div className="hidden lg:grid grid-cols-2 gap-5 lg:flex-[1.8] min-w-0">
-      {processedBanners.slice(0, 2).map((banner: any, index) => (
+    <div className="hidden lg:grid grid-cols-2 xl:grid-cols-3 gap-5 lg:flex-[1.8] min-w-0">
+      {processedBanners.slice(0, 3).map((banner: any, index) => (
         <motion.div
           key={banner.id}
           initial={{ opacity: 0, x: 20 }}
@@ -177,7 +196,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
 
           {/* Content side */}
           <div className="relative z-10 flex flex-col gap-2.5 max-w-[48%]">
-            <span className="text-[11px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] block mb-1">
+            <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] mb-1">
+              {banner.tag_icon && getIcon(banner.tag_icon)}
               {banner.tag_text}
             </span>
             <h3 className="text-[20px] sm:text-[22px] font-[900] text-[#171421] dark:text-white leading-[1.1] tracking-tight group-hover:text-primary transition-colors duration-300">

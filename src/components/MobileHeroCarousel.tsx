@@ -102,6 +102,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
 
     const latest = [...prompts].sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime());
     const loved = [...prompts].sort((a, b) => ((b.likes || 0) + (b.views || 0)) - ((a.likes || 0) + (a.views || 0)));
+    const editorsPick = [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)))[0];
 
     const result: Banner[] = [
       // Slide 0: Main Hero Text
@@ -113,6 +114,21 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         tag_text: 'Discover, Copy & Create'
       }
     ];
+
+    if (editorsPick) {
+      result.push({
+        id: 'editors-pick',
+        type: 'banner',
+        title: editorsPick.title,
+        subtitle: editorsPick.prompt_text || '',
+        tag_text: 'Editor\'s Pick',
+        tag_icon: 'star',
+        button_text: 'View Prompt',
+        button_link: `/prompt/${editorsPick.id}`,
+        image_url: editorsPick.image_url,
+        bg_gradient: 'from-[#1c1a26] to-[#12101b]',
+      } as Banner);
+    }
 
     // Slide 1 & 2 from API
     banners.slice(0, 2).forEach((banner: any) => {
@@ -221,7 +237,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               <div className="absolute -bottom-[30%] right-[20%] w-32 h-32 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
 
               <div className="flex-1 min-w-0 pr-4 relative z-10">
-                <span className="text-[9.5px] md:text-[13px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] block mb-1 md:mb-2">
+                <span className="flex items-center gap-1.5 text-[9.5px] md:text-[13px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] mb-1 md:mb-2">
+                  {current.tag_icon && getIcon(current.tag_icon)}
                   {current.tag_text}
                 </span>
                 <h3 className="text-[15px] md:text-[28px] font-[900] text-[#171421] dark:text-white leading-tight whitespace-nowrap group-hover:text-primary transition-colors duration-300">
