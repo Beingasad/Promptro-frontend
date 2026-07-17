@@ -55,6 +55,7 @@ interface HomeBannersProps {
 
 export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProps) {
   const navigate = useNavigate();
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedBannerForModal, setSelectedBannerForModal] = useState<any | null>(null);
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
@@ -173,18 +174,31 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
     return mapped;
   }, [banners, prompts, loading]);
 
+  useEffect(() => {
+    if (processedBanners.length <= 2) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % processedBanners.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [processedBanners.length]);
+
+  const visibleBanners = useMemo(() => {
+    if (processedBanners.length <= 2) return processedBanners;
+    return [
+      processedBanners[currentIndex],
+      processedBanners[(currentIndex + 1) % processedBanners.length]
+    ];
+  }, [processedBanners, currentIndex]);
+
   if (loading || processedBanners.length === 0) {
     return <HomeBannersSkeleton />;
   }
 
   return (
-    <div className="hidden lg:grid lg:grid-cols-3 gap-5 lg:flex-[1.8] min-w-0">
-      {processedBanners.slice(0, 3).map((banner: any, index: number) => (
-        <motion.div
-          key={banner.id}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
+    <div className="hidden lg:grid lg:grid-cols-2 gap-5 lg:flex-[1.8] min-w-0">
+      {visibleBanners.map((banner: any, index: number) => (
+        <div
+          key={`${banner.id}-${currentIndex}`} // Force re-render just to be safe, though not strictly needed
           className={cn(
             "group relative flex items-center justify-between p-7 rounded-[1.75rem] overflow-hidden shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br border border-[#70639d]/22 dark:border-black/40 animate-gradient-slow",
             banner.bg_gradient,
@@ -289,7 +303,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
               </div>
             )}
           </div>
-        </motion.div>
+        </div>
       ))}
 
       {createPortal(
