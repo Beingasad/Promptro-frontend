@@ -24,9 +24,11 @@ interface Banner {
   prompt1?: any;
   prompt2?: any;
   prompts_list?: any[];
+  is_premium?: boolean;
 }
 
 const getDarkGradient = (lightGrad: string = '') => {
+  if (lightGrad.includes('dark:')) return '';
   if (lightGrad.includes('e0e7ff')) return 'dark:from-[#1e1b4b] dark:to-[#312e81]';
   if (lightGrad.includes('ffedd5')) return 'dark:from-[#431407] dark:to-[#500724]';
   if (lightGrad.includes('dcfce7')) return 'dark:from-[#064e3b] dark:to-[#1e3a8a]';
@@ -130,10 +132,11 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         button_link: `/prompt/${editorsPick[0].id}`,
         image_url: editorsPick[0].image_url,
         secondary_image: editorsPick[1].image_url,
-        bg_gradient: 'from-[#f7f5ff] to-[#fff5f8]',
+        bg_gradient: 'from-[#fffcf5] to-[#fff3d6] dark:from-[#2e2200] dark:to-[#140f00] border-2 border-[#ffe699] dark:border-[#664d00] shadow-[0_15px_40px_rgba(212,175,55,0.2)] dark:shadow-[0_15px_40px_rgba(255,215,0,0.1)]',
         prompt1: editorsPick[0],
         prompt2: editorsPick[1],
         prompts_list: editorsPick.slice(0, 6),
+        is_premium: true,
       } as Banner);
     }
 
@@ -248,7 +251,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               <div className="absolute -bottom-[30%] right-[20%] w-32 h-32 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
 
               <div className="flex-1 min-w-0 pr-4 relative z-10">
-                <span className="flex items-center gap-1.5 text-[9.5px] md:text-[13px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] mb-1 md:mb-2">
+                <span className={cn(
+                  "flex items-center gap-1.5 text-[9.5px] md:text-[13px] font-black uppercase tracking-[0.18em] mb-1 md:mb-2",
+                  current.is_premium ? "text-[#b8860b] dark:text-[#ffd700]" : "text-primary dark:text-[#a78bfa]"
+                )}>
                   {current.tag_icon && getIcon(current.tag_icon)}
                   {current.tag_text}
                 </span>

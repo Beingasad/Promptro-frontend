@@ -24,6 +24,7 @@ interface Banner {
   prompt1?: any;
   prompt2?: any;
   prompts_list?: any[];
+  is_premium?: boolean;
 }
 
 const getIcon = (iconName: string | null) => {
@@ -37,6 +38,7 @@ const getIcon = (iconName: string | null) => {
 };
 
 const getDarkGradient = (lightGrad: string = '') => {
+  if (lightGrad.includes('dark:')) return '';
   if (lightGrad.includes('e0e7ff')) return 'dark:from-[#1e1b4b] dark:to-[#312e81]';
   if (lightGrad.includes('ffedd5')) return 'dark:from-[#431407] dark:to-[#500724]';
   if (lightGrad.includes('dcfce7')) return 'dark:from-[#064e3b] dark:to-[#1e3a8a]';
@@ -156,11 +158,12 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
         button_link: `/prompt/${editorsPick[0].id}`,
         image_url: editorsPick[0].image_url,
         secondary_image: editorsPick[1].image_url,
-        bg_gradient: 'from-[#f7f5ff] to-[#fff5f8]',
+        bg_gradient: 'from-[#fffcf5] to-[#fff3d6] dark:from-[#2e2200] dark:to-[#140f00] border-2 border-[#ffe699] dark:border-[#664d00] shadow-[0_15px_40px_rgba(212,175,55,0.2)] dark:shadow-[0_15px_40px_rgba(255,215,0,0.1)]',
         prompt1: editorsPick[0],
         prompt2: editorsPick[1],
         prompts_list: editorsPick.slice(0, 6),
-        is_active: true
+        is_active: true,
+        is_premium: true
       });
     }
 
@@ -206,7 +209,10 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
 
           {/* Content side */}
           <div className="relative z-10 flex flex-col gap-2.5 max-w-[48%]">
-            <span className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-primary dark:text-[#a78bfa] mb-1">
+            <span className={cn(
+              "flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.18em] mb-1",
+              banner.is_premium ? "text-[#b8860b] dark:text-[#ffd700]" : "text-primary dark:text-[#a78bfa]"
+            )}>
               {banner.tag_icon && getIcon(banner.tag_icon)}
               {banner.tag_text}
             </span>
