@@ -195,16 +195,16 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   }
 
   return (
-    <div className="hidden lg:flex gap-5 lg:flex-[1.8] min-w-0 overflow-hidden relative items-stretch">
+    <div className="hidden lg:flex gap-5 lg:flex-[1.8] min-w-0 relative items-stretch">
       <AnimatePresence mode="popLayout" initial={false}>
         {visibleBanners.map((banner: any, index: number) => (
           <motion.div
             key={banner.id}
             layout
-            initial={{ x: 'calc(100% + 20px)', zIndex: 10 }}
-            animate={{ x: 0, zIndex: 10 }}
-            exit={{ x: 'calc(-100% - 20px)', zIndex: -1, boxShadow: 'none' }}
-            transition={{ duration: 0.6, ease: 'easeInOut' }}
+            initial={{ opacity: 0, scale: 0.85, y: 40, zIndex: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0, zIndex: 10 }}
+            exit={{ opacity: 0, scale: 0.85, y: -40, zIndex: 0, pointerEvents: 'none' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
               "flex-1 w-[calc(50%-10px)] min-w-[calc(50%-10px)] max-w-[calc(50%-10px)] shrink-0 group relative flex items-center justify-between p-7 rounded-[1.75rem] overflow-hidden shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br border border-[#70639d]/22 dark:border-black/40 animate-gradient-slow",
             banner.bg_gradient,
