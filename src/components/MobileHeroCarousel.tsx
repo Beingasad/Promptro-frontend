@@ -126,7 +126,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         button_text: 'View Prompt',
         button_link: `/prompt/${editorsPick.id}`,
         image_url: editorsPick.image_url,
-        bg_gradient: 'from-[#1c1a26] to-[#12101b]',
+        bg_gradient: 'from-[#f7f5ff] to-[#fff5f8]',
       } as Banner);
     }
 
