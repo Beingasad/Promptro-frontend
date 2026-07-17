@@ -22,7 +22,12 @@ export interface Prompt {
   model: string;
   aspectRatio?: string;
   aspect_ratio?: string;
+  copies?: number;
+  saves?: number;
   prompt_text?: string;
+  negative_prompt?: string | null;
+  advanced_prompt?: string | null;
+  professional_prompt?: string | null;
   tags?: string[];
   created_at?: string;
   updated_at?: string;
@@ -192,6 +197,9 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
     setSavedPrompt(prompt, nextSaved);
     setSaved(nextSaved);
     saveUserActivity(auth?.currentUser).catch(() => undefined);
+    const data = new FormData();
+    data.append('saved', String(nextSaved));
+    axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/save`, data, { timeout: 15000 }).catch(() => undefined);
 
     const cardEl = (event.currentTarget as HTMLElement).closest('.group');
     const rect = cardEl?.getBoundingClientRect();

@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation, useNavigationType } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import MasonryGrid from '../components/MasonryGrid';
 import { Prompt } from '../components/ImageCard';
 import { motion } from 'framer-motion';
-import { Flame, ChevronRight } from 'lucide-react';
+import { Flame, ChevronRight, Sparkles, TrendingUp } from 'lucide-react';
 import { useSearch } from '../context/SearchContext';
 import HomeBanners from '../components/HomeBanners';
 import MobileHeroCarousel from '../components/MobileHeroCarousel';
@@ -159,6 +159,26 @@ export default function Home() {
     return matchesCategory && matchesSearch;
   });
 
+  const trendingThisWeek = useMemo(() => {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    const recent = visiblePrompts.filter(p => p.created_at && new Date(p.created_at) >= oneWeekAgo);
+    if (recent.length === 0) return visiblePrompts.slice(0, 8); // fallback
+    return [...recent].sort((a, b) => {
+      const scoreA = (a.views || 0) + ((a.likes || 0) * 2) + ((a.copies || 0) * 3) + ((a.saves || 0) * 3);
+      const scoreB = (b.views || 0) + ((b.likes || 0) * 2) + ((b.copies || 0) * 3) + ((b.saves || 0) * 3);
+      return scoreB - scoreA;
+    }).slice(0, 8);
+  }, [visiblePrompts]);
+
+  const newThisWeek = useMemo(() => {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    const recent = visiblePrompts.filter(p => p.created_at && new Date(p.created_at) >= oneWeekAgo);
+    if (recent.length === 0) return visiblePrompts.slice(0, 8); // fallback
+    return [...recent].sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime()).slice(0, 8);
+  }, [visiblePrompts]);
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -245,7 +265,35 @@ export default function Home() {
               <div className="flex w-[calc((100%-0.625rem)/2)] min-w-0 items-center gap-2 text-[#171421] md:gap-3 lg:w-[calc((100%-1.75rem)/3)]">
                 <Flame className="w-[clamp(22px,6.2vw,28px)] h-[clamp(22px,6.2vw,28px)] md:w-8 md:h-8 text-[#ff6a3d] shrink-0" fill="currentColor" />
                 <h2 className="whitespace-nowrap text-[clamp(22px,6.2vw,28px)] font-bold leading-none md:text-[32px]">
-                  {searchQuery ? 'Search Results' : 'Trending Now'}
+                  Trending This Week
+                </h2>
+              </div>
+            </div>
+            {trendingThisWeek.length > 0 && (
+              <div className="mb-10">
+                <MasonryGrid prompts={trendingThisWeek} />
+              </div>
+            )}
+
+            <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
+              <div className="flex w-[calc((100%-0.625rem)/2)] min-w-0 items-center gap-2 text-[#171421] md:gap-3 lg:w-[calc((100%-1.75rem)/3)]">
+                <Sparkles className="w-[clamp(22px,6.2vw,28px)] h-[clamp(22px,6.2vw,28px)] md:w-8 md:h-8 text-[#dd4bd2] shrink-0" />
+                <h2 className="whitespace-nowrap text-[clamp(22px,6.2vw,28px)] font-bold leading-none md:text-[32px]">
+                  New This Week
+                </h2>
+              </div>
+            </div>
+            {newThisWeek.length > 0 && (
+              <div className="mb-10">
+                <MasonryGrid prompts={newThisWeek} />
+              </div>
+            )}
+
+            <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
+              <div className="flex w-[calc((100%-0.625rem)/2)] min-w-0 items-center gap-2 text-[#171421] md:gap-3 lg:w-[calc((100%-1.75rem)/3)]">
+                <Flame className="w-[clamp(22px,6.2vw,28px)] h-[clamp(22px,6.2vw,28px)] md:w-8 md:h-8 text-[#ff6a3d] shrink-0" fill="currentColor" />
+                <h2 className="whitespace-nowrap text-[clamp(22px,6.2vw,28px)] font-bold leading-none md:text-[32px]">
+                  {searchQuery ? 'Search Results' : 'Explore All Prompts'}
                 </h2>
               </div>
               <button 

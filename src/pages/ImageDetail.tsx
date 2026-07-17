@@ -19,9 +19,12 @@ import ImageGallery from '../components/ImageGallery';
 interface PromptDetail extends Prompt {
   prompt_text?: string;
   negative_prompt?: string | null;
+  advanced_prompt?: string | null;
+  professional_prompt?: string | null;
   tags?: string[];
   trending?: boolean;
   visibility?: string;
+  copies?: number;
 }
 
 
@@ -61,6 +64,14 @@ export default function ImageDetail() {
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [activeVersion, setActiveVersion] = useState<'Basic' | 'Advanced' | 'Professional'>('Basic');
+
+  const hasMultipleVersions = Boolean(prompt?.advanced_prompt || prompt?.professional_prompt);
+  const activePromptText = activeVersion === 'Advanced' && prompt?.advanced_prompt 
+    ? prompt.advanced_prompt 
+    : activeVersion === 'Professional' && prompt?.professional_prompt 
+    ? prompt.professional_prompt 
+    : prompt?.prompt_text || '';
 
   const handleShare = async () => {
     if (!prompt) return;
@@ -204,9 +215,27 @@ export default function ImageDetail() {
 
         // Fetch related prompts in parallel
         try {
-          const relatedRes = await axios.get(`${API_BASE_URL}/api/prompts`, { params: { category: apiPrompt.category, limit: 5 }, timeout: 15000 });
+          const relatedRes = await axios.get(`${API_BASE_URL}/api/prompts`, { params: { limit: 100 }, timeout: 15000 });
           const relatedPrompts = Array.isArray(relatedRes.data) ? relatedRes.data : [];
-          setRelated(relatedPrompts.filter(p => p.id !== id));
+          const filtered = relatedPrompts.filter(p => p.id !== id);
+          
+          filtered.forEach((p: any) => {
+             let score = 0;
+             const pTags = Array.isArray(p.tags) ? p.tags : [];
+             const apiTags = Array.isArray(apiPrompt.tags) ? apiPrompt.tags : [];
+             const sharedTags = pTags.filter(t => apiTags.includes(t));
+             score += sharedTags.length * 4;
+             if (p.model === apiPrompt.model) score += 3;
+             if (p.category === apiPrompt.category) score += 2;
+             const pTitleWords = p.title.toLowerCase().split(/\s+/);
+             const apiTitleWords = apiPrompt.title.toLowerCase().split(/\s+/);
+             const sharedWords = pTitleWords.filter(w => w.length > 3 && apiTitleWords.includes(w));
+             score += sharedWords.length * 1;
+             p._relatedScore = score;
+          });
+          
+          filtered.sort((a: any, b: any) => (b._relatedScore || 0) - (a._relatedScore || 0));
+          setRelated(filtered.slice(0, 5));
         } catch (relatedErr) {
           console.error("Failed to fetch related prompts:", relatedErr);
         }
@@ -252,6 +281,10 @@ export default function ImageDetail() {
     if (type === 'prompt') {
       setCopiedPrompt(true);
       setTimeout(() => setCopiedPrompt(false), 1800);
+      if (prompt) {
+        setPrompt(prev => prev ? { ...prev, copies: (prev.copies || 0) + 1 } : null);
+        axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/copy`).catch(() => undefined);
+      }
       return;
     }
 
@@ -395,7 +428,7 @@ export default function ImageDetail() {
     );
   }
 
-  const promptText = prompt.prompt_text || '';
+  const promptText = activePromptText;
   const negativePrompt = prompt.negative_prompt || '';
   const rawImages = prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url];
   const galleryImages = Array.from(new Set(rawImages)).filter(Boolean);
@@ -482,8 +515,51 @@ export default function ImageDetail() {
     </>
   );
 
+  const handleModelClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!prompt) return;
+    
+    navigator.clipboard.writeText(promptText).then(() => {
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-[#171421] text-white px-4 py-2 rounded-full font-bold text-sm shadow-xl z-50 flex items-center gap-2 animate-in fade-in slide-in-from-top-5';
+      toast.innerHTML = `<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Prompt copied to clipboard!`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => document.body.removeChild(toast), 300);
+      }, 3000);
+      
+      setPrompt(prev => prev ? { ...prev, copies: (prev.copies || 0) + 1 } : null);
+      axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/copy`).catch(() => undefined);
+      
+      window.open(getModelUrl(prompt.model), '_blank');
+    });
+  };
+
   const renderPromptDetails = () => (
     <>
+      {hasMultipleVersions && (
+        <div className="flex p-1.5 gap-1.5 w-full bg-white/40 dark:bg-white/5 backdrop-blur-md rounded-full border border-white/20 mb-2">
+          {['Basic', 'Advanced', 'Professional'].map((ver) => {
+            const isAvailable = ver === 'Basic' || (ver === 'Advanced' && prompt?.advanced_prompt) || (ver === 'Professional' && prompt?.professional_prompt);
+            if (!isAvailable) return null;
+            return (
+              <button
+                key={ver}
+                onClick={() => setActiveVersion(ver as any)}
+                className={`flex-1 py-1.5 md:py-2 px-3 text-xs md:text-sm font-bold rounded-full transition-all ${
+                  activeVersion === ver 
+                    ? 'bg-white text-primary shadow-sm dark:bg-white/20 dark:text-white' 
+                    : 'text-[#4a445f] hover:bg-white/40 dark:text-[#c4bed6] dark:hover:bg-white/10'
+                }`}
+              >
+                {ver}
+              </button>
+            )
+          })}
+        </div>
+      )}
       <section className="shrink-0 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3 px-1">
           <div className="flex items-center gap-3">
@@ -495,7 +571,7 @@ export default function ImageDetail() {
             className="flex md:hidden items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
           >
             {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-            {copiedPrompt ? 'Copied' : 'Copy'}
+            {copiedPrompt ? 'Copied' : <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>}
           </button>
         </div>
         <motion.div
@@ -645,21 +721,19 @@ export default function ImageDetail() {
               <div className="flex items-center justify-between gap-3 mt-1.5">
                 <p className="text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
                   Generated with{' '}
-                  <a
-                    href={getModelUrl(prompt.model)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={handleModelClick}
                     className="text-primary hover:underline font-bold"
                   >
                     {prompt.model}
-                  </a>
+                  </button>
                 </p>
                 <button
                   onClick={() => copyText(promptText, 'prompt')}
                   className="hidden md:flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
                 >
                   {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-                  {copiedPrompt ? 'Copied' : 'Copy'}
+                  {copiedPrompt ? 'Copied' : <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>}
                 </button>
               </div>
             </section>
@@ -692,21 +766,19 @@ export default function ImageDetail() {
             <div className="flex items-center justify-between gap-3 mt-1">
               <p className="text-sm font-medium text-[#756d8d] dark:text-[#a59eb8]">
                 Generated with{' '}
-                <a
-                  href={getModelUrl(prompt.model)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleModelClick}
                   className="text-primary hover:underline font-bold"
                 >
                   {prompt.model}
-                </a>
+                </button>
               </p>
               <button
                 onClick={() => copyText(promptText, 'prompt')}
                 className="hidden md:flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
               >
                 {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-                {copiedPrompt ? 'Copied' : 'Copy'}
+                {copiedPrompt ? 'Copied' : <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>}
               </button>
             </div>
           </section>
