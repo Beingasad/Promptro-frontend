@@ -175,6 +175,17 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   }, [banners, prompts, loading]);
 
   useEffect(() => {
+    if (selectedBannerForModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedBannerForModal]);
+
+  useEffect(() => {
     if (processedBanners.length <= 2) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % processedBanners.length);

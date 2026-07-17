@@ -197,6 +197,17 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
   }, [banners, prompts, loading]);
 
   useEffect(() => {
+    if (selectedBannerForModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedBannerForModal]);
+
+  useEffect(() => {
     if (processedBanners.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % processedBanners.length);
