@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { ChevronRight, Sparkles, Flame, Zap, Star, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '../utils/cn';
 import { MobileHeroCarouselSkeleton } from './common/Skeleton';
 import { Prompt } from './ImageCard';
@@ -47,6 +48,7 @@ interface MobileHeroCarouselProps {
 }
 
 export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHeroCarouselProps) {
+  const navigate = useNavigate();
   const [selectedBannerForModal, setSelectedBannerForModal] = useState<any | null>(null);
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
@@ -199,8 +201,15 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
             </div>
           ) : (
             <div 
+              onClick={() => {
+                if (current.prompt1 && current.prompt2) {
+                  setSelectedBannerForModal(current);
+                } else if (current.button_link) {
+                  navigate(current.button_link);
+                }
+              }}
               className={cn(
-                "group relative flex w-full items-center justify-between py-3 px-4 md:py-6 md:px-8 rounded-[1.35rem] md:rounded-[2rem] shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-3xl overflow-hidden bg-gradient-to-br min-h-[130px] md:min-h-[220px] border-none transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10 animate-gradient-slow",
+                "cursor-pointer group relative flex w-full items-center justify-between py-3 px-4 md:py-6 md:px-8 rounded-[1.35rem] md:rounded-[2rem] shadow-[0_15px_35px_rgba(72,56,118,0.06)] backdrop-blur-3xl overflow-hidden bg-gradient-to-br min-h-[130px] md:min-h-[220px] border-none transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10 animate-gradient-slow",
                 `${current.bg_gradient} ${getDarkGradient(current.bg_gradient)}`
               )}
             >
