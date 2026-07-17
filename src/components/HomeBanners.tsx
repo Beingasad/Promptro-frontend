@@ -178,8 +178,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   }
 
   return (
-    <div className="hidden lg:grid grid-cols-2 gap-5 lg:flex-[1.8] min-w-0">
-      {processedBanners.slice(0, 2).map((banner: any, index: number) => (
+    <div className="hidden lg:grid lg:grid-cols-3 gap-5 lg:flex-[1.8] min-w-0">
+      {processedBanners.slice(0, 3).map((banner: any, index: number) => (
         <motion.div
           key={banner.id}
           initial={{ opacity: 0, x: 20 }}
