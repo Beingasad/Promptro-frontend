@@ -201,10 +201,10 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           <motion.div
             key={banner.id}
             layout
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: '-100%', scale: 0.95 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ x: 'calc(100% + 20px)' }}
+            animate={{ x: 0 }}
+            exit={{ x: 'calc(-100% - 20px)' }}
+            transition={{ duration: 0.7, ease: 'easeInOut' }}
             className={cn(
               "flex-1 w-[calc(50%-10px)] min-w-[calc(50%-10px)] max-w-[calc(50%-10px)] shrink-0 group relative flex items-center justify-between p-7 rounded-[1.75rem] overflow-hidden shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br border border-[#70639d]/22 dark:border-black/40 animate-gradient-slow",
             banner.bg_gradient,
