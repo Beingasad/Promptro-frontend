@@ -55,7 +55,6 @@ interface HomeBannersProps {
 
 export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProps) {
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedBannerForModal, setSelectedBannerForModal] = useState<any | null>(null);
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
@@ -162,7 +161,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
         button_link: `/prompt/${editorsPick[0].id}`,
         image_url: editorsPick[0].image_url,
         secondary_image: editorsPick[1].image_url,
-        bg_gradient: 'from-[#fffcf5] to-[#fff3d6] dark:from-[#2e2200] dark:to-[#140f00] border-2 border-[#ffe699] dark:border-[#664d00] shadow-[0_15px_40px_rgba(212,175,55,0.2)] dark:shadow-[0_15px_40px_rgba(255,215,0,0.1)]',
+        bg_gradient: 'from-[#fffcf5] to-[#fff3d6] dark:from-[#2e2200] dark:to-[#140f00] border-2 border-[#ffe699] dark:border-[#664d00]',
         prompt1: editorsPick[0],
         prompt2: editorsPick[1],
         prompts_list: editorsPick.slice(0, 6),
@@ -174,39 +173,20 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
     return mapped;
   }, [banners, prompts, loading]);
 
-  useEffect(() => {
-    if (processedBanners.length <= 2) return;
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % processedBanners.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [processedBanners.length]);
-
-  const visibleBanners = useMemo(() => {
-    if (processedBanners.length <= 2) return processedBanners;
-    return [
-      processedBanners[currentIndex],
-      processedBanners[(currentIndex + 1) % processedBanners.length]
-    ];
-  }, [processedBanners, currentIndex]);
-
   if (loading || processedBanners.length === 0) {
     return <HomeBannersSkeleton />;
   }
 
   return (
-    <div className="hidden lg:flex gap-5 lg:flex-[1.8] min-w-0 relative items-stretch">
-      <AnimatePresence mode="popLayout" initial={false}>
-        {visibleBanners.map((banner: any, index: number) => (
-          <motion.div
-            key={banner.id}
-            layout
-            initial={{ opacity: 0, scale: 0.85, y: 40, zIndex: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0, zIndex: 10 }}
-            exit={{ opacity: 0, scale: 0.85, y: -40, zIndex: 0, pointerEvents: 'none' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className={cn(
-              "flex-1 w-[calc(50%-10px)] min-w-[calc(50%-10px)] max-w-[calc(50%-10px)] shrink-0 group relative flex items-center justify-between p-7 rounded-[1.75rem] overflow-hidden shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br border border-[#70639d]/22 dark:border-black/40 animate-gradient-slow",
+    <div className="hidden lg:grid grid-cols-2 gap-5 lg:flex-[1.8] min-w-0">
+      {processedBanners.slice(0, 2).map((banner: any, index: number) => (
+        <motion.div
+          key={banner.id}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
+          className={cn(
+            "group relative flex items-center justify-between p-7 rounded-[1.75rem] overflow-hidden shadow-[0_20px_45px_rgba(72,56,118,0.08)] backdrop-blur-2xl transition-all hover:shadow-2xl hover:shadow-primary/15 bg-gradient-to-br border border-[#70639d]/22 dark:border-black/40 animate-gradient-slow",
             banner.bg_gradient,
             getDarkGradient(banner.bg_gradient)
           )}
@@ -311,7 +291,6 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           </div>
         </motion.div>
       ))}
-      </AnimatePresence>
 
       {createPortal(
         <AnimatePresence>

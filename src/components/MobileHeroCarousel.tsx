@@ -133,7 +133,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         button_link: `/prompt/${editorsPick[0].id}`,
         image_url: editorsPick[0].image_url,
         secondary_image: editorsPick[1].image_url,
-        bg_gradient: 'from-[#fffcf5] to-[#fff3d6] dark:from-[#2e2200] dark:to-[#140f00] border-2 border-[#ffe699] dark:border-[#664d00] shadow-[0_15px_40px_rgba(212,175,55,0.2)] dark:shadow-[0_15px_40px_rgba(255,215,0,0.1)]',
+        bg_gradient: 'from-[#fffcf5] to-[#fff3d6] dark:from-[#2e2200] dark:to-[#140f00] border-2 border-[#ffe699] dark:border-[#664d00]',
         prompt1: editorsPick[0],
         prompt2: editorsPick[1],
         prompts_list: editorsPick.slice(0, 6),
