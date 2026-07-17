@@ -273,7 +273,10 @@ export default function Home() {
                     {editorsPick.prompt_text}
                   </p>
                   <button 
-                    onClick={() => navigate(`/prompt/${editorsPick.id}`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/prompt/${editorsPick.id}`);
+                    }}
                     className="mt-4 flex items-center gap-2 text-[13px] md:text-[14px] font-black text-[#1c1a26] bg-white px-6 py-3 rounded-full w-fit hover:scale-[1.03] transition-transform duration-300 hover:shadow-[0_8px_20px_rgba(255,255,255,0.3)] active:scale-95"
                   >
                     View Prompt

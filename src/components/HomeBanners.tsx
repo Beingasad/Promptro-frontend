@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { ChevronRight, Sparkles, Flame, Zap, Star, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '../utils/cn';
 import { HomeBannersSkeleton } from './common/Skeleton';
 import { Prompt } from './ImageCard';
@@ -46,6 +47,7 @@ interface HomeBannersProps {
 }
 
 export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProps) {
+  const navigate = useNavigate();
   const [selectedBannerForModal, setSelectedBannerForModal] = useState<any | null>(null);
   const [banners, setBanners] = useState<Banner[]>(() => {
     try {
@@ -157,6 +159,18 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           {/* Glassmorphic overlays */}
           <div className="absolute inset-0 bg-white/5 dark:bg-black/15 pointer-events-none" />
           
+          {/* Clickable Overlay */}
+          <div 
+            className="absolute inset-0 z-10 cursor-pointer"
+            onClick={() => {
+              if (banner.prompt1 && banner.prompt2) {
+                setSelectedBannerForModal(banner);
+              } else if (banner.button_link) {
+                navigate(banner.button_link);
+              }
+            }}
+          />
+
           {/* Ambient lights */}
           <div className="absolute -top-[30%] -left-[10%] w-36 h-36 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-2xl pointer-events-none dark:from-primary/20" />
           <div className="absolute -bottom-[30%] right-[30%] w-40 h-40 bg-gradient-to-br from-[#ff6a3d]/20 to-[#dd4bd2]/20 rounded-full blur-3xl pointer-events-none" />
@@ -180,20 +194,24 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                   e.stopPropagation();
                   setSelectedBannerForModal(banner);
                 }}
-                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95 outline-none"
+                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95 outline-none z-20"
               >
                 <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                 <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform duration-300" />
               </button>
             ) : (
-              <a
-                href={banner.button_link}
-                onClick={(e) => e.stopPropagation()}
-                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95"
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (banner.button_link) navigate(banner.button_link);
+                }}
+                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95 z-20"
               >
                 <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                 <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform duration-300" />
-              </a>
+              </button>
             )}
           </div>
 

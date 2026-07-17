@@ -243,13 +243,17 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                     <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                   </button>
                 ) : (
-                  <a
-                    href={current.button_link || '#'}
-                    onClick={(e) => e.stopPropagation()}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (current.button_link) navigate(current.button_link);
+                    }}
                     className="cursor-pointer mt-2 md:mt-4 flex items-center text-[11px] md:text-[13px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 md:px-6 md:py-2.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] md:shadow-[0_4px_16px_rgba(116,55,255,0.4)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button"
                   >
                     <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
-                  </a>
+                  </button>
                 )}
               </div>
 
