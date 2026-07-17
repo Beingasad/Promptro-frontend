@@ -25,6 +25,7 @@ interface Banner {
   prompt2?: any;
   prompts_list?: any[];
   is_premium?: boolean;
+  is_pink?: boolean;
 }
 
 const getDarkGradient = (lightGrad: string = '') => {
@@ -151,6 +152,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
       let prompt1: any = null;
       let prompt2: any = null;
       let prompts_list: any[] = [];
+      let is_pink = false;
+      let bg_gradient = banner.bg_gradient;
 
       if (tag.includes('NEW') && latest.length >= 2) {
         img = img || latest[0].image_url;
@@ -170,6 +173,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         prompt1 = loved[0];
         prompt2 = loved[1];
         prompts_list = loved.slice(0, 6);
+        is_pink = true;
+        bg_gradient = 'from-[#fff5f8] to-[#ffe5f0] dark:from-[#2e101f] dark:to-[#14050d] border-2 border-[#ffcce0] dark:border-[#66203d] shadow-[0_15px_40px_rgba(255,105,180,0.15)] dark:shadow-[0_15px_40px_rgba(255,105,180,0.1)]';
       }
 
       result.push({
@@ -182,7 +187,9 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
         button_link: link,
         prompt1,
         prompt2,
-        prompts_list
+        prompts_list,
+        is_pink,
+        bg_gradient
       });
     });
 
@@ -253,7 +260,9 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
               <div className="flex-1 min-w-0 pr-4 relative z-10">
                 <span className={cn(
                   "flex items-center gap-1.5 text-[9.5px] md:text-[13px] font-black uppercase tracking-[0.18em] mb-1 md:mb-2",
-                  current.is_premium ? "text-[#b8860b] dark:text-[#ffd700]" : "text-primary dark:text-[#a78bfa]"
+                  current.is_premium ? "text-[#b8860b] dark:text-[#ffd700]" : 
+                  current.is_pink ? "text-[#ff69b4] dark:text-[#ffb6c1]" : 
+                  "text-primary dark:text-[#a78bfa]"
                 )}>
                   {current.tag_icon && getIcon(current.tag_icon)}
                   {current.tag_text}
