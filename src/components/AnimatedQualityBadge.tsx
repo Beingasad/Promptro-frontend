@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef, memo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Crown, Diamond, Star, ShieldCheck } from 'lucide-react';
+import { Crown, Diamond, Star } from 'lucide-react';
 import { StandardIcon } from './icons/StandardIcon';
+import { VerifiedIcon } from './icons/VerifiedIcon';
 import type { Prompt } from './ImageCard';
 
 interface AnimatedQualityBadgeProps {
