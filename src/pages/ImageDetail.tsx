@@ -1,9 +1,5 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download, Star, Bot } from 'lucide-react';
-import { StandardIcon } from '../components/icons/StandardIcon';
-import { VerifiedIcon } from '../components/icons/VerifiedIcon';
-import { PremiumIcon } from '../components/icons/PremiumIcon';
-import { EliteIcon } from '../components/icons/EliteIcon';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
 import AuthModal from '../components/AuthModal';

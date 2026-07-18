@@ -403,9 +403,9 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
 
       {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
-      {/* Top Right: Floating Category & Quality Pill */}
+      {/* Top Left: Floating Category & Quality Pill */}
       {isHome && (
-        <div className="absolute top-1.5 right-2 md:top-2 md:right-3 z-10">
+        <div className="absolute top-1.5 left-2 md:top-2 md:left-3 z-10">
           <AnimatedCategoryQualityPill prompt={prompt} size="sm" />
         </div>
       )}
