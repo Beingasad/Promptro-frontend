@@ -48,6 +48,16 @@ const getDarkGradient = (lightGrad: string = '') => {
   return 'dark:from-[#1c1a26] dark:to-[#12101b]';
 };
 
+const getButtonTheme = (banner: any) => {
+  if (banner.is_premium) {
+    return "text-[#b8860b] dark:text-[#ffd700] bg-[#b8860b]/10 dark:bg-[#ffd700]/10 border-[#b8860b]/20 dark:border-[#ffd700]/20 hover:bg-gradient-to-r hover:from-[#d4af37] hover:to-[#ff8c00] hover:text-white hover:border-transparent hover:shadow-[0_8px_20px_rgba(218,165,32,0.3)]";
+  }
+  if (banner.is_pink) {
+    return "text-[#db2777] dark:text-[#f472b6] bg-[#db2777]/10 dark:bg-[#f472b6]/10 border-[#db2777]/20 dark:border-[#f472b6]/20 hover:bg-gradient-to-r hover:from-[#be185d] hover:to-[#ec4899] hover:text-white hover:border-transparent hover:shadow-[0_8px_20px_rgba(236,72,153,0.3)]";
+  }
+  return "text-primary dark:text-white bg-primary/8 dark:bg-white/8 border-primary/15 dark:border-white/10 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)]";
+};
+
 interface HomeBannersProps {
   prompts: Prompt[];
   promptsLoading: boolean;
@@ -260,7 +270,10 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                   e.stopPropagation();
                   setSelectedBannerForModal(banner);
                 }}
-                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95 outline-none z-20"
+                className={cn(
+                  "cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:scale-[1.05] active:scale-95 outline-none z-20 border",
+                  getButtonTheme(banner)
+                )}
               >
                 <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                 <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform duration-300" />
@@ -273,7 +286,10 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                   e.stopPropagation();
                   if (banner.button_link) navigate(banner.button_link);
                 }}
-                className="cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black text-primary dark:text-white bg-primary/8 dark:bg-white/8 border border-primary/15 dark:border-white/10 px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:bg-gradient-to-r hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d] hover:text-white hover:border-transparent hover:scale-[1.05] hover:shadow-[0_8px_20px_rgba(116,55,255,0.3)] active:scale-95 z-20"
+                className={cn(
+                  "cursor-pointer group/btn mt-3 flex items-center gap-1.5 text-[12px] font-black px-5 py-2.5 rounded-full w-fit transition-all duration-300 hover:scale-[1.05] active:scale-95 outline-none z-20 border",
+                  getButtonTheme(banner)
+                )}
               >
                 <span>{(banner.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                 <ChevronRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:translate-x-0.5 transition-transform duration-300" />

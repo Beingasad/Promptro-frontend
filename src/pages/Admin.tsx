@@ -83,6 +83,7 @@ type AdminPrompt = {
   visibility?: 'Public' | 'Hidden';
   tool?: string;
   images?: string[];
+  base_quality_score?: number;
 };
 
 interface GalleryImageItem {
@@ -102,6 +103,7 @@ type PromptForm = {
   trending: boolean;
   visibility: 'Public' | 'Hidden';
   tool: string;
+  base_quality_score: number;
 };
 
 const API_URL = `${API_BASE_URL}/api/prompts`;
@@ -120,6 +122,7 @@ const emptyForm: PromptForm = {
   trending: false,
   visibility: 'Public',
   tool: 'Midjourney',
+  base_quality_score: 70,
 };
 
 export type AdminUser = {
@@ -1059,7 +1062,8 @@ export default function Admin() {
       featured: Boolean(prompt.featured),
       trending: Boolean(prompt.trending),
       visibility: prompt.visibility || 'Public',
-      tool: prompt.model,
+      tool: prompt.tool || prompt.model || DEFAULT_MODEL,
+      base_quality_score: prompt.base_quality_score ?? 70,
     });
   };
 
@@ -1074,6 +1078,7 @@ export default function Admin() {
     data.append('featured', String(form.featured));
     data.append('trending', String(form.trending));
     data.append('visibility', form.visibility);
+    data.append('base_quality_score', String(form.base_quality_score));
     if (cssRatio) data.append('aspectRatio', cssRatio);
     
     // Add existing URLs
@@ -3767,6 +3772,18 @@ export default function Admin() {
                           <option key={t} value={t}>{t}</option>
                         ))}
                       </select>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-sm font-bold">Base Quality Score (0-100)</label>
+                      <input 
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={form.base_quality_score}
+                        onChange={(e) => updateForm('base_quality_score', parseInt(e.target.value) || 0)}
+                        className="glass-input h-12"
+                        placeholder="70"
+                      />
                     </div>
                   </div>
 

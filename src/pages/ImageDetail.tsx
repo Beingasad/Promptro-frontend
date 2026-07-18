@@ -1,5 +1,5 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download } from 'lucide-react';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download, Crown, Diamond, Star, ShieldCheck, FileText, Bot } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
 import AuthModal from '../components/AuthModal';
@@ -15,6 +15,7 @@ import SEOMeta from '../components/common/SEOMeta';
 import JsonLd from '../components/common/JsonLd';
 import { DetailSkeleton } from '../components/common/Skeleton';
 import ImageGallery from '../components/ImageGallery';
+import AnimatedQualityBadge from '../components/AnimatedQualityBadge';
 
 interface PromptDetail extends Prompt {
   prompt_text?: string;
@@ -30,18 +31,146 @@ interface PromptDetail extends Prompt {
 
 
 const formatCount = (value: number) => {
-  if (value >= 1000) return `${Number((value / 1000).toFixed(1))}K`;
-  return `${value}`;
+  if (!value) return '0';
+  if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+  if (value >= 1000) return (value / 1000).toFixed(1) + 'K';
+  return value.toString();
+};
+
+const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
+  const [frameIndex, setFrameIndex] = useState(0);
+
+  const score = prompt.final_quality_score;
+  const getTopPercentile = (s: number) => {
+    if (s >= 95) return 1;
+    if (s >= 90) return 5;
+    if (s >= 80) return 15;
+    if (s >= 70) return 30;
+    return 50;
+  };
+
+  const getTierConfig = (s?: number) => {
+    if (!s) return null;
+    if (s >= 95) return { bg: 'from-amber-500/80 to-amber-600/80', border: 'border-amber-400/50', Icon: Crown, name: 'Elite' };
+    if (s >= 90) return { bg: 'from-blue-500/80 to-blue-600/80', border: 'border-blue-400/50', Icon: Diamond, name: 'Premium' };
+    if (s >= 80) return { bg: 'from-purple-500/80 to-purple-600/80', border: 'border-purple-400/50', Icon: Star, name: 'Excellent' };
+    if (s >= 70) return { bg: 'from-green-500/80 to-green-600/80', border: 'border-green-400/50', Icon: ShieldCheck, name: 'Verified' };
+    return { bg: 'from-white/20 to-white/10', border: 'border-white/30', Icon: FileText, name: 'Standard' };
+  };
+
+  const tier = getTierConfig(score);
+
+  const frames = [
+    { type: 'category', content: prompt.category, bg: 'from-[#6d4dec] to-[#ff6a3d]', border: 'border-transparent' }
+  ];
+
+  if (tier) {
+    frames.push(
+      { type: 'badge', content: `${score}/100`, bg: tier.bg, border: tier.border },
+      { type: 'badge', content: 'AI Rated', bg: tier.bg, border: tier.border },
+      { type: 'badge', content: `Top ${getTopPercentile(score!)}%`, bg: tier.bg, border: tier.border }
+    );
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFrameIndex(prev => (prev + 1) % frames.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [frames.length]);
+
+  const currentFrame = frames[frameIndex] || frames[0];
+  const isBadge = currentFrame.type === 'badge';
+
+  return (
+    <div className={`relative flex h-8 md:h-10 items-center justify-center rounded-full border transition-all duration-500 overflow-hidden min-w-[135px] md:min-w-[155px] bg-gradient-to-r shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border}`}>
+       {/* Invisible sizer to ensure the pill is always wide enough for the category text */}
+       <span className="invisible whitespace-nowrap text-xs md:text-sm font-bold px-4 pointer-events-none">
+         {prompt.category}
+       </span>
+
+       {/* Absolute container for the animated content */}
+       <div className="absolute inset-0 flex items-center justify-center px-3.5 w-full h-full">
+         <AnimatePresence mode="wait">
+            {isBadge ? (
+               <motion.div 
+                  key="badge-layout"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center justify-between w-full h-full absolute inset-0 px-3.5"
+               >
+                  <div className="flex items-center gap-1 z-10 pr-2 shrink-0">
+                     {tier && <tier.Icon className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />}
+                     <span className="text-xs md:text-sm font-bold text-white tracking-wide">{tier?.name}</span>
+                  </div>
+                  <div className="flex-1 relative flex items-center justify-end h-full">
+                     <AnimatePresence mode="wait">
+                        <motion.span
+                           key={frameIndex}
+                           initial={{ y: 15, opacity: 0 }}
+                           animate={{ y: 0, opacity: 1 }}
+                           exit={{ y: -15, opacity: 0 }}
+                           transition={{ duration: 0.3 }}
+                           className="whitespace-nowrap text-xs md:text-sm font-bold text-white tracking-normal absolute right-0"
+                        >
+                           {currentFrame.content}
+                        </motion.span>
+                     </AnimatePresence>
+                  </div>
+               </motion.div>
+            ) : (
+               <motion.div 
+                  key="category-layout"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center justify-center w-full h-full absolute inset-0 px-3.5"
+               >
+                  <span className="whitespace-nowrap text-xs md:text-sm font-bold tracking-normal text-white">
+                     {currentFrame.content}
+                  </span>
+               </motion.div>
+            )}
+         </AnimatePresence>
+       </div>
+    </div>
+  );
 };
 
 const getModelUrl = (model: string): string => {
   const name = model.toLowerCase();
-  if (name.includes('midjourney')) return 'https://www.midjourney.com';
-  if (name.includes('flux')) return 'https://blackforestlabs.ai';
-  if (name.includes('dall-e') || name.includes('dalle')) return 'https://openai.com/dall-e-3';
-  if (name.includes('stable diffusion') || name.includes('sdxl') || name.includes('sd3')) return 'https://stability.ai';
-  if (name.includes('leonardo')) return 'https://leonardo.ai';
-  if (name.includes('nijijourney') || name.includes('niji')) return 'https://nijijourney.com';
+  
+  if (name.includes('chatgpt') || name.includes('dall-e') || name.includes('dalle') || name.includes('gpt')) {
+    return 'https://chatgpt.com/';
+  }
+  if (name.includes('claude')) {
+    return 'https://claude.ai/new';
+  }
+  if (name.includes('gemini')) {
+    return 'https://gemini.google.com/app';
+  }
+  if (name.includes('copilot') || name.includes('bing')) {
+    return 'https://copilot.microsoft.com/';
+  }
+  if (name.includes('meta') || name.includes('llama')) {
+    return 'https://www.meta.ai/';
+  }
+  if (name.includes('midjourney') || name.includes('niji')) {
+    return 'https://discord.com/app';
+  }
+  if (name.includes('leonardo')) {
+    return 'https://app.leonardo.ai/';
+  }
+  if (name.includes('flux')) {
+    return 'https://fal.ai/models/fal-ai/flux/dev';
+  }
+  if (name.includes('stable diffusion') || name.includes('sdxl') || name.includes('sd3')) {
+    return 'https://clipdrop.co/stable-diffusion';
+  }
+  
   return `https://www.google.com/search?q=${encodeURIComponent(model)}`;
 };
 
@@ -65,6 +194,7 @@ export default function ImageDetail() {
   const [heartKey, setHeartKey] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeVersion, setActiveVersion] = useState<'Basic' | 'Advanced' | 'Professional'>('Basic');
+
 
   const hasMultipleVersions = Boolean(prompt?.advanced_prompt || prompt?.professional_prompt);
   const activePromptText = activeVersion === 'Advanced' && prompt?.advanced_prompt 
@@ -508,9 +638,9 @@ export default function ImageDetail() {
             {formatCount(prompt.views)}
           </div>
         </div>
-        <span className="flex h-8 shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-[#6d4dec] to-[#ff6a3d] px-3 text-xs md:text-sm font-bold tracking-normal text-white shadow-[0_12px_28px_rgba(109,77,236,0.26)] md:h-10">
-          {prompt.category}
-        </span>
+        <div className="relative flex shrink-0">
+          <InlineCategoryQualityPill prompt={prompt} />
+        </div>
       </div>
     </>
   );
@@ -568,10 +698,21 @@ export default function ImageDetail() {
           </div>
           <button
             onClick={() => copyText(promptText, 'prompt')}
-            className="flex md:hidden items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95"
+            className="flex md:hidden relative items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 overflow-hidden"
           >
-            {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-            {copiedPrompt ? 'Copied' : <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>}
+            <AnimatePresence mode="wait">
+              {copiedPrompt ? (
+                <motion.div key="copied" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} className="flex items-center gap-2">
+                  <Check className="h-5 w-5" />
+                  <span>Copied</span>
+                </motion.div>
+              ) : (
+                <motion.div key="copy" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} className="flex items-center gap-2">
+                  <Copy className="h-5 w-5" />
+                  <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </button>
         </div>
         <motion.div
@@ -639,6 +780,7 @@ export default function ImageDetail() {
       )}
     </>
   );
+
 
   return (
     <motion.div
@@ -728,12 +870,24 @@ export default function ImageDetail() {
                     {prompt.model}
                   </button>
                 </p>
+
                 <button
                   onClick={() => copyText(promptText, 'prompt')}
-                  className="hidden md:flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
+                  className="hidden md:flex relative items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0 overflow-hidden"
                 >
-                  {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-                  {copiedPrompt ? 'Copied' : <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>}
+                  <AnimatePresence mode="wait">
+                    {copiedPrompt ? (
+                      <motion.div key="copied" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} className="flex items-center gap-2">
+                        <Check className="h-5 w-5" />
+                        <span>Copied</span>
+                      </motion.div>
+                    ) : (
+                      <motion.div key="copy" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} className="flex items-center gap-2">
+                        <Copy className="h-5 w-5" />
+                        <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </button>
               </div>
             </section>
@@ -773,12 +927,24 @@ export default function ImageDetail() {
                   {prompt.model}
                 </button>
               </p>
+
               <button
                 onClick={() => copyText(promptText, 'prompt')}
-                className="hidden md:flex items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0"
+                className="hidden md:flex relative items-center gap-2 rounded-full bg-white/40 dark:bg-white/10 border border-white/50 dark:border-white/10 backdrop-blur-md px-4 py-2 text-sm font-medium text-primary shadow-sm transition-all hover:bg-white/70 dark:hover:bg-white/25 active:scale-95 shrink-0 overflow-hidden"
               >
-                {copiedPrompt ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-                {copiedPrompt ? 'Copied' : <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>}
+                <AnimatePresence mode="wait">
+                  {copiedPrompt ? (
+                    <motion.div key="copied" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} className="flex items-center gap-2">
+                      <Check className="h-5 w-5" />
+                      <span>Copied</span>
+                    </motion.div>
+                  ) : (
+                    <motion.div key="copy" initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} className="flex items-center gap-2">
+                      <Copy className="h-5 w-5" />
+                      <span className="whitespace-nowrap">Copy Prompt &bull; {formatCount(prompt.copies || 0)} Copies</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
           </section>

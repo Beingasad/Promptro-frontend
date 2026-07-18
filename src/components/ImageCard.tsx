@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Eye, Bookmark, GalleryVerticalEnd, Share2, Check } from 'lucide-react';
 import CollectionSelectModal from './CollectionSelectModal';
 import AuthModal from './AuthModal';
+import AnimatedQualityBadge from './AnimatedQualityBadge';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useRef, memo } from 'react';
 import type { MouseEvent } from 'react';
@@ -24,6 +25,7 @@ export interface Prompt {
   aspect_ratio?: string;
   copies?: number;
   saves?: number;
+  final_quality_score?: number;
   prompt_text?: string;
   negative_prompt?: string | null;
   advanced_prompt?: string | null;
@@ -408,8 +410,8 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
       {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
       {/* Top Left: Floating Category Pill */}
-      <div className={`absolute z-10 transition-transform duration-300 group-hover:-translate-y-0.5 ${
-        isHome ? "top-1.5 left-2 md:top-2 md:left-3" : "hidden md:block md:top-2 md:left-3"
+      <div className={`absolute z-10 flex items-center gap-1.5 md:gap-2 transition-transform duration-300 group-hover:-translate-y-0.5 ${
+        isHome ? "top-1.5 left-2 md:top-2 md:left-3" : "hidden md:flex md:top-2 md:left-3"
       }`}>
         <button 
           onClick={handleCategoryClick}
@@ -419,6 +421,9 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
           {prompt.category}
         </button>
       </div>
+
+      {/* Top Right: Animated Quality Badge */}
+      {isHome && <AnimatedQualityBadge prompt={prompt} />}
 
       <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3">
         {/* Title (ONLY ON ORIGINAL HOME MODE) */}
