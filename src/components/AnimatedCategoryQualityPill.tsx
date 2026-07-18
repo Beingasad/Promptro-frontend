@@ -19,6 +19,38 @@ interface AnimatedCategoryQualityPillProps {
   size?: 'sm' | 'md';
 }
 
+// Global Ticker to sync all pills and drastically reduce performance overhead
+const pillListeners = new Set<(globalIndex: number) => void>();
+let globalPillTimer: NodeJS.Timeout | null = null;
+let currentGlobalPillIndex = 0;
+let isPillTimerRunning = false;
+
+const startPillTimer = () => {
+  if (isPillTimerRunning) return;
+  isPillTimerRunning = true;
+  
+  const tick = () => {
+    currentGlobalPillIndex = (currentGlobalPillIndex + 1) % 5;
+    pillListeners.forEach(listener => listener(currentGlobalPillIndex));
+    
+    // Category (index 0) gets 5000ms, Badge frames get 2000ms
+    const delay = currentGlobalPillIndex === 0 ? 5000 : 2000;
+    globalPillTimer = setTimeout(tick, delay);
+  };
+  
+  // Start the first interval
+  globalPillTimer = setTimeout(tick, 5000);
+};
+
+const stopPillTimer = () => {
+  if (pillListeners.size === 0 && globalPillTimer) {
+    clearTimeout(globalPillTimer);
+    globalPillTimer = null;
+    isPillTimerRunning = false;
+    currentGlobalPillIndex = 0;
+  }
+};
+
 export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md' }: AnimatedCategoryQualityPillProps) => {
   const [frameIndex, setFrameIndex] = useState(0);
 
@@ -67,15 +99,19 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
   }
 
   useEffect(() => {
-    const currentFrame = frames[frameIndex] || frames[0];
-    const delay = currentFrame.type === 'category' ? 5000 : 2000;
+    const handleTick = (globalIndex: number) => {
+      // Sync frame to global index, wrapping around based on this pill's frame count
+      setFrameIndex(globalIndex % frames.length);
+    };
 
-    const timeout = setTimeout(() => {
-      setFrameIndex(prev => (prev + 1) % frames.length);
-    }, delay);
+    pillListeners.add(handleTick);
+    startPillTimer();
 
-    return () => clearTimeout(timeout);
-  }, [frameIndex, frames.length]);
+    return () => {
+      pillListeners.delete(handleTick);
+      stopPillTimer();
+    };
+  }, [frames.length]);
 
   const currentFrame = frames[frameIndex] || frames[0];
   const isBadge = currentFrame.type === 'badge';
