@@ -2,8 +2,20 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, Eye, Bookmark, GalleryVerticalEnd, Share2, Check } from 'lucide-react';
 import CollectionSelectModal from './CollectionSelectModal';
 import AuthModal from './AuthModal';
-import AnimatedQualityBadge from './AnimatedQualityBadge';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useRef, memo } from 'react';
+import type { MouseEvent } from 'react';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
+import { auth } from '../lib/firebase';
+import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
+import { optimizeImageUrl } from '../utils/image';
+import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
+import { StandardIcon } from './icons/StandardIcon';
+import { VerifiedIcon } from './icons/VerifiedIcon';
+import { PremiumIcon } from './icons/PremiumIcon';
+import { EliteIcon } from './icons/EliteIcon';
+import { ExcellentIcon } from './icons/ExcellentIcon';
 import { useEffect, useState, useRef, memo } from 'react';
 import type { MouseEvent } from 'react';
 import axios from 'axios';
@@ -282,29 +294,23 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
     }
   };
 
-  const handleShareClick = async (event: MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const shareUrl = `${window.location.origin}/prompt/${prompt.id}`;
-    const shareText = `Check out this amazing AI prompt: "${prompt.title}" on Promptro! 🎨✨`;
-
-    if (navigator.share) {
-      try {
+  const handleShare = async (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      if (navigator.share) {
         await navigator.share({
           title: prompt.title,
-          text: shareText,
-          url: shareUrl,
+          text: `Check out this AI prompt: ${prompt.title}`,
+          url: `${window.location.origin}/prompt/${prompt.id}`,
         });
-      } catch (err) {
-        console.error("Error sharing:", err);
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        await navigator.clipboard.writeText(`${window.location.origin}/prompt/${prompt.id}`);
         setShared(true);
         setTimeout(() => setShared(false), 2000);
-      } catch (err) {
+      }
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
         console.error("Failed to copy link:", err);
       }
     }
@@ -320,6 +326,16 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
     event.preventDefault();
     event.stopPropagation();
   };
+
+  const score = prompt.final_quality_score;
+  let tier = null;
+  if (score !== undefined) {
+    if (score >= 95) tier = { bg: 'bg-gradient-to-r from-amber-500 to-amber-600', border: 'border-amber-400/50', Icon: EliteIcon };
+    else if (score >= 90) tier = { bg: 'bg-gradient-to-r from-blue-500 to-blue-600', border: 'border-blue-400/50', Icon: PremiumIcon };
+    else if (score >= 80) tier = { bg: 'bg-gradient-to-r from-purple-500 to-purple-600', border: 'border-purple-400/50', Icon: ExcellentIcon };
+    else if (score >= 70) tier = { bg: 'bg-gradient-to-r from-green-500 to-green-600', border: 'border-green-400/50', Icon: VerifiedIcon };
+    else tier = { bg: 'bg-gradient-to-r from-black/50 to-black/30', border: 'border-white/20', Icon: StandardIcon };
+  }
 
   return (
     <>
@@ -409,21 +425,23 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
 
       {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
-      {/* Top Left: Floating Category Pill */}
+      {/* Top Left: Floating Category & Quality Pill */}
       <div className={`absolute z-10 flex items-center gap-1.5 md:gap-2 transition-transform duration-300 group-hover:-translate-y-0.5 ${
         isHome ? "top-1.5 left-2 md:top-2 md:left-3" : "hidden md:flex md:top-2 md:left-3"
       }`}>
         <button 
           onClick={handleCategoryClick}
-          className="rounded-full bg-gradient-to-r from-[#6d4dec]/90 to-[#ff6a3d]/90 px-2.5 py-[5px] text-[9px] font-bold uppercase tracking-wider text-white transition-transform active:scale-95 md:px-2.5 md:py-[5px] border border-transparent shadow-sm whitespace-nowrap opacity-90 backdrop-blur-[4px]"
+          className="flex items-center gap-1.5 md:gap-2 rounded-full bg-gradient-to-r from-[#6d4dec]/95 to-[#ff6a3d]/95 pl-2.5 pr-1 py-1 md:pl-3 md:pr-1.5 text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-white transition-transform active:scale-95 border border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.15)] whitespace-nowrap backdrop-blur-md"
           aria-label={`View category ${prompt.category}`}
         >
-          {prompt.category}
+          <span>{prompt.category}</span>
+          {tier && (
+            <div className={`flex items-center justify-center p-[3.5px] md:p-1 rounded-full ${tier.bg} border ${tier.border} shadow-sm shrink-0`}>
+              <tier.Icon className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" strokeWidth={2.5} />
+            </div>
+          )}
         </button>
       </div>
-
-      {/* Top Right: Animated Quality Badge */}
-      {isHome && <AnimatedQualityBadge prompt={prompt} />}
 
       <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3">
         {/* Title (ONLY ON ORIGINAL HOME MODE) */}
