@@ -13,7 +13,6 @@ import { useSearch } from '../context/SearchContext';
 import { useIsMobileDevice } from '../utils/device';
 import SEOMeta from '../components/common/SEOMeta';
 import JsonLd from '../components/common/JsonLd';
-import AIToolsSheet from '../components/AIToolsSheet';
 import { DetailSkeleton } from '../components/common/Skeleton';
 import ImageGallery from '../components/ImageGallery';
 import AnimatedQualityBadge from '../components/AnimatedQualityBadge';
@@ -189,7 +188,6 @@ export default function ImageDetail() {
   const [liked, setLiked] = useState(false);
   const [inCollection, setInCollection] = useState(false);
   const [shared, setShared] = useState(false);
-  const [isAiSheetOpen, setIsAiSheetOpen] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
@@ -647,15 +645,27 @@ export default function ImageDetail() {
     </>
   );
 
-  const handleModelClick = (e: React.MouseEvent) => {
+  const handleModelClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (!prompt) return;
-    setIsAiSheetOpen(true);
-  };
-
-  const handleToolSelect = (url: string) => {
-    if (!prompt) return;
     
+    // Track copy analytics
+    setPrompt(prev => prev ? { ...prev, copies: (prev.copies || 0) + 1 } : null);
+    axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/copy`).catch(() => undefined);
+
+    if (isMobile && navigator.share) {
+      try {
+        await navigator.share({
+          title: prompt.title,
+          text: promptText // Just the prompt text so it can be pasted into ChatGPT
+        });
+        return; // Stop here on mobile if share is successful
+      } catch (err) {
+        console.error("Error sharing to AI tool:", err);
+      }
+    }
+    
+    // Fallback for Desktop (or if navigator.share fails/is rejected)
     navigator.clipboard.writeText(promptText).then(() => {
       const toast = document.createElement('div');
       toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-[#171421] text-white px-4 py-2 rounded-full font-bold text-sm shadow-xl z-50 flex items-center gap-2 animate-in fade-in slide-in-from-top-5';
@@ -667,14 +677,8 @@ export default function ImageDetail() {
         setTimeout(() => document.body.removeChild(toast), 300);
       }, 3000);
       
-      setPrompt(prev => prev ? { ...prev, copies: (prev.copies || 0) + 1 } : null);
-      axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/copy`).catch(() => undefined);
-      
-      if (isMobile) {
-        window.location.href = url;
-      } else {
-        window.open(url, '_blank');
-      }
+      const url = getModelUrl(prompt.model);
+      window.open(url, '_blank');
     });
   };
 
@@ -994,11 +998,6 @@ export default function ImageDetail() {
       <AuthModal 
         isOpen={authModalOpen} 
         onClose={() => setAuthModalOpen(false)} 
-      />
-      <AIToolsSheet 
-        isOpen={isAiSheetOpen} 
-        onClose={() => setIsAiSheetOpen(false)} 
-        onSelectTool={handleToolSelect} 
       />
     </motion.div>
   );
