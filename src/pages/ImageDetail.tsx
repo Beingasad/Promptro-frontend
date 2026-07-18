@@ -103,8 +103,8 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
                   className="flex items-center justify-between w-full h-full absolute inset-0 px-3.5"
                >
                   <div className="flex items-center gap-1 z-10 pr-2 shrink-0">
-                     {tier && <tier.Icon className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />}
-                     <span className="text-xs md:text-sm font-bold text-white tracking-wide">{tier?.name}</span>
+                     {tier && <tier.Icon className="w-3 h-3 md:w-3.5 md:h-3.5 text-white" strokeWidth={2.5} />}
+                     <span className="text-[10px] md:text-sm font-bold text-white tracking-wide">{tier?.name}</span>
                   </div>
                   <div className="flex-1 relative flex items-center justify-end h-full">
                      <AnimatePresence mode="wait">
@@ -114,7 +114,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
                            animate={{ y: 0, opacity: 1 }}
                            exit={{ y: -15, opacity: 0 }}
                            transition={{ duration: 0.3 }}
-                           className="whitespace-nowrap text-xs md:text-sm font-bold text-white tracking-normal absolute right-0"
+                           className="whitespace-nowrap text-[10px] md:text-sm font-bold text-white tracking-normal absolute right-0"
                         >
                            {currentFrame.content}
                         </motion.span>
