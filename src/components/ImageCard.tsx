@@ -12,6 +12,11 @@ import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, on
 import { optimizeImageUrl } from '../utils/image';
 import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
 import { AnimatedCategoryQualityPill } from './AnimatedCategoryQualityPill';
+import { StandardIcon } from './icons/StandardIcon';
+import { VerifiedIcon } from './icons/VerifiedIcon';
+import { PremiumIcon } from './icons/PremiumIcon';
+import { EliteIcon } from './icons/EliteIcon';
+import { ExcellentIcon } from './icons/ExcellentIcon';
 
 export interface Prompt {
   id: string;
@@ -315,6 +320,16 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
     event.stopPropagation();
   };
 
+  const score = prompt.final_quality_score;
+  let tier = null;
+  if (score !== undefined) {
+    if (score >= 95) tier = { bg: 'bg-gradient-to-r from-amber-500/80 to-amber-600/80', border: 'border-amber-400/50', Icon: EliteIcon };
+    else if (score >= 90) tier = { bg: 'bg-gradient-to-r from-blue-500/80 to-blue-600/80', border: 'border-blue-400/50', Icon: PremiumIcon };
+    else if (score >= 80) tier = { bg: 'bg-gradient-to-r from-purple-500/80 to-purple-600/80', border: 'border-purple-400/50', Icon: ExcellentIcon };
+    else if (score >= 70) tier = { bg: 'bg-gradient-to-r from-green-500/80 to-green-600/80', border: 'border-green-400/50', Icon: VerifiedIcon };
+    else tier = { bg: 'bg-gradient-to-r from-black/50 to-black/30', border: 'border-white/20', Icon: StandardIcon };
+  }
+
   return (
     <>
       <Link 
@@ -401,12 +416,17 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
         )}
       </AnimatePresence>
 
-      {/* Category Badge removed from minimal explore/saved modes as per user request */}
-
       {/* Top Left: Floating Category & Quality Pill */}
       {isHome && (
         <div className="absolute top-1.5 left-2 md:top-2 md:left-3 z-10">
           <AnimatedCategoryQualityPill prompt={prompt} size="sm" />
+        </div>
+      )}
+
+      {/* Top Right: Fixed Colorful Badge Icon */}
+      {isHome && tier && (
+        <div className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center p-1.5 md:p-2 rounded-full ${tier.bg} border ${tier.border} shadow-[0_4px_12px_rgba(0,0,0,0.15)] backdrop-blur-md`}>
+          <tier.Icon className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" strokeWidth={2.5} />
         </div>
       )}
 
