@@ -1,5 +1,6 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download, Crown, Diamond, Star, ShieldCheck, FileText, Bot } from 'lucide-react';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download, Crown, Diamond, Star, ShieldCheck, Bot } from 'lucide-react';
+import { StandardIcon } from '../components/icons/StandardIcon';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
 import AuthModal from '../components/AuthModal';
@@ -55,7 +56,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
     if (s >= 90) return { bg: 'from-blue-500/80 to-blue-600/80', border: 'border-blue-400/50', Icon: Diamond, name: 'Premium' };
     if (s >= 80) return { bg: 'from-purple-500/80 to-purple-600/80', border: 'border-purple-400/50', Icon: Star, name: 'Excellent' };
     if (s >= 70) return { bg: 'from-green-500/80 to-green-600/80', border: 'border-green-400/50', Icon: ShieldCheck, name: 'Verified' };
-    return { bg: 'from-black/50 to-black/30', border: 'border-white/20', Icon: FileText, name: 'Standard' };
+    return { bg: 'from-black/50 to-black/30', border: 'border-white/20', Icon: StandardIcon, name: 'Standard' };
   };
 
   const tier = getTierConfig(score);

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, memo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Crown, Diamond, Star, ShieldCheck, FileText, Sparkles, Bot, Copy, Flame } from 'lucide-react';
+import { Crown, Diamond, Star, ShieldCheck } from 'lucide-react';
+import { StandardIcon } from './icons/StandardIcon';
 import type { Prompt } from './ImageCard';
 
 interface AnimatedQualityBadgeProps {
@@ -44,7 +45,7 @@ const AnimatedQualityBadge = memo(({ prompt, className }: AnimatedQualityBadgePr
     border: 'border-white/20',
     glow: 'shadow-[0_4px_15px_rgba(0,0,0,0.3)]',
     bg: 'bg-black/40',
-    Icon: FileText
+    Icon: StandardIcon
   };
 
   if (score >= 95) {
