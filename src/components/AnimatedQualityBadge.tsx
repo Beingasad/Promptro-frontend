@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef, memo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Crown, Diamond, Star } from 'lucide-react';
+import { Crown, Star } from 'lucide-react';
 import { StandardIcon } from './icons/StandardIcon';
 import { VerifiedIcon } from './icons/VerifiedIcon';
+import { PremiumIcon } from './icons/PremiumIcon';
 import type { Prompt } from './ImageCard';
 
 interface AnimatedQualityBadgeProps {
@@ -52,7 +53,7 @@ const AnimatedQualityBadge = memo(({ prompt, className }: AnimatedQualityBadgePr
   if (score >= 95) {
     config = { tier: 'Elite', text: 'text-white', border: 'border-amber-400/50', glow: 'shadow-[0_4px_15px_rgba(245,158,11,0.5)]', bg: 'bg-gradient-to-r from-amber-500/60 to-amber-600/60', Icon: Crown };
   } else if (score >= 90) {
-    config = { tier: 'Premium', text: 'text-white', border: 'border-blue-400/50', glow: 'shadow-[0_4px_15px_rgba(59,130,246,0.5)]', bg: 'bg-gradient-to-r from-blue-500/60 to-blue-600/60', Icon: Diamond };
+    config = { tier: 'Premium', text: 'text-white', border: 'border-blue-400/50', glow: 'shadow-[0_4px_15px_rgba(59,130,246,0.5)]', bg: 'bg-gradient-to-r from-blue-500/60 to-blue-600/60', Icon: PremiumIcon };
   } else if (score >= 80) {
     config = { tier: 'Excellent', text: 'text-white', border: 'border-purple-400/50', glow: 'shadow-[0_4px_15px_rgba(168,85,247,0.5)]', bg: 'bg-gradient-to-r from-purple-500/60 to-purple-600/60', Icon: Star };
   } else if (score >= 70) {

@@ -1,7 +1,8 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download, Crown, Diamond, Star, Bot } from 'lucide-react';
+import { ArrowLeft, Bookmark, Copy, Check, Heart, Eye, Flame, Minus, Sparkles, Tag, Share2, GalleryVerticalEnd, Download, Crown, Star, Bot } from 'lucide-react';
 import { StandardIcon } from '../components/icons/StandardIcon';
 import { VerifiedIcon } from '../components/icons/VerifiedIcon';
+import { PremiumIcon } from '../components/icons/PremiumIcon';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
 import AuthModal from '../components/AuthModal';
@@ -54,7 +55,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
   const getTierConfig = (s?: number) => {
     if (!s) return null;
     if (s >= 95) return { bg: 'from-amber-500/80 to-amber-600/80', border: 'border-amber-400/50', Icon: Crown, name: 'Elite' };
-    if (s >= 90) return { bg: 'from-blue-500/80 to-blue-600/80', border: 'border-blue-400/50', Icon: Diamond, name: 'Premium' };
+    if (s >= 90) return { bg: 'from-blue-500/80 to-blue-600/80', border: 'border-blue-400/50', Icon: PremiumIcon, name: 'Premium' };
     if (s >= 80) return { bg: 'from-purple-500/80 to-purple-600/80', border: 'border-purple-400/50', Icon: Star, name: 'Excellent' };
     if (s >= 70) return { bg: 'from-green-500/80 to-green-600/80', border: 'border-green-400/50', Icon: VerifiedIcon, name: 'Verified' };
     return { bg: 'from-black/50 to-black/30', border: 'border-white/20', Icon: StandardIcon, name: 'Standard' };
