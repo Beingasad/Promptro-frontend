@@ -106,8 +106,8 @@ const AnimatedQualityBadge = memo(({ prompt, className }: AnimatedQualityBadgePr
   };
 
   const containerClasses = className 
-    ? `${className} flex items-center justify-between rounded-full ${bg} backdrop-blur-md px-2.5 py-[5px] border ${border} ${glow} pointer-events-none w-[115px] max-w-[120px] overflow-hidden`
-    : `absolute z-10 top-1.5 right-2 md:top-2 md:right-3 flex items-center justify-between rounded-full ${bg} backdrop-blur-md px-2.5 py-[5px] border ${border} ${glow} pointer-events-none w-[115px] max-w-[120px] overflow-hidden`;
+    ? `${className} flex items-center justify-between rounded-full ${bg} backdrop-blur-md px-2.5 py-[5px] border ${border} ${glow} pointer-events-none w-fit max-w-[160px] gap-2 overflow-hidden`
+    : `absolute z-10 top-1.5 right-2 md:top-2 md:right-3 flex items-center justify-between rounded-full ${bg} backdrop-blur-md px-2.5 py-[5px] border ${border} ${glow} pointer-events-none w-fit max-w-[160px] gap-2 overflow-hidden`;
 
   return (
     <div 
@@ -115,13 +115,20 @@ const AnimatedQualityBadge = memo(({ prompt, className }: AnimatedQualityBadgePr
       className={containerClasses}
     >
       {/* Left Static Side */}
-      <div className="flex items-center gap-1 z-10 pr-1.5">
+      <div className="flex items-center gap-1 z-10 shrink-0">
         <Icon className={`w-3 h-3 ${text}`} strokeWidth={2.5} />
         <span className={`text-[9px] font-bold ${text} tracking-wide`}>{tier}</span>
       </div>
 
       {/* Right Animated Side */}
-      <div className="flex-1 relative flex items-center justify-end h-[14px]">
+      <div className="grid items-center justify-items-end h-[14px]">
+        {/* Invisible placeholders for all frames to maintain the max width of the grid cell */}
+        {frames.map(f => (
+          <div key={'sizer-'+f.id} className="invisible col-start-1 row-start-1 flex items-center gap-1 text-[8.5px] font-semibold whitespace-nowrap">
+            {f.content}
+          </div>
+        ))}
+        
         <AnimatePresence mode="wait">
           <motion.div
             key={frames[currentIndex].id}
@@ -130,7 +137,7 @@ const AnimatedQualityBadge = memo(({ prompt, className }: AnimatedQualityBadgePr
             animate="animate"
             exit="exit"
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className={`absolute right-0 flex items-center gap-1 text-[8.5px] font-semibold ${text} whitespace-nowrap drop-shadow-sm`}
+            className={`col-start-1 row-start-1 flex items-center gap-1 text-[8.5px] font-semibold ${text} whitespace-nowrap drop-shadow-sm`}
           >
             {frames[currentIndex].content}
           </motion.div>
