@@ -65,10 +65,10 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
 
   const isSm = size === 'sm';
   
-  const containerHeight = isSm ? 'h-[22px] md:h-6' : 'h-8 md:h-10';
+  const containerHeight = isSm ? 'h-[24px] md:h-[28px]' : 'h-8 md:h-10';
   const containerMinW = isSm ? 'min-w-[95px] md:min-w-[105px]' : 'min-w-[125px] md:min-w-[145px]';
-  const categoryTextClass = isSm ? 'text-[9px] md:text-[10px]' : 'text-xs md:text-sm';
-  const badgeTextClass = isSm ? 'text-[8.5px] md:text-[9.5px]' : 'text-[10px] md:text-sm';
+  const categoryTextClass = isSm ? 'text-[10px] md:text-[11px]' : 'text-xs md:text-sm';
+  const badgeTextClass = isSm ? 'text-[9px] md:text-[10px]' : 'text-[10px] md:text-sm';
   const iconClass = isSm ? 'w-2.5 h-2.5 md:w-3 md:h-3' : 'w-[10px] h-[10px] md:w-3.5 md:h-3.5';
   const containerPadding = isSm ? 'px-2.5 md:px-3' : 'px-4';
   const badgePadding = isSm ? 'px-2 md:px-2.5' : 'px-3 md:px-4';

@@ -425,7 +425,7 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
 
       {/* Top Right: Fixed Colorful Badge Icon */}
       {isHome && tier && (
-        <div className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center p-1.5 md:p-2 rounded-full ${tier.bg} border ${tier.border} shadow-[0_4px_12px_rgba(0,0,0,0.15)] backdrop-blur-md`}>
+        <div className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full ${tier.bg} border ${tier.border} shadow-[0_4px_12px_rgba(0,0,0,0.15)] backdrop-blur-md`}>
           <tier.Icon className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" strokeWidth={2.5} />
         </div>
       )}
