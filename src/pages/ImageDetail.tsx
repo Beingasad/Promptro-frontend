@@ -94,7 +94,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
        </span>
 
        {/* Absolute container for the animated content */}
-       <div className="absolute inset-0 flex items-center justify-center px-3.5 w-full h-full">
+       <div className="absolute inset-0 flex items-center justify-center px-2 md:px-3.5 w-full h-full">
          <AnimatePresence mode="wait">
             {isBadge ? (
                <motion.div 
@@ -103,7 +103,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
-                  className="flex items-center justify-between w-full h-full absolute inset-0 px-3.5"
+                  className="flex items-center justify-between w-full h-full absolute inset-0 px-2 md:px-3.5"
                >
                   <div className="flex items-center gap-1 z-10 pr-2 shrink-0">
                      {tier && <tier.Icon className="w-3 h-3 md:w-3.5 md:h-3.5 text-white" strokeWidth={2.5} />}

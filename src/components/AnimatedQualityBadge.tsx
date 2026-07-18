@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef, memo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Star } from 'lucide-react';
 import { StandardIcon } from './icons/StandardIcon';
 import { VerifiedIcon } from './icons/VerifiedIcon';
 import { PremiumIcon } from './icons/PremiumIcon';
 import { EliteIcon } from './icons/EliteIcon';
+import { ExcellentIcon } from './icons/ExcellentIcon';
 import type { Prompt } from './ImageCard';
 
 interface AnimatedQualityBadgeProps {
@@ -56,9 +56,9 @@ const AnimatedQualityBadge = memo(({ prompt, className }: AnimatedQualityBadgePr
   } else if (score >= 90) {
     config = { tier: 'Premium', text: 'text-white', border: 'border-blue-400/50', glow: 'shadow-[0_4px_15px_rgba(59,130,246,0.5)]', bg: 'bg-gradient-to-r from-blue-500/60 to-blue-600/60', Icon: PremiumIcon };
   } else if (score >= 80) {
-    config = { tier: 'Excellent', text: 'text-white', border: 'border-purple-400/50', glow: 'shadow-[0_4px_15px_rgba(168,85,247,0.5)]', bg: 'bg-gradient-to-r from-purple-500/60 to-purple-600/60', Icon: Star };
+    config = { tier: 'Excellent', text: 'text-white', border: 'border-purple-400/50', glow: 'shadow-[0_4px_15px_rgba(168,85,247,0.5)]', bg: 'bg-gradient-to-r from-purple-500/60 to-purple-600/60', Icon: ExcellentIcon };
   } else if (score >= 70) {
-    config = { tier: 'Verified', text: 'text-white', border: 'border-green-400/50', glow: 'shadow-[0_4px_15px_rgba(34,197,94,0.5)]', bg: 'bg-gradient-to-r from-green-500/60 to-green-600/60', Icon: ShieldCheck };
+    config = { tier: 'Verified', text: 'text-white', border: 'border-green-400/50', glow: 'shadow-[0_4px_15px_rgba(34,197,94,0.5)]', bg: 'bg-gradient-to-r from-green-500/60 to-green-600/60', Icon: VerifiedIcon };
   }
 
   const { Icon, text, border, glow, bg, tier } = config;
