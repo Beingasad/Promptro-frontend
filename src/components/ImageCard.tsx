@@ -11,11 +11,7 @@ import { auth } from '../lib/firebase';
 import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
 import { optimizeImageUrl } from '../utils/image';
 import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
-import { StandardIcon } from './icons/StandardIcon';
-import { VerifiedIcon } from './icons/VerifiedIcon';
-import { PremiumIcon } from './icons/PremiumIcon';
-import { EliteIcon } from './icons/EliteIcon';
-import { ExcellentIcon } from './icons/ExcellentIcon';
+import { AnimatedCategoryQualityPill } from './AnimatedCategoryQualityPill';
 
 export interface Prompt {
   id: string;
@@ -319,16 +315,6 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
     event.stopPropagation();
   };
 
-  const score = prompt.final_quality_score;
-  let tier = null;
-  if (score !== undefined) {
-    if (score >= 95) tier = { bg: 'bg-gradient-to-r from-amber-500 to-amber-600', border: 'border-amber-400/50', Icon: EliteIcon };
-    else if (score >= 90) tier = { bg: 'bg-gradient-to-r from-blue-500 to-blue-600', border: 'border-blue-400/50', Icon: PremiumIcon };
-    else if (score >= 80) tier = { bg: 'bg-gradient-to-r from-purple-500 to-purple-600', border: 'border-purple-400/50', Icon: ExcellentIcon };
-    else if (score >= 70) tier = { bg: 'bg-gradient-to-r from-green-500 to-green-600', border: 'border-green-400/50', Icon: VerifiedIcon };
-    else tier = { bg: 'bg-gradient-to-r from-black/50 to-black/30', border: 'border-white/20', Icon: StandardIcon };
-  }
-
   return (
     <>
       <Link 
@@ -417,23 +403,12 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
 
       {/* Category Badge removed from minimal explore/saved modes as per user request */}
 
-      {/* Top Left: Floating Category & Quality Pill */}
-      <div className={`absolute z-10 flex items-center gap-1.5 md:gap-2 transition-transform duration-300 group-hover:-translate-y-0.5 ${
-        isHome ? "top-1.5 left-2 md:top-2 md:left-3" : "hidden md:flex md:top-2 md:left-3"
-      }`}>
-        <button 
-          onClick={handleCategoryClick}
-          className="flex items-center gap-1.5 md:gap-2 rounded-full bg-gradient-to-r from-[#6d4dec]/95 to-[#ff6a3d]/95 pl-2.5 pr-1 py-1 md:pl-3 md:pr-1.5 text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-white transition-transform active:scale-95 border border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.15)] whitespace-nowrap backdrop-blur-md"
-          aria-label={`View category ${prompt.category}`}
-        >
-          <span>{prompt.category}</span>
-          {tier && (
-            <div className={`flex items-center justify-center p-[3.5px] md:p-1 rounded-full ${tier.bg} border ${tier.border} shadow-sm shrink-0`}>
-              <tier.Icon className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" strokeWidth={2.5} />
-            </div>
-          )}
-        </button>
-      </div>
+      {/* Top Right: Floating Category & Quality Pill */}
+      {isHome && (
+        <div className="absolute top-1.5 right-2 md:top-2 md:right-3 z-10">
+          <AnimatedCategoryQualityPill prompt={prompt} size="sm" />
+        </div>
+      )}
 
       <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3">
         {/* Title (ONLY ON ORIGINAL HOME MODE) */}
