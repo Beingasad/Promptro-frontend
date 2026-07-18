@@ -66,6 +66,7 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
   const isSm = size === 'sm';
   
   const containerHeight = isSm ? 'h-[22px] md:h-6' : 'h-8 md:h-10';
+  const containerMinW = isSm ? 'min-w-[95px] md:min-w-[105px]' : 'min-w-[125px] md:min-w-[145px]';
   const categoryTextClass = isSm ? 'text-[9px] md:text-[10px]' : 'text-xs md:text-sm';
   const badgeTextClass = isSm ? 'text-[8.5px] md:text-[9.5px]' : 'text-[10px] md:text-sm';
   const iconClass = isSm ? 'w-2.5 h-2.5 md:w-3 md:h-3' : 'w-[10px] h-[10px] md:w-3.5 md:h-3.5';
@@ -74,7 +75,7 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
   const badgeGap = isSm ? 'gap-1.5 md:gap-2' : 'gap-3 md:gap-4';
 
   return (
-    <div className={`relative flex ${containerHeight} items-center justify-center rounded-full border transition-all duration-300 overflow-hidden bg-gradient-to-r shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border} ${className}`}>
+    <div className={`relative flex ${containerHeight} ${containerMinW} items-center justify-center rounded-full border transition-all duration-300 overflow-hidden bg-gradient-to-r shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border} ${className}`}>
        <AnimatePresence mode="wait">
           {isBadge ? (
              <motion.div 
@@ -83,7 +84,7 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className={`flex items-center justify-between ${badgePadding} ${badgeGap}`}
+                className={`flex items-center justify-between w-full h-full ${badgePadding} ${badgeGap}`}
              >
                 <div className="flex items-center gap-1 shrink-0">
                    {tier && <tier.Icon className={`${iconClass} text-white`} strokeWidth={2.5} />}
@@ -111,7 +112,7 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className={`whitespace-nowrap ${categoryTextClass} font-bold text-white tracking-wide ${containerPadding}`}
+                className={`flex items-center justify-center w-full h-full whitespace-nowrap ${categoryTextClass} font-bold text-white tracking-wide ${containerPadding}`}
              >
                 {currentFrame.content}
              </motion.span>
