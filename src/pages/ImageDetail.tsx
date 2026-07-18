@@ -13,6 +13,7 @@ import { useSearch } from '../context/SearchContext';
 import { useIsMobileDevice } from '../utils/device';
 import SEOMeta from '../components/common/SEOMeta';
 import JsonLd from '../components/common/JsonLd';
+import AIToolsSheet from '../components/AIToolsSheet';
 import { DetailSkeleton } from '../components/common/Skeleton';
 import ImageGallery from '../components/ImageGallery';
 import AnimatedQualityBadge from '../components/AnimatedQualityBadge';
@@ -188,6 +189,7 @@ export default function ImageDetail() {
   const [liked, setLiked] = useState(false);
   const [inCollection, setInCollection] = useState(false);
   const [shared, setShared] = useState(false);
+  const [isAiSheetOpen, setIsAiSheetOpen] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
@@ -648,6 +650,11 @@ export default function ImageDetail() {
   const handleModelClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!prompt) return;
+    setIsAiSheetOpen(true);
+  };
+
+  const handleToolSelect = (url: string) => {
+    if (!prompt) return;
     
     navigator.clipboard.writeText(promptText).then(() => {
       const toast = document.createElement('div');
@@ -662,7 +669,7 @@ export default function ImageDetail() {
       
       setPrompt(prev => prev ? { ...prev, copies: (prev.copies || 0) + 1 } : null);
       axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/copy`).catch(() => undefined);
-      const url = getModelUrl(prompt.model);
+      
       if (isMobile) {
         window.location.href = url;
       } else {
@@ -987,6 +994,11 @@ export default function ImageDetail() {
       <AuthModal 
         isOpen={authModalOpen} 
         onClose={() => setAuthModalOpen(false)} 
+      />
+      <AIToolsSheet 
+        isOpen={isAiSheetOpen} 
+        onClose={() => setIsAiSheetOpen(false)} 
+        onSelectTool={handleToolSelect} 
       />
     </motion.div>
   );
