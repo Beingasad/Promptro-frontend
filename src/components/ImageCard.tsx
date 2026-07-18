@@ -16,14 +16,6 @@ import { VerifiedIcon } from './icons/VerifiedIcon';
 import { PremiumIcon } from './icons/PremiumIcon';
 import { EliteIcon } from './icons/EliteIcon';
 import { ExcellentIcon } from './icons/ExcellentIcon';
-import { useEffect, useState, useRef, memo } from 'react';
-import type { MouseEvent } from 'react';
-import axios from 'axios';
-import { API_BASE_URL } from '../config';
-import { auth } from '../lib/firebase';
-import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, onActivityUpdated, writeLocalActivity } from '../lib/activity';
-import { optimizeImageUrl } from '../utils/image';
-import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
 
 export interface Prompt {
   id: string;
