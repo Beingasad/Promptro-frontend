@@ -110,16 +110,18 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
                 </div>
              </motion.div>
           ) : (
-             <motion.span
+             <motion.div
                 key="category-layout"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className={`flex items-center justify-center w-full h-full whitespace-nowrap ${categoryTextClass} font-bold text-white tracking-wide ${containerPadding}`}
+                className={`flex items-center justify-center w-full h-full ${containerPadding}`}
              >
-                {currentFrame.content}
-             </motion.span>
+                <span className={`${categoryTextClass} font-bold text-white tracking-wide truncate`}>
+                   {currentFrame.content}
+                </span>
+             </motion.div>
           )}
        </AnimatePresence>
     </div>
