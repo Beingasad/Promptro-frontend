@@ -34,42 +34,26 @@ export function CardSkeleton({ isHome: propIsHome, aspectRatioClass }: CardSkele
       )}
 
       {/* Bottom Content Area */}
-      {isHome ? (
-        <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3 pb-2 md:pb-3 flex flex-col gap-2">
-          {/* Glassmorphic Overlay Background */}
-          <div className="absolute inset-x-2 bottom-2 md:inset-x-3 md:bottom-3 h-[calc(100%-16px)] md:h-[calc(100%-24px)] rounded-[1rem] md:rounded-[1.25rem] bg-black/20 dark:bg-black/40 backdrop-blur-md border border-white/10 pointer-events-none" />
-          
-          {/* Top Row: Title & Author Placeholder */}
-          <div className="relative z-10 px-2 md:px-3 pt-2 md:pt-2.5 flex flex-col gap-1.5">
-            <div className="h-4 w-3/4 rounded-md bg-white/20 animate-pulse" />
-            <div className="flex items-center gap-1.5">
-              <div className="h-4 w-4 md:h-5 md:w-5 rounded-full bg-white/20 animate-pulse" />
-              <div className="h-3 w-20 rounded-md bg-white/20 animate-pulse" />
-            </div>
-          </div>
-          
-          {/* Bottom Row: Actions Placeholder */}
-          <div className="relative z-10 px-2 md:px-3 pb-2 md:pb-2.5 flex items-center justify-between mt-1">
-            <div className="flex items-center gap-1.5 md:gap-2">
-              <div className="h-6 w-12 md:h-7 md:w-14 rounded-full bg-black/40 animate-pulse" />
-              <div className="h-6 w-12 md:h-7 md:w-14 rounded-full bg-black/40 animate-pulse" />
-            </div>
-            <div className="h-6 w-6 md:h-7 md:w-7 rounded-full bg-white/20 animate-pulse" />
-          </div>
+      <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 flex flex-col gap-2">
+        {/* Title Placeholder (Only for Home layout) */}
+        {isHome && (
+          <div className="h-4 w-3/5 rounded-md bg-white/20 backdrop-blur-sm ml-1 px-1.5 animate-pulse" />
+        )}
+
+        <div className={`flex items-center justify-around w-full rounded-full bg-black/15 text-white/60 shadow-[0_16px_38px_rgba(0,0,0,0.15)] backdrop-blur-[24px] ${
+          isHome 
+            ? "px-3 py-2.5 md:px-5 md:py-3.5" 
+            : "px-2.5 py-1.5 md:px-4 md:py-3"
+        }`}>
+          <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
+          <div className="h-3.5 w-px bg-white/15" />
+          <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
+          <div className="h-3.5 w-px bg-white/15" />
+          <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
+          <div className="h-3.5 w-px bg-white/15" />
+          <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
         </div>
-      ) : (
-        <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 flex flex-col gap-2">
-          <div className="flex items-center justify-around w-full rounded-full bg-black/15 text-white/60 shadow-[0_16px_38px_rgba(0,0,0,0.15)] backdrop-blur-[24px] px-2.5 py-1.5 md:px-4 md:py-3">
-            <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-            <div className="h-3.5 w-px bg-white/15" />
-            <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-            <div className="h-3.5 w-px bg-white/15" />
-            <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
-            <div className="h-3.5 w-px bg-white/15" />
-            <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
