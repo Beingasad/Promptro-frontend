@@ -87,14 +87,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
   const isBadge = currentFrame.type === 'badge';
 
   return (
-    <div className={`relative flex h-8 md:h-10 items-center justify-center rounded-full border transition-all duration-500 overflow-hidden min-w-[140px] md:min-w-[155px] bg-gradient-to-r shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border}`}>
-       {/* Invisible sizer to ensure the pill is always wide enough for the category text */}
-       <span className="invisible whitespace-nowrap text-xs md:text-sm font-bold px-4 pointer-events-none">
-         {prompt.category}
-       </span>
-
-       {/* Absolute container for the animated content */}
-       <div className="absolute inset-0 flex items-center justify-center px-2 md:px-3.5 w-full h-full">
+      <div className={`relative flex h-8 md:h-10 items-center justify-center rounded-full border transition-all duration-300 overflow-hidden bg-gradient-to-r shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border}`}>
          <AnimatePresence mode="wait">
             {isBadge ? (
                <motion.div 
@@ -103,13 +96,13 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
-                  className="flex items-center justify-between w-full h-full absolute inset-0 px-2 md:px-3.5"
+                  className="flex items-center justify-between px-3 md:px-4 gap-3 md:gap-4"
                >
-                  <div className="flex items-center gap-1.5 z-10 pr-2 shrink-0">
+                  <div className="flex items-center gap-1.5 shrink-0">
                      {tier && <tier.Icon className="w-[10px] h-[10px] md:w-3.5 md:h-3.5 text-white" strokeWidth={2.5} />}
                      <span className="text-[10px] md:text-sm font-bold text-white tracking-wide leading-none">{tier?.name}</span>
                   </div>
-                  <div className="flex-1 relative flex items-center justify-end h-full">
+                  <div className="flex items-center justify-end overflow-hidden">
                      <AnimatePresence mode="wait">
                         <motion.span
                            key={frameIndex}
@@ -117,7 +110,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
                            animate={{ y: 0, opacity: 1 }}
                            exit={{ y: -15, opacity: 0 }}
                            transition={{ duration: 0.3 }}
-                           className="whitespace-nowrap text-[10px] md:text-sm font-bold text-white tracking-normal absolute right-0"
+                           className="whitespace-nowrap text-[10px] md:text-sm font-bold text-white tracking-normal"
                         >
                            {currentFrame.content}
                         </motion.span>
@@ -125,22 +118,19 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
                   </div>
                </motion.div>
             ) : (
-               <motion.div 
+               <motion.span
                   key="category-layout"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
-                  className="flex items-center justify-center w-full h-full absolute inset-0 px-3.5"
+                  className="whitespace-nowrap text-xs md:text-sm font-bold text-white tracking-wide px-4"
                >
-                  <span className="whitespace-nowrap text-xs md:text-sm font-bold tracking-normal text-white">
-                     {currentFrame.content}
-                  </span>
-               </motion.div>
+                  {currentFrame.content}
+               </motion.span>
             )}
          </AnimatePresence>
-       </div>
-    </div>
+      </div>
   );
 };
 
