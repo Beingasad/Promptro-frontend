@@ -307,7 +307,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                   src={banner.secondary_image} 
                   alt="" 
                   className="h-full w-full object-cover"
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   width={98}
                   height={136}
@@ -322,7 +322,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                   src={banner.image_url} 
                   alt={banner.title} 
                   className="h-full w-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   width={102}
                   height={150}
@@ -387,7 +387,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                           src={prompt.image_url} 
                           alt={prompt.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
+                          loading="eager"
                           decoding="async"
                           width={150}
                           height={187}

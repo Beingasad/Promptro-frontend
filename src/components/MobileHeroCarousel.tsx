@@ -233,6 +233,15 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
 
   return (
     <div className="lg:hidden w-full h-[130px] md:h-[220px] relative mt-0 mb-0 -mx-0.5 md:mx-0 scale-[1.02] md:scale-100">
+      {/* Hidden preloader to prevent flashing during swipes */}
+      <div className="absolute inset-0 opacity-0 pointer-events-none overflow-hidden z-[-1]" aria-hidden="true">
+        {processedBanners.map((b: any, i: number) => (
+          <div key={`preload-${i}`}>
+            {b.image_url && <img src={b.image_url} alt="" loading="eager" decoding="sync" />}
+            {b.secondary_image && <img src={b.secondary_image} alt="" loading="eager" decoding="sync" />}
+          </div>
+        ))}
+      </div>
       <AnimatePresence>
         <motion.div
           key={currentIndex}
@@ -339,7 +348,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                         src={current.secondary_image} 
                         alt="" 
                         className="h-full w-full object-cover"
-                        loading="lazy"
+                        loading="eager"
                         decoding="async"
                         width={58}
                         height={82}
@@ -353,7 +362,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                       src={current.image_url} 
                       alt={current.title} 
                       className="h-full w-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                       width={62}
                       height={90}
@@ -421,7 +430,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                           src={prompt.image_url} 
                           alt={prompt.title} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
+                          loading="eager"
                           decoding="async"
                           width={150}
                           height={187}
