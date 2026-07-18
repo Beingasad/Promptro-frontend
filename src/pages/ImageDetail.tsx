@@ -662,8 +662,12 @@ export default function ImageDetail() {
       
       setPrompt(prev => prev ? { ...prev, copies: (prev.copies || 0) + 1 } : null);
       axios.post(`${API_BASE_URL}/api/prompts/${prompt.id}/copy`).catch(() => undefined);
-      
-      window.open(getModelUrl(prompt.model), '_blank');
+      const url = getModelUrl(prompt.model);
+      if (isMobile) {
+        window.location.href = url;
+      } else {
+        window.open(url, '_blank');
+      }
     });
   };
 
