@@ -28,6 +28,16 @@ interface Banner {
   is_pink?: boolean;
 }
 
+const getButtonTheme = (banner: any) => {
+  if (banner.is_premium) {
+    return "text-white bg-gradient-to-r from-[#d4af37] to-[#ff8c00] shadow-[0_3px_10px_rgba(218,165,32,0.3)] md:shadow-[0_4px_16px_rgba(218,165,32,0.4)] hover:shadow-[0_4px_15px_rgba(218,165,32,0.45)]";
+  }
+  if (banner.is_pink) {
+    return "text-white bg-gradient-to-r from-[#be185d] to-[#ec4899] shadow-[0_3px_10px_rgba(236,72,153,0.3)] md:shadow-[0_4px_16px_rgba(236,72,153,0.4)] hover:shadow-[0_4px_15px_rgba(236,72,153,0.45)]";
+  }
+  return "text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] shadow-[0_3px_10px_rgba(116,55,255,0.3)] md:shadow-[0_4px_16px_rgba(116,55,255,0.4)] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)]";
+};
+
 const getDarkGradient = (lightGrad: string = '') => {
   if (lightGrad.includes('dark:')) return '';
   if (lightGrad.includes('e0e7ff')) return 'dark:from-[#1e1b4b] dark:to-[#312e81]';
@@ -292,7 +302,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                       e.stopPropagation();
                       setSelectedBannerForModal(current);
                     }}
-                    className="cursor-pointer mt-2 md:mt-4 flex items-center text-[11px] md:text-[13px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 md:px-6 md:py-2.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] md:shadow-[0_4px_16px_rgba(116,55,255,0.4)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 outline-none animate-shimmer-button"
+                    className={cn(
+                      "cursor-pointer mt-2 md:mt-4 flex items-center text-[11px] md:text-[13px] font-black px-4 py-1.5 md:px-6 md:py-2.5 rounded-full w-fit transition-all duration-300 hover:scale-[1.05] active:scale-95 outline-none animate-shimmer-button",
+                      getButtonTheme(current)
+                    )}
                   >
                     <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                   </button>
@@ -304,7 +317,10 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                       e.stopPropagation();
                       if (current.button_link) navigate(current.button_link);
                     }}
-                    className="cursor-pointer mt-2 md:mt-4 flex items-center text-[11px] md:text-[13px] font-black text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] px-4 py-1.5 md:px-6 md:py-2.5 rounded-full w-fit shadow-[0_3px_10px_rgba(116,55,255,0.3)] md:shadow-[0_4px_16px_rgba(116,55,255,0.4)] transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)] active:scale-95 animate-shimmer-button"
+                    className={cn(
+                      "cursor-pointer mt-2 md:mt-4 flex items-center text-[11px] md:text-[13px] font-black px-4 py-1.5 md:px-6 md:py-2.5 rounded-full w-fit transition-all duration-300 hover:scale-[1.05] active:scale-95 animate-shimmer-button",
+                      getButtonTheme(current)
+                    )}
                   >
                     <span>{(current.button_text || 'View Now').replace(/[>→\-\s]+$/, '')}</span>
                   </button>
