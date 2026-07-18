@@ -10,6 +10,7 @@ import { ExcellentIcon } from './icons/ExcellentIcon';
 interface PillPrompt {
   category: string;
   final_quality_score?: number;
+  copies?: number;
 }
 
 interface AnimatedCategoryQualityPillProps {
@@ -28,6 +29,12 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
     if (s >= 80) return 15;
     if (s >= 70) return 30;
     return 50;
+  };
+
+  const formatCount = (value: number) => {
+    if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+    if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
+    return value.toString();
   };
 
   const getTierConfig = (s?: number) => {
@@ -51,6 +58,12 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
       { type: 'badge', content: 'AI Rated', bg: tier.bg, border: tier.border },
       { type: 'badge', content: `Top ${getTopPercentile(score!)}%`, bg: tier.bg, border: tier.border }
     );
+    
+    if (prompt.copies && prompt.copies > 0) {
+      frames.push(
+        { type: 'badge', content: `${formatCount(prompt.copies)} Copies`, bg: tier.bg, border: tier.border }
+      );
+    }
   }
 
   useEffect(() => {
