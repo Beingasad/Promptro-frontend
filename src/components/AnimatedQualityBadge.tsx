@@ -41,9 +41,9 @@ const AnimatedQualityBadge = memo(({ prompt, className }: AnimatedQualityBadgePr
   let config = {
     tier: 'Standard',
     text: 'text-white',
-    border: 'border-white/30',
-    glow: 'shadow-[0_4px_15px_rgba(255,255,255,0.2)]',
-    bg: 'bg-white/20',
+    border: 'border-white/20',
+    glow: 'shadow-[0_4px_15px_rgba(0,0,0,0.3)]',
+    bg: 'bg-black/40',
     Icon: FileText
   };
 
