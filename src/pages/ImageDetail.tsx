@@ -87,7 +87,7 @@ const InlineCategoryQualityPill = ({ prompt }: { prompt: PromptDetail }) => {
   const isBadge = currentFrame.type === 'badge';
 
   return (
-    <div className={`relative flex h-8 md:h-10 items-center justify-center rounded-full border transition-all duration-500 overflow-hidden min-w-[145px] md:min-w-[165px] bg-gradient-to-r shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border}`}>
+    <div className={`relative flex h-8 md:h-10 items-center justify-center rounded-full border transition-all duration-500 overflow-hidden min-w-[140px] md:min-w-[155px] bg-gradient-to-r shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border}`}>
        {/* Invisible sizer to ensure the pill is always wide enough for the category text */}
        <span className="invisible whitespace-nowrap text-xs md:text-sm font-bold px-4 pointer-events-none">
          {prompt.category}
