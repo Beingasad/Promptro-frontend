@@ -54,11 +54,15 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const currentFrame = frames[frameIndex] || frames[0];
+    const delay = currentFrame.type === 'category' ? 5000 : 2000;
+
+    const timeout = setTimeout(() => {
       setFrameIndex(prev => (prev + 1) % frames.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [frames.length]);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [frameIndex, frames.length]);
 
   const currentFrame = frames[frameIndex] || frames[0];
   const isBadge = currentFrame.type === 'badge';
