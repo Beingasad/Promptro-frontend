@@ -52,7 +52,7 @@ export default function Founder() {
 
       {/* Hero Section */}
       <motion.section {...fadeUp(0)} className="flex flex-col md:flex-row items-center md:items-start gap-8 bg-white/5 dark:bg-[#12101b]/50 backdrop-blur-xl border border-white/10 p-6 md:p-10 rounded-[2rem]">
-        <div className="w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-primary/20 p-1 relative">
+        <div className="w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full border-4 border-primary/20 p-1 relative">
           <div className="w-full h-full rounded-full bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center overflow-hidden">
             <img 
               src="/brand/founder.jpg" 
@@ -99,8 +99,8 @@ export default function Founder() {
       {/* The Promptro Journey */}
       <motion.section {...fadeUp(0.1)} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white/5 dark:bg-[#12101b]/50 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-[1.5rem] flex flex-col gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#3b82f6] flex items-center justify-center text-white mb-2 shadow-lg shadow-blue-500/20">
-            <Target className="w-6 h-6" />
+          <div className="w-12 h-12 flex items-center justify-center mb-2">
+            <img src="/brand/logo.png" alt="Promptro" className="w-full h-full object-contain" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Why Promptro?</h2>
           <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -128,21 +128,6 @@ export default function Founder() {
               <p className="text-sm text-gray-600 dark:text-gray-400">To become the ultimate hub for AI inspiration, where anyone can master AI generation tools through community knowledge and high-quality resources.</p>
             </div>
           </div>
-        </div>
-      </motion.section>
-
-      {/* Skills & Background */}
-      <motion.section {...fadeUp(0.2)} className="bg-white/5 dark:bg-[#12101b]/50 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-[1.5rem]">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-          <Briefcase className="w-6 h-6 text-primary" />
-          Expertise & Skills
-        </h2>
-        <div className="flex flex-wrap gap-2 md:gap-3">
-          {['Full Stack Development', 'AI Prompt Engineering', 'React & Vite', 'UI/UX Design', 'SEO Optimization', 'Database Architecture', 'Tailwind CSS', 'Python & AI Integration'].map((skill) => (
-            <span key={skill} className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
-              {skill}
-            </span>
-          ))}
         </div>
       </motion.section>
 
