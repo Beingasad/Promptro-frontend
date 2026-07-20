@@ -948,16 +948,18 @@ export default function TopNavbar() {
       navigate(location.pathname, { replace: true, state: {} });
     }
 
-    if (path === '/about') {
+    const isMobile = window.innerWidth < 768;
+
+    if (path === '/about' && isMobile) {
       setMenuOpen(true);
       setExpandedView('about');
-    } else if (path === '/contact') {
+    } else if (path === '/contact' && isMobile) {
       setMenuOpen(true);
       setExpandedView('help');
-    } else if (path === '/privacy-policy') {
+    } else if (path === '/privacy-policy' && isMobile) {
       setMenuOpen(true);
       setExpandedView('privacy');
-    } else if (path === '/terms') {
+    } else if (path === '/terms' && isMobile) {
       setMenuOpen(true);
       setExpandedView('terms');
     } else {
