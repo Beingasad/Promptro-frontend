@@ -1092,21 +1092,25 @@ export default function TopNavbar() {
 
     if (action === 'privacy') {
       navigate('/privacy-policy');
+      setMenuOpen(false);
       return;
     }
 
     if (action === 'terms') {
       navigate('/terms');
+      setMenuOpen(false);
       return;
     }
 
     if (action === 'help') {
       navigate('/contact');
+      setMenuOpen(false);
       return;
     }
 
     if (action === 'about') {
       navigate('/about');
+      setMenuOpen(false);
       return;
     }
 

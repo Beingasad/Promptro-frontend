@@ -54,8 +54,12 @@ export default function Founder() {
       <motion.section {...fadeUp(0)} className="flex flex-col md:flex-row items-center md:items-start gap-8 bg-white/5 dark:bg-[#12101b]/50 backdrop-blur-xl border border-white/10 p-6 md:p-10 rounded-[2rem]">
         <div className="w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-primary/20 p-1 relative">
           <div className="w-full h-full rounded-full bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center overflow-hidden">
-             {/* Placeholder for Founder Photo */}
-            <span className="text-6xl font-bold text-white drop-shadow-lg">MA</span>
+            <img 
+              src="/brand/founder.jpg" 
+              alt="Mohammad Asad Ansari - Founder of Promptro" 
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
           </div>
           {/* Badge */}
           <div className="absolute bottom-2 right-2 bg-black/60 dark:bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 flex items-center gap-1 shadow-lg">

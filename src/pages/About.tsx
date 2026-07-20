@@ -236,8 +236,13 @@ export default function About() {
           <div className="px-6 pb-6">
             {/* Avatar — overlapping the header */}
             <div className="-mt-8 mb-4 flex items-end justify-between">
-              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-[#7437ff] via-[#dd4bd2] to-[#ff642d] flex items-center justify-center shadow-[0_12px_28px_rgba(116,55,255,0.3)] border-4 border-white dark:border-[#1a1625]">
-                <span className="text-xl font-black text-white select-none">MA</span>
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-[#7437ff] via-[#dd4bd2] to-[#ff642d] flex items-center justify-center shadow-[0_12px_28px_rgba(116,55,255,0.3)] border-4 border-white dark:border-[#1a1625] overflow-hidden">
+                <img 
+                  src="/brand/founder.jpg" 
+                  alt="Mohammad Asad Ansari" 
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
               <div className="flex gap-2 mt-8">
                 <a
