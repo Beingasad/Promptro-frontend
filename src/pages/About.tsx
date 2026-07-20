@@ -224,54 +224,29 @@ export default function About() {
       <motion.section {...fadeUp(0.18)}>
         <h2 className="text-xl md:text-2xl font-bold mb-4">Meet the Founder</h2>
         <div
-          className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 overflow-hidden glass-shine hover-glass-glow"
+          className="flex flex-col md:flex-row items-center md:items-start gap-8 bg-white/5 dark:bg-[#12101b]/50 backdrop-blur-xl border border-white/10 p-6 md:p-8 rounded-[2rem] hover:border-white/20 transition-all group"
           itemScope
           itemType="https://schema.org/Person"
         >
-          {/* Gradient header */}
-          <div className="h-24 bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] relative">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,255,255,0.15),transparent_50%)]" />
+          <div className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-full border-4 border-primary/20 p-1 relative mx-auto md:mx-0 group-hover:scale-105 transition-transform duration-500">
+            <div className="w-full h-full rounded-full bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center overflow-hidden shadow-[0_12px_28px_rgba(116,55,255,0.3)]">
+              <img 
+                src="/brand/founder.jpg" 
+                alt="Mohammad Asad Ansari" 
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
           </div>
 
-          <div className="px-6 pb-6">
-            {/* Avatar — overlapping the header */}
-            <div className="-mt-8 mb-4 flex items-end justify-between">
-              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-[#7437ff] via-[#dd4bd2] to-[#ff642d] flex items-center justify-center shadow-[0_12px_28px_rgba(116,55,255,0.3)] border-4 border-white dark:border-[#1a1625] overflow-hidden">
-                <img 
-                  src="/brand/founder.jpg" 
-                  alt="Mohammad Asad Ansari" 
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className="flex gap-2 mt-8">
-                <a
-                  href="https://instagram.com/beingxasad"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#f09433] to-[#e6683c] text-white shadow-[0_4px_12px_rgba(230,104,60,0.3)] hover:scale-105 transition-transform"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-4 w-4" />
-                </a>
-                <a
-                  href="mailto:support.promptro@gmail.com"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors hover:scale-105"
-                  aria-label="Email"
-                  title="support.promptro@gmail.com"
-                >
-                  <Mail className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-
-            <h3 className="text-lg font-black text-[#171421] dark:text-white" itemProp="name">
+          <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start w-full">
+            <h3 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white" itemProp="name">
               Mohammad Asad Ansari
             </h3>
-            <p className="text-sm font-bold text-primary mb-3" itemProp="jobTitle">
-              Founder &amp; Developer · Promptro
+            <p className="text-sm font-bold text-primary mb-4" itemProp="jobTitle">
+              Founder &amp; Developer • Promptro
             </p>
-            <p className="text-[14px] font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed" itemProp="description">
+            <p className="text-[14px] md:text-[15px] font-medium text-gray-600 dark:text-gray-300 leading-relaxed mb-6" itemProp="description">
               I built Promptro in 2026 to solve a simple frustration: seeing beautiful AI art on Instagram, 
               only to be forced to follow and comment for prompt links that never arrived. Today, Promptro 
               is a completely free, open library helping creators get instant access to production-ready prompts 
@@ -279,7 +254,7 @@ export default function About() {
             </p>
 
             {/* Quick info pills */}
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-6">
               {[
                 { icon: Clock, label: 'Founded 2026' },
                 { icon: Globe, label: 'India' },
@@ -292,9 +267,31 @@ export default function About() {
               ))}
             </div>
 
-            <div className="mt-5">
-              <Link to="/founder" className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary/80 transition-colors">
-                Read Full Story <ArrowRight className="h-4 w-4" />
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 w-full">
+              <a
+                href="https://instagram.com/beingxasad"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 dark:bg-black/20 text-gray-700 dark:text-gray-200 hover:bg-gradient-to-br hover:from-[#f09433] hover:to-[#e6683c] hover:text-white hover:border-transparent transition-all border border-white/10"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a
+                href="mailto:support.promptro@gmail.com"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 dark:bg-black/20 text-gray-700 dark:text-gray-200 hover:bg-primary hover:text-white hover:border-transparent transition-all border border-white/10"
+                aria-label="Email"
+                title="support.promptro@gmail.com"
+              >
+                <Mail className="h-5 w-5" />
+              </a>
+              
+              <Link
+                to="/founder"
+                className="ml-auto inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-5 py-2 text-sm font-bold text-primary hover:bg-primary hover:text-white transition-all duration-300"
+              >
+                Read Full Story
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
