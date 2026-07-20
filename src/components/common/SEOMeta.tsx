@@ -165,6 +165,10 @@ export default function SEOMeta({
           name: 'Mohammad Asad Ansari',
           url: `${SITE_URL}/founder`,
           jobTitle: 'Founder',
+          sameAs: [
+            'https://instagram.com/beingxasad',
+            'https://github.com/Beingasad',
+          ],
           worksFor: {
             '@type': 'Organization',
             name: 'Promptro',

@@ -23,7 +23,7 @@ export default function Founder() {
       url: 'https://promptro.in',
     },
     sameAs: [
-      'https://instagram.com/promptro.in',
+      'https://instagram.com/beingxasad',
       'https://github.com/Beingasad',
     ],
   };
@@ -83,10 +83,10 @@ export default function Founder() {
           </p>
 
           <div className="flex items-center justify-center md:justify-start gap-3 mt-2">
-            <a href="mailto:contact@promptro.in" className="w-10 h-10 rounded-full bg-white/10 dark:bg-black/20 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-primary/20 hover:text-primary transition-colors border border-white/10">
+            <a href="mailto:support.promptro@gmail.com" className="w-10 h-10 rounded-full bg-white/10 dark:bg-black/20 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-primary/20 hover:text-primary transition-colors border border-white/10">
               <Mail className="w-5 h-5" />
             </a>
-            <a href="https://instagram.com/promptro.in" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 dark:bg-black/20 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-primary/20 hover:text-primary transition-colors border border-white/10">
+            <a href="https://instagram.com/beingxasad" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 dark:bg-black/20 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-primary/20 hover:text-primary transition-colors border border-white/10">
               <Instagram className="w-5 h-5" />
             </a>
             <a href="https://github.com/Beingasad" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 dark:bg-black/20 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-primary/20 hover:text-primary transition-colors border border-white/10">
