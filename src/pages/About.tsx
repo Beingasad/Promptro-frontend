@@ -286,6 +286,12 @@ export default function About() {
                 </div>
               ))}
             </div>
+
+            <div className="mt-5">
+              <Link to="/founder" className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary/80 transition-colors">
+                Read Full Story <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </motion.section>
@@ -339,6 +345,26 @@ export default function About() {
               </div>
             </motion.div>
           ))}
+        </div>
+      </motion.section>
+
+      {/* 🚀 EDITORIAL PROCESS (E-E-A-T) 🚀 */}
+      <motion.section {...fadeUp(0.35)} className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8 glass-shine hover-glass-glow">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center shadow-[0_6px_16px_rgba(16,185,129,0.28)]">
+            <CheckCircle2 className="h-4.5 w-4.5 text-white" />
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold">Our Editorial Process</h2>
+        </div>
+        <div className="space-y-3 text-[14px] md:text-[15px] font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed">
+          <p>
+            At Promptro, we believe in quality and trust (E-E-A-T). Every prompt on our platform goes through a rigorous curation process:
+          </p>
+          <ul className="list-disc pl-5 space-y-2 mt-2">
+            <li><strong>Expert Curation:</strong> All prompts are hand-selected by our founder and AI experts.</li>
+            <li><strong>Live Testing:</strong> We test every prompt across multiple AI engines (ChatGPT, Gemini, Midjourney) to ensure consistent results.</li>
+            <li><strong>Regular Updates:</strong> Prompts are frequently reviewed and updated to adapt to the latest AI model changes.</li>
+          </ul>
         </div>
       </motion.section>
 

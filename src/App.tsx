@@ -25,6 +25,9 @@ const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Founder = lazy(() => import('./pages/Founder'));
 
 // Simple Protected Route Component
 const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -58,8 +61,10 @@ function App() {
                   <Route path="profile" element={<Profile />} />
                   <Route path="verify-email" element={<VerifyEmail />} />
                   {/* Trust & SEO Pages */}
-                  <Route path="about" element={<Home />} />
-                  <Route path="contact" element={<Home />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="contact" element={<Contact />} />
+                  <Route path="founder" element={<Founder />} />
+                  <Route path="mohammad-asad-ansari" element={<Founder />} />
                   <Route path="privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="terms" element={<TermsOfService />} />
                   {/* Blog System */}

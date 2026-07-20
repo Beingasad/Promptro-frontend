@@ -163,7 +163,7 @@ export default function SEOMeta({
         founder: {
           '@type': 'Person',
           name: 'Mohammad Asad Ansari',
-          url: `${SITE_URL}/about`,
+          url: `${SITE_URL}/founder`,
           jobTitle: 'Founder',
           worksFor: {
             '@type': 'Organization',

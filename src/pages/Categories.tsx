@@ -43,6 +43,11 @@ export default function Categories() {
         title="Prompt Categories - Browse AI Prompts | Promptro"
         description="Browse thousands of AI image prompts categorized by style, including cinematic, 3D CGI, portrait, nature, and more."
         keywords="AI prompt categories, prompt styles, Midjourney styles, ChatGPT templates, cinematic prompts, Promptro"
+        canonical="https://promptro.in/categories"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://promptro.in' },
+          { name: 'Categories', url: 'https://promptro.in/categories' }
+        ]}
       />
       <div className="max-w-7xl mx-auto">
         <header className="mb-6 md:mb-10 text-left flex flex-col items-start">

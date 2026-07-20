@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import TopNavbar from '../components/TopNavbar';
@@ -348,10 +348,25 @@ export default function MainLayout() {
       </main>
 
       {!isAuth && (
-        <footer className={`relative z-10 text-center ${showBottomNav ? 'pb-24 md:pb-32' : 'pb-6 md:pb-8'}`}>
-          <p className="text-[10px] font-medium text-[#8d86a0]/50">
-            &copy; {new Date().getFullYear()} Promptro. All rights reserved.
-          </p>
+        <footer className={`relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 border-t border-white/5 pt-8 ${showBottomNav ? 'pb-24 md:pb-32' : 'pb-6 md:pb-8'}`}>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex flex-col items-center md:items-start gap-1">
+              <p className="text-xs font-medium text-[#8d86a0]/70">
+                &copy; {new Date().getFullYear()} Promptro. All rights reserved.
+              </p>
+              <p className="text-[11px] font-medium text-[#8d86a0]/50">
+                Founded & Developed by <Link to="/founder" className="text-primary hover:underline">Mohammad Asad Ansari</Link>
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-4 text-[11px] font-medium text-[#8d86a0]/70">
+              <Link to="/about" className="hover:text-primary transition-colors">About</Link>
+              <Link to="/founder" className="hover:text-primary transition-colors">Founder</Link>
+              <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+              <Link to="/terms" className="hover:text-primary transition-colors">Terms</Link>
+              <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
+            </div>
+          </div>
         </footer>
       )}
 
