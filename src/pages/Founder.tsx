@@ -99,7 +99,7 @@ export default function Founder() {
       {/* The Promptro Journey */}
       <motion.section {...fadeUp(0.1)} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white/5 dark:bg-[#12101b]/50 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-[1.5rem] flex flex-col gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-white/10 dark:bg-black/20 border border-white/20 flex items-center justify-center mb-4 p-2.5 shadow-[0_8px_16px_rgba(0,0,0,0.1)]">
+          <div className="w-14 h-14 rounded-2xl bg-white/10 dark:bg-black/20 border border-white/20 flex items-center justify-center mb-4 p-1 shadow-[0_8px_16px_rgba(0,0,0,0.1)]">
             <img src="/brand/logo.png" alt="Promptro" className="w-full h-full object-contain drop-shadow-md" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Why Promptro?</h2>
