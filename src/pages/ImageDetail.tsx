@@ -97,11 +97,16 @@ export default function ImageDetail() {
 
 
   const hasMultipleVersions = Boolean(prompt?.advanced_prompt || prompt?.professional_prompt);
+  
+  const basePromptText = prompt?.prompts && prompt.prompts.length > 1
+    ? (prompt.prompts[currentImageIndex] || prompt.prompt_text)
+    : prompt?.prompt_text || '';
+
   const activePromptText = activeVersion === 'Advanced' && prompt?.advanced_prompt 
     ? prompt.advanced_prompt 
     : activeVersion === 'Professional' && prompt?.professional_prompt 
     ? prompt.professional_prompt 
-    : prompt?.prompt_text || '';
+    : basePromptText;
 
   const handleShare = async () => {
     if (!prompt) return;
@@ -458,7 +463,7 @@ export default function ImageDetail() {
     );
   }
 
-  const promptText = activePromptText;
+  const promptText = activePromptText || '';
   const negativePrompt = prompt.negative_prompt || '';
   const rawImages = prompt.images && prompt.images.length > 0 ? prompt.images : [prompt.image_url];
   const galleryImages = Array.from(new Set(rawImages)).filter(Boolean);
@@ -638,7 +643,17 @@ export default function ImageDetail() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="relative overflow-hidden rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md p-5 md:p-6 text-[15px] font-medium leading-relaxed text-[#4a445f] dark:text-[#c4bed6] whitespace-pre-wrap transition-all duration-300"
         >
-          {promptText}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={promptText}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              {promptText}
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
       </section>
 

@@ -39,6 +39,7 @@ export interface Prompt {
   created_at?: string;
   updated_at?: string;
   images?: string[];
+  prompts?: string[];
 }
 
 interface ImageCardProps {

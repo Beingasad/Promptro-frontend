@@ -83,6 +83,7 @@ type AdminPrompt = {
   visibility?: 'Public' | 'Hidden';
   tool?: string;
   images?: string[];
+  prompts?: string[];
   base_quality_score?: number;
 };
 
@@ -198,6 +199,8 @@ export default function Admin() {
   const [cssRatio, setCssRatio] = useState('');
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [showBulkModal, setShowBulkModal] = useState(false);
+  const [isMultiPromptMode, setIsMultiPromptMode] = useState(false);
+  const [multiPrompts, setMultiPrompts] = useState<string[]>([]);
   const [campaignStep, setCampaignStep] = useState(1);
   const [selectedPromptsForCampaign, setSelectedPromptsForCampaign] = useState<string[]>([]);
   const [isLaunching, setIsLaunching] = useState(false);
@@ -1052,6 +1055,10 @@ export default function Admin() {
        setCssRatio(ratio);
        setDetectedRatio(ratio.replace(' / ', 'x'));
     }
+    const promptArray = prompt.prompts && prompt.prompts.length > 0 ? prompt.prompts : [prompt.prompt_text];
+    setIsMultiPromptMode(prompt.prompts && prompt.prompts.length > 1 ? true : false);
+    setMultiPrompts(promptArray);
+    
     setForm({
       title: prompt.title,
       category: prompt.category,
@@ -1080,6 +1087,14 @@ export default function Admin() {
     data.append('visibility', form.visibility);
     data.append('base_quality_score', String(form.base_quality_score));
     if (cssRatio) data.append('aspectRatio', cssRatio);
+    
+    if (isMultiPromptMode && multiPrompts.length > 0) {
+      data.append('prompts', JSON.stringify(multiPrompts));
+      // Overwrite primary prompt text with the first prompt for backward compatibility
+      data.set('prompt_text', multiPrompts[0] || form.prompt_text.trim());
+    } else {
+      data.append('prompts', JSON.stringify([]));
+    }
     
     // Add existing URLs
     data.append('image_urls', JSON.stringify(existingUrls));
@@ -2120,19 +2135,69 @@ export default function Admin() {
                             </div>
                           </div>
 
-                          <div className="flex flex-col gap-1.5">
-                            <label className="text-[11px] font-bold text-[#171421] dark:text-white uppercase tracking-wider">Prompt</label>
-                            <div className="relative">
-                              <textarea 
-                                value={form.prompt_text}
-                                onChange={(e) => updateForm('prompt_text', e.target.value)}
-                                placeholder="Enter your main prompt..."
-                                rows={4}
-                                className="glass-input p-5 text-sm resize-none"
-                                required
-                              />
-                              <span className="absolute bottom-4 right-5 text-[10px] font-bold opacity-30">{form.prompt_text.length} / 2000</span>
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-center justify-between">
+                              <label className="text-[11px] font-bold text-[#171421] dark:text-white uppercase tracking-wider">Prompt(s)</label>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-medium text-[#756d8d] dark:text-[#a09bb3]">Multiple Prompts</span>
+                                <div 
+                                  onClick={() => {
+                                    const newMode = !isMultiPromptMode;
+                                    setIsMultiPromptMode(newMode);
+                                    if (newMode) {
+                                      // initialize multiPrompts array with current gallery item count
+                                      setMultiPrompts(galleryItems.map((_, i) => multiPrompts[i] || form.prompt_text));
+                                    }
+                                  }}
+                                  className={`w-10 h-5 rounded-full p-1 cursor-pointer transition-colors relative ${isMultiPromptMode ? 'bg-primary' : 'bg-[#e9e2f3] dark:bg-white/10'}`}
+                                >
+                                  <div className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-transform ${isMultiPromptMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                                </div>
+                              </div>
                             </div>
+                            
+                            {!isMultiPromptMode ? (
+                              <div className="relative">
+                                <textarea 
+                                  value={form.prompt_text}
+                                  onChange={(e) => updateForm('prompt_text', e.target.value)}
+                                  placeholder="Enter your main prompt..."
+                                  rows={4}
+                                  className="glass-input p-5 text-sm resize-none"
+                                  required
+                                />
+                                <span className="absolute bottom-4 right-5 text-[10px] font-bold opacity-30">{form.prompt_text.length} / 2000</span>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col gap-4">
+                                {galleryItems.length === 0 && (
+                                  <div className="p-4 rounded-xl border border-dashed border-primary/30 bg-primary/5 text-sm text-center text-primary/70">
+                                    Upload images first to add multiple prompts.
+                                  </div>
+                                )}
+                                {galleryItems.map((item, index) => (
+                                  <div key={item.id} className="relative flex gap-3 p-3 rounded-xl border border-[#e9e2f3] dark:border-white/10 bg-white/30 dark:bg-black/10">
+                                    <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-white/20">
+                                      <img src={item.url} alt={`Preview ${index}`} className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="flex-1 relative">
+                                      <textarea 
+                                        value={multiPrompts[index] || ''}
+                                        onChange={(e) => {
+                                          const newPrompts = [...multiPrompts];
+                                          newPrompts[index] = e.target.value;
+                                          setMultiPrompts(newPrompts);
+                                        }}
+                                        placeholder={`Enter prompt for image ${index + 1}...`}
+                                        rows={3}
+                                        className="glass-input p-3 text-sm resize-none w-full"
+                                        required
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
 
                           <div className="flex flex-col gap-1.5">
@@ -2152,7 +2217,7 @@ export default function Admin() {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div className="flex flex-col gap-1.5">
                               <label className="text-[11px] font-bold text-[#171421] dark:text-white uppercase tracking-wider">Visibility</label>
                               <div className="relative">
@@ -2189,6 +2254,18 @@ export default function Admin() {
                                 onChange={(e) => updateForm('tags', e.target.value)}
                                 placeholder="Add tags..."
                                 className="glass-input h-12 text-sm"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[11px] font-bold text-[#171421] dark:text-white uppercase tracking-wider">Base Quality Score (0-100)</label>
+                              <input 
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={form.base_quality_score}
+                                onChange={(e) => updateForm('base_quality_score', parseInt(e.target.value) || 0)}
+                                className="glass-input h-12 text-sm"
+                                placeholder="70"
                               />
                             </div>
                           </div>
