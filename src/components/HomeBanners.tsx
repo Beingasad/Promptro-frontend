@@ -134,7 +134,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
           button_link: `/prompt/${latest[0].id}`,
           prompt1: latest[0],
           prompt2: latest[1],
-          prompts_list: latest.slice(0, 6)
+          prompts_list: latest.slice(0, 6),
+          bg_gradient: 'from-[#f5faff] to-[#e6f2ff] dark:from-[#051124] dark:to-[#020812] border-2 border-[#cce6ff] dark:border-[#132c52] shadow-[0_15px_40px_rgba(72,168,255,0.15)] dark:shadow-[0_15px_40px_rgba(72,168,255,0.1)]'
         };
       }
       
