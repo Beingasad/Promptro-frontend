@@ -481,7 +481,7 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
             <>
               <button
                 className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
-                onClick={handleShareClick}
+                onClick={handleShare}
                 aria-label="Share prompt"
               >
                 {shared ? (
