@@ -1081,8 +1081,10 @@ export default function TopNavbar() {
       return;
     }
 
+    const isMobileDevice = (windowWidth < 768) || (typeof window !== 'undefined' && window.innerWidth < 768);
+
     if (action === 'blog') {
-      if (windowWidth >= 768) {
+      if (!isMobileDevice) {
         sessionStorage.setItem('promptro:sidebar-restore', JSON.stringify({ view: null }));
         navigate('/blog');
         closePanels();
@@ -1093,7 +1095,7 @@ export default function TopNavbar() {
     }
 
     if (action === 'privacy') {
-      if (windowWidth < 768) {
+      if (isMobileDevice) {
         setExpandedView('privacy');
       } else {
         navigate('/privacy-policy');
@@ -1103,7 +1105,7 @@ export default function TopNavbar() {
     }
 
     if (action === 'terms') {
-      if (windowWidth < 768) {
+      if (isMobileDevice) {
         setExpandedView('terms');
       } else {
         navigate('/terms');
@@ -1113,7 +1115,7 @@ export default function TopNavbar() {
     }
 
     if (action === 'help') {
-      if (windowWidth < 768) {
+      if (isMobileDevice) {
         setExpandedView('help');
       } else {
         navigate('/contact');
@@ -1123,7 +1125,7 @@ export default function TopNavbar() {
     }
 
     if (action === 'about') {
-      if (windowWidth < 768) {
+      if (isMobileDevice) {
         setExpandedView('about');
       } else {
         navigate('/about');
