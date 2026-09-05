@@ -509,11 +509,11 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
           <div className="h-3 w-px bg-white/20" />
 
           <button
-            className={`liquid-glass-save-btn flex items-center gap-1 text-[11px] font-bold tracking-normal active:scale-90 md:gap-1.5 md:text-sm px-1.5 py-1 md:px-2 md:py-1 ${saved ? 'is-saved' : ''}`}
+            className="liquid-glass-card-btn flex items-center gap-1 text-[11px] font-bold tracking-normal active:scale-90 md:gap-1.5 md:text-sm px-1.5 py-1 md:px-2 md:py-1"
             onClick={toggleSave}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
-            <Bookmark className={`w-3.5 h-3.5 md:w-4 md:h-4 transition-colors ${saved ? 'text-white fill-white' : 'text-white/90'}`} fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
+            <Bookmark className={`w-3.5 h-3.5 md:w-4 md:h-4 transition-colors ${saved ? 'text-primary fill-primary dark:text-[#c4b5fd] dark:fill-[#c4b5fd]' : 'text-white/90'}`} fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
           </button>
         </div>
       </div>
