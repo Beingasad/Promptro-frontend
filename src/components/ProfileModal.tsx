@@ -393,13 +393,13 @@ export default function ProfileModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[22rem] overflow-hidden rounded-[28px] p-6 text-center text-[#171421] dark:text-white liquid-glass-modal"
+              className="relative w-full max-w-[22rem] overflow-hidden rounded-[28px] p-6 text-center text-white liquid-glass-modal"
             >
               <div className="mx-auto flex h-14 w-14 items-center justify-center text-primary">
-                <User className="h-9 w-9" />
+                <User className="h-9 w-9 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
               </div>
-              <h3 className="mt-3 text-lg font-extrabold text-[#171421] dark:text-white">Welcome to Promptro</h3>
-              <p className="mt-1.5 text-xs text-[#554c6e] dark:text-[#E2E8F0] leading-relaxed">
+              <h3 className="mt-3 text-lg font-extrabold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">Welcome to Promptro</h3>
+              <p className="mt-1.5 text-xs text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] leading-relaxed">
                 Connect your account to save prompts, customize your style, and join the Promptro creator community.
               </p>
               <a
@@ -442,7 +442,7 @@ export default function ProfileModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[28px] p-5 sm:p-7 text-[#171421] dark:text-white liquid-glass-modal"
+            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[28px] p-5 sm:p-7 text-white liquid-glass-modal"
           >
             {/* Ambient background glows */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.12),transparent_42%)]" />
@@ -450,7 +450,7 @@ export default function ProfileModal({
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 z-20 liquid-glass-control flex h-8 w-8 items-center justify-center rounded-full text-[#171421] dark:text-white hover:opacity-80 transition-all cursor-pointer"
+              className="absolute top-5 right-5 z-20 liquid-glass-control flex h-8 w-8 items-center justify-center rounded-full text-white hover:opacity-80 transition-all cursor-pointer drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
               aria-label="Close modal"
             >
               <X className="w-4 h-4" />
@@ -459,7 +459,7 @@ export default function ProfileModal({
             {loading ? (
               <div className="flex min-h-[300px] flex-col items-center justify-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="mt-2 text-xs text-[#554c6e] dark:text-[#E2E8F0] font-bold uppercase tracking-wider">Syncing Details...</p>
+                <p className="mt-2 text-xs text-[#E2E8F0] font-bold uppercase tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">Syncing Details...</p>
               </div>
             ) : (
               <div className="relative z-10 flex flex-col gap-4 overflow-y-auto hide-scrollbar min-h-0 pr-1">
@@ -467,11 +467,11 @@ export default function ProfileModal({
                 <div className="flex flex-col items-center text-center mt-1">
                   {/* Large Avatar with camera upload edit overlay */}
                   <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 select-none">
-                    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-black/10 dark:border-white/10 bg-[#f8f7fc] dark:bg-[#201c31] shadow-[0_12px_28px_rgba(72,56,118,0.12)]">
+                    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white/15 bg-white/10 shadow-[0_12px_28px_rgba(72,56,118,0.12)]">
                       {profilePhoto ? (
                         <img src={profilePhoto} alt={firstName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                       ) : (
-                        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary to-[#ff6a3d] text-2xl sm:text-3xl font-black text-white">
+                        <span className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary to-[#ff6a3d] text-2xl sm:text-3xl font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
                           {profileInitial}
                         </span>
                       )}
@@ -484,26 +484,26 @@ export default function ProfileModal({
                   </div>
 
                   {/* Full Name & Username */}
-                  <h3 className="text-lg sm:text-xl font-black text-[#171421] dark:text-white mt-2 leading-snug">
+                  <h3 className="text-lg sm:text-xl font-black text-white mt-2 leading-snug drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                     {firstName} {lastName}
                   </h3>
                   
                   {username ? (
-                    <p className="text-xs font-bold text-primary dark:text-[#c4b5fd] mt-0.5">@{username}</p>
+                    <p className="text-xs font-bold text-[#c4b5fd] mt-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">@{username}</p>
                   ) : (
-                    <p className="text-xs font-semibold text-[#554c6e] dark:text-[#E2E8F0] italic mt-0.5">No username set</p>
+                    <p className="text-xs font-semibold text-[#E2E8F0] italic mt-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">No username set</p>
                   )}
 
                   {/* Email & Verified Badge */}
-                  <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-black/[0.04] dark:bg-white/5 px-3 py-1 rounded-full border border-black/10 dark:border-white/10">
-                    <Mail className="h-3.5 w-3.5 text-[#554c6e] dark:text-[#E2E8F0] shrink-0" />
-                    <span className="text-xs font-medium text-[#171421] dark:text-white truncate max-w-[12rem]">{currentUser.email}</span>
+                  <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-white/10 px-3 py-1 rounded-full border border-white/15">
+                    <Mail className="h-3.5 w-3.5 text-[#E2E8F0] shrink-0 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+                    <span className="text-xs font-medium text-white truncate max-w-[12rem] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{currentUser.email}</span>
                     {backendEmailVerified ? (
-                      <span className="inline-flex items-center text-[10px] font-black text-emerald-500 dark:text-emerald-400 ml-1">
+                      <span className="inline-flex items-center text-[10px] font-black text-emerald-400 ml-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
                         <BadgeCheck className="h-3.5 w-3.5" />
                       </span>
                     ) : (
-                      <span className="inline-flex items-center text-[10px] font-bold text-amber-500 dark:text-amber-400 ml-1">
+                      <span className="inline-flex items-center text-[10px] font-bold text-amber-400 ml-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
                         !
                       </span>
                     )}
@@ -514,17 +514,17 @@ export default function ProfileModal({
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/15 to-secondary/10 border border-primary/25 rounded-[18px] text-[11px] font-semibold text-[#171421] dark:text-white"
+                    className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/15 to-secondary/10 border border-primary/25 rounded-[18px] text-[11px] font-semibold text-white"
                   >
                     <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-extrabold text-[#171421] dark:text-white block">Complete Your Profile</span>
-                      <p className="opacity-90 leading-normal mt-0.5 text-[#554c6e] dark:text-[#E2E8F0]">
+                      <span className="font-extrabold text-white block drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">Complete Your Profile</span>
+                      <p className="opacity-90 leading-normal mt-0.5 text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
                         Please set your username, last name, and gender to personalize your Promptro dashboard!
                       </p>
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="mt-2 text-[10px] font-black text-primary dark:text-[#c4b5fd] hover:underline uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                        className="mt-2 text-[10px] font-black text-primary dark:text-[#c4b5fd] hover:underline uppercase tracking-wider flex items-center gap-1 cursor-pointer drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
                       >
                         Complete Profile Now →
                       </button>
@@ -547,7 +547,7 @@ export default function ProfileModal({
                       >
                         <div className="grid grid-cols-2 gap-3">
                           <label className="block text-left">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">First Name</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] ml-1 block mb-1">First Name</span>
                             <input
                               type="text"
                               value={firstName}
@@ -559,7 +559,7 @@ export default function ProfileModal({
                           </label>
 
                           <label className="block text-left">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Last Name</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] ml-1 block mb-1">Last Name</span>
                             <input
                               type="text"
                               value={lastName}
@@ -571,7 +571,7 @@ export default function ProfileModal({
                         </div>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Username</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] ml-1 block mb-1">Username</span>
                           <span className="relative flex items-center">
                             <span className="absolute left-3.5 text-xs font-bold text-primary">@</span>
                             <input
@@ -585,7 +585,7 @@ export default function ProfileModal({
                         </label>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Gender</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] ml-1 block mb-1">Gender</span>
                           <div className="relative">
                             <select
                               value={gender}

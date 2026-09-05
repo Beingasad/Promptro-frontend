@@ -72,7 +72,7 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
                 transition={{ type: 'spring', stiffness: 450, damping: 34 }}
               />
             )}
-            <span className="relative z-10">{category}</span>
+            <span className="relative z-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.65)]">{category}</span>
           </button>
         ))}
         {loading && globalCategories.length === 0 && (

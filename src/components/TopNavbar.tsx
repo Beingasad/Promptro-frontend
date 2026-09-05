@@ -1093,26 +1093,42 @@ export default function TopNavbar() {
     }
 
     if (action === 'privacy') {
-      navigate('/privacy-policy');
-      setMenuOpen(false);
+      if (windowWidth < 768) {
+        setExpandedView('privacy');
+      } else {
+        navigate('/privacy-policy');
+        setMenuOpen(false);
+      }
       return;
     }
 
     if (action === 'terms') {
-      navigate('/terms');
-      setMenuOpen(false);
+      if (windowWidth < 768) {
+        setExpandedView('terms');
+      } else {
+        navigate('/terms');
+        setMenuOpen(false);
+      }
       return;
     }
 
     if (action === 'help') {
-      navigate('/contact');
-      setMenuOpen(false);
+      if (windowWidth < 768) {
+        setExpandedView('help');
+      } else {
+        navigate('/contact');
+        setMenuOpen(false);
+      }
       return;
     }
 
     if (action === 'about') {
-      navigate('/about');
-      setMenuOpen(false);
+      if (windowWidth < 768) {
+        setExpandedView('about');
+      } else {
+        navigate('/about');
+        setMenuOpen(false);
+      }
       return;
     }
 
@@ -1793,10 +1809,10 @@ export default function TopNavbar() {
                   title="Select Category"
                   className={`flex items-center justify-center transition-all duration-300 cursor-pointer p-1.5 rounded-full hover:scale-105 active:scale-95 ${categoryDropdownOpen || currentCategory !== 'All'
                     ? 'text-primary'
-                    : 'text-[#6f6684] hover:text-[#171421] dark:text-[#a59cb8] dark:hover:text-white'
+                    : 'text-white hover:text-white/80'
                     }`}
                 >
-                  <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5" />
+                  <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
                 </button>
               </div>
             </div>
@@ -1811,7 +1827,7 @@ export default function TopNavbar() {
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto overscroll-contain hide-scrollbar rounded-[1.45rem] liquid-glass-dropdown p-2.5"
               >
-                <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/80">Categories</p>
+                <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/80 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">Categories</p>
                 <div className="mt-1.5 flex flex-col gap-0.5">
                   {categories.map((category) => (
                     <button
@@ -1819,11 +1835,11 @@ export default function TopNavbar() {
                       type="button"
                       onClick={() => handleSelectCategory(category)}
                       className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${currentCategory === category
-                        ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
-                        : 'text-white/90 hover:text-white hover:bg-white/15'
+                        ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-sm'
+                        : 'text-white/95 hover:text-white hover:bg-white/15 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]'
                         }`}
                     >
-                      {category}
+                      <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">{category}</span>
                     </button>
                   ))}
                 </div>
@@ -1975,13 +1991,11 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             if (expandedView === 'privacy' || expandedView === 'terms') {
                               setExpandedView('legal');
-                              navigate('/', { state: { keepMenuOpen: true, restoreView: 'legal' } });
                             } else if (expandedView === 'blog-post') {
                               setExpandedView('blog');
                             } else {
                               setExpandedView(null);
                               setIsFullWidth(false);
-                              navigate('/', { state: { keepMenuOpen: true } });
                             }
                           }}
                           icon={

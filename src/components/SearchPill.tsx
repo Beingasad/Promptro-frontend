@@ -84,10 +84,10 @@ export default function SearchPill() {
                 className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                   activeDropdown === 'category' || currentCategory !== 'All'
                     ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
-                    : 'liquid-glass-filter-btn text-white'
+                    : 'liquid-glass-filter-btn text-[#554c6e] dark:text-[#a59cb8] hover:text-[#171421] dark:hover:text-white'
                 }`}
               >
-                <LayoutGrid className="h-4 w-4 md:h-4.5 md:w-4.5 text-white" />
+                <LayoutGrid className="h-4 w-4 md:h-4.5 md:w-4.5" />
               </button>
 
               {/* Sort Dropdown Trigger */}
@@ -99,10 +99,10 @@ export default function SearchPill() {
                   className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                     activeDropdown === 'sort' || currentSort !== 'All'
                       ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
-                      : 'liquid-glass-filter-btn text-white'
+                      : 'liquid-glass-filter-btn text-[#554c6e] dark:text-[#a59cb8] hover:text-[#171421] dark:hover:text-white'
                 }`}
               >
-                <SlidersHorizontal className="h-4 w-4 md:h-4.5 md:w-4.5 text-white" />
+                <SlidersHorizontal className="h-4 w-4 md:h-4.5 md:w-4.5" />
               </button>
             )}
             </div>
@@ -122,7 +122,7 @@ export default function SearchPill() {
               isHome ? 'right-2' : 'right-12'
             }`}
           >
-            <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/80">Categories</p>
+            <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/85 drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.35)]">Categories</p>
             <div className="mt-1.5 flex flex-col gap-0.5">
               {categories.map((category) => (
                 <button
@@ -131,11 +131,11 @@ export default function SearchPill() {
                   onClick={() => handleSelectCategory(category)}
                   className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${
                     currentCategory === category
-                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
-                      : 'text-white/90 hover:text-white hover:bg-white/15'
+                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-sm'
+                      : 'text-white/95 hover:text-white hover:bg-white/15'
                   }`}
                 >
-                  {category}
+                  <span className="drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.35)]">{category}</span>
                 </button>
               ))}
             </div>
@@ -151,7 +151,7 @@ export default function SearchPill() {
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="absolute right-2 top-full mt-2.5 z-50 w-52 rounded-[1.45rem] liquid-glass-dropdown p-2.5"
           >
-            <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/80">Sort By</p>
+            <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/85 drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.35)]">Sort By</p>
             <div className="mt-1.5 flex flex-col gap-0.5">
               {sortOptions.map((option) => (
                 <button
@@ -160,11 +160,11 @@ export default function SearchPill() {
                   onClick={() => handleSelectSort(option)}
                   className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${
                     currentSort === option
-                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
-                      : 'text-white/90 hover:text-white hover:bg-white/15'
+                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-sm'
+                      : 'text-white/95 hover:text-white hover:bg-white/15'
                   }`}
                 >
-                  {option}
+                  <span className="drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.35)]">{option}</span>
                 </button>
               ))}
             </div>
