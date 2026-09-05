@@ -743,7 +743,7 @@
   .liquid-glass-dropdown {
     position: relative;
     color: #ffffff !important;
-    text-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.35);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
     background: linear-gradient(
