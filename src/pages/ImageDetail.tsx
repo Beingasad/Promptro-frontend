@@ -470,24 +470,28 @@ export default function ImageDetail() {
 
   const renderOverlays = () => (
     <>
+      {/* Top and bottom subtle gradients for high contrast on pure white images */}
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/40 via-black/10 to-transparent pointer-events-none z-[5]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent pointer-events-none" />
+
       <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-start justify-between">
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={handleBack}
-            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Go back"
           >
-            <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
+            <ArrowLeft className="h-4 w-4 md:h-5 md:w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
           </button>
           <button
             onClick={handleDownload}
-            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Download image"
           >
-            <Download className="h-4 w-4 md:h-5 md:w-5 text-white" />
+            <Download className="h-4 w-4 md:h-5 md:w-5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
           </button>
           {galleryImages.length > 1 && (
-            <div className="liquid-glass-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white font-bold text-[10px] select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none">
+            <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white font-bold text-[10px] select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
               {currentImageIndex + 1}/{galleryImages.length}
             </div>
           )}
@@ -495,31 +499,30 @@ export default function ImageDetail() {
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={handleShare}
-            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Share prompt"
           >
-            {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
+            {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />}
           </button>
           <button
             onClick={toggleSave}
-            className={`liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px] ${saved ? 'bg-purple-500/35 border-purple-300/50' : ''}`}
+            className={`liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px] ${saved ? '!bg-purple-600/70 !border-purple-400/60' : ''}`}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
-            <Bookmark className="h-4 w-4 md:h-5 md:w-5" fill={saved ? 'currentColor' : 'none'} />
+            <Bookmark className="h-4 w-4 md:h-5 md:w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" fill={saved ? 'currentColor' : 'none'} />
           </button>
           <button
             onClick={handleCollectionClick}
-            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
-              className="h-4 w-4 md:h-5 md:w-5 text-white"
+              className="h-4 w-4 md:h-5 md:w-5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
               fill={inCollection ? 'currentColor' : 'none'}
             />
           </button>
         </div>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent pointer-events-none" />
       <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 flex flex-wrap items-center justify-between gap-2 md:gap-3">
         <div className="liquid-glass-card-dock flex h-8 items-center gap-2 md:gap-3 rounded-full px-3 text-white md:h-10">
           <button 
