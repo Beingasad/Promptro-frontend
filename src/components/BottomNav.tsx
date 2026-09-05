@@ -47,11 +47,11 @@ export default function BottomNav() {
   const renderNavIcon = (item: typeof navItems[0], isActive: boolean) => {
     if (!isActive) {
       return (
-        <item.icon className="w-[18px] h-[18px] md:w-5 md:h-5 transition-all duration-200 fill-none stroke-current drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+        <item.icon className="w-[18px] h-[18px] md:w-5 md:h-5 transition-all duration-200 fill-none stroke-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]" />
       );
     }
 
-    const iconClasses = "w-[18px] h-[18px] md:w-5 md:h-5 scale-105 transition-all duration-200";
+    const iconClasses = "w-[18px] h-[18px] md:w-5 md:h-5 scale-105 transition-all duration-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]";
 
     switch (item.path) {
       case '/':
@@ -129,7 +129,7 @@ export default function BottomNav() {
           className={({ isActive }) =>
             cn(
               "flex flex-col items-center justify-center gap-1 md:gap-1.5 relative rounded-full min-w-14 md:min-w-20 px-2.5 py-1.5 md:px-4 md:py-2 transition-all duration-200",
-              isActive ? "text-primary dark:text-[#c4b5fd]" : "text-white/90 hover:text-white hover:bg-white/14"
+              isActive ? "text-primary dark:text-[#c4b5fd]" : "text-white/95 hover:text-white hover:bg-white/14"
             )
           }
         >
@@ -145,7 +145,7 @@ export default function BottomNav() {
 
               <span className={cn(
                 "text-[10px] md:text-xs leading-none tracking-tight transition-opacity duration-200 z-10",
-                isActive ? "font-semibold text-primary dark:text-[#c4b5fd] opacity-100" : "font-medium text-white/90 opacity-90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
+                isActive ? "font-bold text-primary dark:text-[#c4b5fd] opacity-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" : "font-semibold text-white opacity-95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
               )}>
                 {item.label}
               </span>

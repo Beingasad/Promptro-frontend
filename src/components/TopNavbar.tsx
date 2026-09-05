@@ -1702,7 +1702,7 @@ export default function TopNavbar() {
       className="fixed top-0 w-full z-[100] px-4 pt-0.5 pb-3 md:pt-1.5 md:pb-3 md:px-8"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[160px] md:h-[120px] bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.18),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.16),transparent_42%),linear-gradient(180deg,#ffffff_0%,#ffffff_55%,rgba(255,255,255,0.8)_70%,rgba(255,255,255,0.3)_85%,rgba(255,255,255,0)_100%)] [mask-image:linear-gradient(to_bottom,#000_0%,#000_55%,rgba(0,0,0,0.8)_70%,rgba(0,0,0,0.3)_85%,rgba(0,0,0,0.05)_93%,transparent_100%)] dark:bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.22),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.15),transparent_42%),linear-gradient(180deg,#0d0b14_0%,#0d0b14_55%,rgba(13,11,20,0.8)_70%,rgba(13,11,20,0.3)_85%,rgba(13,11,20,0)_100%)]" />
-      <div className="relative z-10 mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-x-3 gap-y-2 md:top-nav-glass md:flex-nowrap md:rounded-full md:px-6 md:py-3">
+      <div className="top-nav-glass relative z-10 mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-x-3 gap-y-2 md:flex-nowrap md:rounded-full md:px-6 md:py-3">
         <div className="flex min-w-0 items-center gap-2.5 sm:gap-3 md:gap-4.5">
           <button
             className="liquid-glass-control liquid-glass-sheen flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full text-[#171421] dark:text-white shrink-0"
