@@ -1513,7 +1513,12 @@
 
 .shimmer-bg {
   overflow: hidden !important;
-  background-color: rgba(232, 226, 240, 0.35) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(232, 226, 240, 0.45) 0%,
+    rgba(245, 240, 252, 0.25) 50%,
+    rgba(232, 226, 240, 0.40) 100%
+  ) !important;
 }
 
 .shimmer-bg::after {
@@ -1526,26 +1531,35 @@
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.35) 35%,
+    rgba(139, 92, 246, 0.16) 50%,
+    rgba(255, 255, 255, 0.35) 65%,
     rgba(255, 255, 255, 0) 100%
   ) !important;
   transform: skewX(-20deg) translateX(-150%) !important;
-  animation: premium-shimmer-gpu 1.6s infinite linear !important;
+  animation: premium-shimmer-gpu 1.6s infinite cubic-bezier(0.4, 0, 0.2, 1) !important;
   will-change: transform !important;
 }
 
 [data-theme="dark"] .shimmer-bg {
-  background-color: rgba(255, 255, 255, 0.05) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  ) !important;
 }
 
 [data-theme="dark"] .shimmer-bg::after {
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.05) 35%,
+    rgba(139, 92, 246, 0.12) 50%,
+    rgba(255, 255, 255, 0.05) 65%,
     rgba(255, 255, 255, 0) 100%
   ) !important;
-  animation: premium-shimmer-gpu 1.6s infinite linear !important;
+  animation: premium-shimmer-gpu 1.6s infinite cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 @keyframes bounceShort {

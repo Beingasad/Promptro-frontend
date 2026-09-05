@@ -15,43 +15,43 @@ export function CardSkeleton({ isHome: propIsHome, aspectRatioClass }: CardSkele
 
   return (
     <div 
-      className={`relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_18px_42px_rgba(32,26,54,0.08)] ${finalAspectClass}`}
+      className={`relative block w-full rounded-[1.35rem] md:rounded-[1.75rem] overflow-hidden group mb-2.5 md:mb-3.5 bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-[0_18px_42px_rgba(32,26,54,0.08)] ${finalAspectClass}`}
     >
       {/* Shimmer Background */}
       <div className="absolute inset-0 shimmer-bg w-full h-full" />
 
       {/* Shadow overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent pointer-events-none" />
 
       {/* Category Pill Placeholder on Top Left */}
-      <div className={`absolute z-10 h-[24px] md:h-[28px] w-24 md:w-32 rounded-full bg-black/20 dark:bg-white/10 border border-white/20 dark:border-white/5 animate-pulse backdrop-blur-md ${
+      <div className={`absolute z-10 h-[24px] md:h-[28px] w-24 md:w-32 rounded-full liquid-glass-pill animate-pulse ${
         isHome ? "top-1.5 left-2 md:top-2 md:left-3" : "hidden md:block md:top-2 md:left-3"
       }`} />
 
       {/* Badge Placeholder on Top Right */}
       {isHome && (
-        <div className="absolute top-1.5 right-2 md:top-2 md:right-3 z-10 h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full bg-black/20 dark:bg-white/10 border border-white/20 dark:border-white/5 animate-pulse backdrop-blur-md" />
+        <div className="absolute top-1.5 right-2 md:top-2 md:right-3 z-10 h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full liquid-glass-badge animate-pulse" />
       )}
 
       {/* Bottom Content Area */}
       <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3 flex flex-col gap-2">
         {/* Title Placeholder (Only for Home layout) */}
         {isHome && (
-          <div className="h-4 w-3/5 rounded-md bg-white/20 backdrop-blur-sm ml-1 px-1.5 animate-pulse" />
+          <div className="h-4 w-3/5 rounded-md bg-white/30 backdrop-blur-sm ml-1 px-1.5 animate-pulse" />
         )}
 
-        <div className={`flex items-center justify-around w-full rounded-full bg-black/15 text-white/60 shadow-[0_16px_38px_rgba(0,0,0,0.15)] backdrop-blur-[24px] ${
+        <div className={`liquid-glass-card-dock flex items-center justify-around w-full rounded-full ${
           isHome 
-            ? "px-3 py-2.5 md:px-5 md:py-3.5" 
-            : "px-2.5 py-1.5 md:px-4 md:py-3"
+            ? "px-2.5 py-1.5 md:px-4 md:py-2.5" 
+            : "px-2 py-1 md:px-3 md:py-2"
         }`}>
-          <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-          <div className="h-3.5 w-px bg-white/15" />
-          <div className="h-4 w-8 bg-white/15 rounded-md animate-pulse" />
-          <div className="h-3.5 w-px bg-white/15" />
-          <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
-          <div className="h-3.5 w-px bg-white/15" />
-          <div className="h-4 w-6 bg-white/15 rounded-md animate-pulse" />
+          <div className="h-3.5 w-8 bg-white/20 rounded-full animate-pulse" />
+          <div className="h-3 w-px bg-white/20" />
+          <div className="h-3.5 w-8 bg-white/20 rounded-full animate-pulse" />
+          <div className="h-3 w-px bg-white/20" />
+          <div className="h-3.5 w-6 bg-white/20 rounded-full animate-pulse" />
+          <div className="h-3 w-px bg-white/20" />
+          <div className="h-3.5 w-6 bg-white/20 rounded-full animate-pulse" />
         </div>
       </div>
     </div>
@@ -106,91 +106,93 @@ export function DetailSkeleton({
   hasMultipleImages?: boolean;
 }) {
   const renderSkeletonOverlays = () => (
-    <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-start justify-between">
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-          <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
-        </div>
-        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-          <Download className="h-4 w-4 md:h-5 md:w-5" />
-        </div>
-        {hasMultipleImages && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/20 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px] font-bold text-[10px] md:text-[12px] select-none">
-            -/-
-          </div>
-        )}
-      </div>
+    <>
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/40 via-black/10 to-transparent pointer-events-none z-[5]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent pointer-events-none" />
 
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-          <Share2 className="h-4 w-4 md:h-5 md:w-5" />
+      <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-start justify-between">
+        <div className="flex flex-col items-center gap-2">
+          <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white/50 md:h-10 md:w-10 md:rounded-[18px]">
+            <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
+          </div>
+          <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white/50 md:h-10 md:w-10 md:rounded-[18px]">
+            <Download className="h-4 w-4 md:h-5 md:w-5" />
+          </div>
+          {hasMultipleImages && (
+            <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white/50 font-bold text-[10px] md:text-[12px] select-none pointer-events-none">
+              -/-
+            </div>
+          )}
         </div>
-        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-          <Bookmark className="h-4 w-4 md:h-5 md:w-5" />
-        </div>
-        <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/15 text-white/40 backdrop-blur-md md:h-10 md:w-10 md:rounded-[18px]">
-          <GalleryVerticalEnd className="h-4 w-4 md:h-5 md:w-5" />
+
+        <div className="flex flex-col items-center gap-2">
+          <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white/50 md:h-10 md:w-10 md:rounded-[18px]">
+            <Share2 className="h-4 w-4 md:h-5 md:w-5" />
+          </div>
+          <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white/50 md:h-10 md:w-10 md:rounded-[18px]">
+            <Bookmark className="h-4 w-4 md:h-5 md:w-5" />
+          </div>
+          <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white/50 md:h-10 md:w-10 md:rounded-[18px]">
+            <GalleryVerticalEnd className="h-4 w-4 md:h-5 md:w-5" />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 
   const renderSkeletonBottomRow = () => (
-    <>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex h-8 items-center gap-3 rounded-full bg-white/15 px-3 text-white shadow-[0_14px_34px_rgba(0,0,0,0.15)] backdrop-blur-xl md:h-10">
-          <div className="flex items-center gap-1 text-xs md:text-sm font-bold text-white/60">
-            <Heart className="h-4 w-4 md:h-5 md:w-5" />
-            <div className="h-3 w-6 bg-white/20 rounded-md animate-pulse ml-1" />
-          </div>
-          <span className="h-3 md:h-3.5 w-px bg-white/20" />
-          <div className="flex items-center gap-1 text-xs md:text-sm font-bold text-white/60">
-            <Eye className="h-4 w-4 md:h-5 md:w-5" />
-            <div className="h-3 w-6 bg-white/20 rounded-md animate-pulse ml-1" />
-          </div>
+    <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 flex flex-wrap items-center justify-between gap-2 md:gap-3 z-10">
+      <div className="liquid-glass-card-dock flex h-8 items-center gap-2 md:gap-3 rounded-full px-3 text-white md:h-10">
+        <div className="flex items-center gap-1 text-xs md:text-sm font-bold text-white/70">
+          <Heart className="h-4 w-4 md:h-5 md:w-5" />
+          <div className="h-3 w-6 bg-white/25 rounded-md animate-pulse ml-1" />
         </div>
-        <div className="h-8 w-24 rounded-full bg-white/20 backdrop-blur-xl md:h-10 animate-pulse" />
+        <span className="h-3 md:h-3.5 w-px bg-white/22" />
+        <div className="flex items-center gap-1 text-xs md:text-sm font-bold text-white/70">
+          <Eye className="h-4 w-4 md:h-5 md:w-5" />
+          <div className="h-3 w-6 bg-white/25 rounded-md animate-pulse ml-1" />
+        </div>
       </div>
-    </>
+      <div className="h-8 w-24 rounded-full liquid-glass-pill animate-pulse md:h-10" />
+    </div>
   );
 
   const renderSkeletonTitleAndPrompt = () => (
     <>
       <div className="px-1 shrink-0">
-        <div className="h-8 md:h-10 w-4/5 rounded-lg bg-[#e8e2f0]/60 dark:bg-white/10 animate-pulse" />
-        <div className="h-8 md:h-10 w-3/5 rounded-lg bg-[#e8e2f0]/60 dark:bg-white/10 animate-pulse mt-2" />
-        <div className="h-4 w-1/3 rounded-md bg-[#e8e2f0]/60 dark:bg-white/10 animate-pulse mt-3.5" />
+        <div className="h-8 md:h-10 w-4/5 rounded-2xl bg-white/40 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/50 dark:border-white/10" />
+        <div className="h-8 md:h-10 w-3/5 rounded-2xl bg-white/30 dark:bg-white/10 backdrop-blur-md animate-pulse mt-2 border border-white/40 dark:border-white/10" />
+        <div className="h-4 w-1/3 rounded-full bg-white/35 dark:bg-white/10 backdrop-blur-md animate-pulse mt-3.5 border border-white/40 dark:border-white/10" />
       </div>
       <div className="flex-grow min-h-0 flex flex-col gap-5 overflow-y-auto hide-scrollbar pb-2">
         <div className="shrink-0 flex flex-col gap-3">
           <div className="flex items-center justify-between gap-3 px-1">
-            <div className="flex items-center gap-3 text-[#3a344c] dark:text-[#e4dcf5] opacity-50">
+            <div className="flex items-center gap-3 text-primary opacity-60">
               <Sparkles className="h-6 w-6" />
-              <div className="h-5 w-20 rounded-md bg-[#e8e2f0]/60 dark:bg-white/10" />
+              <div className="h-5 w-20 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/50 dark:border-white/10" />
             </div>
-            <div className="h-8 w-20 rounded-full bg-[#e8e2f0]/60 dark:bg-white/10" />
+            <div className="h-8 w-28 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/50 dark:border-white/10 animate-pulse" />
           </div>
-          <div className="w-full h-36 rounded-[1.5rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_12px_30px_rgba(72,56,118,0.04)] relative overflow-hidden">
+          <div className="w-full h-36 rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md relative overflow-hidden shadow-sm">
             <div className="absolute inset-0 shimmer-bg w-full h-full" />
           </div>
         </div>
         <div className="shrink-0 flex flex-col gap-3">
           <div className="flex items-center justify-between gap-3 px-1">
-            <div className="h-6 w-28 rounded-md bg-[#e8e2f0]/60 dark:bg-white/10" />
-            <div className="h-8 w-20 rounded-full bg-[#e8e2f0]/60 dark:bg-white/10" />
+            <div className="h-6 w-32 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/50 dark:border-white/10 animate-pulse" />
+            <div className="h-8 w-20 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/50 dark:border-white/10 animate-pulse" />
           </div>
-          <div className="w-full h-24 rounded-[1.5rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_12px_30px_rgba(72,56,118,0.04)] relative overflow-hidden">
+          <div className="w-full h-24 rounded-[1.5rem] bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 backdrop-blur-md relative overflow-hidden shadow-sm">
             <div className="absolute inset-0 shimmer-bg w-full h-full" />
           </div>
         </div>
         <div className="shrink-0 flex flex-col gap-2.5 mt-2">
-          <div className="h-4.5 w-16 bg-[#e8e2f0]/60 dark:bg-white/10 rounded-md animate-pulse px-1" />
+          <div className="h-4.5 w-16 bg-white/40 dark:bg-white/10 rounded-full animate-pulse px-1 border border-white/40 dark:border-white/10" />
           <div className="flex flex-wrap gap-2 px-1 mt-1">
-            <div className="h-5 w-16 rounded-full bg-[#e8e2f0]/50 dark:bg-white/10 animate-pulse" />
-            <div className="h-5 w-12 rounded-full bg-[#e8e2f0]/50 dark:bg-white/10 animate-pulse" />
-            <div className="h-5 w-20 rounded-full bg-[#e8e2f0]/50 dark:bg-white/10 animate-pulse" />
-            <div className="h-5 w-14 rounded-full bg-[#e8e2f0]/50 dark:bg-white/10 animate-pulse" />
+            <div className="h-6 w-16 rounded-full bg-white/30 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/40 dark:border-white/10" />
+            <div className="h-6 w-12 rounded-full bg-white/30 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/40 dark:border-white/10" />
+            <div className="h-6 w-20 rounded-full bg-white/30 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/40 dark:border-white/10" />
+            <div className="h-6 w-14 rounded-full bg-white/30 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/40 dark:border-white/10" />
           </div>
         </div>
       </div>
@@ -203,7 +205,7 @@ export function DetailSkeleton({
         <div className="flex flex-col md:flex-row gap-5 md:gap-10 lg:gap-12 md:h-[calc(100vh-100px)] md:min-h-[500px]">
           {/* Left Column: Image Box */}
           <div className="w-full md:w-auto md:max-w-[55%] flex-shrink-0 md:h-full min-h-0 min-w-0 flex items-center justify-center md:justify-start">
-            <div className="relative w-full aspect-[3/4] md:w-[360px] lg:w-[420px] md:h-full overflow-hidden rounded-[1.75rem] md:rounded-[2rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_22px_56px_rgba(32,26,54,0.08)]">
+            <div className="relative w-full aspect-[3/4] md:w-[360px] lg:w-[420px] md:h-full overflow-hidden rounded-[1.75rem] md:rounded-[2rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-[0_22px_56px_rgba(32,26,54,0.08)]">
               <div className="absolute inset-0 shimmer-bg w-full h-full" />
               {renderSkeletonOverlays()}
               {renderSkeletonBottomRow()}
@@ -217,7 +219,7 @@ export function DetailSkeleton({
       ) : (
         <>
           {/* Landscape Image Box */}
-          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-[1.75rem] md:rounded-[2rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-[0_22px_56px_rgba(32,26,54,0.08)]">
+          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-[1.75rem] md:rounded-[2rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-[0_22px_56px_rgba(32,26,54,0.08)]">
             <div className="absolute inset-0 shimmer-bg w-full h-full" />
             {renderSkeletonOverlays()}
             {renderSkeletonBottomRow()}
@@ -238,29 +240,27 @@ export function HomeBannersSkeleton() {
       {Array.from({ length: 2 }).map((_, index) => (
         <div
           key={index}
-          className="relative overflow-hidden rounded-[1.75rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.06)] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 h-[206px]"
+          className="relative overflow-hidden rounded-[1.75rem] p-7 flex items-center justify-between shadow-[0_20px_45px_rgba(72,56,118,0.06)] liquid-glass border border-white/60 dark:border-white/15 h-[206px]"
         >
           {/* Shimmer overlay */}
           <div className="absolute inset-0 shimmer-bg w-full h-full" />
           
           {/* Left side text skeleton */}
           <div className="relative z-10 flex flex-col gap-2.5 w-[52%]">
-            {/* Tag line placeholder */}
-            <div className="h-3.5 w-20 bg-[#c5bad6] dark:bg-white/20 rounded-md animate-pulse mb-1" />
-            {/* Title placeholder */}
-            <div className="h-6.5 w-44 bg-[#b5a8c9] dark:bg-white/25 rounded-lg animate-pulse" />
-            {/* Subtitle placeholder */}
-            <div className="h-4 w-full bg-[#c5bad6]/70 dark:bg-white/15 rounded-md animate-pulse" />
-            {/* Pill Button placeholder */}
-            <div className="h-9.5 w-24 bg-[#c5bad6] dark:bg-white/20 rounded-full animate-pulse mt-3" />
+            <div className="h-3.5 w-20 bg-white/40 dark:bg-white/20 rounded-full backdrop-blur-md animate-pulse mb-1 border border-white/40 dark:border-white/10" />
+            <div className="h-7 w-44 bg-white/50 dark:bg-white/25 rounded-2xl backdrop-blur-md animate-pulse border border-white/50 dark:border-white/10" />
+            <div className="h-4 w-full bg-white/30 dark:bg-white/15 rounded-full backdrop-blur-md animate-pulse border border-white/30 dark:border-white/10" />
+            <div className="h-9.5 w-28 liquid-glass-control rounded-full animate-pulse mt-3" />
           </div>
 
           {/* Right side collage skeleton */}
           <div className="relative h-[150px] w-40 shrink-0 flex items-center justify-end">
-            {/* Front card skeleton */}
-            <div className="relative z-20 h-[150px] w-[102px] rounded-2xl bg-[#c5bad6] dark:bg-white/20 animate-pulse shadow-md" />
-            {/* Back card skeleton (rotated) */}
-            <div className="absolute z-10 -left-6 top-3 h-[136px] w-[98px] rounded-2xl bg-[#c5bad6]/70 dark:bg-white/10 animate-pulse shadow-sm" style={{ transform: 'rotate(-12deg)' }} />
+            <div className="relative z-20 h-[150px] w-[102px] rounded-2xl liquid-glass border border-white/50 dark:border-white/15 animate-pulse shadow-md overflow-hidden">
+              <div className="absolute inset-0 shimmer-bg" />
+            </div>
+            <div className="absolute z-10 -left-6 top-3 h-[136px] w-[98px] rounded-2xl liquid-glass border border-white/40 dark:border-white/10 animate-pulse shadow-sm overflow-hidden" style={{ transform: 'rotate(-12deg)' }}>
+              <div className="absolute inset-0 shimmer-bg" />
+            </div>
           </div>
         </div>
       ))}
@@ -274,15 +274,15 @@ export function MobileHeroCarouselSkeleton() {
       {/* Mimic the hero text slide layout */}
       <div className="flex flex-col w-full">
         {/* Skeleton for "Discover, Copy & Create" subtitle */}
-        <div className="h-[18px] w-48 rounded-md bg-[#c4b8d9]/40 animate-pulse" />
+        <div className="h-[18px] w-48 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/30 dark:border-white/10" />
         {/* Skeleton for "Trending AI Prompts" heading — with shimmer to mimic gradient */}
-        <div className="mt-2 h-10 w-[72%] rounded-lg bg-[#c4b8d9]/50 relative overflow-hidden sm:w-72">
+        <div className="mt-2 h-10 w-[72%] rounded-2xl bg-white/50 dark:bg-white/15 relative overflow-hidden sm:w-72 border border-white/40 dark:border-white/10 backdrop-blur-md">
           <div className="absolute inset-0 shimmer-bg" />
         </div>
         {/* Skeleton for description lines */}
         <div className="flex flex-col gap-2 mt-3">
-          <div className="h-[14px] w-[90%] max-w-[340px] rounded-md bg-[#c4b8d9]/30 animate-pulse" />
-          <div className="h-[14px] w-[70%] max-w-[260px] rounded-md bg-[#c4b8d9]/22 animate-pulse" />
+          <div className="h-[14px] w-[90%] max-w-[340px] rounded-full bg-white/30 dark:bg-white/10 animate-pulse" />
+          <div className="h-[14px] w-[70%] max-w-[260px] rounded-full bg-white/25 dark:bg-white/10 animate-pulse" />
         </div>
       </div>
     </div>
@@ -295,15 +295,15 @@ export function CategoriesSkeleton() {
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-md"
+          className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.25rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-md"
         >
           {/* Shimmer background */}
           <div className="absolute inset-0 shimmer-bg w-full h-full" />
           
           {/* Overlay with bottom placeholders */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
-            <div className="h-6 w-2/3 bg-white/20 rounded-md animate-pulse mb-2" />
-            <div className="h-4 w-1/3 bg-white/10 rounded-md animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-7">
+            <div className="h-6 w-2/3 bg-white/30 backdrop-blur-md border border-white/30 rounded-full animate-pulse mb-2" />
+            <div className="h-4 w-1/3 bg-white/20 backdrop-blur-md rounded-full animate-pulse" />
           </div>
         </div>
       ))}
@@ -315,23 +315,25 @@ export function CollectionsSkeleton() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0 mt-4">
       {/* Dashed Create Board card skeleton */}
-      <div className="relative flex aspect-[4/5] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.5rem] border-2 border-dashed border-[#cfc7dd] dark:border-white/10 bg-[#e8e2f0]/20 dark:bg-white/5 shadow-sm">
-        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/15 animate-pulse" />
-        <div className="h-4 w-20 bg-white/15 rounded-md animate-pulse mt-4" />
+      <div className="relative flex aspect-[4/5] flex-col items-center justify-center rounded-[1.5rem] sm:rounded-[2.25rem] border-2 border-dashed border-[#cfc7dd] dark:border-white/15 bg-white/20 dark:bg-white/5 backdrop-blur-md shadow-sm">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl liquid-glass-control flex items-center justify-center animate-pulse">
+          <div className="w-6 h-6 rounded-full bg-primary/20" />
+        </div>
+        <div className="h-4 w-20 bg-white/30 dark:bg-white/15 rounded-full animate-pulse mt-4 backdrop-blur-sm" />
       </div>
 
       {Array.from({ length: 7 }).map((_, i) => (
         <div
           key={i}
-          className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/5 shadow-md"
+          className="relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.25rem] bg-[#e8e2f0]/30 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-md"
         >
           {/* Shimmer background */}
           <div className="absolute inset-0 shimmer-bg w-full h-full" />
           
           {/* Overlay with bottom placeholders */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-8">
-            <div className="h-6 w-2/3 bg-white/20 rounded-md animate-pulse mb-2" />
-            <div className="h-4 w-1/3 bg-white/10 rounded-md animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-7">
+            <div className="h-6 w-2/3 bg-white/30 backdrop-blur-md border border-white/30 rounded-full animate-pulse mb-2" />
+            <div className="h-4 w-1/3 bg-white/20 backdrop-blur-md rounded-full animate-pulse" />
           </div>
         </div>
       ))}
