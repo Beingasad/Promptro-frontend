@@ -663,16 +663,16 @@
     backdrop-filter: blur(16px) saturate(180%) !important;
     background: linear-gradient(
       135deg,
-      rgba(24, 19, 36, 0.72) 0%,
-      rgba(15, 12, 24, 0.60) 50%,
-      rgba(10, 8, 16, 0.76) 100%
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(18, 14, 28, 0.48) 40%,
+      rgba(10, 8, 18, 0.65) 100%
     ) !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border: 1px solid rgba(255, 255, 255, 0.24) !important;
     box-shadow: 
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.32),
-      inset 0 -0.5px 0.5px 0 rgba(0, 0, 0, 0.4),
-      0 4px 14px -2px rgba(0, 0, 0, 0.45),
-      0 8px 24px -4px rgba(0, 0, 0, 0.35) !important;
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -0.5px 0.5px 0 rgba(0, 0, 0, 0.35),
+      0 4px 14px -2px rgba(0, 0, 0, 0.35),
+      0 8px 24px -4px rgba(0, 0, 0, 0.25) !important;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -680,14 +680,14 @@
   .liquid-glass-dark-control:hover {
     background: linear-gradient(
       135deg,
-      rgba(36, 28, 54, 0.84) 0%,
-      rgba(22, 17, 34, 0.72) 50%,
-      rgba(15, 12, 24, 0.88) 100%
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(26, 20, 38, 0.58) 40%,
+      rgba(15, 12, 24, 0.75) 100%
     ) !important;
-    border-color: rgba(255, 255, 255, 0.38) !important;
+    border-color: rgba(255, 255, 255, 0.40) !important;
     box-shadow: 
       inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.45),
-      0 6px 20px -2px rgba(0, 0, 0, 0.55),
+      0 6px 20px -2px rgba(0, 0, 0, 0.45),
       0 14px 32px -4px rgba(139, 92, 246, 0.25) !important;
     transform: translateY(-1px) scale(1.04);
   }
