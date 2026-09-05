@@ -1811,7 +1811,7 @@ export default function TopNavbar() {
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto overscroll-contain hide-scrollbar rounded-[1.45rem] liquid-glass-dropdown p-2.5"
               >
-                <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#8c84a6]">Categories</p>
+                <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/80">Categories</p>
                 <div className="mt-1.5 flex flex-col gap-0.5">
                   {categories.map((category) => (
                     <button
@@ -1820,7 +1820,7 @@ export default function TopNavbar() {
                       onClick={() => handleSelectCategory(category)}
                       className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${currentCategory === category
                         ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
-                        : 'text-[#4e4566] hover:bg-black/5 dark:text-[#c6bddb] dark:hover:bg-white/5'
+                        : 'text-white/90 hover:text-white hover:bg-white/15'
                         }`}
                     >
                       {category}
