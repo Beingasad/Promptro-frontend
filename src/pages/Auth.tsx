@@ -580,7 +580,7 @@ export default function Auth() {
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        className="grid w-full max-w-[27rem] overflow-hidden rounded-[1.45rem] border border-white/80 bg-white/74 shadow-[0_22px_58px_rgba(72,56,118,0.14)] backdrop-blur-2xl md:max-w-4xl md:grid-cols-[0.86fr_1.14fr] md:rounded-[1.75rem]"
+        className="liquid-glass-modal grid w-full max-w-[27rem] overflow-hidden rounded-[1.65rem] md:max-w-4xl md:grid-cols-[0.86fr_1.14fr] md:rounded-[2rem]"
       >
         {/* Left Panel */}
         <div className="relative hidden min-h-[34rem] overflow-hidden bg-[#171421] p-7 text-white md:block">
@@ -588,14 +588,14 @@ export default function Auth() {
           <div className="relative z-10 flex h-full flex-col justify-between">
             <Link
               to="/"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/12 text-white backdrop-blur-xl transition-colors hover:bg-white/20"
+              className="liquid-glass-control flex h-10 w-10 items-center justify-center rounded-full text-white"
               aria-label="Back to home"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
 
             <div>
-              <div className="mb-5 flex h-16 w-16 items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/90 shadow-[0_18px_46px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <div className="mb-5 flex h-16 w-16 items-center justify-center overflow-hidden rounded-[1.25rem] liquid-glass-control">
                 <img 
                   src="/brand/logo.png" 
                   alt="Promptro Logo" 
@@ -635,20 +635,20 @@ export default function Auth() {
           <div className="mb-4 flex items-center justify-between gap-4 md:hidden">
             <Link
               to="/"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary"
+              className="liquid-glass-control flex h-9 w-9 items-center justify-center rounded-full text-[#171421] dark:text-white"
               aria-label="Back to home"
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
-            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_10px_24px_rgba(72,56,118,0.1)]">
+            <div className="liquid-glass-control flex h-9 w-9 items-center justify-center overflow-hidden rounded-full">
               <img 
                 src="/brand/logo.png" 
                 alt="Promptro Logo" 
-                className="h-8 w-auto object-contain" 
+                className="h-7 w-auto object-contain" 
                 loading="eager"
                 decoding="async"
-                width={32}
-                height={32}
+                width={28}
+                height={28}
               />
             </div>
           </div>
@@ -717,9 +717,9 @@ export default function Auth() {
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={!isFirebaseConfigured || loading}
-                className="mt-5 flex h-11 w-full items-center justify-center gap-3 rounded-full border border-[#e9e2f3] bg-white/78 px-4 text-sm font-bold text-[#242033] shadow-[0_14px_30px_rgba(72,56,118,0.1)] transition-all hover:-translate-y-0.5 hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-5 flex h-11 w-full items-center justify-center gap-3 rounded-full liquid-glass border border-white/60 dark:border-white/20 px-4 text-sm font-bold text-[#242033] dark:text-white transition-all hover:-translate-y-0.5 hover:border-white/80 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#f8f5ff] text-sm font-bold text-primary">G</span>
+                <span className="liquid-glass-control flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold text-primary">G</span>
                 {mode === 'login' ? 'Login with Google' : 'Sign up with Google'}
               </button>
 
@@ -736,7 +736,7 @@ export default function Auth() {
             <form onSubmit={handleLogin} className="flex flex-col gap-3">
               <label className="block">
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">Email</span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                   <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type="email"
@@ -751,7 +751,7 @@ export default function Auth() {
 
               <label className="block">
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">Password</span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                   <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -829,7 +829,7 @@ export default function Auth() {
                 <form onSubmit={handleForgotPasswordSendOTP} className="flex flex-col gap-3">
                   <label className="block">
                     <span className="mb-1.5 block text-sm font-bold text-[#242033]">Email</span>
-                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                       <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                       <input
                         type="email"
@@ -869,7 +869,7 @@ export default function Auth() {
                       setError('');
                       setNotice('');
                     }}
-                    className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+                    className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full liquid-glass-control text-sm font-bold text-[#242033] dark:text-white transition-all hover:-translate-y-0.5"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Back to Login
@@ -907,7 +907,7 @@ export default function Auth() {
                         className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl border-2 text-center text-base sm:text-lg font-bold outline-none transition-all ${
                           val
                             ? 'border-primary bg-primary/5 text-primary'
-                            : 'border-[#e9e2f3] bg-white/72 text-[#171421] focus:border-primary focus:bg-primary/5'
+                            : 'border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 text-[#171421] dark:text-white backdrop-blur-md focus:border-primary focus:bg-white/55 dark:focus:bg-white/10'
                         }`}
                       />
                     ))}
@@ -946,7 +946,7 @@ export default function Auth() {
                     <button
                       type="button"
                       onClick={() => { setForgotStep('email'); setError(''); setNotice(''); }}
-                      className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+                      className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full liquid-glass-control text-sm font-bold text-[#242033] dark:text-white transition-all hover:-translate-y-0.5"
                     >
                       <ArrowLeft className="h-4 w-4" />
                       Back
@@ -969,7 +969,7 @@ export default function Auth() {
                 <form onSubmit={handleForgotPasswordReset} className="flex flex-col gap-3">
                   <label className="block">
                     <span className="mb-1.5 block text-sm font-bold text-[#242033]">New Password</span>
-                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                       <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                       <input
                         type={showPassword ? 'text' : 'password'}
@@ -992,7 +992,7 @@ export default function Auth() {
 
                   <label className="block">
                     <span className="mb-1.5 block text-sm font-bold text-[#242033]">Confirm Password</span>
-                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                    <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                       <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                       <input
                         type={showConfirmPassword ? 'text' : 'password'}
@@ -1034,7 +1034,7 @@ export default function Auth() {
                       setMode('login');
                       resetForm();
                     }}
-                    className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+                    className="mt-1 flex h-11 w-full items-center justify-center gap-2 rounded-full liquid-glass-control text-sm font-bold text-[#242033] dark:text-white transition-all hover:-translate-y-0.5"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     Back to Login
@@ -1052,7 +1052,7 @@ export default function Auth() {
                   <span className="mb-1.5 block text-sm font-bold text-[#242033]">
                     First Name <span className="text-[#ff6a3d]">*</span>
                   </span>
-                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                     <User className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                     <input
                       type="text"
@@ -1066,7 +1066,7 @@ export default function Auth() {
                 </label>
                 <label className="block">
                   <span className="mb-1.5 block text-sm font-bold text-[#242033]">Last Name</span>
-                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                  <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                     <input
                       type="text"
                       value={lastName}
@@ -1085,7 +1085,7 @@ export default function Auth() {
                   <button
                     type="button"
                     onClick={() => setGenderOpen(!genderOpen)}
-                    className="flex h-11 w-full items-center justify-between gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none text-sm font-medium"
+                    className="flex h-11 w-full items-center justify-between gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all text-sm font-medium"
                   >
                     <span className={gender ? 'text-[#171421]' : 'text-[#958baa]'}>
                       {gender || 'Select gender'}
@@ -1098,7 +1098,7 @@ export default function Auth() {
                         initial={{ opacity: 0, y: -4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -4 }}
-                        className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-[#e9e2f3] bg-white dark:bg-[#1c182a] shadow-[0_12px_32px_rgba(72,56,118,0.14)]"
+                        className="liquid-glass-dropdown absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl shadow-[0_12px_32px_rgba(72,56,118,0.14)]"
                       >
                         {GENDER_OPTIONS.map((opt) => (
                           <button
@@ -1120,7 +1120,7 @@ export default function Auth() {
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">
                   Email <span className="text-[#ff6a3d]">*</span>
                 </span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                   <Mail className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type="email"
@@ -1137,7 +1137,7 @@ export default function Auth() {
                 <span className="mb-1.5 block text-sm font-bold text-[#242033]">
                   Password <span className="text-[#ff6a3d]">*</span>
                 </span>
-                <span className="flex h-11 items-center gap-3 rounded-2xl border border-[#e9e2f3] bg-white/72 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] dark:shadow-none">
+                <span className="flex h-11 items-center gap-3 rounded-2xl border border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 px-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] backdrop-blur-md focus-within:border-primary/60 focus-within:bg-white/55 dark:focus-within:bg-white/10 transition-all">
                   <LockKeyhole className="h-5 w-5 shrink-0 text-[#8b5cf6]" />
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -1205,7 +1205,7 @@ export default function Auth() {
                     className={`h-10 w-10 sm:h-12 sm:w-12 rounded-xl border-2 text-center text-base sm:text-lg font-bold outline-none transition-all ${
                       val
                         ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-[#e9e2f3] bg-white/72 text-[#171421] focus:border-primary focus:bg-primary/5'
+                        : 'border-white/50 bg-white/35 dark:bg-white/5 dark:border-white/15 text-[#171421] dark:text-white backdrop-blur-md focus:border-primary focus:bg-white/55 dark:focus:bg-white/10'
                     }`}
                   />
                 ))}
@@ -1244,7 +1244,7 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => { setSignupStep('info'); setError(''); setNotice(''); }}
-                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-[#e9e2f3] bg-white/78 text-sm font-bold text-[#242033] transition-all hover:-translate-y-0.5"
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full liquid-glass-control text-sm font-bold text-[#242033] dark:text-white transition-all hover:-translate-y-0.5"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   Back
