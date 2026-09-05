@@ -341,7 +341,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
               {/* Backdrop */}
               <motion.button
                 type="button"
-                className="fixed inset-0 bg-black/5 backdrop-blur-[3px] cursor-default w-full h-full border-none outline-none animate-fade-in"
+                className="fixed inset-0 bg-black/5 dark:bg-black/40 backdrop-blur-[4px] cursor-default w-full h-full border-none outline-none animate-fade-in"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -356,19 +356,19 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                 exit={{ opacity: 0, scale: 0.94, y: 15 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-[28rem] overflow-hidden rounded-[2rem] liquid-glass-modal p-5 text-left text-white"
+                className="relative w-full max-w-[28rem] overflow-hidden rounded-[28px] liquid-glass-modal p-5 text-left text-[#171421] dark:text-white border border-black/10 dark:border-white/12"
               >
                 {/* Ambient glow inside modal */}
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_30%_0%,rgba(139,92,246,0.2),transparent_50%),radial-gradient(circle_at_80%_0%,rgba(255,106,61,0.14),transparent_50%)]" />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_30%_0%,rgba(139,92,246,0.16),transparent_50%),radial-gradient(circle_at_80%_0%,rgba(255,106,61,0.12),transparent_50%)]" />
 
-                <div className="relative z-10 flex items-center justify-between mb-4 pb-2.5 border-b border-white/15">
+                <div className="relative z-10 flex items-center justify-between mb-4 pb-2.5 border-b border-black/10 dark:border-white/12">
                   <div className="min-w-0 pr-2">
-                    <h3 className="text-sm font-black uppercase tracking-wider text-white truncate max-w-[20rem] drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">{selectedBannerForModal.title}</h3>
-                    <p className="text-[10px] text-white/80 font-medium mt-0.5">Select a prompt to view details</p>
+                    <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white truncate max-w-[20rem]">{selectedBannerForModal.title}</h3>
+                    <p className="text-[10px] text-[#554c6e] dark:text-[#E2E8F0] font-medium mt-0.5">Select a prompt to view details</p>
                   </div>
                   <button 
                     onClick={() => setSelectedBannerForModal(null)}
-                    className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white/85 hover:text-white transition-all cursor-pointer"
+                    className="liquid-glass-control flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#171421] dark:text-white hover:opacity-80 transition-all cursor-pointer"
                     aria-label="Close modal"
                   >
                     <X className="w-4 h-4" />
@@ -385,9 +385,9 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                         setSelectedBannerForModal(null);
                         navigate(`/prompt/${prompt.id}`);
                       }}
-                      className="cursor-pointer group flex flex-col gap-2 p-2 rounded-2xl liquid-glass-control liquid-glass-sheen border border-white/15 hover:border-white/30 text-left transition-all duration-300 outline-none hover:scale-[1.02] active:scale-[0.98]"
+                      className="cursor-pointer group flex flex-col gap-2 p-2 rounded-[18px] liquid-glass-control border border-black/10 dark:border-white/12 hover:border-black/20 dark:hover:border-white/25 text-left transition-all duration-200 outline-none active:scale-[0.98] hover:shadow-[0_0_12px_rgba(255,255,255,0.15)]"
                     >
-                      <div className="aspect-[4/5] w-full rounded-xl overflow-hidden shadow-sm bg-black/25">
+                      <div className="aspect-[4/5] w-full rounded-[12px] overflow-hidden shadow-sm bg-black/5 dark:bg-black/25">
                         <img 
                           src={prompt.image_url} 
                           alt={prompt.title} 
@@ -399,8 +399,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
                         />
                       </div>
                       <div className="px-0.5 w-full">
-                        <span className="text-[8px] font-black uppercase text-[#c4b5fd] tracking-wider block">Option {index + 1}</span>
-                        <h4 className="text-xs font-bold text-white truncate mt-0.5 group-hover:text-primary transition-colors drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+                        <span className="text-[11px] font-extrabold uppercase text-primary dark:text-[#c4b5fd] tracking-wider block">Option {index + 1}</span>
+                        <h4 className="text-sm font-semibold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
                           {prompt.title}
                         </h4>
                       </div>

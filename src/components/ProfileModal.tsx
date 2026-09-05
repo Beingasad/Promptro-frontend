@@ -380,7 +380,7 @@ export default function ProfileModal({
           <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
             <motion.button
               type="button"
-              className="fixed inset-0 bg-black/20 dark:bg-black/50 backdrop-blur-[6px] cursor-default w-full h-full border-none outline-none"
+              className="fixed inset-0 bg-black/5 dark:bg-black/40 backdrop-blur-[4px] cursor-default w-full h-full border-none outline-none"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -393,19 +393,23 @@ export default function ProfileModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 text-center liquid-glass-modal"
+              className="relative w-full max-w-[22rem] overflow-hidden rounded-[28px] p-6 text-center text-[#171421] dark:text-white liquid-glass-modal"
             >
               <div className="mx-auto flex h-14 w-14 items-center justify-center text-primary">
                 <User className="h-9 w-9" />
               </div>
-              <h3 className="mt-3 text-lg font-extrabold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">Welcome to Promptro</h3>
-              <p className="mt-1.5 text-xs text-white/85 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
+              <h3 className="mt-3 text-lg font-extrabold text-[#171421] dark:text-white">Welcome to Promptro</h3>
+              <p className="mt-1.5 text-xs text-[#554c6e] dark:text-[#E2E8F0] leading-relaxed">
                 Connect your account to save prompts, customize your style, and join the Promptro creator community.
               </p>
               <a
                 href="/auth"
                 onClick={onClose}
-                className="mt-5 flex h-11 w-full items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-secondary px-4 text-xs font-bold text-white shadow-md shadow-primary/20 hover:scale-102 transition-transform"
+                className="mt-5 flex h-11 w-full items-center justify-center gap-1.5 rounded-[12px] px-4 text-xs font-bold text-white shadow-lg transition-all duration-200 active:scale-[0.98] hover:scale-[1.01] cursor-pointer"
+                style={{
+                  background: 'linear-gradient(135deg, #7C3AED, #9333EA)',
+                  boxShadow: '0 4px 14px rgba(124, 58, 237, 0.45)'
+                }}
               >
                 Login / Sign Up
               </a>
@@ -423,7 +427,7 @@ export default function ProfileModal({
           {/* Backdrop overlay */}
           <motion.button
             type="button"
-            className="fixed inset-0 bg-black/20 dark:bg-black/50 backdrop-blur-[6px] cursor-default w-full h-full border-none outline-none"
+            className="fixed inset-0 bg-black/5 dark:bg-black/40 backdrop-blur-[4px] cursor-default w-full h-full border-none outline-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -438,7 +442,7 @@ export default function ProfileModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-7 text-white liquid-glass-modal"
+            className="relative flex flex-col w-full max-w-[26rem] max-h-[85vh] sm:max-h-[90vh] overflow-hidden rounded-[28px] p-5 sm:p-7 text-[#171421] dark:text-white liquid-glass-modal"
           >
             {/* Ambient background glows */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.16),transparent_44%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.12),transparent_42%)]" />
@@ -446,7 +450,7 @@ export default function ProfileModal({
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 z-20 liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-full text-white/85 hover:text-white"
+              className="absolute top-5 right-5 z-20 liquid-glass-control flex h-8 w-8 items-center justify-center rounded-full text-[#171421] dark:text-white hover:opacity-80 transition-all cursor-pointer"
               aria-label="Close modal"
             >
               <X className="w-4 h-4" />
@@ -455,7 +459,7 @@ export default function ProfileModal({
             {loading ? (
               <div className="flex min-h-[300px] flex-col items-center justify-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="mt-2 text-xs text-white/85 font-bold uppercase tracking-wider">Syncing Details...</p>
+                <p className="mt-2 text-xs text-[#554c6e] dark:text-[#E2E8F0] font-bold uppercase tracking-wider">Syncing Details...</p>
               </div>
             ) : (
               <div className="relative z-10 flex flex-col gap-4 overflow-y-auto hide-scrollbar min-h-0 pr-1">
@@ -463,7 +467,7 @@ export default function ProfileModal({
                 <div className="flex flex-col items-center text-center mt-1">
                   {/* Large Avatar with camera upload edit overlay */}
                   <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 select-none">
-                    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white/80 dark:border-white/10 bg-[#f8f7fc] dark:bg-[#201c31] shadow-[0_12px_28px_rgba(72,56,118,0.12)]">
+                    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-black/10 dark:border-white/10 bg-[#f8f7fc] dark:bg-[#201c31] shadow-[0_12px_28px_rgba(72,56,118,0.12)]">
                       {profilePhoto ? (
                         <img src={profilePhoto} alt={firstName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                       ) : (
@@ -480,26 +484,26 @@ export default function ProfileModal({
                   </div>
 
                   {/* Full Name & Username */}
-                  <h3 className="text-lg sm:text-xl font-black text-white mt-2 leading-snug drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+                  <h3 className="text-lg sm:text-xl font-black text-[#171421] dark:text-white mt-2 leading-snug">
                     {firstName} {lastName}
                   </h3>
                   
                   {username ? (
                     <p className="text-xs font-bold text-primary dark:text-[#c4b5fd] mt-0.5">@{username}</p>
                   ) : (
-                    <p className="text-xs font-semibold text-white/70 italic mt-0.5">No username set</p>
+                    <p className="text-xs font-semibold text-[#554c6e] dark:text-[#E2E8F0] italic mt-0.5">No username set</p>
                   )}
 
                   {/* Email & Verified Badge */}
-                  <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-white/20 dark:bg-white/5 px-3 py-1 rounded-full border border-white/30 dark:border-white/10">
-                    <Mail className="h-3.5 w-3.5 text-white/80 shrink-0" />
-                    <span className="text-xs font-medium text-white/95 truncate max-w-[12rem] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">{currentUser.email}</span>
+                  <div className="flex items-center justify-center gap-1.5 mt-1.5 bg-black/[0.04] dark:bg-white/5 px-3 py-1 rounded-full border border-black/10 dark:border-white/10">
+                    <Mail className="h-3.5 w-3.5 text-[#554c6e] dark:text-[#E2E8F0] shrink-0" />
+                    <span className="text-xs font-medium text-[#171421] dark:text-white truncate max-w-[12rem]">{currentUser.email}</span>
                     {backendEmailVerified ? (
-                      <span className="inline-flex items-center text-[10px] font-black text-emerald-400 ml-1">
+                      <span className="inline-flex items-center text-[10px] font-black text-emerald-500 dark:text-emerald-400 ml-1">
                         <BadgeCheck className="h-3.5 w-3.5" />
                       </span>
                     ) : (
-                      <span className="inline-flex items-center text-[10px] font-bold text-amber-400 ml-1">
+                      <span className="inline-flex items-center text-[10px] font-bold text-amber-500 dark:text-amber-400 ml-1">
                         !
                       </span>
                     )}
@@ -510,17 +514,17 @@ export default function ProfileModal({
                   <motion.div 
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/15 to-secondary/10 border border-primary/25 rounded-xl text-[11px] font-semibold text-white/90"
+                    className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/15 to-secondary/10 border border-primary/25 rounded-[18px] text-[11px] font-semibold text-[#171421] dark:text-white"
                   >
                     <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-extrabold text-white block">Complete Your Profile</span>
-                      <p className="opacity-90 leading-normal mt-0.5 text-white/85">
+                      <span className="font-extrabold text-[#171421] dark:text-white block">Complete Your Profile</span>
+                      <p className="opacity-90 leading-normal mt-0.5 text-[#554c6e] dark:text-[#E2E8F0]">
                         Please set your username, last name, and gender to personalize your Promptro dashboard!
                       </p>
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="mt-2 text-[10px] font-black text-[#c4b5fd] hover:underline uppercase tracking-wider flex items-center gap-1"
+                        className="mt-2 text-[10px] font-black text-primary dark:text-[#c4b5fd] hover:underline uppercase tracking-wider flex items-center gap-1 cursor-pointer"
                       >
                         Complete Profile Now →
                       </button>
@@ -543,31 +547,31 @@ export default function ProfileModal({
                       >
                         <div className="grid grid-cols-2 gap-3">
                           <label className="block text-left">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-white/85 ml-1 block mb-1">First Name</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">First Name</span>
                             <input
                               type="text"
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
                               placeholder="First Name"
-                              className="glass-input text-xs font-semibold h-11 py-0 w-full"
+                              className="glass-input text-xs font-semibold h-11 py-0 w-full rounded-[12px] text-[#171421] dark:text-white"
                               required
                             />
                           </label>
 
                           <label className="block text-left">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-white/85 ml-1 block mb-1">Last Name</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Last Name</span>
                             <input
                               type="text"
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
                               placeholder="Last Name"
-                              className="glass-input text-xs font-semibold h-11 py-0 w-full"
+                              className="glass-input text-xs font-semibold h-11 py-0 w-full rounded-[12px] text-[#171421] dark:text-white"
                             />
                           </label>
                         </div>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-white/85 ml-1 block mb-1">Username</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Username</span>
                           <span className="relative flex items-center">
                             <span className="absolute left-3.5 text-xs font-bold text-primary">@</span>
                             <input
@@ -575,31 +579,31 @@ export default function ProfileModal({
                               value={username}
                               onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
                               placeholder="username"
-                              className="glass-input text-xs font-semibold h-11 py-0 pl-7 w-full"
+                              className="glass-input text-xs font-semibold h-11 py-0 pl-7 w-full rounded-[12px] text-[#171421] dark:text-white"
                             />
                           </span>
                         </label>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-white/85 ml-1 block mb-1">Gender</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Gender</span>
                           <div className="relative">
                             <select
                               value={gender}
                               onChange={(e) => setGender(e.target.value)}
-                              className="glass-input text-xs font-semibold h-11 py-0 appearance-none pr-8 bg-transparent w-full text-white"
+                              className="glass-input text-xs font-semibold h-11 py-0 appearance-none pr-8 bg-transparent w-full text-[#171421] dark:text-white rounded-[12px]"
                             >
-                              <option value="" disabled className="bg-[#14111f] text-white">Select Gender</option>
-                              <option value="Male" className="bg-[#14111f] text-white">Male</option>
-                              <option value="Female" className="bg-[#14111f] text-white">Female</option>
-                              <option value="Other" className="bg-[#14111f] text-white">Other</option>
-                              <option value="Prefer not to say" className="bg-[#14111f] text-white">Prefer not to say</option>
+                              <option value="" disabled className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Select Gender</option>
+                              <option value="Male" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Male</option>
+                              <option value="Female" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Female</option>
+                              <option value="Other" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Other</option>
+                              <option value="Prefer not to say" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Prefer not to say</option>
                             </select>
-                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70 pointer-events-none" />
+                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#554c6e] dark:text-white/70 pointer-events-none" />
                           </div>
                         </label>
 
                         {error && (
-                          <div className="flex gap-2 items-center text-rose-400 font-bold text-[11px] p-2.5 bg-rose-500/15 border border-rose-500/25 rounded-xl">
+                          <div className="flex gap-2 items-center text-rose-500 dark:text-rose-400 font-bold text-[11px] p-2.5 bg-rose-500/10 border border-rose-500/25 rounded-[12px]">
                             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                             <span>{error}</span>
                           </div>
@@ -619,14 +623,18 @@ export default function ProfileModal({
                                 setGender(profile.gender || '');
                               }
                             }}
-                            className="flex-1 h-10 rounded-full border border-white/20 bg-white/10 text-xs font-bold text-white transition-all hover:bg-white/15"
+                            className="flex-1 h-11 rounded-[12px] border border-black/10 dark:border-white/12 bg-black/5 dark:bg-white/10 text-xs font-bold text-[#171421] dark:text-white transition-all hover:bg-black/10 dark:hover:bg-white/15 active:scale-[0.98] cursor-pointer"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
                             disabled={saving}
-                            className="flex-1 h-10 rounded-full bg-primary text-white text-xs font-bold transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-1.5 hover:scale-102 disabled:opacity-60"
+                            className="flex-1 h-11 rounded-[12px] text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5 active:scale-[0.98] hover:scale-[1.01] cursor-pointer disabled:opacity-60"
+                            style={{
+                              background: 'linear-gradient(135deg, #7C3AED, #9333EA)',
+                              boxShadow: '0 4px 14px rgba(124, 58, 237, 0.45)'
+                            }}
                           >
                             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                             Save Changes
@@ -645,25 +653,25 @@ export default function ProfileModal({
                         {/* Stats Grid */}
                         <div className="grid grid-cols-2 gap-2">
                           {/* Stat 1: Verification */}
-                          <div className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                          <div className="bg-black/[0.04] dark:bg-white/5 border border-black/10 dark:border-white/12 rounded-[18px] p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md">
                             {backendEmailVerified ? (
-                              <BadgeCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+                              <BadgeCheck className="w-5 h-5 text-emerald-500 dark:text-emerald-400 shrink-0" />
                             ) : (
-                              <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
+                              <AlertCircle className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0" />
                             )}
-                            <span className={`text-xs font-bold mt-1.5 ${backendEmailVerified ? 'text-emerald-400' : 'text-amber-400'}`}>
+                            <span className={`text-xs font-bold mt-1.5 ${backendEmailVerified ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                               {backendEmailVerified ? 'Verified' : 'Unverified'}
                             </span>
-                            <span className="text-[9px] font-extrabold uppercase tracking-wider text-white/80 mt-0.5">Verification</span>
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#554c6e] dark:text-[#E2E8F0] mt-0.5">Verification</span>
                           </div>
 
                           {/* Stat 2: Joined Date */}
-                          <div className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                          <div className="bg-black/[0.04] dark:bg-white/5 border border-black/10 dark:border-white/12 rounded-[18px] p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md">
                             <Clock className="w-5 h-5 text-primary shrink-0" />
-                            <span className="text-xs font-bold text-white mt-1.5">
+                            <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {profile ? formatDate(profile.created_at) : 'N/A'}
                             </span>
-                            <span className="text-[9px] font-extrabold uppercase tracking-wider text-white/80 mt-0.5">Joined Date</span>
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#554c6e] dark:text-[#E2E8F0] mt-0.5">Joined Date</span>
                           </div>
 
                           {/* Stat 3: Saved Count */}
@@ -673,13 +681,13 @@ export default function ProfileModal({
                               onClose();
                               navigate('/saved');
                             }}
-                            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/18"
+                            className="bg-black/[0.04] dark:bg-white/5 border border-black/10 dark:border-white/12 rounded-[18px] p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md transition-all active:scale-[0.98] hover:scale-[1.02] cursor-pointer hover:bg-black/[0.07] dark:hover:bg-white/10 hover:shadow-[0_0_12px_rgba(255,255,255,0.15)]"
                           >
                             <Bookmark className="w-5 h-5 text-[#ff6a3d] shrink-0" />
-                            <span className="text-xs font-bold text-white mt-1.5">
+                            <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {savedCount}
                             </span>
-                            <span className="text-[9px] font-extrabold uppercase tracking-wider text-white/80 mt-0.5">Saved Prompts</span>
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#554c6e] dark:text-[#E2E8F0] mt-0.5">Saved Prompts</span>
                           </button>
 
                           {/* Stat 4: Collections Count */}
@@ -689,30 +697,30 @@ export default function ProfileModal({
                               onClose();
                               navigate('/collections');
                             }}
-                            className="bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] transition-all hover:scale-102 active:scale-98 cursor-pointer hover:bg-white/18"
+                            className="bg-black/[0.04] dark:bg-white/5 border border-black/10 dark:border-white/12 rounded-[18px] p-2.5 flex flex-col items-center justify-center text-center backdrop-blur-md transition-all active:scale-[0.98] hover:scale-[1.02] cursor-pointer hover:bg-black/[0.07] dark:hover:bg-white/10 hover:shadow-[0_0_12px_rgba(255,255,255,0.15)]"
                           >
-                            <GalleryVerticalEnd className="w-5 h-5 text-violet-400 shrink-0" />
-                            <span className="text-xs font-bold text-white mt-1.5">
+                            <GalleryVerticalEnd className="w-5 h-5 text-violet-500 dark:text-violet-400 shrink-0" />
+                            <span className="text-xs font-bold text-[#171421] dark:text-white mt-1.5">
                               {collectionsCount}
                             </span>
-                            <span className="text-[9px] font-extrabold uppercase tracking-wider text-white/80 mt-0.5">Collections</span>
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#554c6e] dark:text-[#E2E8F0] mt-0.5">Collections</span>
                           </button>
                         </div>
 
                         {/* Verification notice if not verified */}
                         {!backendEmailVerified && profile?.provider === 'email' && (
-                          <div className="flex flex-col gap-2 p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-left">
-                            <div className="flex gap-2 items-start text-xs font-semibold text-amber-300">
+                          <div className="flex flex-col gap-2 p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-[18px] text-left">
+                            <div className="flex gap-2 items-start text-xs font-semibold text-amber-700 dark:text-amber-300">
                               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                               <p>Email address not verified yet. Verify your account to secure your boards.</p>
                             </div>
                             {verificationSuccess && (
-                              <div className="text-[11px] font-bold text-emerald-400 mt-1">
+                              <div className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 mt-1">
                                 ✓ Verification email sent! Please check your inbox.
                               </div>
                             )}
                             {error && (
-                              <div className="text-[11px] font-bold text-rose-400 mt-1">
+                              <div className="text-[11px] font-bold text-rose-600 dark:text-rose-400 mt-1">
                                 {error}
                               </div>
                             )}
@@ -720,7 +728,7 @@ export default function ProfileModal({
                               type="button"
                               onClick={handleSendVerification}
                               disabled={verificationLoading}
-                              className="mt-1 inline-flex items-center gap-1.5 text-xs font-black text-primary hover:text-primary-hover w-max"
+                              className="mt-1 inline-flex items-center gap-1.5 text-xs font-black text-primary hover:text-primary-hover w-max cursor-pointer"
                             >
                               {verificationLoading ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -733,32 +741,52 @@ export default function ProfileModal({
                         )}
 
                         {/* Display list of details in minimal layout */}
-                        <div className="flex flex-col gap-2.5 mt-1 border-t border-white/15 pt-4 text-left text-xs font-semibold text-white/90">
-                          <div className="flex justify-between">
-                            <span className="text-white/80 font-medium">Gender</span>
-                            <span className="font-bold text-white">{gender || 'Not specified'}</span>
+                        <div className="flex flex-col gap-2.5 mt-1 border-t border-black/10 dark:border-white/12 pt-4 text-left text-xs font-semibold">
+                          <div className="flex justify-between items-center">
+                            <span className="text-[#554c6e] dark:text-[#E2E8F0] font-medium">Gender</span>
+                            <span className="font-bold text-[#171421] dark:text-white">{gender || 'Not specified'}</span>
                           </div>
-                          <div className="flex justify-between">
-                            <span className="text-white/80 font-medium">Login Provider</span>
-                            <span className="font-bold text-white uppercase tracking-wider">{profile?.provider || 'email'}</span>
+                          <div className="flex justify-between items-center">
+                            <span className="text-[#554c6e] dark:text-[#E2E8F0] font-medium">Login Provider</span>
+                            <span className="font-bold text-[#171421] dark:text-white uppercase tracking-wider">{profile?.provider || 'email'}</span>
                           </div>
                         </div>
 
                         {/* Action buttons */}
-                        <div className="flex flex-col gap-2.5 mt-2">
+                        <div className="flex flex-col gap-2.5 mt-3">
                           <button
                             type="button"
                             onClick={() => setIsEditing(true)}
-                            className="liquid-glass-control liquid-glass-sheen flex h-10 w-full items-center justify-center gap-2 rounded-full text-xs font-bold text-primary shadow-sm hover:scale-101 active:scale-99 transition-all cursor-pointer"
+                            className="flex h-11 w-full items-center justify-center gap-2 rounded-[12px] text-xs font-bold text-white shadow-lg transition-all duration-200 cursor-pointer active:scale-[0.98] hover:scale-[1.01]"
+                            style={{
+                              background: 'linear-gradient(135deg, #7C3AED, #9333EA)',
+                              color: '#FFFFFF',
+                              boxShadow: '0 4px 14px rgba(124, 58, 237, 0.45)'
+                            }}
                           >
-                            <Edit3 className="w-4 h-4" />
+                            <Edit3 className="w-4 h-4 text-white" />
                             Edit Profile Details
                           </button>
                           
                           <button
                             type="button"
                             onClick={handleLogout}
-                            className="flex h-10 w-full items-center justify-center gap-2 rounded-full bg-rose-500/10 hover:bg-rose-500/18 text-xs font-bold text-rose-500 border border-rose-500/10 active:scale-99 transition-all cursor-pointer"
+                            className="flex h-11 w-full items-center justify-center gap-2 rounded-[12px] text-xs font-bold transition-all duration-200 cursor-pointer active:scale-[0.98] hover:scale-[1.01]"
+                            style={{
+                              background: 'rgba(239, 68, 68, 0.12)',
+                              border: '1px solid rgba(239, 68, 68, 0.28)',
+                              color: '#EF4444'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.22)';
+                              e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.45)';
+                              e.currentTarget.style.boxShadow = '0 0 12px rgba(239, 68, 68, 0.25)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.12)';
+                              e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.28)';
+                              e.currentTarget.style.boxShadow = 'none';
+                            }}
                           >
                             <LogOut className="w-4 h-4" />
                             Log Out
@@ -775,20 +803,20 @@ export default function ProfileModal({
           {/* Sub-Modal for Image Cropping/Zooming */}
           <AnimatePresence>
             {cropImageSrc && (
-              <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#0d0b14]/75 backdrop-blur-md">
+              <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/5 dark:bg-black/40 backdrop-blur-[4px]">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.96, y: 16 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.96, y: 12 }}
                   transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative w-full max-w-[20rem] overflow-hidden rounded-[2rem] liquid-glass-modal p-5 text-center shadow-2xl"
+                  className="relative w-full max-w-[20rem] overflow-hidden rounded-[28px] liquid-glass-modal p-6 text-center text-[#171421] dark:text-white shadow-2xl border border-black/10 dark:border-white/12"
                 >
-                  <h4 className="text-sm font-black text-white uppercase tracking-wider mb-4 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">Adjust Photo</h4>
+                  <h4 className="text-sm font-black text-[#171421] dark:text-white uppercase tracking-wider mb-4">Adjust Photo</h4>
                   
                   <div className="flex flex-col items-center gap-4">
                     {/* Cropper Box */}
                     <div 
-                      className="relative w-64 h-64 bg-black/40 rounded-[1.75rem] overflow-hidden cursor-move select-none border border-white/20"
+                      className="relative w-64 h-64 bg-black/15 dark:bg-black/40 rounded-[18px] overflow-hidden cursor-move select-none border border-black/10 dark:border-white/12"
                       onMouseDown={handleMouseDown}
                       onMouseMove={handleMouseMove}
                       onMouseUp={handleMouseUp}
@@ -817,7 +845,7 @@ export default function ProfileModal({
 
                     {/* Slider zoom control */}
                     <div className="w-full flex items-center gap-3 px-1.5 mt-2">
-                      <span className="text-xs font-bold text-white/70">-</span>
+                      <span className="text-xs font-bold text-[#554c6e] dark:text-[#E2E8F0]">-</span>
                       <input 
                         type="range" 
                         min="1" 
@@ -825,28 +853,32 @@ export default function ProfileModal({
                         step="0.02" 
                         value={zoom} 
                         onChange={(e) => setZoom(parseFloat(e.target.value))}
-                        className="flex-1 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-primary"
+                        className="flex-1 h-1.5 bg-black/10 dark:bg-white/20 rounded-lg appearance-none cursor-pointer accent-primary"
                       />
-                      <span className="text-xs font-bold text-primary">+</span>
+                      <span className="text-xs font-bold text-primary dark:text-[#c4b5fd]">+</span>
                     </div>
                     
-                    <p className="text-[10px] text-white/80 font-semibold">Drag to position, use slider to zoom</p>
+                    <p className="text-[10px] text-[#554c6e] dark:text-[#E2E8F0] font-semibold">Drag to position, use slider to zoom</p>
 
                     {/* Buttons */}
                     <div className="flex gap-2.5 w-full mt-2">
                       <button
                         type="button"
                         onClick={() => setCropImageSrc(null)}
-                        className="flex-1 h-10 rounded-full border border-white/20 bg-white/10 text-xs font-bold text-white transition-all hover:bg-white/15"
+                        className="flex-1 h-11 rounded-[12px] border border-black/10 dark:border-white/12 bg-black/5 dark:bg-white/10 text-xs font-bold text-[#171421] dark:text-white transition-all hover:bg-black/10 dark:hover:bg-white/15 active:scale-[0.98] cursor-pointer"
                       >
                         Cancel
                       </button>
                       <button
                         type="button"
                         onClick={handleCropConfirm}
-                        className="flex-1 h-10 rounded-full bg-primary text-white text-xs font-bold transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-1.5 hover:scale-102"
+                        className="flex-1 h-11 rounded-[12px] text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5 active:scale-[0.98] hover:scale-[1.01] cursor-pointer"
+                        style={{
+                          background: 'linear-gradient(135deg, #7C3AED, #9333EA)',
+                          boxShadow: '0 4px 14px rgba(124, 58, 237, 0.45)'
+                        }}
                       >
-                        <Check className="w-4 h-4" />
+                        <Check className="w-4 h-4 text-white" />
                         Crop & Save
                       </button>
                     </div>
