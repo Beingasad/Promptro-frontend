@@ -2229,22 +2229,22 @@ export default function TopNavbar() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full rounded-[2rem] md:rounded-[2.5rem] z-[90] overflow-y-auto hide-scrollbar max-h-[92vh] transition-all duration-300 liquid-glass-modal text-[#171421] dark:text-white ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[94%] sm:w-[90%] md:w-full rounded-[1.75rem] sm:rounded-[2rem] md:rounded-[2.5rem] z-[90] overflow-y-auto hide-scrollbar max-h-[90vh] transition-all duration-300 liquid-glass-modal text-[#171421] dark:text-white ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
                 }`}
             >
               {/* Ambient radial glows */}
               <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.14),transparent_50%),radial-gradient(circle_at_80%_0%,rgba(255,106,61,0.1),transparent_50%)]" />
 
-              <div className="relative z-10 p-5 md:p-8">
+              <div className="relative z-10 p-4 sm:p-6 md:p-8">
                 {showcaseStep === 1 && (
-                  <div className="flex flex-col gap-5 md:gap-6">
-                    <div className="flex items-center justify-between pb-1 border-b border-black/10 dark:border-white/15">
-                      <div>
-                        <h2 className="text-lg md:text-xl font-black text-[#171421] dark:text-white">Showcase Creator</h2>
-                        <p className="text-[11px] md:text-xs text-[#554c6e] dark:text-white/80 font-medium mt-0.5">Select 1 to 3 prompts to build your story poster</p>
+                  <div className="flex flex-col gap-3.5 sm:gap-5 md:gap-6">
+                    <div className="flex items-center justify-between pb-2 border-b border-black/10 dark:border-white/15">
+                      <div className="min-w-0 pr-2">
+                        <h2 className="text-base sm:text-lg md:text-xl font-black text-[#171421] dark:text-white truncate">Showcase Creator</h2>
+                        <p className="text-[10px] sm:text-xs text-[#554c6e] dark:text-white/80 font-medium mt-0.5">Select 1 to 3 prompts to build your story poster</p>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="text-[10px] font-bold text-primary uppercase tracking-wider bg-primary/10 dark:bg-primary/25 border border-primary/20 dark:border-primary/40 px-3 py-1 rounded-full whitespace-nowrap shrink-0">
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="text-[9px] sm:text-[10px] font-bold text-primary uppercase tracking-wider bg-primary/10 dark:bg-primary/25 border border-primary/20 dark:border-primary/40 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shrink-0">
                           {selectedPromptsForShowcase.length} Selected
                         </div>
                         <button
@@ -2257,7 +2257,7 @@ export default function TopNavbar() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[340px] md:max-h-[420px] overflow-y-auto pt-2 pb-6 scroll-fade-mask hide-scrollbar rounded-2xl">
+                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[50vh] sm:max-h-[380px] md:max-h-[420px] overflow-y-auto px-1 py-1.5 hide-scrollbar rounded-2xl">
                       {allPromptsForShowcase.map((prompt) => (
                         <div
                           key={prompt.id}
@@ -2272,40 +2272,42 @@ export default function TopNavbar() {
                               setSelectedPromptsForShowcase(prev => [...prev, prompt.id]);
                             }
                           }}
-                          className={`flex items-center gap-4 p-3 rounded-2xl transition-all cursor-pointer ${selectedPromptsForShowcase.includes(prompt.id)
+                          className={`flex items-center gap-3 sm:gap-4 p-2.5 sm:p-3 rounded-2xl shrink-0 min-h-[66px] sm:min-h-[72px] w-full transition-all cursor-pointer select-none ${selectedPromptsForShowcase.includes(prompt.id)
                             ? "bg-primary/20 dark:bg-primary/30 border border-primary/40 shadow-sm"
                             : "liquid-glass-control liquid-glass-sheen hover:bg-black/5 dark:hover:bg-white/10"
                             }`}
                         >
-                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-black/10 dark:bg-black/25">
+                          <div className="w-13 h-13 sm:w-14 sm:h-14 min-w-[52px] min-h-[52px] rounded-xl overflow-hidden shrink-0 aspect-square bg-black/10 dark:bg-black/25 relative shadow-xs">
                             <img 
                               src={prompt.image_url} 
                               alt={prompt.title} 
-                              className="w-full h-full object-cover" 
+                              className="w-full h-full object-cover shrink-0 block" 
                               loading="lazy"
                               decoding="async"
-                              width={48}
-                              height={48}
+                              width={56}
+                              height={56}
                             />
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold truncate text-[#171421] dark:text-white">{prompt.title}</p>
-                            <p className="text-[10px] text-[#554c6e] dark:text-white/75 mt-0.5 truncate font-medium">AI generated creative prompt</p>
+                          <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
+                            <p className="text-xs sm:text-sm font-bold truncate text-[#171421] dark:text-white leading-snug">{prompt.title}</p>
+                            <p className="text-[10px] sm:text-[11px] text-[#554c6e] dark:text-white/70 mt-1 truncate font-medium">
+                              {prompt.category ? `${prompt.category} • AI prompt` : "AI generated creative prompt"}
+                            </p>
                           </div>
-                          <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${selectedPromptsForShowcase.includes(prompt.id)
-                            ? "bg-primary text-white shadow-sm"
-                            : "border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/10"
+                          <div className={`w-5 h-5 sm:w-6 sm:h-6 min-w-[20px] min-h-[20px] rounded-full shrink-0 aspect-square flex items-center justify-center transition-all ${selectedPromptsForShowcase.includes(prompt.id)
+                            ? "bg-primary text-white shadow-sm scale-105"
+                            : "border border-black/25 dark:border-white/30 bg-black/5 dark:bg-white/10"
                             }`}>
-                            {selectedPromptsForShowcase.includes(prompt.id) && <Check className="w-3 h-3" />}
+                            {selectedPromptsForShowcase.includes(prompt.id) && <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />}
                           </div>
                         </div>
                       ))}
                     </div>
 
-                    <div className="flex items-center gap-4 pt-2">
+                    <div className="flex items-center gap-3 pt-1 sm:pt-2 shrink-0">
                       <button
                         onClick={() => setShowShowcaseModal(false)}
-                        className="liquid-glass-control liquid-glass-sheen flex-1 h-12 rounded-2xl font-bold text-sm text-[#171421] dark:text-white hover:bg-black/5 dark:hover:bg-white/15 cursor-pointer transition-all"
+                        className="liquid-glass-control liquid-glass-sheen flex-1 h-11 sm:h-12 rounded-2xl font-bold text-xs sm:text-sm text-[#171421] dark:text-white hover:bg-black/5 dark:hover:bg-white/15 cursor-pointer transition-all"
                       >
                         Cancel
                       </button>
@@ -2321,12 +2323,12 @@ export default function TopNavbar() {
                             setIsGeneratingShowcase(false);
                           }, 2000);
                         }}
-                        className={`liquid-glass-control liquid-glass-sheen flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${selectedPromptsForShowcase.length >= 1
+                        className={`liquid-glass-control liquid-glass-sheen flex-[2] h-11 sm:h-12 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all ${selectedPromptsForShowcase.length >= 1
                           ? "bg-gradient-to-r from-primary to-secondary text-white hover:scale-[1.02] shadow-lg shadow-primary/25 cursor-pointer"
                           : "opacity-40 text-black/50 dark:text-white/50 cursor-not-allowed"
                           }`}
                       >
-                        {isGeneratingShowcase ? <Sparkles className="w-5 h-5 animate-spin" /> : <><Share2 className="w-4 h-4" /> Create Poster</>}
+                        {isGeneratingShowcase ? <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <><Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Create Poster</>}
                       </button>
                     </div>
                   </div>
