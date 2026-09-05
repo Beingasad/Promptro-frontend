@@ -21,13 +21,16 @@ export default function Home() {
   const navigationType = useNavigationType();
   const { searchQuery, setSearchQuery } = useSearch();
   const { categories: globalCategories } = useCategories();
-  const categoryNames = globalCategories.map(c => c.name);
+  const categoryNames = globalCategories.map(c => c.name?.trim()).filter(Boolean);
   const filterCategories = ['All', ...categoryNames];
 
   const selectedCategory = new URLSearchParams(location.search).get('category');
-  const [activeCategory, setActiveCategory] = useState(() => (
-    selectedCategory && filterCategories.includes(selectedCategory) ? selectedCategory : 'All'
-  ));
+  const [activeCategory, setActiveCategory] = useState(() => {
+    const cat = selectedCategory?.trim().toLowerCase();
+    if (!cat) return 'All';
+    const match = filterCategories.find(c => c.trim().toLowerCase() === cat);
+    return match || 'All';
+  });
   
   // Cache prompts in localStorage for instant load and scroll restoration
   const [prompts, setPrompts] = useState<Prompt[]>(() => {
@@ -53,9 +56,10 @@ export default function Home() {
 
   // Sync category state from URL query parameter
   useEffect(() => {
-    const category = new URLSearchParams(location.search).get('category');
-    if (category && filterCategories.includes(category)) {
-      setActiveCategory(category);
+    const category = new URLSearchParams(location.search).get('category')?.trim();
+    if (category) {
+      const match = filterCategories.find(c => c.trim().toLowerCase() === category.toLowerCase());
+      setActiveCategory(match || 'All');
     } else {
       setActiveCategory('All');
     }
@@ -150,7 +154,9 @@ export default function Home() {
   }, []);
 
   const visiblePrompts = prompts.filter((prompt) => {
-    const matchesCategory = activeCategory === 'All' || prompt.category === activeCategory;
+    const promptCategory = prompt.category?.trim().toLowerCase();
+    const activeCat = activeCategory.trim().toLowerCase();
+    const matchesCategory = activeCat === 'all' || promptCategory === activeCat;
     const normalizedQuery = searchQuery.trim().toLowerCase();
     const tagsString = Array.isArray(prompt.tags) ? prompt.tags.join(' ') : '';
     const promptText = prompt.prompt_text || '';

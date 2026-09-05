@@ -16,10 +16,12 @@ export default function SearchPill() {
   const isHome = location.pathname === '/';
   const [activeDropdown, setActiveDropdown] = useState<'sort' | 'category' | null>(null);
 
-  const categories = ['All', ...globalCategories.map((c) => c.name)];
+  const categories = ['All', ...globalCategories.map((c) => c.name?.trim()).filter(Boolean)];
   const sortOptions = ['All', 'Popular', 'New Updates', 'Trending', 'Most viewed'] as const;
 
-  const currentCategory = new URLSearchParams(location.search).get('category') || 'All';
+  const rawCategoryParam = new URLSearchParams(location.search).get('category')?.trim() || '';
+  const matchedCurrentCategory = categories.find(c => c.toLowerCase() === rawCategoryParam.toLowerCase());
+  const currentCategory = matchedCurrentCategory || (rawCategoryParam ? rawCategoryParam : 'All');
   const currentSort = new URLSearchParams(location.search).get('filter') || 'All';
 
   const handleSelectSort = (option: string) => {
@@ -38,7 +40,7 @@ export default function SearchPill() {
     if (category === 'All') {
       params.delete('category');
     } else {
-      params.set('category', category);
+      params.set('category', category.trim());
     }
     const path = isHome ? '/' : '/explore';
     navigate(`${path}?${params.toString()}`);
@@ -82,7 +84,7 @@ export default function SearchPill() {
                 onClick={() => setActiveDropdown(prev => prev === 'category' ? null : 'category')}
                 title="Select Category"
                 className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
-                  activeDropdown === 'category' || currentCategory !== 'All'
+                  activeDropdown === 'category' || currentCategory.toLowerCase() !== 'all'
                     ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
                     : 'liquid-glass-filter-btn text-[#554c6e] dark:text-[#a59cb8] hover:text-[#171421] dark:hover:text-white'
                 }`}
@@ -97,7 +99,7 @@ export default function SearchPill() {
                   onClick={() => setActiveDropdown(prev => prev === 'sort' ? null : 'sort')}
                   title="Sort Options"
                   className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
-                    activeDropdown === 'sort' || currentSort !== 'All'
+                    activeDropdown === 'sort' || currentSort.toLowerCase() !== 'all'
                       ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
                       : 'liquid-glass-filter-btn text-[#554c6e] dark:text-[#a59cb8] hover:text-[#171421] dark:hover:text-white'
                 }`}
@@ -130,7 +132,7 @@ export default function SearchPill() {
                   type="button"
                   onClick={() => handleSelectCategory(category)}
                   className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${
-                    currentCategory === category
+                    currentCategory.toLowerCase() === category.toLowerCase()
                       ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-sm'
                       : 'text-white/95 hover:text-white hover:bg-white/15'
                   }`}

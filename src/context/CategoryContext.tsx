@@ -25,7 +25,9 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   const [categories, setCategories] = useState<Category[]>(() => {
     try {
       const cached = localStorage.getItem('promptro_categories');
-      return cached ? JSON.parse(cached) : [];
+      if (!cached) return [];
+      const parsed = JSON.parse(cached);
+      return Array.isArray(parsed) ? parsed.map((c: Category) => ({ ...c, name: c.name?.trim() })) : [];
     } catch {
       return [];
     }
@@ -45,9 +47,12 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
         setLoading(true);
       }
       const response = await axios.get(API_URL);
-      setCategories(response.data);
+      const cleanedData = Array.isArray(response.data) 
+        ? response.data.map((c: Category) => ({ ...c, name: c.name?.trim() })) 
+        : [];
+      setCategories(cleanedData);
       try {
-        localStorage.setItem('promptro_categories', JSON.stringify(response.data));
+        localStorage.setItem('promptro_categories', JSON.stringify(cleanedData));
       } catch (e) {
         console.warn('localStorage error:', e);
       }

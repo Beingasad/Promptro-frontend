@@ -82,7 +82,7 @@ export default function Categories() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0">
             {categories.map((cat, i) => {
-              const latestPrompt = prompts.find(p => p.category === cat.name);
+              const latestPrompt = prompts.find(p => p.category?.trim() === cat.name?.trim());
               const coverImage = latestPrompt ? latestPrompt.image_url : (cat.image_url || DEFAULT_IMAGE);
 
               return (
@@ -93,7 +93,7 @@ export default function Categories() {
                   transition={{ delay: i * 0.05 }}
                 >
                   <Link 
-                    to={`/explore?category=${cat.name}`}
+                    to={`/explore?category=${encodeURIComponent(cat.name.trim())}`}
                     className="group relative block aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-[#f8f7fc] dark:bg-white/5"
                   >
                     <img 

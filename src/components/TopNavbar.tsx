@@ -69,15 +69,17 @@ export default function TopNavbar() {
   const [isFocused, setIsFocused] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 
-  const categories = ['All', ...globalCategories.map((c) => c.name)];
-  const currentCategory = new URLSearchParams(location.search).get('category') || 'All';
+  const categories = ['All', ...globalCategories.map((c) => c.name?.trim()).filter(Boolean)];
+  const rawCategoryParam = new URLSearchParams(location.search).get('category')?.trim() || '';
+  const matchedCurrentCategory = categories.find(c => c.toLowerCase() === rawCategoryParam.toLowerCase());
+  const currentCategory = matchedCurrentCategory || (rawCategoryParam ? rawCategoryParam : 'All');
 
   const handleSelectCategory = (category: string) => {
     const params = new URLSearchParams(location.search);
     if (category === 'All') {
       params.delete('category');
     } else {
-      params.set('category', category);
+      params.set('category', category.trim());
     }
     navigate(`/?${params.toString()}`);
     setCategoryDropdownOpen(false);

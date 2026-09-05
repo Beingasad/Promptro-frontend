@@ -18,7 +18,7 @@ type SortOption = typeof sortOptions[number];
 
 export default function Explore() {
   const { categories: globalCategories } = useCategories();
-  const categoryNames = globalCategories.map(c => c.name);
+  const categoryNames = globalCategories.map(c => c.name?.trim()).filter(Boolean);
   const filterCategories = ['All', ...categoryNames];
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -36,9 +36,12 @@ export default function Explore() {
     }
   });
 
-  const [activeCategory, setActiveCategory] = useState(() => (
-    selectedCategory && filterCategories.includes(selectedCategory) ? selectedCategory : 'All'
-  ));
+  const [activeCategory, setActiveCategory] = useState(() => {
+    const cat = selectedCategory?.trim().toLowerCase();
+    if (!cat) return 'All';
+    const match = filterCategories.find(c => c.trim().toLowerCase() === cat);
+    return match || 'All';
+  });
   const [sortBy, setSortBy] = useState<SortOption>(() => (
     selectedFilter && sortOptions.includes(selectedFilter) ? selectedFilter : 'All'
   ));
@@ -142,9 +145,10 @@ export default function Explore() {
 
   useEffect(() => {
     const filter = new URLSearchParams(location.search).get('filter') as SortOption | null;
-    const category = new URLSearchParams(location.search).get('category');
-    if (category && filterCategories.includes(category)) {
-      setActiveCategory(category);
+    const category = new URLSearchParams(location.search).get('category')?.trim();
+    if (category) {
+      const match = filterCategories.find(c => c.trim().toLowerCase() === category.toLowerCase());
+      setActiveCategory(match || 'All');
     } else {
       setActiveCategory('All');
     }
@@ -158,7 +162,9 @@ export default function Explore() {
   const visiblePrompts = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
     const filteredPrompts = prompts.filter((prompt) => {
-      const matchesCategory = activeCategory === 'All' || prompt.category === activeCategory;
+      const promptCategory = prompt.category?.trim().toLowerCase();
+      const activeCat = activeCategory.trim().toLowerCase();
+      const matchesCategory = activeCat === 'all' || promptCategory === activeCat;
       
       // Handle "New Updates" specific logic (last 48 hours)
       if (sortBy === 'New Updates') {
