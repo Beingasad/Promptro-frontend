@@ -13,7 +13,7 @@ export default function GlassHeader({ title, icon, onBack }: GlassHeaderProps) {
       <button
         type="button"
         onClick={onBack}
-        className="flex h-11 w-11 items-center justify-center rounded-full bg-white/40 dark:bg-white/10 border border-white/60 dark:border-white/15 text-[#171421] dark:text-white shadow-[0_2px_10px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform backdrop-blur-md"
+        className="liquid-glass-control liquid-glass-sheen flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white"
         aria-label="Back to menu"
       >
         <ArrowLeft className="h-5 w-5" />
@@ -21,7 +21,7 @@ export default function GlassHeader({ title, icon, onBack }: GlassHeaderProps) {
       <h2 className="text-center text-base sm:text-lg font-bold text-[#171421] dark:text-white line-clamp-1 px-2">
         {title}
       </h2>
-      <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white/40 dark:bg-white/10 border border-white/60 dark:border-white/15 shadow-[0_2px_10px_rgba(0,0,0,0.08)] backdrop-blur-md">
+      <div className="liquid-glass-subtle flex h-11 w-11 items-center justify-center overflow-hidden rounded-full text-[#171421] dark:text-white">
         {icon}
       </div>
     </div>

@@ -103,7 +103,7 @@ export default function TermsAcceptanceModal({ onAccepted }: TermsAcceptanceModa
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-white/50 bg-white/75 p-6 shadow-[0_24px_60px_rgba(72,56,118,0.12)] backdrop-blur-3xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/80 dark:text-white sm:p-8"
+            className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-3xl modal-glass text-[#171421] dark:text-white p-6 sm:p-8"
           >
             {/* Header */}
             <div className="flex flex-col gap-1.5 mb-4 pb-4 border-b border-[#e9e2f3] dark:border-white/5">

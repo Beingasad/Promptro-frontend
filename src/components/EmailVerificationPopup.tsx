@@ -115,7 +115,7 @@ export default function EmailVerificationPopup() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 flex w-full max-w-md flex-col overflow-hidden rounded-3xl border border-white/50 bg-white/75 shadow-[0_24px_60px_rgba(72,56,118,0.14)] backdrop-blur-3xl text-[#171421] dark:border-white/10 dark:bg-[#171421]/80 dark:text-white"
+            className="relative z-10 flex w-full max-w-md flex-col overflow-hidden rounded-3xl modal-glass text-[#171421] dark:text-white"
           >
             {/* Close button */}
             <button

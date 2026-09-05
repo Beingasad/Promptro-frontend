@@ -424,10 +424,10 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
         </div>
       )}
 
-      {/* Top Right: Fixed Colorful Badge Icon */}
+      {/* Top Right: Fixed Liquid Glass Colorful Badge Icon */}
       {isHome && tier && (
-        <div className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full ${tier.bg} border ${tier.border} shadow-[0_4px_12px_rgba(0,0,0,0.15)] backdrop-blur-md`}>
-          <tier.Icon className="w-3.5 h-3.5 md:w-[18px] md:h-[18px] text-white" strokeWidth={2.5} />
+        <div className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full ${tier.bg} border ${tier.border} liquid-glass-badge`}>
+          <tier.Icon className="w-3.5 h-3.5 md:w-[18px] md:h-[18px] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" strokeWidth={2.5} />
         </div>
       )}
 
@@ -439,16 +439,16 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
           </h3>
         )}
 
-        {/* MINIMAL EXPLORE / SAVED LAYOUT (Now applied to Home page cards too) */}
-        <div className={`flex items-center justify-around w-full rounded-full bg-black/20 text-white shadow-[0_16px_38px_rgba(0,0,0,0.26)] backdrop-blur-[28px] ${
+        {/* MINIMAL EXPLORE / SAVED LAYOUT - Floating Liquid Glass Action Pill Dock */}
+        <div className={`liquid-glass-card-dock flex items-center justify-around w-full rounded-full text-white ${
           isHome 
-            ? "px-3 py-2.5 md:px-5 md:py-3.5" 
-            : "px-2.5 py-1.5 md:px-4 md:py-3"
+            ? "px-2.5 py-1.5 md:px-4 md:py-2.5" 
+            : "px-2 py-1 md:px-3 md:py-2"
         }`}>
           {!isSavedOrCollections ? (
             <>
               <button
-                className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+                className="liquid-glass-card-btn flex items-center gap-1 text-[11px] font-bold tracking-normal active:scale-90 md:gap-1.5 md:text-sm px-1.5 py-1 md:px-2 md:py-1"
                 onClick={toggleLike}
                 aria-label={liked ? 'Unlike prompt' : 'Like prompt'}
               >
@@ -459,61 +459,61 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className="flex items-center justify-center"
                 >
-                  <Heart className="w-4 h-4 md:w-5 md:h-5 transition-colors" fill={liked ? '#ff4b72' : 'rgba(255,255,255,0.22)'} stroke={liked ? '#ff4b72' : 'currentColor'} />
+                  <Heart className="w-3.5 h-3.5 md:w-4 md:h-4 transition-colors" fill={liked ? '#ff4b72' : 'rgba(255,255,255,0.22)'} stroke={liked ? '#ff4b72' : 'currentColor'} />
                 </motion.span>
-                <span className="ml-1">{formatCount(likes)}</span>
+                <span className="ml-0.5 text-white/95">{formatCount(likes)}</span>
               </button>
               
-              <div className="h-3.5 w-px bg-white/20" />
+              <div className="h-3 w-px bg-white/20" />
 
               <button
-                className="flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm"
+                className="liquid-glass-card-btn flex items-center gap-1 text-[11px] font-bold tracking-normal md:gap-1.5 md:text-sm px-1.5 py-1 md:px-2 md:py-1"
                 onClick={stopCardNavigation}
                 aria-label={`${formatCount(prompt.views)} views`}
               >
-                <Eye className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="ml-1">{formatCount(prompt.views)}</span>
+                <Eye className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/90" />
+                <span className="ml-0.5 text-white/95">{formatCount(prompt.views)}</span>
               </button>
 
-              <div className="h-3.5 w-px bg-white/20" />
+              <div className="h-3 w-px bg-white/20" />
             </>
           ) : (
             <>
               <button
-                className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+                className="liquid-glass-card-btn flex items-center gap-1 text-[11px] font-bold tracking-normal active:scale-90 md:gap-1.5 md:text-sm px-1.5 py-1 md:px-2 md:py-1"
                 onClick={handleShare}
                 aria-label="Share prompt"
               >
                 {shared ? (
-                  <Check className="w-4 h-4 text-emerald-400 md:w-5 md:h-5" />
+                  <Check className="w-3.5 h-3.5 text-emerald-400 md:w-4 md:h-4" />
                 ) : (
-                  <Share2 className="w-4 h-4 text-white md:w-5 md:h-5" />
+                  <Share2 className="w-3.5 h-3.5 text-white/90 md:w-4 md:h-4" />
                 )}
               </button>
 
-              <div className="h-3.5 w-px bg-white/20" />
+              <div className="h-3 w-px bg-white/20" />
             </>
           )}
 
           <button
-            className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+            className="liquid-glass-card-btn flex items-center gap-1 text-[11px] font-bold tracking-normal active:scale-90 md:gap-1.5 md:text-sm px-1.5 py-1 md:px-2 md:py-1"
             onClick={handleCollectionClick}
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
-              className="w-4 h-4 md:w-5 md:h-5 text-white"
+              className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/90"
               fill={inCollection ? 'currentColor' : 'none'}
             />
           </button>
           
-          <div className="h-3.5 w-px bg-white/20" />
+          <div className="h-3 w-px bg-white/20" />
 
           <button
-            className="flex items-center gap-1 text-[11px] font-bold tracking-normal transition-transform active:scale-90 md:gap-1.5 md:text-sm"
+            className={`liquid-glass-save-btn flex items-center gap-1 text-[11px] font-bold tracking-normal active:scale-90 md:gap-1.5 md:text-sm px-1.5 py-1 md:px-2 md:py-1 ${saved ? 'is-saved' : ''}`}
             onClick={toggleSave}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
-            <Bookmark className="w-4 h-4 text-white md:w-5 md:h-5" fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
+            <Bookmark className={`w-3.5 h-3.5 md:w-4 md:h-4 transition-colors ${saved ? 'text-white fill-white' : 'text-white/90'}`} fill={saved ? 'currentColor' : 'none'} strokeWidth={2.4} />
           </button>
         </div>
       </div>

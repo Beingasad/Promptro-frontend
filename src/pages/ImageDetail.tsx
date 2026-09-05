@@ -474,20 +474,20 @@ export default function ImageDetail() {
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={handleBack}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Go back"
           >
             <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
           </button>
           <button
             onClick={handleDownload}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Download image"
           >
             <Download className="h-4 w-4 md:h-5 md:w-5 text-white" />
           </button>
           {galleryImages.length > 1 && (
-            <div className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white font-bold text-[10px] shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none">
+            <div className="liquid-glass-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white font-bold text-[10px] select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none">
               {currentImageIndex + 1}/{galleryImages.length}
             </div>
           )}
@@ -495,21 +495,21 @@ export default function ImageDetail() {
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={handleShare}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Share prompt"
           >
             {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
           </button>
           <button
             onClick={toggleSave}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            className={`liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px] ${saved ? 'bg-purple-500/35 border-purple-300/50' : ''}`}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
             <Bookmark className="h-4 w-4 md:h-5 md:w-5" fill={saved ? 'currentColor' : 'none'} />
           </button>
           <button
             onClick={handleCollectionClick}
-            className="flex h-8 w-8 items-center justify-center rounded-[14px] bg-black/30 text-white shadow-[0_14px_34px_rgba(0,0,0,0.26)] backdrop-blur-3xl transition-transform active:scale-95 hover:bg-black/45 md:h-10 md:w-10 md:rounded-[18px]"
+            className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
@@ -521,7 +521,7 @@ export default function ImageDetail() {
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent pointer-events-none" />
       <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4 flex flex-wrap items-center justify-between gap-2 md:gap-3">
-        <div className="flex h-8 items-center gap-2 md:gap-3 rounded-full bg-white/18 px-3 text-white shadow-[0_14px_34px_rgba(0,0,0,0.24)] backdrop-blur-2xl md:h-10">
+        <div className="liquid-glass-card-dock flex h-8 items-center gap-2 md:gap-3 rounded-full px-3 text-white md:h-10">
           <button 
             onClick={toggleLike}
             className="flex items-center gap-1.5 text-xs md:text-sm font-bold transition-transform active:scale-95 hover:text-white/80"

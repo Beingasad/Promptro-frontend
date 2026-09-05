@@ -1,5 +1,6 @@
 import { ExternalLink, Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import LiquidGlass from './LiquidGlass';
 
 const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -39,8 +40,11 @@ export default function AuthorCard({ variant = 'full', className = '' }: AuthorC
   }
 
   return (
-    <aside
-      className={`rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 md:p-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center ${className}`}
+    <LiquidGlass
+      as="aside"
+      variant="default"
+      rounded="2xl"
+      className={`p-5 md:p-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center ${className}`}
       aria-label="Article author"
     >
       {/* Avatar */}
@@ -90,6 +94,6 @@ export default function AuthorCard({ variant = 'full', className = '' }: AuthorC
           </div>
         </div>
       </div>
-    </aside>
+    </LiquidGlass>
   );
 }

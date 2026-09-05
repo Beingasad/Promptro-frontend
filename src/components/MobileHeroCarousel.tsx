@@ -30,12 +30,12 @@ interface Banner {
 
 const getButtonTheme = (banner: any) => {
   if (banner.is_premium) {
-    return "text-white bg-gradient-to-r from-[#d4af37] to-[#ff8c00] shadow-[0_3px_10px_rgba(218,165,32,0.3)] md:shadow-[0_4px_16px_rgba(218,165,32,0.4)] hover:shadow-[0_4px_15px_rgba(218,165,32,0.45)]";
+    return "liquid-glass-control liquid-glass-sheen text-white bg-gradient-to-r from-[#d4af37]/85 to-[#ff8c00]/85 border-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_8px_20px_rgba(218,165,32,0.25)] hover:from-[#d4af37] hover:to-[#ff8c00]";
   }
   if (banner.is_pink) {
-    return "text-white bg-gradient-to-r from-[#be185d] to-[#ec4899] shadow-[0_3px_10px_rgba(236,72,153,0.3)] md:shadow-[0_4px_16px_rgba(236,72,153,0.4)] hover:shadow-[0_4px_15px_rgba(236,72,153,0.45)]";
+    return "liquid-glass-control liquid-glass-sheen text-white bg-gradient-to-r from-[#be185d]/85 to-[#ec4899]/85 border-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_8px_20px_rgba(236,72,153,0.25)] hover:from-[#be185d] hover:to-[#ec4899]";
   }
-  return "text-white bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] shadow-[0_3px_10px_rgba(116,55,255,0.3)] md:shadow-[0_4px_16px_rgba(116,55,255,0.4)] hover:shadow-[0_4px_15px_rgba(116,55,255,0.45)]";
+  return "liquid-glass-control liquid-glass-sheen text-white bg-gradient-to-r from-[#7437ff]/85 via-[#dd4bd2]/85 to-[#ff642d]/85 border-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_8px_20px_rgba(116,55,255,0.25)] hover:from-[#7437ff] hover:via-[#dd4bd2] hover:to-[#ff642d]";
 };
 
 const getDarkGradient = (lightGrad: string = '') => {
@@ -398,22 +398,26 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                 exit={{ opacity: 0, scale: 0.94, y: 15 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl p-5 text-left"
+                className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] liquid-glass-modal p-5 text-left text-white"
               >
-                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#e9e2f3] dark:border-white/5">
-                  <div>
-                    <h3 className="text-sm font-black uppercase tracking-wider text-[#171421] dark:text-white truncate max-w-[14rem]">{selectedBannerForModal.title}</h3>
-                    <p className="text-[10px] text-[#756d8d] dark:text-[#afa6c8] font-medium mt-0.5">Select a prompt to view details</p>
+                {/* Ambient glow inside modal */}
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_30%_0%,rgba(139,92,246,0.2),transparent_50%),radial-gradient(circle_at_80%_0%,rgba(255,106,61,0.14),transparent_50%)]" />
+
+                <div className="relative z-10 flex items-center justify-between mb-4 pb-2.5 border-b border-white/15">
+                  <div className="min-w-0 pr-2">
+                    <h3 className="text-sm font-black uppercase tracking-wider text-white truncate max-w-[14rem] drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">{selectedBannerForModal.title}</h3>
+                    <p className="text-[10px] text-white/80 font-medium mt-0.5">Select a prompt to view details</p>
                   </div>
                   <button 
                     onClick={() => setSelectedBannerForModal(null)}
-                    className="flex h-7 w-7 items-center justify-center rounded-full border border-[#e9e2f3] dark:border-white/10 bg-white/80 dark:bg-white/5 text-[#756d8d] dark:text-[#afa6c8] hover:scale-105 transition-transform cursor-pointer"
+                    className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white/85 hover:text-white transition-all cursor-pointer"
+                    aria-label="Close modal"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 max-h-[55vh] overflow-y-auto pr-1.5 pb-2 custom-scrollbar">
+                <div className="relative z-10 grid grid-cols-2 gap-3 max-h-[55vh] overflow-y-auto pr-0.5 pb-2 hide-scrollbar">
                   {(selectedBannerForModal.prompts_list?.length > 0 ? selectedBannerForModal.prompts_list : [selectedBannerForModal.prompt1, selectedBannerForModal.prompt2].filter(Boolean)).map((prompt: any, index: number) => (
                     <button
                       key={prompt.id}
@@ -423,9 +427,9 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                         setSelectedBannerForModal(null);
                         navigate(`/prompt/${prompt.id}`);
                       }}
-                      className="cursor-pointer group flex flex-col gap-2 p-2 rounded-xl border border-white/10 dark:border-white/5 bg-white/5 dark:bg-white/3 hover:bg-primary/5 hover:border-primary/20 transition-all duration-300 outline-none text-left"
+                      className="cursor-pointer group flex flex-col gap-2 p-2 rounded-2xl liquid-glass-control liquid-glass-sheen border border-white/15 hover:border-white/30 text-left transition-all duration-300 outline-none hover:scale-[1.02] active:scale-[0.98]"
                     >
-                      <div className="aspect-[4/5] w-full rounded-lg overflow-hidden shadow-md bg-[#e8e2f0]/20">
+                      <div className="aspect-[4/5] w-full rounded-xl overflow-hidden shadow-sm bg-black/25">
                         <img 
                           src={prompt.image_url} 
                           alt={prompt.title} 
@@ -437,8 +441,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
                         />
                       </div>
                       <div className="px-0.5 w-full">
-                        <span className="text-[8px] font-black uppercase text-primary tracking-wider block">Option {index + 1}</span>
-                        <h4 className="text-xs font-bold text-[#171421] dark:text-white truncate mt-0.5 group-hover:text-primary transition-colors">
+                        <span className="text-[8px] font-black uppercase text-[#c4b5fd] tracking-wider block">Option {index + 1}</span>
+                        <h4 className="text-xs font-bold text-white truncate mt-0.5 group-hover:text-primary transition-colors drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
                           {prompt.title}
                         </h4>
                       </div>

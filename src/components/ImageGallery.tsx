@@ -286,7 +286,7 @@ export default function ImageGallery({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               onClick={handlePrev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 hidden md:flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white shadow-lg backdrop-blur-md transition-all hover:bg-black/50 hover:scale-105 active:scale-95 z-20 group"
+              className="absolute left-4 top-1/2 -translate-y-1/2 hidden md:flex h-10 w-10 items-center justify-center rounded-full liquid-glass-control liquid-glass-sheen text-white z-20 group"
               aria-label="Previous image"
             >
               <ChevronLeft className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" />
@@ -298,7 +298,7 @@ export default function ImageGallery({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               onClick={handleNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white shadow-lg backdrop-blur-md transition-all hover:bg-black/50 hover:scale-105 active:scale-95 z-20 group"
+              className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex h-10 w-10 items-center justify-center rounded-full liquid-glass-control liquid-glass-sheen text-white z-20 group"
               aria-label="Next image"
             >
               <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
@@ -309,7 +309,7 @@ export default function ImageGallery({
 
       {/* Instagram-style bottom middle pagination indicator */}
       {showNumbering && images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pill-glass flex h-11 px-5 items-center justify-center rounded-full text-[#171421] dark:text-[#f7f2ff] font-bold text-[13px] tracking-normal select-none pointer-events-none">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 liquid-glass-subtle liquid-glass-sheen flex h-11 px-5 items-center justify-center rounded-full text-[#171421] dark:text-[#f7f2ff] font-bold text-[13px] tracking-normal select-none pointer-events-none">
           {currentIndex + 1} / {images.length}
         </div>
       )}

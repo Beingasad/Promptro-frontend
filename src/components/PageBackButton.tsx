@@ -26,7 +26,7 @@ export default function PageBackButton() {
     <button
       type="button"
       onClick={handleBack}
-      className="pill-glass flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#171421] transition-transform active:scale-95 dark:text-[#f7f2ff]"
+      className="liquid-glass-control liquid-glass-sheen flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#171421] dark:text-[#f7f2ff]"
       aria-label="Go back"
     >
       <ArrowLeft className="h-5 w-5" />

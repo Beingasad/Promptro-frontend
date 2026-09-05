@@ -49,7 +49,7 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
   }, [active]);
 
   return (
-    <div ref={scrollerRef} className="pill-glass flex h-11 w-full items-center overflow-x-auto hide-scrollbar rounded-full px-1.5 md:h-14 md:px-2">
+    <div ref={scrollerRef} className="liquid-glass-search liquid-glass-sheen flex h-11 w-full items-center overflow-x-auto hide-scrollbar rounded-full px-1.5 md:h-14 md:px-2">
       <div className="flex w-max items-center gap-2.5 pr-1.5 md:pr-2">
         {categories.map((category) => (
           <button
@@ -62,7 +62,7 @@ export default function CategorySection({ activeCategory = 'All', onCategoryChan
             className={`relative h-8 px-4 rounded-full whitespace-nowrap text-[13px] font-medium tracking-normal transition-all duration-300 md:h-10 md:px-5 md:text-sm ${
               active === category 
                 ? 'text-white shadow-[0_16px_34px_rgba(139,92,246,0.28)]' 
-                : 'pill-glass text-[#5f5774] dark:text-[#c6bddb] hover:text-[#171421] dark:hover:text-white'
+                : 'liquid-glass-filter-btn text-[#5f5774] dark:text-[#c6bddb] hover:text-[#171421] dark:hover:text-white'
             }`}
           >
             {active === category && (

@@ -71,17 +71,17 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
 
   const getTierConfig = (s?: number) => {
     if (!s) return null;
-    if (s >= 95) return { bg: 'from-amber-500/80 to-amber-600/80', border: 'border-amber-400/50', Icon: EliteIcon, name: 'Elite' };
-    if (s >= 90) return { bg: 'from-blue-500/80 to-blue-600/80', border: 'border-blue-400/50', Icon: PremiumIcon, name: 'Premium' };
-    if (s >= 80) return { bg: 'from-purple-500/80 to-purple-600/80', border: 'border-purple-400/50', Icon: ExcellentIcon, name: 'Excellent' };
-    if (s >= 70) return { bg: 'from-green-500/80 to-green-600/80', border: 'border-green-400/50', Icon: VerifiedIcon, name: 'Verified' };
-    return { bg: 'from-[#64748B]/80 to-[#94A3B8]/80', border: 'border-[#94A3B8]/50', Icon: StandardIcon, name: 'Standard' };
+    if (s >= 95) return { bg: 'from-amber-500/75 to-amber-600/75', border: 'border-amber-400/40', Icon: EliteIcon, name: 'Elite' };
+    if (s >= 90) return { bg: 'from-blue-500/75 to-blue-600/75', border: 'border-blue-400/40', Icon: PremiumIcon, name: 'Premium' };
+    if (s >= 80) return { bg: 'from-purple-500/75 to-purple-600/75', border: 'border-purple-400/40', Icon: ExcellentIcon, name: 'Excellent' };
+    if (s >= 70) return { bg: 'from-green-500/75 to-green-600/75', border: 'border-green-400/40', Icon: VerifiedIcon, name: 'Verified' };
+    return { bg: 'from-[#64748B]/75 to-[#94A3B8]/75', border: 'border-[#94A3B8]/40', Icon: StandardIcon, name: 'Standard' };
   };
 
   const tier = getTierConfig(score);
 
   const frames = [
-    { type: 'category', content: prompt.category, bg: 'from-[#6d4dec]/80 to-[#ff6a3d]/80', border: 'border-transparent' }
+    { type: 'category', content: prompt.category, bg: 'from-[#6d4dec]/75 to-[#ff6a3d]/75', border: 'border-white/20' }
   ];
 
   if (tier) {
@@ -128,7 +128,7 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
   const badgeGap = isSm ? 'gap-1.5 md:gap-2' : 'gap-3 md:gap-4';
 
   return (
-    <div className={`relative flex ${containerHeight} ${containerMinW} items-center justify-center rounded-full border transition-all duration-300 overflow-hidden bg-gradient-to-r backdrop-blur-[24px] shadow-[0_12px_28px_rgba(0,0,0,0.15)] box-border ${currentFrame.bg} ${currentFrame.border} ${className}`}>
+    <div className={`relative flex ${containerHeight} ${containerMinW} items-center justify-center rounded-full border transition-all duration-300 overflow-hidden bg-gradient-to-r liquid-glass-pill box-border ${currentFrame.bg} ${currentFrame.border} ${className}`}>
        <AnimatePresence mode="wait">
           {isBadge ? (
              <motion.div 

@@ -114,7 +114,7 @@ export default function CollectionSelectModal({ isOpen, onClose, prompt }: Colle
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] border border-white/50 dark:border-white/10 bg-white/88 dark:bg-[#171421]/92 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+            className="relative w-full max-w-[22rem] overflow-hidden rounded-[2rem] modal-glass"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 pt-5 pb-3.5 border-b border-[#e9e2f3] dark:border-white/5">

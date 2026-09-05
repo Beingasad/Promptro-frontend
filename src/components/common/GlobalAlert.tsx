@@ -136,7 +136,7 @@ export default function GlobalAlert() {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.96, opacity: 0, y: 10 }}
             transition={{ type: 'spring', damping: 26, stiffness: 320 }}
-            className="relative w-full max-w-sm rounded-[1.75rem] bg-white/72 dark:bg-[#171421]/78 border border-white/60 dark:border-white/10 p-5 md:p-6 shadow-[0_24px_60px_rgba(116,55,255,0.18)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.42)] backdrop-blur-3xl"
+            className="relative w-full max-w-sm rounded-[1.75rem] p-5 md:p-6 modal-glass"
           >
             {/* Top Close Button (for non-success alerts or manual dismissal) */}
             {alert.type !== 'success' && (

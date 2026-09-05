@@ -1702,10 +1702,10 @@ export default function TopNavbar() {
       className="fixed top-0 w-full z-[100] px-4 pt-0.5 pb-3 md:pt-1.5 md:pb-3 md:px-8"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[160px] md:h-[120px] bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.18),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.16),transparent_42%),linear-gradient(180deg,#ffffff_0%,#ffffff_55%,rgba(255,255,255,0.8)_70%,rgba(255,255,255,0.3)_85%,rgba(255,255,255,0)_100%)] [mask-image:linear-gradient(to_bottom,#000_0%,#000_55%,rgba(0,0,0,0.8)_70%,rgba(0,0,0,0.3)_85%,rgba(0,0,0,0.05)_93%,transparent_100%)] dark:bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.22),transparent_44%),radial-gradient(circle_at_92%_0%,rgba(255,106,61,0.15),transparent_42%),linear-gradient(180deg,#0d0b14_0%,#0d0b14_55%,rgba(13,11,20,0.8)_70%,rgba(13,11,20,0.3)_85%,rgba(13,11,20,0)_100%)]" />
-      <div className="relative z-10 mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-x-3 gap-y-2 md:glass-panel md:flex-nowrap md:rounded-full md:px-6 md:py-3">
-        <div className="flex min-w-0 items-center gap-1 md:gap-2">
+      <div className="relative z-10 mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-x-3 gap-y-2 md:top-nav-glass md:flex-nowrap md:rounded-full md:px-6 md:py-3">
+        <div className="flex min-w-0 items-center gap-2.5 sm:gap-3 md:gap-4.5">
           <button
-            className="flex h-12 w-12 md:h-14 md:w-14 -mt-[2px] md:-mt-[3px] items-center justify-center rounded-full text-[#171421] dark:text-white transition-colors hover:bg-white/75 dark:hover:bg-white/10"
+            className="liquid-glass-control liquid-glass-sheen flex h-10 w-10 md:h-11 md:w-11 items-center justify-center rounded-full text-[#171421] dark:text-white shrink-0"
             onClick={() => {
               setMenuOpen((open) => {
                 if (open) setExpandedView(null);
@@ -1717,12 +1717,12 @@ export default function TopNavbar() {
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           >
             {menuOpen ? (
-              <X className="w-6 h-6 md:w-7 md:h-7" />
+              <X className="w-4.5 h-4.5 md:w-5 md:h-5" />
             ) : (
-              <div className="flex flex-col gap-[6px] md:gap-[7px] items-start">
-                <span className="block h-[2.5px] w-6 md:h-[3px] md:w-7 rounded-full bg-current transition-all duration-300" />
-                <span className="block h-[2.5px] w-3.5 md:h-[3px] md:w-4 rounded-full bg-current transition-all duration-300" />
-                <span className="block h-[2.5px] w-5 md:h-[3px] md:w-6 rounded-full bg-current transition-all duration-300" />
+              <div className="flex flex-col gap-1 md:gap-[4.5px] items-start">
+                <span className="block h-[2px] w-4.5 md:h-[2px] md:w-5 rounded-full bg-current transition-all duration-300" />
+                <span className="block h-[2px] w-2.5 md:h-[2px] md:w-3 rounded-full bg-current transition-all duration-300" />
+                <span className="block h-[2px] w-3.5 md:h-[2px] md:w-4 rounded-full bg-current transition-all duration-300" />
               </div>
             )}
           </button>
@@ -1731,7 +1731,7 @@ export default function TopNavbar() {
             <img
               src="/brand/logo.png"
               alt="Promptro Logo"
-              className="-ml-1 h-14 w-auto object-contain md:-ml-2 md:h-[4.5rem]"
+              className="h-14 w-auto object-contain md:h-[4.5rem]"
               loading="eager"
               decoding="async"
               width={56}
@@ -1769,16 +1769,15 @@ export default function TopNavbar() {
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
             <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isHome ? 'opacity-45 md:hidden' : (isFocused ? 'opacity-100' : 'opacity-45')
               }`}></div>
-            <div className={`relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full bg-white/58 dark:bg-white/5 shadow-[0_16px_38px_rgba(80,67,120,0.14)] dark:shadow-none backdrop-blur-2xl md:h-14 ${isHome ? 'md:shadow-none md:dark:shadow-none' : ''
-              }`}>
+            <div className="liquid-glass-search liquid-glass-sheen relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full md:h-14">
               <div className="flex flex-grow items-center h-full min-w-0">
-                <div className="pl-4 md:pl-5 pr-2.5 text-[#81789e]">
+                <div className="pl-4 md:pl-5 pr-2.5 text-[#6f6684] dark:text-[#a59cb8]">
                   <Search className="w-5 h-5 md:w-5.5 md:h-5.5" />
                 </div>
                 <input
                   type="text"
                   placeholder="Search prompts, styles, themes..."
-                  className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] dark:text-white placeholder-[#8c84a6] dark:placeholder-[#afa6c8]/60 focus:outline-none md:text-base"
+                  className="h-full w-full border-none bg-transparent pr-4 text-sm font-medium tracking-normal text-[#171421] dark:text-[#f7f2ff] placeholder-[#786f91] dark:placeholder-[#9e94b8] focus:outline-none md:text-base"
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                   value={searchQuery}
@@ -1792,9 +1791,9 @@ export default function TopNavbar() {
                   type="button"
                   onClick={() => setCategoryDropdownOpen(prev => !prev)}
                   title="Select Category"
-                  className={`flex items-center justify-center transition-all duration-300 cursor-pointer p-1.5 hover:scale-105 active:scale-95 ${categoryDropdownOpen || currentCategory !== 'All'
+                  className={`flex items-center justify-center transition-all duration-300 cursor-pointer p-1.5 rounded-full hover:scale-105 active:scale-95 ${categoryDropdownOpen || currentCategory !== 'All'
                     ? 'text-primary'
-                    : 'text-[#81789e] hover:text-[#171421] dark:text-[#afa6c8]/60 dark:hover:text-white'
+                    : 'text-[#6f6684] hover:text-[#171421] dark:text-[#a59cb8] dark:hover:text-white'
                     }`}
                 >
                   <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5" />
@@ -1810,7 +1809,7 @@ export default function TopNavbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto overscroll-contain hide-scrollbar rounded-[1.45rem] border border-white/50 dark:border-white/10 bg-white/75 dark:bg-[#171421]/80 p-2.5 shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)] backdrop-blur-3xl"
+                className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto overscroll-contain hide-scrollbar rounded-[1.45rem] liquid-glass-dropdown p-2.5"
               >
                 <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#8c84a6]">Categories</p>
                 <div className="mt-1.5 flex flex-col gap-0.5">
@@ -1835,7 +1834,7 @@ export default function TopNavbar() {
 
         <div className="relative flex shrink-0 items-center gap-2 md:gap-3">
           <button
-            className="relative flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white transition-all hover:scale-105 active:scale-95 hover:bg-white/75 dark:hover:bg-white/10 md:h-12 md:w-12"
+            className="liquid-glass-control liquid-glass-sheen relative flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white md:h-12 md:w-12"
             onClick={() => {
               setNotificationsOpen((open) => !open);
               setHasUnreadNotifications(false);
@@ -1852,7 +1851,7 @@ export default function TopNavbar() {
             )}
           </button>
           <button
-            className="flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white transition-all hover:scale-105 active:scale-95 hover:bg-white/75 dark:hover:bg-white/10 md:h-12 md:w-12"
+            className="liquid-glass-control liquid-glass-sheen flex h-11 w-11 items-center justify-center rounded-full text-[#171421] dark:text-white md:h-12 md:w-12"
             onClick={() => {
               setProfileOpen((open) => !open);
               setMenuOpen(false);
@@ -1901,8 +1900,8 @@ export default function TopNavbar() {
                   <div className="mx-auto flex h-12 w-12 items-center justify-center text-primary bg-primary/10 rounded-full mb-3">
                     <CircleUserRound className="h-7 w-7" />
                   </div>
-                  <h3 className="text-base font-extrabold text-[#171421] dark:text-white leading-snug">Welcome to Promptro</h3>
-                  <p className="mt-1.5 text-xs text-[#5a5075] dark:text-[#b4aaca] leading-relaxed">
+                  <h3 className="text-base font-extrabold text-white leading-snug drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">Welcome to Promptro</h3>
+                  <p className="mt-1.5 text-xs text-white/85 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
                     Connect your account to save prompts, customize your style, and join the Promptro creator community.
                   </p>
                   <Link
@@ -2157,13 +2156,13 @@ export default function TopNavbar() {
                 <button
                   type="button"
                   onClick={() => setNotificationsOpen(false)}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
                   aria-label="Back"
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </button>
-                <h3 className="flex-1 text-sm font-bold text-[#171421] dark:text-white uppercase tracking-wider">Notifications</h3>
-                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">{notifications.length} NEW</span>
+                <h3 className="flex-1 text-sm font-bold text-white uppercase tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">Notifications</h3>
+                <span className="rounded-full bg-primary/30 px-2.5 py-1 text-[11px] font-extrabold text-white border border-primary/40 shadow-sm">{notifications.length} NEW</span>
               </div>
               <div className="flex flex-col gap-1 max-h-[224px] overflow-y-auto overscroll-contain pr-1 hide-scrollbar">
                 {notifications.length > 0 ? (
@@ -2178,21 +2177,21 @@ export default function TopNavbar() {
                         }
                         setNotificationsOpen(false);
                       }}
-                      className="flex w-full items-start gap-3 rounded-2xl px-3 py-3 text-left transition-all hover:bg-primary/8 group"
+                      className="flex w-full items-start gap-3 rounded-2xl px-3 py-3 text-left transition-all hover:bg-white/10 group"
                     >
-                      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+                      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/25 text-white border border-primary/35 transition-transform group-hover:scale-110 shadow-sm">
                         <CheckCircle2 className="h-4 w-4" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-[13px] font-bold text-[#171421] dark:text-white leading-tight group-hover:text-primary transition-colors">{notif.text}</p>
-                        <p className="mt-1 text-[10px] font-medium text-[#756d8d] uppercase tracking-wider">Just now</p>
+                        <p className="text-[13px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">{notif.text}</p>
+                        <p className="mt-1 text-[10px] font-medium text-white/80 uppercase tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">Just now</p>
                       </div>
                     </button>
                   ))
                 ) : (
                   <div className="py-8 text-center">
-                    <Bell className="mx-auto h-8 w-8 text-[#afa6c8]/40 mb-3" />
-                    <p className="text-sm font-bold text-[#756d8d]">No new notifications</p>
+                    <Bell className="mx-auto h-8 w-8 text-white/60 mb-3" />
+                    <p className="text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">No new notifications</p>
                   </div>
                 )}
               </div>
@@ -2230,23 +2229,35 @@ export default function TopNavbar() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full rounded-[2rem] md:rounded-[2.5rem] z-[90] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] max-h-[92vh] transition-all duration-300 modal-glass ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
+              className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] md:w-full rounded-[2rem] md:rounded-[2.5rem] z-[90] overflow-y-auto hide-scrollbar max-h-[92vh] transition-all duration-300 liquid-glass-modal text-[#171421] dark:text-white ${showcaseStep === 2 ? 'max-w-3xl' : 'max-w-xl'
                 }`}
             >
-              <div className="p-5 md:p-8">
+              {/* Ambient radial glows */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_25%_0%,rgba(139,92,246,0.14),transparent_50%),radial-gradient(circle_at_80%_0%,rgba(255,106,61,0.1),transparent_50%)]" />
+
+              <div className="relative z-10 p-5 md:p-8">
                 {showcaseStep === 1 && (
                   <div className="flex flex-col gap-5 md:gap-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between pb-1 border-b border-black/10 dark:border-white/15">
                       <div>
-                        <h2 className="text-lg md:text-xl font-bold text-[#171421] dark:text-white">Showcase Creator</h2>
-                        <p className="text-[11px] md:text-xs text-[#756d8d]">Select 1 to 3 prompts to build your story poster</p>
+                        <h2 className="text-lg md:text-xl font-black text-[#171421] dark:text-white">Showcase Creator</h2>
+                        <p className="text-[11px] md:text-xs text-[#554c6e] dark:text-white/80 font-medium mt-0.5">Select 1 to 3 prompts to build your story poster</p>
                       </div>
-                      <div className="text-[10px] font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full whitespace-nowrap shrink-0">
-                        {selectedPromptsForShowcase.length} Selected
+                      <div className="flex items-center gap-2">
+                        <div className="text-[10px] font-bold text-primary uppercase tracking-wider bg-primary/10 dark:bg-primary/25 border border-primary/20 dark:border-primary/40 px-3 py-1 rounded-full whitespace-nowrap shrink-0">
+                          {selectedPromptsForShowcase.length} Selected
+                        </div>
+                        <button
+                          onClick={() => setShowShowcaseModal(false)}
+                          className="liquid-glass-control liquid-glass-sheen flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#171421] dark:text-white hover:opacity-80 transition-all cursor-pointer"
+                          aria-label="Close"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[340px] md:max-h-[420px] overflow-y-auto pt-4 pb-8 scroll-fade-mask hide-scrollbar rounded-2xl">
+                    <div className="flex flex-col gap-2.5 md:gap-3 max-h-[340px] md:max-h-[420px] overflow-y-auto pt-2 pb-6 scroll-fade-mask hide-scrollbar rounded-2xl">
                       {allPromptsForShowcase.map((prompt) => (
                         <div
                           key={prompt.id}
@@ -2262,11 +2273,11 @@ export default function TopNavbar() {
                             }
                           }}
                           className={`flex items-center gap-4 p-3 rounded-2xl transition-all cursor-pointer ${selectedPromptsForShowcase.includes(prompt.id)
-                            ? "bg-primary/20 dark:bg-primary/30"
-                            : "pill-glass hover:bg-white/20 dark:hover:bg-white/10"
+                            ? "bg-primary/20 dark:bg-primary/30 border border-primary/40 shadow-sm"
+                            : "liquid-glass-control liquid-glass-sheen hover:bg-black/5 dark:hover:bg-white/10"
                             }`}
                         >
-                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-black/10 dark:bg-black/25">
                             <img 
                               src={prompt.image_url} 
                               alt={prompt.title} 
@@ -2279,11 +2290,11 @@ export default function TopNavbar() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold truncate text-[#171421] dark:text-white">{prompt.title}</p>
-                            <p className="text-[10px] text-[#756d8d] mt-0.5 truncate">AI generated creative prompt</p>
+                            <p className="text-[10px] text-[#554c6e] dark:text-white/75 mt-0.5 truncate font-medium">AI generated creative prompt</p>
                           </div>
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${selectedPromptsForShowcase.includes(prompt.id)
-                            ? "bg-primary text-white"
-                            : "bg-white/10 dark:bg-white/5"
+                            ? "bg-primary text-white shadow-sm"
+                            : "border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/10"
                             }`}>
                             {selectedPromptsForShowcase.includes(prompt.id) && <Check className="w-3 h-3" />}
                           </div>
@@ -2294,7 +2305,7 @@ export default function TopNavbar() {
                     <div className="flex items-center gap-4 pt-2">
                       <button
                         onClick={() => setShowShowcaseModal(false)}
-                        className="pill-glass flex-1 h-12 rounded-2xl font-bold text-sm text-[#171421] dark:text-white hover:bg-white/20 dark:hover:bg-white/10"
+                        className="liquid-glass-control liquid-glass-sheen flex-1 h-12 rounded-2xl font-bold text-sm text-[#171421] dark:text-white hover:bg-black/5 dark:hover:bg-white/15 cursor-pointer transition-all"
                       >
                         Cancel
                       </button>
@@ -2310,9 +2321,9 @@ export default function TopNavbar() {
                             setIsGeneratingShowcase(false);
                           }, 2000);
                         }}
-                        className={`flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${selectedPromptsForShowcase.length >= 1
-                          ? "bg-primary text-white hover:bg-primary/90 hover:scale-[1.02]"
-                          : "pill-glass text-[#756d8d] dark:text-[#afa6c8]/50 cursor-not-allowed"
+                        className={`liquid-glass-control liquid-glass-sheen flex-[2] h-12 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${selectedPromptsForShowcase.length >= 1
+                          ? "bg-gradient-to-r from-primary to-secondary text-white hover:scale-[1.02] shadow-lg shadow-primary/25 cursor-pointer"
+                          : "opacity-40 text-black/50 dark:text-white/50 cursor-not-allowed"
                           }`}
                       >
                         {isGeneratingShowcase ? <Sparkles className="w-5 h-5 animate-spin" /> : <><Share2 className="w-4 h-4" /> Create Poster</>}
@@ -2323,30 +2334,30 @@ export default function TopNavbar() {
 
                 {showcaseStep === 2 && (
                   <div className="flex flex-col gap-3 md:gap-4">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-3 md:pb-4">
+                    <div className="flex items-center justify-between border-b border-black/10 dark:border-white/15 pb-3 md:pb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-sm">
                           <Check className="w-5 h-5" strokeWidth={3} />
                         </div>
                         <div>
-                          <h2 className="text-xl font-bold text-[#171421] dark:text-white">Poster Created!</h2>
-                          <p className="text-[10px] font-bold text-green-500 uppercase tracking-wider">Ready to Download & Share</p>
+                          <h2 className="text-xl font-black text-[#171421] dark:text-white">Poster Created!</h2>
+                          <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Ready to Download & Share</p>
                         </div>
                       </div>
                       <button
                         onClick={() => setShowShowcaseModal(false)}
-                        className="pill-glass flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#171421] dark:text-[#f7f2ff] hover:scale-105 active:scale-95 hover:bg-white/20 dark:hover:bg-white/10"
+                        className="liquid-glass-control liquid-glass-sheen flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#171421] dark:text-white hover:opacity-80 transition-all cursor-pointer"
                         aria-label="Close"
                       >
-                        <X className="w-5 h-5" />
+                        <X className="w-4.5 h-4.5" />
                       </button>
                     </div>
 
                     <div className="flex flex-col items-center gap-3.5 md:gap-4 w-full">
                       {/* Header title */}
                       <div className="text-center w-full -mt-1 md:-mt-2 mb-1">
-                        <h3 className="text-lg md:text-xl font-bold text-[#171421] dark:text-white">Share Your Showcase</h3>
-                        <p className="text-[11px] md:text-xs text-[#756d8d] mt-0.5">We've rendered your prompts into a premium story poster. Share it with friends or save to your device!</p>
+                        <h3 className="text-lg md:text-xl font-black text-[#171421] dark:text-white">Share Your Showcase</h3>
+                        <p className="text-[11px] md:text-xs text-[#554c6e] dark:text-white/80 font-medium mt-0.5">We've rendered your prompts into a premium story poster. Share it with friends or save to your device!</p>
                       </div>
 
                       <div className={`w-[200px] h-[356px] md:w-[260px] md:h-[462px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden flex flex-col relative shrink-0 border transition-all duration-300 ${appearanceMode === 'Light'
@@ -2514,35 +2525,35 @@ export default function TopNavbar() {
                           <button
                             onClick={downloadShowcasePoster}
                             title="Download Poster PNG"
-                            className="pill-glass flex-1 h-11 rounded-xl text-primary flex items-center justify-center transition-all hover:scale-105 hover:bg-primary/10 active:scale-95"
+                            className="liquid-glass-control liquid-glass-sheen flex-1 h-11 rounded-xl text-[#c4b5fd] hover:text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                           >
                             <Download className="w-5 h-5" />
                           </button>
                           <button
                             onClick={copyImageToClipboard}
                             title="Copy Image"
-                            className="pill-glass flex-1 h-11 rounded-xl text-primary flex items-center justify-center transition-all hover:scale-105 hover:bg-primary/10 active:scale-95"
+                            className="liquid-glass-control liquid-glass-sheen flex-1 h-11 rounded-xl text-[#c4b5fd] hover:text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                           >
                             <Copy className="w-5 h-5" />
                           </button>
                           <button
                             onClick={shareShowcaseNatively}
                             title="Share Poster"
-                            className="pill-glass flex-1 h-11 rounded-xl text-green-500 flex items-center justify-center transition-all hover:scale-105 hover:bg-green-500/10 active:scale-95"
+                            className="liquid-glass-control liquid-glass-sheen flex-1 h-11 rounded-xl text-emerald-400 hover:text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                           >
                             <Share2 className="w-5 h-5" />
                           </button>
                           <button
                             onClick={shareShowcaseToInstagram}
                             title="Instagram Story"
-                            className="pill-glass flex-1 h-11 rounded-xl text-[#e1306c] flex items-center justify-center transition-all hover:scale-105 hover:bg-[#e1306c]/10 active:scale-95"
+                            className="liquid-glass-control liquid-glass-sheen flex-1 h-11 rounded-xl text-[#f472b6] hover:text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                           >
                             <Instagram className="w-5 h-5" />
                           </button>
                           <button
                             onClick={shareShowcaseToWhatsApp}
                             title="WhatsApp Send"
-                            className="pill-glass flex-1 h-11 rounded-xl text-green-500 flex items-center justify-center transition-all hover:scale-105 hover:bg-green-500/10 active:scale-95"
+                            className="liquid-glass-control liquid-glass-sheen flex-1 h-11 rounded-xl text-emerald-400 hover:text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                           >
                             <MessageCircle className="w-5 h-5" />
                           </button>
@@ -2550,7 +2561,7 @@ export default function TopNavbar() {
 
                         <button
                           onClick={copyShowcaseLink}
-                          className="pill-glass w-full h-9 rounded-xl text-[#756d8d] dark:text-[#afa6c8] hover:text-primary font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-white/20 dark:hover:bg-white/10"
+                          className="liquid-glass-control liquid-glass-sheen w-full h-10 rounded-xl text-[#171421] dark:text-white hover:text-primary font-bold text-xs flex items-center justify-center gap-1.5 transition-all hover:bg-black/5 dark:hover:bg-white/15 cursor-pointer"
                         >
                           <Copy className="w-3.5 h-3.5" /> Copy Showcase Link
                         </button>
@@ -2579,25 +2590,25 @@ export default function TopNavbar() {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md rounded-[2rem] z-[99999] overflow-hidden modal-glass"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md rounded-[2rem] z-[99999] overflow-hidden liquid-glass-modal text-white"
             >
               <div className="p-6 md:p-8 flex flex-col gap-6 items-center text-center">
                 {/* Warning Icon Container */}
-                <div className="w-16 h-16 rounded-full bg-[#ff6a3d]/10 dark:bg-[#ff6a3d]/15 flex items-center justify-center text-[#ff6a3d] animate-pulse">
+                <div className="w-16 h-16 rounded-full bg-[#ff6a3d]/20 flex items-center justify-center text-[#ff6a3d] animate-pulse border border-[#ff6a3d]/30">
                   <UserX className="w-8 h-8" />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-xl font-[900] text-[#171421] dark:text-white leading-tight">
+                  <h3 className="text-xl font-[900] text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
                     Delete Account
                   </h3>
-                  <p className="text-[12px] font-semibold text-[#6f6684] dark:text-[#afa6c8] leading-relaxed opacity-90">
+                  <p className="text-[12px] font-semibold text-white/80 leading-relaxed">
                     Are you sure you want to delete your account? This action is permanent and cannot be undone. All your saved prompts, activity, and custom creations will be lost forever.
                   </p>
                 </div>
 
                 {deleteError ? (
-                  <div className="w-full p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 text-[11px] font-bold leading-normal">
+                  <div className="w-full p-4 rounded-2xl bg-red-500/15 border border-red-500/25 text-red-300 text-[11px] font-bold leading-normal">
                     {deleteError}
                   </div>
                 ) : null}
@@ -2606,14 +2617,14 @@ export default function TopNavbar() {
                   <button
                     onClick={() => setShowDeleteConfirm(false)}
                     disabled={isDeletingAccount}
-                    className="pill-glass flex-1 h-11 rounded-xl text-xs font-black text-[#756d8d] dark:text-[#afa6c8] hover:bg-white/20 dark:hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
+                    className="liquid-glass-control liquid-glass-sheen flex-1 h-11 rounded-xl text-xs font-bold text-white hover:bg-white/15 active:scale-95 transition-all cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={executeDeleteAccount}
                     disabled={isDeletingAccount}
-                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-red-500 to-[#ff6a3d] hover:shadow-lg hover:shadow-red-500/15 text-xs font-black text-white hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
+                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-red-500 to-[#ff6a3d] hover:shadow-lg hover:shadow-red-500/25 text-xs font-black text-white hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
                   >
                     {isDeletingAccount ? (
                       <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
