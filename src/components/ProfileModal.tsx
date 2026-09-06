@@ -40,6 +40,13 @@ interface ProfileModalProps {
   onProfileUpdated?: (firstName: string, lastName: string) => void;
 }
 
+const GENDER_OPTIONS = [
+  { value: 'Male', label: 'Male', emoji: '👨', description: 'He / Him' },
+  { value: 'Female', label: 'Female', emoji: '👩', description: 'She / Her' },
+  { value: 'Other', label: 'Other', emoji: '✨', description: 'Non-binary / Other' },
+  { value: 'Prefer not to say', label: 'Prefer not to say', emoji: '🔒', description: 'Keep private' },
+];
+
 export default function ProfileModal({
   isOpen,
   onClose,
@@ -77,14 +84,15 @@ export default function ProfileModal({
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [gender, setGender] = useState('');
+  const [showGenderModal, setShowGenderModal] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
   const [collectionsCount, setCollectionsCount] = useState(0);
   const [verificationLoading, setVerificationLoading] = useState(false);
   const [verificationSuccess, setVerificationSuccess] = useState(false);
 
-  // Prevent page scroll when the modal or cropping sub-modal is open
+  // Prevent page scroll when the modal, gender selector, or cropping sub-modal is open
   useEffect(() => {
-    if (isOpen || !!cropImageSrc) {
+    if (isOpen || !!cropImageSrc || showGenderModal) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -92,7 +100,7 @@ export default function ProfileModal({
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen, cropImageSrc]);
+  }, [isOpen, cropImageSrc, showGenderModal]);
 
   // Fetch saved prompts count and collections count
   useEffect(() => {
@@ -484,14 +492,20 @@ export default function ProfileModal({
                   </div>
 
                   {/* Full Name & Username */}
-                  <h3 className="text-lg sm:text-xl font-black text-white mt-2 leading-snug drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+                  <h3 className="text-lg sm:text-xl font-black text-white mt-2 leading-snug">
                     {firstName} {lastName}
                   </h3>
                   
                   {username ? (
-                    <p className="text-xs font-bold text-[#c4b5fd] mt-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">@{username}</p>
+                    <div className="inline-flex items-center gap-1.5 mt-1 px-3 py-1 rounded-full bg-gradient-to-r from-primary/30 via-primary/20 to-[#ff6a3d]/25 border border-primary/45 shadow-sm">
+                      <span className="text-xs font-black text-white tracking-wide">
+                        @{username}
+                      </span>
+                    </div>
                   ) : (
-                    <p className="text-xs font-semibold text-[#E2E8F0] italic mt-0.5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">No username set</p>
+                    <div className="inline-flex items-center gap-1 mt-1 px-3 py-0.5 rounded-full bg-white/10 border border-white/20">
+                      <span className="text-xs font-bold text-white/80 italic">No username set</span>
+                    </div>
                   )}
 
                   {/* Email & Verified Badge */}
@@ -571,35 +585,31 @@ export default function ProfileModal({
                         </div>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] ml-1 block mb-1">Username</span>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Username</span>
                           <span className="relative flex items-center">
-                            <span className="absolute left-3.5 text-xs font-bold text-primary">@</span>
+                            <span className="absolute left-3.5 text-xs font-black text-primary">@</span>
                             <input
                               type="text"
                               value={username}
                               onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
                               placeholder="username"
-                              className="glass-input text-xs font-semibold h-11 py-0 pl-7 w-full rounded-[12px] text-[#171421] dark:text-white"
+                              className="glass-input text-xs font-bold h-11 py-0 pl-7 w-full rounded-[12px] text-[#171421] dark:text-white"
                             />
                           </span>
                         </label>
 
                         <label className="block text-left">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)] ml-1 block mb-1">Gender</span>
-                          <div className="relative">
-                            <select
-                              value={gender}
-                              onChange={(e) => setGender(e.target.value)}
-                              className="glass-input text-xs font-semibold h-11 py-0 appearance-none pr-8 bg-transparent w-full text-[#171421] dark:text-white rounded-[12px]"
-                            >
-                              <option value="" disabled className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Select Gender</option>
-                              <option value="Male" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Male</option>
-                              <option value="Female" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Female</option>
-                              <option value="Other" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Other</option>
-                              <option value="Prefer not to say" className="bg-white dark:bg-[#14111f] text-[#171421] dark:text-white">Prefer not to say</option>
-                            </select>
-                            <ChevronDown className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#554c6e] dark:text-white/70 pointer-events-none" />
-                          </div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#554c6e] dark:text-[#E2E8F0] ml-1 block mb-1">Gender</span>
+                          <button
+                            type="button"
+                            onClick={() => setShowGenderModal(true)}
+                            className="glass-input text-xs font-bold h-11 py-0 px-3.5 flex items-center justify-between w-full text-left rounded-[12px] text-[#171421] dark:text-white cursor-pointer hover:bg-black/5 dark:hover:bg-white/10 transition-all active:scale-[0.99]"
+                          >
+                            <span className={gender ? "font-bold text-[#171421] dark:text-white" : "text-[#786f91] dark:text-[#9e94b8]"}>
+                              {gender || "Select Gender"}
+                            </span>
+                            <ChevronDown className="w-4 h-4 text-[#554c6e] dark:text-white/70" />
+                          </button>
                         </label>
 
                         {error && (
@@ -743,6 +753,12 @@ export default function ProfileModal({
                         {/* Display list of details in minimal layout */}
                         <div className="flex flex-col gap-2.5 mt-1 border-t border-black/10 dark:border-white/12 pt-4 text-left text-xs font-semibold">
                           <div className="flex justify-between items-center">
+                            <span className="text-[#554c6e] dark:text-[#E2E8F0] font-medium">Username</span>
+                            <span className="font-black text-white text-xs bg-gradient-to-r from-primary/30 to-[#ff6a3d]/25 border border-primary/40 px-2.5 py-0.5 rounded-full tracking-wide">
+                              {username ? `@${username}` : 'Not set'}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
                             <span className="text-[#554c6e] dark:text-[#E2E8F0] font-medium">Gender</span>
                             <span className="font-bold text-[#171421] dark:text-white">{gender || 'Not specified'}</span>
                           </div>
@@ -882,6 +898,79 @@ export default function ProfileModal({
                         Crop & Save
                       </button>
                     </div>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+
+          {/* Sub-Modal for Custom Gender Selection */}
+          <AnimatePresence>
+            {showGenderModal && (
+              <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40 backdrop-blur-[4px]">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 16 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 16 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative w-full max-w-[20rem] overflow-hidden rounded-[28px] liquid-glass-modal p-5 text-left text-[#171421] dark:text-white shadow-2xl border border-black/10 dark:border-white/12"
+                >
+                  <div className="flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/12">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-primary/15 dark:bg-primary/25 border border-primary/30 flex items-center justify-center text-primary">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-black text-[#171421] dark:text-white">Select Gender</h4>
+                        <p className="text-[10px] font-medium text-[#554c6e] dark:text-[#E2E8F0]">Choose how you identify</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowGenderModal(false)}
+                      className="liquid-glass-control flex h-7 w-7 items-center justify-center rounded-full text-[#171421] dark:text-white hover:opacity-80 transition-all cursor-pointer"
+                      aria-label="Close"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="mt-3 flex flex-col gap-2">
+                    {GENDER_OPTIONS.map((opt) => {
+                      const isSelected = gender === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => {
+                            setGender(opt.value);
+                            setShowGenderModal(false);
+                          }}
+                          className={`group flex items-center justify-between p-3 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                            isSelected
+                              ? 'bg-primary/20 dark:bg-primary/30 border-primary/50 shadow-sm scale-[1.01]'
+                              : 'bg-black/[0.03] dark:bg-white/5 border-black/8 dark:border-white/10 hover:bg-black/[0.06] dark:hover:bg-white/10 hover:border-primary/30'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg flex items-center justify-center w-8 h-8 rounded-xl bg-white/60 dark:bg-white/10 border border-black/5 dark:border-white/10 shadow-xs">
+                              {opt.emoji}
+                            </span>
+                            <div>
+                              <p className="text-xs font-black text-[#171421] dark:text-white leading-tight">{opt.label}</p>
+                              <p className="text-[10px] font-medium text-[#554c6e] dark:text-[#E2E8F0] mt-0.5">{opt.description}</p>
+                            </div>
+                          </div>
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                            isSelected
+                              ? 'bg-primary text-white scale-105 shadow-sm'
+                              : 'border border-black/20 dark:border-white/25 bg-black/5 dark:bg-white/5'
+                          }`}>
+                            {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </motion.div>
               </div>
