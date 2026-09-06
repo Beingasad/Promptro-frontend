@@ -1969,13 +1969,17 @@ export default function TopNavbar() {
                   ? { height: `${mobileHeight}px`, bottom: 'auto' }
                   : undefined
               }
-              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden pb-3 pt-5 will-change-transform cursor-default transition-[border-radius] duration-300 profile-modal-glass border-l-0 ${
-                (windowWidth < 768 && (expandedView || isFullWidth))
-                  ? 'rounded-none border-t-0 border-b-0'
-                  : 'rounded-tr-[2.5rem] rounded-br-[2.5rem] border-y-0'
+              className={`fixed bottom-0 left-0 top-0 z-[90] flex flex-col overflow-hidden will-change-transform cursor-default transition-all duration-300 profile-modal-glass sidebar-drawer border-l-0 ${
+                expandedView
+                  ? 'expanded-page rounded-none border-none pt-1.5 pb-2'
+                  : (windowWidth < 768 && isFullWidth)
+                    ? 'rounded-none border-t-0 border-b-0 pt-4 pb-3'
+                    : 'rounded-l-none rounded-r-[2.25rem] border-y-0 pt-4 pb-3'
               }`}
             >
-              <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
+              {!expandedView && (
+                <div className="mx-auto mb-3 h-1.5 w-14 shrink-0 rounded-full bg-[#cfc7dd]" />
+              )}
 
               <AnimatePresence mode="wait">
                 {expandedView ? (
@@ -1987,8 +1991,8 @@ export default function TopNavbar() {
                     transition={{ duration: 0.22 }}
                     className="flex min-h-0 flex-1 flex-col relative"
                   >
-                    <div className="relative flex-1 min-h-0 rounded-t-[1.35rem] md:rounded-t-[1.75rem] overflow-hidden">
-                      <div className="w-full h-full overflow-y-auto overscroll-contain hide-scrollbar flex flex-col relative pt-2">
+                    <div className="relative flex-1 min-h-0 overflow-hidden">
+                      <div className="w-full h-full overflow-y-auto overscroll-contain hide-scrollbar flex flex-col relative pt-0.5">
                         <GlassHeader
                           title={expandedTitle}
                           onBack={(e) => {
