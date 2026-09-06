@@ -567,7 +567,7 @@ export default function ProfileModal({
                               value={firstName}
                               onChange={(e) => setFirstName(e.target.value)}
                               placeholder="First Name"
-                              className="glass-input !text-white placeholder:!text-white/40 !bg-white/10 !border-white/20 text-xs font-semibold h-11 py-0 w-full rounded-[12px]"
+                              className="liquid-glass-input text-xs font-semibold h-11 py-0 w-full"
                               required
                             />
                           </label>
@@ -579,7 +579,7 @@ export default function ProfileModal({
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
                               placeholder="Last Name"
-                              className="glass-input !text-white placeholder:!text-white/40 !bg-white/10 !border-white/20 text-xs font-semibold h-11 py-0 w-full rounded-[12px]"
+                              className="liquid-glass-input text-xs font-semibold h-11 py-0 w-full"
                             />
                           </label>
                         </div>
@@ -587,13 +587,13 @@ export default function ProfileModal({
                         <label className="block text-left">
                           <span className="text-[10px] font-black uppercase tracking-widest text-[#E2E8F0] ml-1 block mb-1">Username</span>
                           <span className="relative flex items-center">
-                            <span className="absolute left-3.5 text-xs font-black text-primary">@</span>
+                            <span className="absolute left-3.5 text-xs font-black text-primary z-10">@</span>
                             <input
                               type="text"
                               value={username}
                               onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
                               placeholder="username"
-                              className="glass-input !text-white placeholder:!text-white/40 !bg-white/10 !border-white/20 text-xs font-bold h-11 py-0 pl-7 w-full rounded-[12px]"
+                              className="liquid-glass-input text-xs font-bold h-11 py-0 pl-7 w-full"
                             />
                           </span>
                         </label>
@@ -603,7 +603,7 @@ export default function ProfileModal({
                           <button
                             type="button"
                             onClick={() => setShowGenderModal(true)}
-                            className="glass-input !text-white !bg-white/10 !border-white/20 text-xs font-bold h-11 py-0 px-3.5 flex items-center justify-between w-full text-left rounded-[12px] cursor-pointer hover:!bg-white/15 transition-all active:scale-[0.99]"
+                            className="liquid-glass-input text-xs font-bold h-11 py-0 px-3.5 flex items-center justify-between w-full text-left cursor-pointer transition-all active:scale-[0.99]"
                           >
                             <span className={gender ? "font-bold text-white" : "text-white/60"}>
                               {gender || "Select Gender"}
@@ -613,7 +613,7 @@ export default function ProfileModal({
                         </label>
 
                         {error && (
-                          <div className="flex gap-2 items-center text-rose-400 font-bold text-[11px] p-2.5 bg-rose-500/15 border border-rose-500/30 rounded-[12px]">
+                          <div className="flex gap-2 items-center text-rose-400 font-bold text-[11px] p-2.5 bg-rose-500/15 border border-rose-500/30 rounded-[14px]">
                             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                             <span>{error}</span>
                           </div>
@@ -633,14 +633,14 @@ export default function ProfileModal({
                                 setGender(profile.gender || '');
                               }
                             }}
-                            className="flex-1 h-11 rounded-[12px] border border-white/15 bg-white/10 text-xs font-bold text-white transition-all hover:bg-white/15 active:scale-[0.98] cursor-pointer"
+                            className="liquid-glass-control liquid-glass-sheen flex-1 h-11 rounded-[14px] text-xs font-bold text-white hover:bg-white/15 active:scale-[0.98] cursor-pointer transition-all flex items-center justify-center"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
                             disabled={saving}
-                            className="flex-1 h-11 rounded-[12px] text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5 active:scale-[0.98] hover:scale-[1.01] cursor-pointer disabled:opacity-60"
+                            className="flex-1 h-11 rounded-[14px] text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5 active:scale-[0.98] hover:scale-[1.01] cursor-pointer disabled:opacity-60"
                             style={{
                               background: 'linear-gradient(135deg, #7C3AED, #9333EA)',
                               boxShadow: '0 4px 14px rgba(124, 58, 237, 0.45)'
