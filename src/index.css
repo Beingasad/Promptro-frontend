@@ -1213,6 +1213,35 @@
   .profile-modal-glass.sidebar-drawer.expanded-page {
     border-radius: 0 !important;
     border: none !important;
+    -webkit-backdrop-filter: blur(36px) saturate(200%) !important;
+    backdrop-filter: blur(36px) saturate(200%) !important;
+    background: linear-gradient(
+      135deg,
+      rgba(18, 14, 28, 0.82) 0%,
+      rgba(10, 8, 18, 0.92) 100%
+    ) !important;
+    color: #ffffff !important;
+  }
+
+  [data-theme="dark"] .profile-modal-glass.sidebar-drawer.expanded-page {
+    background: linear-gradient(
+      135deg,
+      rgba(14, 10, 22, 0.90) 0%,
+      rgba(6, 4, 12, 0.96) 100%
+    ) !important;
+  }
+
+  /* Internal cards inside expanded reading pages - frosted glass with white text */
+  .sidebar-drawer.expanded-page .liquid-glass-card {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4) !important;
+    color: #ffffff !important;
+  }
+
+  .sidebar-drawer.expanded-page .liquid-glass-card:hover {
+    background: rgba(255, 255, 255, 0.13) !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
   }
 
   [data-theme="dark"] .profile-modal-glass::before {

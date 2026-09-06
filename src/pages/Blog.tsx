@@ -61,7 +61,7 @@ export default function Blog() {
             Tips &amp; Guides
           </span>
         </h1>
-        <p className="text-sm sm:text-base md:text-lg font-medium text-[#6f6684] dark:text-[#afa6c8] max-w-xl mx-auto leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg font-medium text-[#0A0910] dark:text-white max-w-xl mx-auto leading-relaxed">
           Learn how to write better AI image prompts, master your favourite AI tools, and create stunning visuals faster.
         </p>
       </motion.header>
@@ -103,10 +103,10 @@ export default function Blog() {
             </div>
           </div>
           <div className="p-5 md:p-6">
-            <p className="text-sm md:text-base font-medium text-[#6f6684] dark:text-[#afa6c8] line-clamp-2 mb-3">
+            <p className="text-sm md:text-base font-medium text-[#0A0910] dark:text-white line-clamp-2 mb-3">
               {featured.excerpt}
             </p>
-            <div className="flex flex-wrap items-center gap-4 text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+            <div className="flex flex-wrap items-center gap-4 text-[11px] font-bold text-[#0A0910] dark:text-white">
               <div className="flex items-center gap-2">
                 <div className="h-5 w-5 rounded-full bg-gradient-to-br from-[#7437ff] to-[#ff642d] flex items-center justify-center">
                   <span className="text-[7px] font-black text-white">MA</span>
@@ -163,13 +163,13 @@ export default function Blog() {
                         {post.category}
                       </span>
                     </div>
-                    <h3 className="text-sm font-bold leading-snug line-clamp-2 text-[#171421] dark:text-white group-hover:text-primary transition-colors">
+                    <h3 className="text-sm font-bold leading-snug line-clamp-2 text-[#0A0910] dark:text-white group-hover:text-primary transition-colors">
                       {post.title}
                     </h3>
-                    <p className="text-xs font-medium text-[#756d8d] dark:text-[#afa6c8] line-clamp-2">
+                    <p className="text-xs font-medium text-[#0A0910] dark:text-white line-clamp-2">
                       {post.excerpt}
                     </p>
-                    <div className="flex items-center gap-3 text-[10px] font-semibold text-[#8d86a0]/80 mt-auto pt-2.5 border-t border-[#e8e2f0] dark:border-white/5">
+                    <div className="flex items-center gap-3 text-[10px] font-semibold text-[#0A0910] dark:text-white/80 mt-auto pt-2.5 border-t border-[#e8e2f0] dark:border-white/5">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {formatDate(post.publishDate)}
@@ -192,7 +192,7 @@ export default function Blog() {
       >
         <div className="flex items-center gap-2 mb-3">
           <Tag className="h-4 w-4 text-primary" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8]">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-[#0A0910] dark:text-white">
             Topics
           </h2>
         </div>
@@ -200,7 +200,7 @@ export default function Blog() {
           {Array.from(new Set(posts.flatMap((p) => p.tags))).map((tag) => (
             <span
               key={tag}
-              className="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 text-[#4a445f] dark:text-[#c4bed6] border border-white/60 dark:border-white/10 hover:border-primary/30 hover:text-primary transition-colors cursor-default"
+              className="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/80 dark:bg-white/10 text-[#0A0910] dark:text-white border border-white/60 dark:border-white/10 hover:border-primary/30 hover:text-primary transition-colors cursor-default"
             >
               #{tag}
             </span>

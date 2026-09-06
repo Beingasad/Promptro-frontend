@@ -71,7 +71,7 @@ export default function Categories() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+            className="text-[#0A0910] dark:text-white text-sm sm:text-base font-semibold max-w-lg"
           >
             Browse high-quality prompts curated by the community.
           </motion.p>
@@ -109,7 +109,7 @@ export default function Categories() {
                        <div className="flex items-center justify-between">
                           <div>
                             <h2 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">{cat.name}</h2>
-                            <p className="text-white/60 text-[10px] sm:text-sm font-medium">Browse Prompts</p>
+                            <p className="text-white text-[10px] sm:text-sm font-semibold">Browse Prompts</p>
                           </div>
                           <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all shrink-0">
                             <ArrowUpRight className="w-4 h-4 sm:w-6 sm:h-6" />

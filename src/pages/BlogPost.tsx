@@ -123,7 +123,7 @@ export default function BlogPost() {
               {post.category}
             </span>
             {post.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="flex items-center gap-1 text-[10px] font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+              <span key={tag} className="flex items-center gap-1 text-[10px] font-bold text-[#0A0910] dark:text-white">
                 <Tag className="h-2.5 w-2.5" />
                 {tag}
               </span>
@@ -131,17 +131,17 @@ export default function BlogPost() {
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl sm:text-3xl md:text-[2.5rem] font-black leading-[1.12] tracking-tight text-[#171421] dark:text-white">
+          <h1 className="text-2xl sm:text-3xl md:text-[2.5rem] font-black leading-[1.12] tracking-tight text-[#0A0910] dark:text-white">
             {post.title}
           </h1>
 
           {/* Meta row */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] font-bold text-[#0A0910] dark:text-white">
             <div className="flex items-center gap-2">
               <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#7437ff] to-[#ff642d] flex items-center justify-center ring-2 ring-white/50 dark:ring-white/10">
                 <span className="text-[8px] font-black text-white">MA</span>
               </div>
-              <span className="font-bold text-[#4a445f] dark:text-[#c4bed6]">{post.author}</span>
+              <span className="font-bold text-[#0A0910] dark:text-white">{post.author}</span>
             </div>
             <span className="h-4 w-px bg-[#d4cfe3] dark:bg-white/15" />
             <span className="flex items-center gap-1">
@@ -149,7 +149,7 @@ export default function BlogPost() {
               {formatDate(post.publishDate)}
             </span>
             {post.updatedDate !== post.publishDate && (
-              <span className="text-[10px] opacity-60 italic">
+              <span className="text-[10px] opacity-70 italic">
                 Updated {formatDate(post.updatedDate)}
               </span>
             )}
@@ -176,7 +176,7 @@ export default function BlogPost() {
           </div>
 
           {/* Excerpt (intro) */}
-          <p className="text-base md:text-lg font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed rounded-[1.25rem] bg-primary/5 border border-primary/15 px-5 py-4">
+          <p className="text-base md:text-lg font-medium text-[#0A0910] dark:text-white leading-relaxed rounded-[1.25rem] bg-primary/5 border border-primary/15 px-5 py-4">
             {post.excerpt}
           </p>
 
@@ -213,7 +213,7 @@ export default function BlogPost() {
 
           {/* Author Card */}
           <div className="pt-6 mt-2 border-t border-[#e8e2f0] dark:border-white/10">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-[#8d86a0]/70 mb-3">Written by</p>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-[#0A0910] dark:text-white/80 mb-3">Written by</p>
             <AuthorCard variant="full" />
           </div>
 
@@ -222,7 +222,7 @@ export default function BlogPost() {
             <section className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 md:p-7 glass-shine hover-glass-glow">
               <div className="flex items-center gap-2 mb-5">
                 <HelpCircle className="h-5 w-5 text-primary" />
-                <h2 className="text-lg font-bold">Frequently Asked Questions</h2>
+                <h2 className="text-lg font-bold text-[#0A0910] dark:text-white">Frequently Asked Questions</h2>
               </div>
               <div className="flex flex-col divide-y divide-[#e8e2f0] dark:divide-white/10">
                 {post.faqs.map((faq, i) => (
@@ -232,7 +232,7 @@ export default function BlogPost() {
                       className="flex w-full items-start justify-between gap-3 text-left"
                       aria-expanded={openFaq === i}
                     >
-                      <span className="text-sm font-semibold text-[#171421] dark:text-white leading-snug">
+                      <span className="text-sm font-semibold text-[#0A0910] dark:text-white leading-snug">
                         {faq.question}
                       </span>
                       <ChevronDown
@@ -248,7 +248,7 @@ export default function BlogPost() {
                           transition={{ duration: 0.25 }}
                           className="overflow-hidden"
                         >
-                          <p className="pt-2.5 text-[13px] font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed">
+                          <p className="pt-2.5 text-[13px] font-medium text-[#0A0910] dark:text-white leading-relaxed">
                             {faq.answer}
                           </p>
                         </motion.div>
@@ -287,7 +287,7 @@ export default function BlogPost() {
                       <p className="text-xs font-semibold text-[#171421] dark:text-white line-clamp-2 leading-snug group-hover:text-primary transition-colors">
                         {r.title}
                       </p>
-                      <p className="text-[10px] text-[#8d86a0]/70 mt-1">{formatDate(r.publishDate)}</p>
+                      <p className="text-[10px] text-[#0A0910] dark:text-white/80 font-medium mt-1">{formatDate(r.publishDate)}</p>
                     </div>
                   </Link>
                 ))}
@@ -303,7 +303,7 @@ export default function BlogPost() {
             <div className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 glass-shine hover-glass-glow">
               <div className="flex items-center gap-2 mb-4">
                 <List className="h-4 w-4 text-primary" />
-                <p className="text-xs font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8]">Contents</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-[#0A0910] dark:text-white">Contents</p>
               </div>
               <nav aria-label="Table of contents">
                 <ol className="space-y-2.5">
@@ -311,7 +311,7 @@ export default function BlogPost() {
                     <li key={item.id} className={item.level === 3 ? 'pl-3.5' : ''}>
                       <a
                         href={`#${item.id}`}
-                        className="text-[12px] font-medium text-[#4a445f] dark:text-[#c4bed6] hover:text-primary transition-colors leading-snug block"
+                        className="text-[12px] font-semibold text-[#0A0910] dark:text-white hover:text-primary transition-colors leading-snug block"
                       >
                         {item.title}
                       </a>
@@ -325,9 +325,9 @@ export default function BlogPost() {
             <div className="rounded-[1.5rem] bg-gradient-to-br from-primary/8 to-[#ff6a3d]/5 border border-primary/12 p-5 glass-shine hover-glass-glow">
               <div className="flex items-center gap-2 mb-2">
                 <BookOpen className="h-4 w-4 text-primary" />
-                <p className="text-xs font-bold text-[#4a445f] dark:text-[#c4bed6]">Explore Prompts</p>
+                <p className="text-xs font-bold text-[#0A0910] dark:text-white">Explore Prompts</p>
               </div>
-              <p className="text-[11px] font-medium text-[#756d8d] dark:text-[#afa6c8] mb-3 leading-relaxed">
+              <p className="text-[11px] font-semibold text-[#0A0910] dark:text-white mb-3 leading-relaxed">
                 Discover curated AI image prompts for ChatGPT, Midjourney & more.
               </p>
               <Link

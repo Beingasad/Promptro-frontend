@@ -38,12 +38,12 @@ export default function TermsOfService() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.1]">
           Terms of Service
         </h1>
-        <div className="flex flex-wrap gap-4 text-xs font-medium text-[#756d8d] dark:text-[#afa6c8]">
+        <div className="flex flex-wrap gap-4 text-xs font-semibold text-[#0A0910] dark:text-white">
           <span><strong>Effective:</strong> {EFFECTIVE_DATE}</span>
           <span><strong>Last Updated:</strong> {LAST_UPDATED}</span>
         </div>
-        <p className="text-[15px] font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed">
-          Please read these Terms of Service carefully before using Promptro. These terms govern your access to and use of <a href="https://promptro.in" className="text-primary font-semibold hover:underline">promptro.in</a>.
+        <p className="text-[15px] font-medium text-[#0A0910] dark:text-white leading-relaxed">
+          Please read these Terms of Service carefully before using Promptro. These terms govern your access to and use of <a href="https://promptro.in" className="text-primary font-bold hover:underline">promptro.in</a>.
         </p>
       </motion.header>
 
@@ -55,13 +55,13 @@ export default function TermsOfService() {
         className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 glass-shine hover-glass-glow"
         aria-label="Table of contents"
       >
-        <p className="text-xs font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8] mb-3">Contents</p>
+        <p className="text-xs font-bold uppercase tracking-wider text-[#0A0910] dark:text-white mb-3">Contents</p>
         <ol className="space-y-1">
           {sections.map((s) => (
             <li key={s.id}>
               <a
                 href={`#${s.id}`}
-                className="text-sm font-medium text-[#4a445f] dark:text-[#c4bed6] hover:text-primary transition-colors"
+                className="text-sm font-semibold text-[#0A0910] dark:text-white hover:text-primary transition-colors"
               >
                 {s.title}
               </a>
@@ -81,8 +81,8 @@ export default function TermsOfService() {
             transition={{ delay: 0.1 + i * 0.04 }}
             className="rounded-[1.5rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-5 md:p-6 glass-shine hover-glass-glow"
           >
-            <h2 className="text-lg font-bold mb-3">{s.title}</h2>
-            <div className="text-[14px] md:text-[15px] font-medium text-[#4a445f] dark:text-[#c4bed6] leading-relaxed">
+            <h2 className="text-lg font-bold mb-3 text-[#0A0910] dark:text-white">{s.title}</h2>
+            <div className="text-[14px] md:text-[15px] font-medium text-[#0A0910] dark:text-white leading-relaxed">
               {s.content}
             </div>
           </motion.section>

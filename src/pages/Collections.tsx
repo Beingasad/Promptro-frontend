@@ -271,7 +271,7 @@ export default function Collections() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+                className="text-[#0A0910] dark:text-white text-sm sm:text-base font-semibold max-w-lg"
               >
                 Curate and organize your favorite prompts into boards.
               </motion.p>
@@ -475,7 +475,7 @@ export default function Collections() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+              className="text-[#0A0910] dark:text-white text-sm sm:text-base font-semibold max-w-lg"
             >
               Curate and organize your favorite prompts into boards.
             </motion.p>
@@ -497,7 +497,7 @@ export default function Collections() {
               <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 group-hover:bg-primary group-hover:text-white transition-all duration-300 shadow-[0_8px_20px_rgba(109,77,236,0.08)]">
                 <Plus className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
-              <span className="mt-3 sm:mt-4 text-xs sm:text-sm font-black text-[#5f5774] dark:text-[#c4bed6] group-hover:text-primary transition-colors uppercase tracking-wider">
+              <span className="mt-3 sm:mt-4 text-xs sm:text-sm font-black text-[#0A0910] dark:text-white group-hover:text-primary transition-colors uppercase tracking-wider">
                 Create Board
               </span>
             </motion.div>
@@ -544,7 +544,7 @@ export default function Collections() {
                       <div className="flex items-center justify-between">
                         <div>
                           <h2 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1 line-clamp-1">{col.name}</h2>
-                          <p className="text-white/60 text-[10px] sm:text-sm font-medium">
+                          <p className="text-white text-[10px] sm:text-sm font-semibold">
                             {col.prompts.length} {col.prompts.length === 1 ? 'Prompt' : 'Prompts'}
                           </p>
                         </div>
@@ -578,7 +578,7 @@ export default function Collections() {
               <Folder className="w-8 h-8" />
             </div>
             <h2 className="text-xl font-black text-[#171421] dark:text-white">No collections yet</h2>
-            <p className="mt-2 text-sm font-semibold text-[#6f6684] dark:text-[#afa6c8] max-w-sm leading-relaxed">
+            <p className="mt-2 text-sm font-semibold text-[#0A0910] dark:text-white max-w-sm leading-relaxed">
               Create a board to organize prompts by style, project, or mood. Start fresh and compile your favorites!
             </p>
             <button
@@ -607,7 +607,7 @@ export default function Collections() {
                 <Folder className="w-6 h-6" />
               </div>
               <h2 className="text-base font-black text-[#171421] dark:text-white mb-1">Create Board</h2>
-              <p className="text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8] mb-4">Give your new prompt board a unique name.</p>
+              <p className="text-[11px] font-semibold text-[#0A0910] dark:text-white mb-4">Give your new prompt board a unique name.</p>
               <form onSubmit={handleCreate} className="flex flex-col gap-3.5">
                 <input
                   type="text"
@@ -617,7 +617,7 @@ export default function Collections() {
                   placeholder="e.g. Cinematic Landscapes"
                   maxLength={30}
                   autoFocus
-                  className="w-full h-11 px-4 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white"
+                  className="w-full h-11 px-4 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#0A0910]/50 dark:placeholder-white/50 text-[#171421] dark:text-white"
                 />
                 <div className="flex gap-2">
                   <button
@@ -657,7 +657,7 @@ export default function Collections() {
                 <Edit3 className="w-5 h-5" />
               </div>
               <h2 className="text-base font-black text-[#171421] dark:text-white mb-1">Rename Board</h2>
-              <p className="text-[11px] font-semibold text-[#756d8d] dark:text-[#afa6c8] mb-4">Provide a new name for your prompt board.</p>
+              <p className="text-[11px] font-semibold text-[#0A0910] dark:text-white mb-4">Provide a new name for your prompt board.</p>
               <form onSubmit={handleRename} className="flex flex-col gap-3.5">
                 <input
                   type="text"
@@ -667,7 +667,7 @@ export default function Collections() {
                   placeholder="Collection Name"
                   maxLength={30}
                   autoFocus
-                  className="w-full h-11 px-4 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#8a819d] text-[#171421] dark:text-white"
+                  className="w-full h-11 px-4 rounded-full border border-[#cfc7dd] dark:border-white/10 bg-white/50 dark:bg-white/5 text-xs font-semibold focus:outline-none focus:border-primary placeholder-[#0A0910]/50 dark:placeholder-white/50 text-[#171421] dark:text-white"
                 />
                 <div className="flex gap-2">
                   <button

@@ -101,7 +101,7 @@ export default function Saved() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+            className="text-[#0A0910] dark:text-white text-sm sm:text-base font-semibold max-w-lg"
           >
             Browse and manage your private gallery of saved creative prompts.
           </motion.p>
@@ -112,7 +112,7 @@ export default function Saved() {
             <Lock className="w-8 h-8" />
           </div>
           <h3 className="text-xl font-black text-[#171421] dark:text-white">Authentication Required</h3>
-          <p className="mt-2 text-sm font-semibold text-[#6f6684] dark:text-[#afa6c8] max-w-sm leading-relaxed">
+          <p className="mt-2 text-sm font-semibold text-[#0A0910] dark:text-white max-w-sm leading-relaxed">
             To use this feature, you need to signup or login
           </p>
           <button
@@ -159,7 +159,7 @@ export default function Saved() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+          className="text-[#0A0910] dark:text-white text-sm sm:text-base font-semibold max-w-lg"
         >
           Browse and manage your private gallery of saved creative prompts.
         </motion.p>
@@ -170,9 +170,9 @@ export default function Saved() {
       ) : savedPrompts.length ? (
         <MasonryGrid prompts={savedPrompts} isTwoColumns={true} />
       ) : (
-        <div className="min-h-[48vh] rounded-[1.8rem] border border-white/70 bg-white/58 px-6 py-12 text-center shadow-[0_18px_46px_rgba(72,56,118,0.12)] backdrop-blur-2xl">
-          <p className="text-lg font-bold text-[#171421]">No saved prompts yet</p>
-          <p className="mt-2 text-sm font-medium leading-6 text-[#6f6684]">Tap the bookmark on any image card to save it here.</p>
+        <div className="min-h-[48vh] rounded-[1.8rem] border border-white/70 bg-white/58 dark:bg-[#14111f]/45 dark:border-white/10 px-6 py-12 text-center shadow-[0_18px_46px_rgba(72,56,118,0.12)] backdrop-blur-2xl">
+          <p className="text-lg font-bold text-[#171421] dark:text-white">No saved prompts yet</p>
+          <p className="mt-2 text-sm font-semibold leading-6 text-[#0A0910] dark:text-white">Tap the bookmark on any image card to save it here.</p>
         </div>
       )}
     </motion.div>

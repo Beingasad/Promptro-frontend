@@ -231,7 +231,7 @@ export default function Explore() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-[#756d8d] dark:text-[#afa6c8] text-sm sm:text-base font-medium max-w-lg"
+          className="text-[#0A0910] dark:text-white text-sm sm:text-base font-semibold max-w-lg"
         >
           Explore high-quality prompts and templates curated by the community.
         </motion.p>
@@ -244,9 +244,9 @@ export default function Explore() {
       ) : visiblePrompts.length ? (
         <MasonryGrid prompts={visiblePrompts} isTwoColumns={true} />
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center rounded-[1.25rem] border border-white/70 bg-white/64 shadow-[0_16px_38px_rgba(72,56,118,0.1)]">
-          <p className="text-lg font-bold text-[#171421]">No prompts found</p>
-          <p className="mt-2 text-sm text-[#6f6684]">Try adjusting your filters or search query.</p>
+        <div className="flex flex-col items-center justify-center py-20 text-center rounded-[1.25rem] border border-white/70 bg-white/64 dark:bg-[#14111f]/45 dark:border-white/10 shadow-[0_16px_38px_rgba(72,56,118,0.1)]">
+          <p className="text-lg font-bold text-[#171421] dark:text-white">No prompts found</p>
+          <p className="mt-2 text-sm font-semibold text-[#0A0910] dark:text-white">Try adjusting your filters or search query.</p>
         </div>
       )}
     </motion.div>

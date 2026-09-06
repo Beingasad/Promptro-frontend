@@ -240,13 +240,13 @@ export default function About() {
           </div>
 
           <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start w-full">
-            <h3 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white" itemProp="name">
+            <h3 className="text-xl md:text-2xl font-black text-[#0A0910] dark:text-white" itemProp="name">
               Mohammad Asad Ansari
             </h3>
             <p className="text-sm font-bold text-primary mb-4" itemProp="jobTitle">
               Founder &amp; Developer • Promptro
             </p>
-            <p className="text-[14px] md:text-[15px] font-medium text-gray-600 dark:text-gray-300 leading-relaxed mb-6" itemProp="description">
+            <p className="text-[14px] md:text-[15px] font-medium text-[#0A0910] dark:text-white leading-relaxed mb-6" itemProp="description">
               I built Promptro in 2026 to solve a simple frustration: seeing beautiful AI art on Instagram, 
               only to be forced to follow and comment for prompt links that never arrived. Today, Promptro 
               is a completely free, open library helping creators get instant access to production-ready prompts 
@@ -260,9 +260,9 @@ export default function About() {
                 { icon: Globe, label: 'India' },
                 { icon: CheckCircle2, label: 'Open Access' },
               ].map((pill) => (
-                <div key={pill.label} className="flex items-center gap-1.5 rounded-full bg-primary/8 border border-primary/15 px-3 py-1">
+                <div key={pill.label} className="flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/20 px-3 py-1">
                   <pill.icon className="h-3 w-3 text-primary" />
-                  <span className="text-[11px] font-semibold text-primary">{pill.label}</span>
+                  <span className="text-[11px] font-bold text-primary">{pill.label}</span>
                 </div>
               ))}
             </div>
@@ -272,14 +272,14 @@ export default function About() {
                 href="https://instagram.com/beingxasad"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 dark:bg-black/20 text-gray-700 dark:text-gray-200 hover:bg-gradient-to-br hover:from-[#f09433] hover:to-[#e6683c] hover:text-white hover:border-transparent transition-all border border-white/10"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 dark:bg-white/10 text-white hover:bg-gradient-to-br hover:from-[#f09433] hover:to-[#e6683c] hover:text-white hover:border-transparent transition-all border border-white/15"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </a>
               <a
                 href="mailto:support.promptro@gmail.com"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 dark:bg-black/20 text-gray-700 dark:text-gray-200 hover:bg-primary hover:text-white hover:border-transparent transition-all border border-white/10"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 dark:bg-white/10 text-white hover:bg-primary hover:text-white hover:border-transparent transition-all border border-white/15"
                 aria-label="Email"
                 title="support.promptro@gmail.com"
               >

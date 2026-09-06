@@ -110,7 +110,7 @@ export default function Contact() {
               hear from you
             </span>
           </h1>
-          <p className="text-base md:text-lg font-medium text-[#6f6684] dark:text-[#afa6c8] max-w-lg mx-auto">
+          <p className="text-base md:text-lg font-medium text-[#0A0910] dark:text-white max-w-lg mx-auto">
             Whether you have feedback, a bug report, a collaboration idea, or just want to say hi, we're here.
           </p>
         </div>
@@ -123,13 +123,13 @@ export default function Contact() {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="rounded-[2rem] bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 p-6 md:p-8 glass-shine hover-glass-glow"
       >
-        <h2 className="text-lg font-bold mb-4">Contact Email</h2>
+        <h2 className="text-lg font-bold mb-4 text-[#0A0910] dark:text-white">Contact Email</h2>
         <div className="flex items-center gap-3">
           <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-[#7437ff] to-[#dd4bd2] flex items-center justify-center shadow-[0_8px_20px_rgba(116,55,255,0.3)] shrink-0">
             <Mail className="h-5 w-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-[#756d8d] dark:text-[#afa6c8] font-medium">Email</p>
+            <p className="text-xs text-[#0A0910] dark:text-white font-semibold">Email</p>
             <a
               href="mailto:support.promptro@gmail.com"
               className="text-base font-bold text-primary hover:underline"
@@ -146,7 +146,7 @@ export default function Contact() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.5 }}
       >
-        <h2 className="text-lg font-bold mb-4">Find Us Online</h2>
+        <h2 className="text-lg font-bold mb-4 text-[#0A0910] dark:text-white">Find Us Online</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {socialLinks.map((s) => {
             const isClickable = s.href !== '#';
@@ -165,10 +165,10 @@ export default function Contact() {
                   <s.icon className="h-5 w-5 text-white" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[11px] text-[#756d8d] dark:text-[#afa6c8] font-medium">
+                  <p className="text-[11px] text-[#0A0910] dark:text-white font-semibold">
                     {s.label} {!isClickable && <span className="text-[9px] font-bold text-primary ml-1">(Soon)</span>}
                   </p>
-                  <p className="text-sm font-bold text-[#171421] dark:text-white truncate">{s.handle}</p>
+                  <p className="text-sm font-bold text-[#0A0910] dark:text-white truncate">{s.handle}</p>
                 </div>
               </ContainerComponent>
             );
@@ -191,7 +191,7 @@ export default function Contact() {
               <CheckCircle2 className="h-7 w-7 text-emerald-500" />
             </div>
             <p className="text-base font-bold text-[#171421] dark:text-white">Message sent!</p>
-            <p className="text-sm text-[#756d8d] dark:text-[#afa6c8]">
+            <p className="text-sm text-[#0A0910] dark:text-white font-medium">
               Thanks for reaching out. We'll get back to you soon.
             </p>
             <button
@@ -205,7 +205,7 @@ export default function Contact() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+                <label className="text-xs font-bold text-[#0A0910] dark:text-white">
                   Your Name
                 </label>
                 <input
@@ -218,7 +218,7 @@ export default function Contact() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+                <label className="text-xs font-bold text-[#0A0910] dark:text-white">
                   Email Address <span className="text-[#ff6a3d]">*</span>
                 </label>
                 <input
@@ -232,7 +232,7 @@ export default function Contact() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+                <label className="text-xs font-bold text-[#0A0910] dark:text-white">
                   Phone Number (Optional)
                 </label>
                 <input
@@ -246,7 +246,7 @@ export default function Contact() {
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+              <label className="text-xs font-bold text-[#0A0910] dark:text-white">
                 Subject
               </label>
               <input
@@ -259,7 +259,7 @@ export default function Contact() {
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-[#756d8d] dark:text-[#afa6c8]">
+              <label className="text-xs font-bold text-[#0A0910] dark:text-white">
                 Message <span className="text-[#ff6a3d]">*</span>
               </label>
               <textarea
