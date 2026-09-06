@@ -586,16 +586,13 @@ export default function ProfileModal({
 
                         <label className="block text-left">
                           <span className="text-[10px] font-black uppercase tracking-widest text-[#E2E8F0] ml-1 block mb-1">Username</span>
-                          <span className="relative flex items-center">
-                            <span className="absolute left-3.5 text-xs font-black text-primary z-10">@</span>
-                            <input
-                              type="text"
-                              value={username}
-                              onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
-                              placeholder="username"
-                              className="liquid-glass-input text-xs font-bold h-11 py-0 pl-7 w-full"
-                            />
-                          </span>
+                          <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+                            placeholder="Username"
+                            className="liquid-glass-input text-xs font-bold h-11 py-0 w-full"
+                          />
                         </label>
 
                         <label className="block text-left">
