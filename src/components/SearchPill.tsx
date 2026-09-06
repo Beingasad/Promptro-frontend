@@ -85,7 +85,7 @@ export default function SearchPill() {
                 title="Select Category"
                 className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                   activeDropdown === 'category' || currentCategory.toLowerCase() !== 'all'
-                    ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
+                    ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
                     : 'bg-white/60 text-[#5f5774] hover:bg-white/90 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
                 }`}
               >
@@ -100,7 +100,7 @@ export default function SearchPill() {
                   title="Sort Options"
                   className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                     activeDropdown === 'sort' || currentSort.toLowerCase() !== 'all'
-                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)]'
+                      ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white'
                       : 'bg-white/60 text-[#5f5774] hover:bg-white/90 dark:bg-white/[0.04] dark:text-[#c6bddb] dark:hover:bg-white/[0.08]'
                   }`}
                 >

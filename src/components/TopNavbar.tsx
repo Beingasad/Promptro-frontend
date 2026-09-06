@@ -1813,10 +1813,10 @@ export default function TopNavbar() {
                   title="Select Category"
                   className={`flex items-center justify-center transition-all duration-300 cursor-pointer p-1.5 rounded-full hover:scale-105 active:scale-95 ${categoryDropdownOpen || currentCategory !== 'All'
                     ? 'text-primary'
-                    : 'text-white hover:text-white/80'
+                    : 'text-[#5f5774] hover:text-[#171421] dark:text-[#c6bddb] dark:hover:text-white'
                     }`}
                 >
-                  <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
+                  <LayoutGrid className="w-5 h-5 md:w-5.5 md:h-5.5" />
                 </button>
               </div>
             </div>
