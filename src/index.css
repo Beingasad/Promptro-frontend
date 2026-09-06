@@ -1433,6 +1433,41 @@
   overflow: hidden;
 }
 
+/* Drawer Prose Styles for Sidebar Blog Post View */
+.drawer-prose,
+.drawer-prose * {
+  color: #ffffff !important;
+  text-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.35);
+}
+.drawer-prose p,
+.drawer-prose li {
+  color: #e2e8f0 !important;
+}
+.drawer-prose h2,
+.drawer-prose h3,
+.drawer-prose strong {
+  color: #ffffff !important;
+}
+.drawer-prose code {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+.drawer-prose a {
+  color: #c4b5fd !important;
+  text-decoration: underline;
+}
+.drawer-prose a:hover {
+  color: #ffffff !important;
+}
+.drawer-prose th,
+.drawer-prose td {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #e2e8f0 !important;
+}
+.drawer-prose tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
 /* Global utility classes outside of Tailwind layers to ensure they are never stripped */
 .hide-scrollbar::-webkit-scrollbar {
   display: none !important;
