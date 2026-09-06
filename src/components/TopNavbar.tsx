@@ -1261,15 +1261,15 @@ export default function TopNavbar() {
                 </div>
               </div>
               <div className="p-4 flex-1">
-                <h3 className="text-xs font-bold leading-snug text-white drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.45)] line-clamp-2">
+                <h3 className="text-xs font-bold leading-snug text-white line-clamp-2">
                   {post.title}
                 </h3>
-                <p className="mt-1 text-[10px] font-medium text-[#E2E8F0] drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)] line-clamp-2 leading-relaxed">
+                <p className="mt-1 text-[10px] font-medium text-[#E2E8F0] line-clamp-2 leading-relaxed">
                   {post.excerpt}
                 </p>
-                <div className="mt-3 pt-2 border-t border-white/20 dark:border-white/10 flex items-center justify-between text-[8px] font-bold text-white/80 uppercase tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
+                <div className="mt-3 pt-2 border-t border-white/20 dark:border-white/10 flex items-center justify-between text-[8px] font-bold text-white/80 uppercase tracking-wider">
                   <span>{new Date(post.publishDate).toLocaleString('en-IN', { month: 'short', day: 'numeric' })}</span>
-                  <span className="text-white font-bold flex items-center gap-0.5 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Read <ChevronRight className="h-3 w-3" /></span>
+                  <span className="text-white font-bold flex items-center gap-0.5">Read <ChevronRight className="h-3 w-3" /></span>
                 </div>
               </div>
             </button>
@@ -1298,13 +1298,13 @@ export default function TopNavbar() {
 
           {/* Meta */}
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-bold text-white uppercase tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]">{post.category}</span>
-            <h3 className="text-sm font-black text-white drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.45)] leading-tight">{post.title}</h3>
-            <p className="text-[9px] font-medium text-[#E2E8F0] drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">By {post.author} • {new Date(post.publishDate).toLocaleString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <span className="text-[10px] font-bold text-white uppercase tracking-wider">{post.category}</span>
+            <h3 className="text-sm font-black text-white leading-tight">{post.title}</h3>
+            <p className="text-[9px] font-medium text-[#E2E8F0]">By {post.author} • {new Date(post.publishDate).toLocaleString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
 
           {/* Excerpt */}
-          <p className="text-xs font-medium leading-relaxed text-white bg-white/10 border border-white/15 drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)] rounded-[1rem] p-3">
+          <p className="text-xs font-medium leading-relaxed text-white bg-white/10 border border-white/15 rounded-[1rem] p-3">
             {post.excerpt}
           </p>
 
@@ -1317,7 +1317,7 @@ export default function TopNavbar() {
           {/* FAQ Accordion */}
           {post.faqs.length > 0 && (
             <div className="rounded-[1.25rem] liquid-glass-card p-4 mt-2">
-              <h4 className="text-xs font-bold text-white drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.4)] mb-3">Frequently Asked Questions</h4>
+              <h4 className="text-xs font-bold text-white mb-3">Frequently Asked Questions</h4>
               <div className="flex flex-col divide-y divide-white/20 dark:divide-white/10">
                 {post.faqs.map((faq, i) => (
                   <div key={i} className="py-2.5">
@@ -1326,11 +1326,11 @@ export default function TopNavbar() {
                       className="flex w-full items-start justify-between gap-2 text-left"
                       type="button"
                     >
-                      <span className="text-xs font-bold text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)] leading-tight">{faq.question}</span>
+                      <span className="text-xs font-bold text-white leading-tight">{faq.question}</span>
                       <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-white transition-transform mt-0.5 ${openFaq === i ? 'rotate-180' : ''}`} />
                     </button>
                     {openFaq === i && (
-                      <p className="pt-1.5 text-[11px] font-medium text-[#E2E8F0] drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)] leading-relaxed">
+                      <p className="pt-1.5 text-[11px] font-medium text-[#E2E8F0] leading-relaxed">
                         {faq.answer}
                       </p>
                     )}
@@ -1831,7 +1831,7 @@ export default function TopNavbar() {
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="absolute right-2 top-full mt-2.5 z-50 w-52 max-h-[300px] overflow-y-auto overscroll-contain hide-scrollbar rounded-[1.45rem] liquid-glass-dropdown p-2.5"
               >
-                <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/80 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">Categories</p>
+                <p className="px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white/80">Categories</p>
                 <div className="mt-1.5 flex flex-col gap-0.5">
                   {categories.map((category) => (
                     <button
@@ -1840,10 +1840,10 @@ export default function TopNavbar() {
                       onClick={() => handleSelectCategory(category)}
                       className={`w-full rounded-xl px-3 py-2 text-left text-xs font-bold transition-all duration-200 cursor-pointer ${currentCategory === category
                         ? 'bg-gradient-to-r from-primary to-[#ff6a3d] text-white shadow-sm'
-                        : 'text-white/95 hover:text-white hover:bg-white/15 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]'
+                        : 'text-white/95 hover:text-white hover:bg-white/15'
                         }`}
                     >
-                      <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">{category}</span>
+                      <span>{category}</span>
                     </button>
                   ))}
                 </div>
@@ -2258,11 +2258,11 @@ export default function TopNavbar() {
                   <div className="flex flex-col gap-3.5 sm:gap-5 md:gap-6">
                     <div className="flex items-center justify-between pb-2 border-b border-white/15">
                       <div className="min-w-0 pr-2">
-                        <h2 className="text-base sm:text-lg md:text-xl font-black text-white drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.45)] truncate">Showcase Creator</h2>
-                        <p className="text-[10px] sm:text-xs text-[#E2E8F0] drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)] font-medium mt-0.5">Select 1 to 3 prompts to build your story poster</p>
+                        <h2 className="text-base sm:text-lg md:text-xl font-black text-white truncate">Showcase Creator</h2>
+                        <p className="text-[10px] sm:text-xs text-[#E2E8F0] font-medium mt-0.5">Select 1 to 3 prompts to build your story poster</p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <div className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wider bg-white/15 border border-white/25 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shrink-0 drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)]">
+                        <div className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wider bg-white/15 border border-white/25 px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap shrink-0">
                           {selectedPromptsForShowcase.length} Selected
                         </div>
                         <button
@@ -2307,8 +2307,8 @@ export default function TopNavbar() {
                             />
                           </div>
                           <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
-                            <p className="text-xs sm:text-sm font-bold truncate text-white drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.4)] leading-snug">{prompt.title}</p>
-                            <p className="text-[10px] sm:text-[11px] text-[#E2E8F0] drop-shadow-[0_1px_1px_rgba(0,0,0,0.3)] mt-1 truncate font-medium">
+                            <p className="text-xs sm:text-sm font-bold truncate text-white leading-snug">{prompt.title}</p>
+                            <p className="text-[10px] sm:text-[11px] text-[#E2E8F0] mt-1 truncate font-medium">
                               {prompt.category ? `${prompt.category} • AI prompt` : "AI generated creative prompt"}
                             </p>
                           </div>
@@ -2325,7 +2325,7 @@ export default function TopNavbar() {
                     <div className="flex items-center gap-3 pt-1 sm:pt-2 shrink-0">
                       <button
                         onClick={() => setShowShowcaseModal(false)}
-                        className="liquid-glass-control liquid-glass-sheen flex-1 h-11 sm:h-12 rounded-2xl font-bold text-xs sm:text-sm text-white hover:text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)] hover:bg-white/10 cursor-pointer transition-all"
+                        className="liquid-glass-control liquid-glass-sheen flex-1 h-11 sm:h-12 rounded-2xl font-bold text-xs sm:text-sm text-white hover:text-white hover:bg-white/10 cursor-pointer transition-all"
                       >
                         Cancel
                       </button>
@@ -2360,7 +2360,7 @@ export default function TopNavbar() {
                           <Check className="w-5 h-5" strokeWidth={3} />
                         </div>
                         <div>
-                          <h2 className="text-xl font-black text-white drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.45)]">Poster Created!</h2>
+                          <h2 className="text-xl font-black text-white">Poster Created!</h2>
                           <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Ready to Download & Share</p>
                         </div>
                       </div>
@@ -2376,8 +2376,8 @@ export default function TopNavbar() {
                     <div className="flex flex-col items-center gap-3.5 md:gap-4 w-full">
                       {/* Header title */}
                       <div className="text-center w-full -mt-1 md:-mt-2 mb-1">
-                        <h3 className="text-lg md:text-xl font-black text-white drop-shadow-[0_1px_1.5px_rgba(0,0,0,0.45)]">Share Your Showcase</h3>
-                        <p className="text-[11px] md:text-xs text-[#E2E8F0] drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)] font-medium mt-0.5">We've rendered your prompts into a premium story poster. Share it with friends or save to your device!</p>
+                        <h3 className="text-lg md:text-xl font-black text-white">Share Your Showcase</h3>
+                        <p className="text-[11px] md:text-xs text-[#E2E8F0] font-medium mt-0.5">We've rendered your prompts into a premium story poster. Share it with friends or save to your device!</p>
                       </div>
 
                       <div className={`w-[200px] h-[356px] md:w-[260px] md:h-[462px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden flex flex-col relative shrink-0 border transition-all duration-300 ${appearanceMode === 'Light'
@@ -2581,7 +2581,7 @@ export default function TopNavbar() {
 
                         <button
                           onClick={copyShowcaseLink}
-                          className="liquid-glass-control liquid-glass-sheen w-full h-10 rounded-xl text-white hover:text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)] font-bold text-xs flex items-center justify-center gap-1.5 transition-all hover:bg-white/15 cursor-pointer"
+                          className="liquid-glass-control liquid-glass-sheen w-full h-10 rounded-xl text-white hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all hover:bg-white/15 cursor-pointer"
                         >
                           <Copy className="w-3.5 h-3.5" /> Copy Showcase Link
                         </button>
