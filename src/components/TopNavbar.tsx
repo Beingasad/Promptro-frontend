@@ -2091,10 +2091,10 @@ export default function TopNavbar() {
                       {/* Mobile Footer (visible only on mobile, placed inside scroll container to stay close to buttons) */}
                       {windowWidth < 768 && (
                         <div className="pt-12 pb-2 mt-8 text-center touch-none">
-                          <div className="flex items-center justify-center gap-1 text-[9px] font-medium text-[#5f5774]">
-                            Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
+                          <div className="flex items-center justify-center gap-1 text-[9px] font-semibold text-white">
+                            Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-white">Promptro</span>
                           </div>
-                          <p className="mt-0.5 text-[9px] font-medium text-[#5f5774]">v1.1.0</p>
+                          <p className="mt-0.5 text-[9px] font-medium text-white/90">v1.1.0</p>
                         </div>
                       )}
                     </div>
@@ -2107,7 +2107,7 @@ export default function TopNavbar() {
                           <span className="text-sm font-black text-[#171421] dark:text-white">
                             {promptCount > 0 ? `${promptCount}+` : '...'}
                           </span>
-                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8] mt-0.5">Total</span>
+                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#0A0910] dark:text-white mt-0.5">Total</span>
                         </div>
                         
                         <button
@@ -2122,7 +2122,7 @@ export default function TopNavbar() {
                           <span className="text-sm font-black text-[#171421] dark:text-white hover:text-primary transition-colors">
                             {savedCount}
                           </span>
-                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8] mt-0.5">Saved</span>
+                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#0A0910] dark:text-white mt-0.5">Saved</span>
                         </button>
                         
                         <button
@@ -2137,17 +2137,17 @@ export default function TopNavbar() {
                           <span className="text-sm font-black text-[#171421] dark:text-white hover:text-primary transition-colors">
                             {collectionsCount}
                           </span>
-                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#756d8d] dark:text-[#afa6c8] mt-0.5">Collections</span>
+                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#0A0910] dark:text-white mt-0.5">Collections</span>
                         </button>
                       </div>
                     </div>
 
                     {windowWidth >= 768 && (
                       <div className="shrink-0 pt-1.5 md:pt-3 mb-4 md:mb-0 text-center touch-none">
-                        <div className="flex items-center justify-center gap-1 text-[9px] md:text-[10px] font-medium text-[#5f5774]">
-                          Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
+                        <div className="flex items-center justify-center gap-1 text-[9px] md:text-[10px] font-semibold text-white">
+                          Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-white">Promptro</span>
                         </div>
-                        <p className="mt-0.5 md:mt-1.5 text-[9px] md:text-[10px] font-medium text-[#5f5774]">v1.1.0</p>
+                        <p className="mt-0.5 md:mt-1.5 text-[9px] md:text-[10px] font-medium text-white/90">v1.1.0</p>
                       </div>
                     )}
                   </motion.div>
