@@ -5,12 +5,17 @@ import { VerifiedIcon } from './icons/VerifiedIcon';
 import { PremiumIcon } from './icons/PremiumIcon';
 import { EliteIcon } from './icons/EliteIcon';
 import { ExcellentIcon } from './icons/ExcellentIcon';
+import { QualityTierModal } from './QualityTierModal';
 
 // Note: Ensure PromptDetail/Prompt interface has the required fields
 interface PillPrompt {
+  id?: string;
+  title?: string;
   category: string;
   final_quality_score?: number;
   copies?: number;
+  saves?: number;
+  image_url?: string;
 }
 
 interface AnimatedCategoryQualityPillProps {
@@ -53,6 +58,7 @@ const stopPillTimer = () => {
 
 export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md' }: AnimatedCategoryQualityPillProps) => {
   const [frameIndex, setFrameIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const score = prompt.final_quality_score;
   const getTopPercentile = (s: number) => {
@@ -128,51 +134,67 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
   const badgeGap = isSm ? 'gap-1.5 md:gap-2' : 'gap-3 md:gap-4';
 
   return (
-    <div className={`relative flex ${containerHeight} ${containerMinW} items-center justify-center rounded-full border transition-all duration-300 overflow-hidden bg-gradient-to-r liquid-glass-pill box-border ${currentFrame.bg} ${currentFrame.border} ${className}`}>
-       <AnimatePresence mode="wait">
-          {isBadge ? (
-             <motion.div 
-                key="badge-layout"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className={`flex items-center justify-between w-full h-full ${badgePadding} ${badgeGap}`}
-             >
-                <div className="flex items-center gap-1 shrink-0">
-                   {tier && <tier.Icon className={`${iconClass} text-white`} strokeWidth={2.5} />}
-                   <span className={`${badgeTextClass} font-bold text-white tracking-wide leading-none`}>{tier?.name}</span>
-                </div>
-                <div className="flex items-center justify-end overflow-hidden">
-                   <AnimatePresence mode="wait">
-                      <motion.span
-                         key={frameIndex}
-                         initial={{ y: 15, opacity: 0 }}
-                         animate={{ y: 0, opacity: 1 }}
-                         exit={{ y: -15, opacity: 0 }}
-                         transition={{ duration: 0.3 }}
-                         className={`whitespace-nowrap ${badgeTextClass} font-bold text-white tracking-normal`}
-                      >
-                         {currentFrame.content}
-                      </motion.span>
-                   </AnimatePresence>
-                </div>
-             </motion.div>
-          ) : (
-             <motion.div
-                key="category-layout"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className={`flex items-center justify-center w-full h-full ${containerPadding}`}
-             >
-                <span className={`${categoryTextClass} font-bold text-white tracking-wide truncate`}>
-                   {currentFrame.content}
-                </span>
-             </motion.div>
-          )}
-       </AnimatePresence>
-    </div>
+    <>
+      <div 
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsModalOpen(true);
+        }}
+        title="Click to view AI Quality Rating & Tier details"
+        className={`relative flex ${containerHeight} ${containerMinW} items-center justify-center rounded-full border transition-all duration-300 overflow-hidden bg-gradient-to-r liquid-glass-pill box-border cursor-pointer hover:scale-[1.03] active:scale-[0.98] select-none ${currentFrame.bg} ${currentFrame.border} ${className}`}
+      >
+         <AnimatePresence mode="wait">
+            {isBadge ? (
+               <motion.div 
+                  key="badge-layout"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className={`flex items-center justify-between w-full h-full ${badgePadding} ${badgeGap}`}
+               >
+                  <div className="flex items-center gap-1 shrink-0">
+                     {tier && <tier.Icon className={`${iconClass} text-white`} strokeWidth={2.5} />}
+                     <span className={`${badgeTextClass} font-bold text-white tracking-wide leading-none`}>{tier?.name}</span>
+                  </div>
+                  <div className="flex items-center justify-end overflow-hidden">
+                     <AnimatePresence mode="wait">
+                        <motion.span
+                           key={frameIndex}
+                           initial={{ y: 15, opacity: 0 }}
+                           animate={{ y: 0, opacity: 1 }}
+                           exit={{ y: -15, opacity: 0 }}
+                           transition={{ duration: 0.3 }}
+                           className={`whitespace-nowrap ${badgeTextClass} font-bold text-white tracking-normal`}
+                        >
+                           {currentFrame.content}
+                        </motion.span>
+                     </AnimatePresence>
+                  </div>
+               </motion.div>
+            ) : (
+               <motion.div 
+                  key="category-layout"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className={`flex items-center justify-center w-full h-full ${containerPadding}`}
+               >
+                  <span className={`${categoryTextClass} font-bold text-white tracking-wide truncate`}>
+                     {currentFrame.content}
+                  </span>
+               </motion.div>
+            )}
+         </AnimatePresence>
+      </div>
+
+      <QualityTierModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        prompt={prompt}
+      />
+    </>
   );
 };

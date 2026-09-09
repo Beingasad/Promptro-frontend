@@ -12,6 +12,7 @@ import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, on
 import { optimizeImageUrl } from '../utils/image';
 import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
 import { AnimatedCategoryQualityPill } from './AnimatedCategoryQualityPill';
+import { QualityTierModal } from './QualityTierModal';
 import { StandardIcon } from './icons/StandardIcon';
 import { VerifiedIcon } from './icons/VerifiedIcon';
 import { PremiumIcon } from './icons/PremiumIcon';
@@ -85,6 +86,7 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
   const [imageLoaded, setImageLoaded] = useState(alreadyCached);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [qualityModalOpen, setQualityModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
   const [shared, setShared] = useState(false);
@@ -426,7 +428,15 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
 
       {/* Top Right: Fixed Liquid Glass Colorful Badge Icon */}
       {isHome && tier && (
-        <div className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full ${tier.bg} border ${tier.border} liquid-glass-badge`}>
+        <div 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setQualityModalOpen(true);
+          }}
+          title="Click to view AI Quality Rating details"
+          className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full ${tier.bg} border ${tier.border} liquid-glass-badge cursor-pointer hover:scale-110 active:scale-95 transition-transform select-none`}
+        >
           <tier.Icon className="w-3.5 h-3.5 md:w-[18px] md:h-[18px] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" strokeWidth={2.5} />
         </div>
       )}
@@ -526,6 +536,11 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
       <AuthModal 
         isOpen={authModalOpen} 
         onClose={() => setAuthModalOpen(false)} 
+      />
+      <QualityTierModal
+        isOpen={qualityModalOpen}
+        onClose={() => setQualityModalOpen(false)}
+        prompt={prompt}
       />
     </>
   );
