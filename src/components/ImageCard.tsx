@@ -12,7 +12,7 @@ import { readLocalActivity, saveUserActivity, setLikedPrompt, setSavedPrompt, on
 import { optimizeImageUrl } from '../utils/image';
 import { isImageLoaded, markImageLoaded } from '../utils/imageCache';
 import { AnimatedCategoryQualityPill } from './AnimatedCategoryQualityPill';
-import { QualityTierModal } from './QualityTierModal';
+import { QualityTierCardOverlay } from './QualityTierModal';
 import { StandardIcon } from './icons/StandardIcon';
 import { VerifiedIcon } from './icons/VerifiedIcon';
 import { PremiumIcon } from './icons/PremiumIcon';
@@ -87,7 +87,6 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [qualityModalOpen, setQualityModalOpen] = useState(false);
-  const [badgeAnchorRect, setBadgeAnchorRect] = useState<DOMRect | null>(null);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
   const [shared, setShared] = useState(false);
@@ -423,7 +422,15 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
       {/* Top Left: Floating Category & Quality Pill */}
       {isHome && (
         <div className="absolute top-1.5 left-2 md:top-2 md:left-3 z-10">
-          <AnimatedCategoryQualityPill prompt={prompt} size="sm" />
+          <AnimatedCategoryQualityPill 
+            prompt={prompt} 
+            size="sm" 
+            onPillClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setQualityModalOpen(prev => !prev);
+            }}
+          />
         </div>
       )}
 
@@ -433,9 +440,7 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            const rect = e.currentTarget.getBoundingClientRect();
-            setBadgeAnchorRect(rect);
-            setQualityModalOpen(true);
+            setQualityModalOpen(prev => !prev);
           }}
           title="Click to view AI Quality Rating details"
           className={`absolute top-1.5 right-2 md:top-2 md:right-3 z-10 flex items-center justify-center h-[24px] w-[24px] md:h-[28px] md:w-[28px] rounded-full ${tier.bg} border ${tier.border} liquid-glass-badge cursor-pointer hover:scale-110 active:scale-95 transition-transform select-none`}
@@ -443,6 +448,16 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
           <tier.Icon className="w-3.5 h-3.5 md:w-[18px] md:h-[18px] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" strokeWidth={2.5} />
         </div>
       )}
+
+      {/* In-Card Quality Tier Popover (Opens right below the tags, spanning left to right inside the card) */}
+      <AnimatePresence>
+        {qualityModalOpen && (
+          <QualityTierCardOverlay
+            prompt={prompt}
+            onClose={() => setQualityModalOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
       <div className="absolute bottom-2 left-2 right-2 md:bottom-3 md:left-3 md:right-3">
         {/* Title (ONLY ON ORIGINAL HOME MODE) */}
@@ -539,12 +554,6 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
       <AuthModal 
         isOpen={authModalOpen} 
         onClose={() => setAuthModalOpen(false)} 
-      />
-      <QualityTierModal
-        isOpen={qualityModalOpen}
-        onClose={() => setQualityModalOpen(false)}
-        prompt={prompt}
-        anchorRect={badgeAnchorRect}
       />
     </>
   );

@@ -22,6 +22,7 @@ interface AnimatedCategoryQualityPillProps {
   prompt: PillPrompt;
   className?: string;
   size?: 'sm' | 'md';
+  onPillClick?: (e: React.MouseEvent) => void;
 }
 
 // Global Ticker to sync all pills and drastically reduce performance overhead
@@ -56,7 +57,7 @@ const stopPillTimer = () => {
   }
 };
 
-export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md' }: AnimatedCategoryQualityPillProps) => {
+export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md', onPillClick }: AnimatedCategoryQualityPillProps) => {
   const [frameIndex, setFrameIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null);
@@ -140,6 +141,10 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
+          if (onPillClick) {
+            onPillClick(e);
+            return;
+          }
           const rect = e.currentTarget.getBoundingClientRect();
           setAnchorRect(rect);
           setIsModalOpen(true);
