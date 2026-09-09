@@ -1222,21 +1222,21 @@
   /* Liquid Glass: Floating Popovers & Side Panels */
   .profile-modal-glass {
     position: relative;
-    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.14) 0%,
-      rgba(255, 255, 255, 0.04) 45%,
-      rgba(18, 14, 28, 0.26) 100%
+      rgba(255, 255, 255, 0.86) 0%,
+      rgba(248, 245, 255, 0.78) 45%,
+      rgba(242, 238, 252, 0.84) 100%
     ) !important;
-    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border: 1px solid rgba(255, 255, 255, 0.65) !important;
     border-radius: 28px;
     box-shadow: 
-      0 0 24px 2px rgba(0, 0, 0, 0.20),
-      0 20px 50px -4px rgba(0, 0, 0, 0.32),
-      0 4px 16px -1px rgba(0, 0, 0, 0.12),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.35) !important;
+      0 0 24px 2px rgba(139, 92, 246, 0.08),
+      0 20px 50px -4px rgba(72, 56, 118, 0.14),
+      0 4px 16px -1px rgba(72, 56, 118, 0.06),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.85) !important;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -1245,7 +1245,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%);
+    background: radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.05) 40%, transparent 70%);
     border-radius: inherit;
     z-index: 1;
     mix-blend-mode: overlay;
@@ -1256,9 +1256,9 @@
       135deg,
       rgba(255, 255, 255, 0.08) 0%,
       rgba(255, 255, 255, 0.02) 45%,
-      rgba(14, 10, 22, 0.42) 100%
+      rgba(14, 10, 22, 0.92) 100%
     ) !important;
-    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
     border-radius: 28px;
     box-shadow: 
       0 0 30px 4px rgba(0, 0, 0, 0.65),
@@ -1267,11 +1267,39 @@
       inset 0 1px 1px 0 rgba(255, 255, 255, 0.10) !important;
   }
 
+  /* Mobile & Desktop Sidebar Drawer */
   .profile-modal-glass.sidebar-drawer {
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(250, 247, 255, 0.88) 50%,
+      rgba(244, 240, 252, 0.94) 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    -webkit-backdrop-filter: blur(36px) saturate(190%) !important;
+    backdrop-filter: blur(36px) saturate(190%) !important;
+    box-shadow: 
+      0 0 30px 2px rgba(139, 92, 246, 0.08),
+      0 20px 50px -4px rgba(72, 56, 118, 0.16),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.85) !important;
   }
 
+  [data-theme="dark"] .profile-modal-glass.sidebar-drawer {
+    background: linear-gradient(
+      135deg,
+      rgba(20, 16, 30, 0.94) 0%,
+      rgba(12, 10, 20, 0.97) 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 
+      0 0 30px 4px rgba(0, 0, 0, 0.65),
+      0 20px 50px -4px rgba(0, 0, 0, 0.58),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.10) !important;
+  }
+
+  /* Expanded reading pages inside sidebar (About, Contact, Blog, Privacy, Terms) */
   .profile-modal-glass.sidebar-drawer.expanded-page {
     border-radius: 0 !important;
     border: none !important;
@@ -1279,29 +1307,39 @@
     backdrop-filter: blur(36px) saturate(200%) !important;
     background: linear-gradient(
       135deg,
-      rgba(18, 14, 28, 0.82) 0%,
-      rgba(10, 8, 18, 0.92) 100%
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(250, 248, 255, 0.92) 50%,
+      rgba(244, 240, 252, 0.96) 100%
     ) !important;
-    color: #ffffff !important;
   }
 
   [data-theme="dark"] .profile-modal-glass.sidebar-drawer.expanded-page {
     background: linear-gradient(
       135deg,
-      rgba(14, 10, 22, 0.90) 0%,
-      rgba(6, 4, 12, 0.96) 100%
+      rgba(14, 10, 22, 0.94) 0%,
+      rgba(6, 4, 12, 0.98) 100%
     ) !important;
   }
 
-  /* Internal cards inside expanded reading pages - frosted glass with white text */
+  /* Internal cards inside expanded reading pages */
   .sidebar-drawer.expanded-page .liquid-glass-card {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.16) !important;
-    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4) !important;
-    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 8px 24px -4px rgba(72, 56, 118, 0.08) !important;
   }
 
   .sidebar-drawer.expanded-page .liquid-glass-card:hover {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(139, 92, 246, 0.3) !important;
+  }
+
+  [data-theme="dark"] .sidebar-drawer.expanded-page .liquid-glass-card {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  [data-theme="dark"] .sidebar-drawer.expanded-page .liquid-glass-card:hover {
     background: rgba(255, 255, 255, 0.13) !important;
     border-color: rgba(255, 255, 255, 0.28) !important;
   }
@@ -1537,34 +1575,67 @@
 /* Drawer Prose Styles for Sidebar Blog Post View */
 .drawer-prose,
 .drawer-prose * {
-  color: #ffffff !important;
+  color: #171421 !important;
 }
 .drawer-prose p,
 .drawer-prose li {
-  color: #e2e8f0 !important;
+  color: #242033 !important;
 }
 .drawer-prose h2,
 .drawer-prose h3,
 .drawer-prose strong {
-  color: #ffffff !important;
+  color: #0f0d17 !important;
 }
 .drawer-prose code {
-  background: rgba(255, 255, 255, 0.12) !important;
-  color: #ffffff !important;
+  background: rgba(139, 92, 246, 0.08) !important;
+  color: #7c3aed !important;
 }
 .drawer-prose a {
-  color: #c4b5fd !important;
+  color: #7c3aed !important;
   text-decoration: underline;
 }
 .drawer-prose a:hover {
-  color: #ffffff !important;
+  color: #6d28d9 !important;
 }
 .drawer-prose th,
 .drawer-prose td {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #242033 !important;
+}
+.drawer-prose tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="dark"] .drawer-prose,
+[data-theme="dark"] .drawer-prose * {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .drawer-prose p,
+[data-theme="dark"] .drawer-prose li {
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .drawer-prose h2,
+[data-theme="dark"] .drawer-prose h3,
+[data-theme="dark"] .drawer-prose strong {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .drawer-prose code {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .drawer-prose a {
+  color: #c4b5fd !important;
+  text-decoration: underline;
+}
+[data-theme="dark"] .drawer-prose a:hover {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .drawer-prose th,
+[data-theme="dark"] .drawer-prose td {
   border-color: rgba(255, 255, 255, 0.15) !important;
   color: #e2e8f0 !important;
 }
-.drawer-prose tr:nth-child(even) {
+[data-theme="dark"] .drawer-prose tr:nth-child(even) {
   background-color: rgba(255, 255, 255, 0.04) !important;
 }
 

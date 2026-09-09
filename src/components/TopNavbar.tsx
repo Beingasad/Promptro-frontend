@@ -1196,8 +1196,8 @@ export default function TopNavbar() {
           />
           {privacySections.map((s) => (
             <div key={s.id} className="rounded-[1.25rem] liquid-glass-card p-4">
-              <h3 className="text-xs font-bold mb-1.5 text-white">{s.title}</h3>
-              <div className="text-[11px] font-medium text-[#E2E8F0] leading-relaxed">
+              <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
+              <div className="text-[11px] font-medium text-[#242033] dark:text-[#E2E8F0] leading-relaxed">
                 {s.content}
               </div>
             </div>
@@ -1221,8 +1221,8 @@ export default function TopNavbar() {
           />
           {termsSections.map((s) => (
             <div key={s.id} className="rounded-[1.25rem] liquid-glass-card p-4">
-              <h3 className="text-xs font-bold mb-1.5 text-white">{s.title}</h3>
-              <div className="text-[11px] font-medium text-[#E2E8F0] leading-relaxed">
+              <h3 className="text-xs font-bold mb-1.5 text-[#171421] dark:text-white">{s.title}</h3>
+              <div className="text-[11px] font-medium text-[#242033] dark:text-[#E2E8F0] leading-relaxed">
                 {s.content}
               </div>
             </div>
@@ -1261,15 +1261,15 @@ export default function TopNavbar() {
                 </div>
               </div>
               <div className="p-4 flex-1">
-                <h3 className="text-xs font-bold leading-snug text-white line-clamp-2">
+                <h3 className="text-xs font-bold leading-snug text-[#171421] dark:text-white line-clamp-2">
                   {post.title}
                 </h3>
-                <p className="mt-1 text-[10px] font-medium text-[#E2E8F0] line-clamp-2 leading-relaxed">
+                <p className="mt-1 text-[10px] font-medium text-[#242033] dark:text-[#E2E8F0] line-clamp-2 leading-relaxed">
                   {post.excerpt}
                 </p>
-                <div className="mt-3 pt-2 border-t border-white/20 dark:border-white/10 flex items-center justify-between text-[8px] font-bold text-white/80 uppercase tracking-wider">
+                <div className="mt-3 pt-2 border-t border-black/10 dark:border-white/10 flex items-center justify-between text-[8px] font-bold text-[#5f5774] dark:text-white/80 uppercase tracking-wider">
                   <span>{new Date(post.publishDate).toLocaleString('en-IN', { month: 'short', day: 'numeric' })}</span>
-                  <span className="text-white font-bold flex items-center gap-0.5">Read <ChevronRight className="h-3 w-3" /></span>
+                  <span className="text-primary font-bold flex items-center gap-0.5">Read <ChevronRight className="h-3 w-3" /></span>
                 </div>
               </div>
             </button>
@@ -1280,7 +1280,7 @@ export default function TopNavbar() {
 
     if (expandedView === 'blog-post') {
       const post = blogPosts.find((p) => p.slug === selectedBlogPostSlug);
-      if (!post) return <p className="text-xs text-white">Post not found.</p>;
+      if (!post) return <p className="text-xs text-[#171421] dark:text-white">Post not found.</p>;
       return (
         <div className="flex flex-col gap-4 pb-6">
           {/* Featured Image */}
@@ -1298,39 +1298,39 @@ export default function TopNavbar() {
 
           {/* Meta */}
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-bold text-white uppercase tracking-wider">{post.category}</span>
-            <h3 className="text-sm font-black text-white leading-tight">{post.title}</h3>
-            <p className="text-[9px] font-medium text-[#E2E8F0]">By {post.author} • {new Date(post.publishDate).toLocaleString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{post.category}</span>
+            <h3 className="text-sm font-black text-[#171421] dark:text-white leading-tight">{post.title}</h3>
+            <p className="text-[9px] font-semibold text-[#242033] dark:text-[#E2E8F0]">By {post.author} • {new Date(post.publishDate).toLocaleString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
 
           {/* Excerpt */}
-          <p className="text-xs font-medium leading-relaxed text-white bg-white/10 border border-white/15 rounded-[1rem] p-3">
+          <p className="text-xs font-medium leading-relaxed text-[#242033] dark:text-white bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 rounded-[1rem] p-3">
             {post.excerpt}
           </p>
 
           {/* Main Content */}
           <div
-            className="drawer-prose prose-custom text-xs font-medium text-white leading-relaxed"
+            className="drawer-prose prose-custom text-xs font-medium leading-relaxed"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
           {/* FAQ Accordion */}
           {post.faqs.length > 0 && (
             <div className="rounded-[1.25rem] liquid-glass-card p-4 mt-2">
-              <h4 className="text-xs font-bold text-white mb-3">Frequently Asked Questions</h4>
-              <div className="flex flex-col divide-y divide-white/20 dark:divide-white/10">
+              <h4 className="text-xs font-bold text-[#171421] dark:text-white mb-3">Frequently Asked Questions</h4>
+              <div className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
                 {post.faqs.map((faq, i) => (
                   <div key={i} className="py-2.5">
                     <button
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="flex w-full items-start justify-between gap-2 text-left"
+                      className="flex w-full items-start justify-between gap-2 text-left cursor-pointer"
                       type="button"
                     >
-                      <span className="text-xs font-bold text-white leading-tight">{faq.question}</span>
-                      <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-white transition-transform mt-0.5 ${openFaq === i ? 'rotate-180' : ''}`} />
+                      <span className="text-xs font-bold text-[#171421] dark:text-white leading-tight">{faq.question}</span>
+                      <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-[#171421] dark:text-white transition-transform mt-0.5 ${openFaq === i ? 'rotate-180' : ''}`} />
                     </button>
                     {openFaq === i && (
-                      <p className="pt-1.5 text-[11px] font-medium text-[#E2E8F0] leading-relaxed">
+                      <p className="pt-1.5 text-[11px] font-medium text-[#242033] dark:text-[#E2E8F0] leading-relaxed">
                         {faq.answer}
                       </p>
                     )}
@@ -1382,7 +1382,7 @@ export default function TopNavbar() {
         <div className="flex flex-col gap-3 pb-6">
           <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/15 to-transparent p-4 border border-primary/20">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Legal Documents</p>
-            <p className="text-[12px] font-medium text-[#E2E8F0] leading-relaxed">
+            <p className="text-[12px] font-medium text-[#242033] dark:text-[#E2E8F0] leading-relaxed">
               Promptro is committed to transparency. Read our policies below.
             </p>
           </div>
@@ -1394,20 +1394,20 @@ export default function TopNavbar() {
                 const action = link.href === '/privacy-policy' ? 'privacy' : 'terms';
                 handleDrawerAction(action);
               }}
-              className="flex w-full items-center gap-3 rounded-[1.25rem] liquid-glass-card p-4 hover:bg-gradient-to-r hover:from-primary/12 hover:to-secondary/12 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-colors text-left"
+              className="flex w-full items-center gap-3 rounded-[1.25rem] liquid-glass-card p-4 hover:bg-gradient-to-r hover:from-primary/12 hover:to-secondary/12 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-colors text-left cursor-pointer"
             >
               <div className={`h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-gradient-to-br ${link.color} text-white shadow-[0_4px_12px_rgba(0,0,0,0.08)]`}>
                 <link.icon className="h-5 w-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-white">{link.title}</p>
-                <p className="text-[11px] font-medium text-[#E2E8F0] leading-relaxed mt-0.5">{link.desc}</p>
+                <p className="text-sm font-bold text-[#171421] dark:text-white">{link.title}</p>
+                <p className="text-[11px] font-medium text-[#242033] dark:text-[#E2E8F0] leading-relaxed mt-0.5">{link.desc}</p>
               </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-white/80" />
+              <ChevronRight className="h-4 w-4 shrink-0 text-[#171421] dark:text-white/80" />
             </button>
           ))}
           <div className="rounded-[1.15rem] liquid-glass-card p-3 text-center">
-            <p className="text-[10px] font-medium text-[#E2E8F0]">
+            <p className="text-[10px] font-medium text-[#242033] dark:text-[#E2E8F0]">
               Questions? Email: <a href="mailto:support.promptro@gmail.com" className="text-primary font-bold hover:underline">support.promptro@gmail.com</a>
             </p>
           </div>
@@ -1428,7 +1428,7 @@ export default function TopNavbar() {
             ]}
           />
           {/* Contact Email prominent */}
-          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4">
+          <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/10 to-[#ff6a3d]/5 p-4 border border-primary/20">
             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Contact Email</p>
             <div className="flex items-center gap-2 mt-1">
               <span className="flex h-8 w-8 items-center justify-center shrink-0 text-primary">
@@ -1436,12 +1436,12 @@ export default function TopNavbar() {
               </span>
               <a href="mailto:support.promptro@gmail.com" className="text-xs font-bold text-primary hover:underline font-mono">support.promptro@gmail.com</a>
             </div>
-            <p className="text-[10px] font-medium text-[#E2E8F0] mt-1.5">Use the form below to send a message</p>
+            <p className="text-[10px] font-medium text-[#242033] dark:text-[#E2E8F0] mt-1.5">Use the form below to send a message</p>
           </div>
 
           {/* Feedback form with tabs */}
           <div className="rounded-[1.25rem] liquid-glass-card p-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-[#E2E8F0] mb-3">Send Message</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#171421] dark:text-[#E2E8F0] mb-3">Send Message</p>
             <div className="flex flex-wrap gap-1.5 mb-3">
               {['Bug Report', 'Feature Request', 'General Feedback'].map((label) => (
                 <button
@@ -1450,7 +1450,11 @@ export default function TopNavbar() {
                   onClick={() => {
                     setFeedbackSubject(label);
                   }}
-                  className="rounded-full bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1 text-[10px] font-bold text-white hover:text-primary transition-colors"
+                  className={`rounded-full px-2.5 py-1 text-[10px] font-bold transition-colors cursor-pointer ${
+                    feedbackSubject === label 
+                      ? 'bg-primary text-white shadow-xs' 
+                      : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 border border-black/10 dark:border-white/15 text-[#171421] dark:text-white'
+                  }`}
                 >
                   {label}
                 </button>
@@ -1461,14 +1465,14 @@ export default function TopNavbar() {
               type="text"
               value={feedbackSubject}
               onChange={(e) => setFeedbackSubject(e.target.value)}
-              className="mb-2 w-full rounded-xl bg-white/10 border border-white/15 px-3 py-2 text-xs font-semibold text-white outline-none placeholder:text-white/50"
+              className="mb-2 w-full rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#5f5774] dark:placeholder:text-white/50"
               placeholder="Subject"
             />
             <div className="flex gap-2 mb-2">
               <input
                 id="help-reply-email"
                 type="email"
-                className="flex-1 min-w-0 rounded-xl bg-white/10 border border-white/15 px-3 py-2 text-xs font-semibold text-white outline-none placeholder:text-white/50"
+                className="flex-1 min-w-0 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#5f5774] dark:placeholder:text-white/50"
                 placeholder="Your email *"
                 value={feedbackEmail}
                 onChange={(e) => setFeedbackEmail(e.target.value)}
@@ -1476,7 +1480,7 @@ export default function TopNavbar() {
               <input
                 id="help-reply-phone"
                 type="tel"
-                className="flex-1 min-w-0 rounded-xl bg-white/10 border border-white/15 px-3 py-2 text-xs font-semibold text-white outline-none placeholder:text-white/50"
+                className="flex-1 min-w-0 rounded-xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 px-3 py-2 text-xs font-semibold text-[#171421] dark:text-white outline-none placeholder:text-[#5f5774] dark:placeholder:text-white/50"
                 placeholder="Phone (optional)"
                 value={feedbackPhone}
                 onChange={(e) => setFeedbackPhone(e.target.value)}
@@ -1484,7 +1488,7 @@ export default function TopNavbar() {
             </div>
             <textarea
               id="help-msg"
-              className="h-24 w-full resize-none rounded-2xl bg-white/10 border border-white/15 p-3 text-sm font-medium text-white outline-none placeholder:text-white/50 disabled:opacity-60"
+              className="h-24 w-full resize-none rounded-2xl bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 p-3 text-sm font-medium text-[#171421] dark:text-white outline-none placeholder:text-[#5f5774] dark:placeholder:text-white/50 disabled:opacity-60"
               placeholder={
                 feedbackSubject === 'Bug Report' ? 'What went wrong? Which page or feature?' :
                   feedbackSubject === 'Feature Request' ? 'What feature would make Promptro better for you?' :
@@ -1551,7 +1555,7 @@ export default function TopNavbar() {
 
           {/* Find Us Online */}
           <div className="mt-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-[#E2E8F0] mb-3">Find Us Online</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#171421] dark:text-[#E2E8F0] mb-3">Find Us Online</p>
             <div className="flex flex-col gap-2.5">
               {/* Instagram */}
               <a
@@ -1564,8 +1568,8 @@ export default function TopNavbar() {
                   <Instagram className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] text-[#E2E8F0] font-medium">Instagram</p>
-                  <p className="text-xs font-bold text-white truncate">@promptro.in</p>
+                  <p className="text-[10px] text-[#242033] dark:text-[#E2E8F0] font-semibold">Instagram</p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate">@promptro.in</p>
                 </div>
               </a>
 
@@ -1573,14 +1577,14 @@ export default function TopNavbar() {
               <div
                 className="flex items-center gap-3 rounded-[1.25rem] liquid-glass-card p-3.5 opacity-70 cursor-not-allowed select-none"
               >
-                <div className="h-10 w-10 shrink-0 flex items-center justify-center text-white">
+                <div className="h-10 w-10 shrink-0 flex items-center justify-center text-[#171421] dark:text-white">
                   <XIcon className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] text-[#E2E8F0] font-medium">
+                  <p className="text-[10px] text-[#242033] dark:text-[#E2E8F0] font-semibold">
                     X (Twitter) <span className="text-[8px] font-bold text-primary ml-1">(Soon)</span>
                   </p>
-                  <p className="text-xs font-bold text-white truncate">Coming Soon</p>
+                  <p className="text-xs font-bold text-[#171421] dark:text-white truncate">Coming Soon</p>
                 </div>
               </div>
             </div>
@@ -1616,12 +1620,12 @@ export default function TopNavbar() {
         {/* Our Story - TOP */}
         <div className="rounded-[1.25rem] bg-gradient-to-br from-primary/15 to-[#ff6a3d]/10 border border-primary/20 p-4">
           <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Our Story</p>
-          <p className="text-[12px] font-medium leading-relaxed text-white">
+          <p className="text-[12px] font-medium leading-relaxed text-[#171421] dark:text-white">
             It all started while scrolling through Instagram. I would see a breathtaking AI-generated image,
             but getting the prompt was a constant struggle because you had to follow the creator, leave a comment,
             and wait for an automated link that either never arrived or was completely broken.
           </p>
-          <p className="mt-2 text-[12px] font-medium leading-relaxed text-white">
+          <p className="mt-2 text-[12px] font-medium leading-relaxed text-[#171421] dark:text-white">
             Frustrated by this endless gatekeeping, I built Promptro: a beautifully curated, completely open
             space where anyone can instantly copy high-quality prompts for ChatGPT, Gemini, and other popular
             AI tools, with no barriers or paywalls. It is just pure creativity, free for everyone.
@@ -1635,8 +1639,8 @@ export default function TopNavbar() {
               <span className="text-sm font-black text-white">MA</span>
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#E2E8F0]">Founder &amp; Developer</p>
-              <p className="text-sm font-bold text-white truncate">Mohammad Asad Ansari</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#242033] dark:text-[#E2E8F0]">Founder &amp; Developer</p>
+              <p className="text-sm font-bold text-[#171421] dark:text-white truncate">Mohammad Asad Ansari</p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -1657,7 +1661,7 @@ export default function TopNavbar() {
         <div className="grid grid-cols-2 gap-2">
           {stats.map((stat, i) => (
             <div key={i} className="rounded-[1.15rem] liquid-glass-card p-3 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#E2E8F0]">{stat.label}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#242033] dark:text-[#E2E8F0]">{stat.label}</p>
               <span className={`mt-1 block text-base font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                 {stat.value}
               </span>
@@ -1668,7 +1672,7 @@ export default function TopNavbar() {
         {/* Mission */}
         <div className="rounded-[1.25rem] liquid-glass-card p-4">
           <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">Mission</p>
-          <p className="text-[12px] font-medium leading-relaxed text-white">
+          <p className="text-[12px] font-medium leading-relaxed text-[#171421] dark:text-white">
             Help creators discover, save and share high-quality AI prompts — for free, forever.
           </p>
         </div>
@@ -1684,20 +1688,20 @@ export default function TopNavbar() {
             <Instagram className="h-4.5 w-4.5 text-white" />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#E2E8F0]">Instagram</p>
-            <p className="text-sm font-bold text-white">@promptro.in</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#242033] dark:text-[#E2E8F0]">Instagram</p>
+            <p className="text-sm font-bold text-[#171421] dark:text-white">@promptro.in</p>
           </div>
-          <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-white" />
+          <ArrowUpRight className="ml-auto h-4 w-4 shrink-0 text-[#171421] dark:text-white" />
         </a>
 
         {/* Coming Soon Features */}
         <div className="rounded-[1.25rem] liquid-glass-card p-4">
-          <p className="text-[10px] font-black uppercase tracking-widest text-[#E2E8F0] mb-3">Coming Soon ✨</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#171421] dark:text-[#E2E8F0] mb-3">Coming Soon ✨</p>
           <div className="flex flex-col gap-1.5">
             {comingSoon.map((feature) => (
               <div key={feature} className="flex items-center gap-2">
                 <div className="h-1.5 w-1.5 rounded-full bg-primary/50 shrink-0" />
-                <p className="text-[12px] font-bold text-white">{feature}</p>
+                <p className="text-[12px] font-bold text-[#171421] dark:text-white">{feature}</p>
                 <span className="ml-auto text-[9px] font-bold uppercase tracking-wider text-primary/80 bg-primary/15 px-1.5 py-0.5 rounded-full">Soon</span>
               </div>
             ))}
@@ -1705,8 +1709,8 @@ export default function TopNavbar() {
         </div>
 
         {/* Version */}
-        <div className="rounded-[1rem] bg-white/10 py-2 px-4 text-center border border-white/15">
-          <span className="text-[8px] font-bold uppercase tracking-widest text-white/80">
+        <div className="rounded-[1rem] bg-black/5 dark:bg-white/10 py-2 px-4 text-center border border-black/10 dark:border-white/15">
+          <span className="text-[8px] font-bold uppercase tracking-widest text-[#5f5774] dark:text-white/80">
             Promptro v1.1.0 • © 2026
           </span>
         </div>
@@ -2041,13 +2045,13 @@ export default function TopNavbar() {
                     transition={{ duration: 0.18 }}
                     className="flex min-h-0 flex-1 flex-col"
                   >
-                    <div className="mb-2 md:mb-3 shrink-0 mx-3 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/35 dark:bg-white/[0.07] border border-white/45 dark:border-white/10 p-3.5 md:p-4.5 shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow touch-none">
+                    <div className="mb-2 md:mb-3 shrink-0 mx-3 rounded-[0.85rem] md:rounded-[1.15rem] bg-white/75 dark:bg-white/[0.07] border border-white/80 dark:border-white/10 p-3.5 md:p-4.5 shadow-[0_4px_16px_rgba(72,56,118,0.06)] dark:shadow-[0_12px_24px_rgba(72,56,118,0.08)] backdrop-blur-2xl glass-shine hover-glass-glow touch-none">
                       <div className="flex items-start gap-2 text-left">
                         <div className="min-w-0 w-full">
-                          <p className="text-[9px] md:text-[10px] font-medium uppercase tracking-normal text-[#8b5cf6]">Profile</p>
-                          <p className="mt-0.5 truncate text-[13px] md:text-[15px] font-bold leading-tight text-[#171421]">{displayName}</p>
+                          <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-normal text-primary">Profile</p>
+                          <p className="mt-0.5 truncate text-[13px] md:text-[15px] font-black leading-tight text-[#171421] dark:text-white">{displayName}</p>
                           <div className="flex flex-wrap items-center gap-1.5 mt-0.5 min-w-0">
-                            <p className="truncate text-[10px] md:text-[11px] font-medium text-[#5f5774]">{displayEmail}</p>
+                            <p className="truncate text-[10px] md:text-[11px] font-semibold text-[#242033] dark:text-[#cbd5e1]">{displayEmail}</p>
                             {isLoggedIn && backendEmailVerified && (
                               <span className="inline-flex items-center text-emerald-500 ml-1">
                                 <BadgeCheck className="h-3.5 w-3.5" />
@@ -2068,46 +2072,46 @@ export default function TopNavbar() {
                             e.stopPropagation();
                             handleDrawerAction(item.action);
                           }}
-                          className={`group flex w-full shrink-0 items-center gap-2 md:gap-3 rounded-[0.85rem] md:rounded-[1.15rem] px-3.5 py-3 md:px-5 md:py-4.5 text-left backdrop-blur-xl transition-all duration-300 glass-shine hover-glass-glow ${item.action === 'delete-account'
-                              ? 'bg-[#fff4f8]/72 border border-rose-500/20 hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
-                              : 'bg-white/35 dark:bg-white/[0.07] border border-white/45 dark:border-white/10 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover:bg-gradient-to-r hover:from-primary/8 hover:to-secondary/8 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)]'
+                          className={`group flex w-full shrink-0 items-center gap-2 md:gap-3 rounded-[0.85rem] md:rounded-[1.15rem] px-3.5 py-3 md:px-5 md:py-4.5 text-left backdrop-blur-xl transition-all duration-300 glass-shine hover-glass-glow cursor-pointer ${item.action === 'delete-account'
+                              ? 'bg-[#fff4f8]/85 border border-rose-500/20 hover:bg-[#fff8fb] dark:bg-[#f23672]/12 dark:hover:bg-[#f23672]/18'
+                              : 'bg-white/70 dark:bg-white/[0.07] border border-white/80 dark:border-white/10 shadow-[0_4px_16px_rgba(72,56,118,0.06)] hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] dark:hover:from-primary/12 dark:hover:to-secondary/12 dark:hover:border-primary/50 dark:hover:shadow-[0_0_25px_rgba(139,92,246,0.25)]'
                             }`}
                         >
                           <span className="flex h-6.5 w-6.5 md:h-8 md:w-8 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[6deg] text-primary">
                             <item.icon className="h-3.5 w-3.5 md:h-4 md:w-4" />
                           </span>
                           <div className="min-w-0 flex-1 flex flex-col justify-center">
-                            <span className={`block truncate text-[11px] md:text-[12px] font-medium leading-tight ${item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#242033] dark:text-white'
+                            <span className={`block truncate text-[11px] md:text-[12px] font-bold leading-tight ${item.action === 'delete-account' ? 'text-[#f23672]' : 'text-[#171421] dark:text-white'
                               }`}>{item.title}</span>
-                            <span className="mt-0.5 block line-clamp-2 text-[9px] md:text-[10px] font-medium leading-snug text-[#5f5774]">
+                            <span className="mt-0.5 block line-clamp-2 text-[9px] md:text-[10px] font-medium leading-snug text-[#242033] dark:text-[#cbd5e1]">
                               {item.action === 'appearance' ? `${item.description} (${appearanceMode})` : item.description}
                             </span>
                           </div>
                           {item.action !== 'appearance' && item.action !== 'delete-account' && (
-                            <ChevronRight className="h-3.5 w-3.5 shrink-0 text-[#80779a]" />
+                            <ChevronRight className="h-3.5 w-3.5 shrink-0 text-[#171421] dark:text-white/80" />
                           )}
                         </button>
                       ))}
                       {/* Mobile Footer (visible only on mobile, placed inside scroll container to stay close to buttons) */}
                       {windowWidth < 768 && (
                         <div className="pt-12 pb-2 mt-8 text-center touch-none">
-                          <div className="flex items-center justify-center gap-1 text-[9px] font-semibold text-white">
+                          <div className="flex items-center justify-center gap-1 text-[9px] font-semibold text-[#171421] dark:text-white">
                             Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                           </div>
-                          <p className="mt-0.5 text-[9px] font-medium text-white/90">v1.1.0</p>
+                          <p className="mt-0.5 text-[9px] font-medium text-[#242033] dark:text-white/90">v1.1.0</p>
                         </div>
                       )}
                     </div>
 
                     {/* Quick Stats Section */}
-                    <div className="hidden md:block shrink-0 mt-3 mb-3 mx-3 rounded-[1.15rem] bg-white/62 dark:bg-white/5 border border-white/45 dark:border-white/10 p-3 shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover-glass-glow touch-none">
+                    <div className="hidden md:block shrink-0 mt-3 mb-3 mx-3 rounded-[1.15rem] bg-white/75 dark:bg-white/5 border border-white/80 dark:border-white/10 p-3 shadow-[0_4px_16px_rgba(72,56,118,0.06)] dark:shadow-[0_12px_24px_rgba(72,56,118,0.08)] hover-glass-glow touch-none">
                       <p className="text-[9px] font-black uppercase tracking-widest text-primary mb-2.5 text-left">Quick Stats ⚡</p>
                       <div className="grid grid-cols-3 gap-2">
                         <div className="flex flex-col items-center justify-center py-1">
                           <span className="text-sm font-black text-[#171421] dark:text-white">
                             {promptCount > 0 ? `${promptCount}+` : '...'}
                           </span>
-                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#0A0910] dark:text-white mt-0.5">Total</span>
+                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#171421] dark:text-white mt-0.5">Total</span>
                         </div>
                         
                         <button
@@ -2122,7 +2126,7 @@ export default function TopNavbar() {
                           <span className="text-sm font-black text-[#171421] dark:text-white hover:text-primary transition-colors">
                             {savedCount}
                           </span>
-                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#0A0910] dark:text-white mt-0.5">Saved</span>
+                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#171421] dark:text-white mt-0.5">Saved</span>
                         </button>
                         
                         <button
@@ -2137,17 +2141,17 @@ export default function TopNavbar() {
                           <span className="text-sm font-black text-[#171421] dark:text-white hover:text-primary transition-colors">
                             {collectionsCount}
                           </span>
-                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#0A0910] dark:text-white mt-0.5">Collections</span>
+                          <span className="text-[8px] font-bold uppercase tracking-wider text-[#171421] dark:text-white mt-0.5">Collections</span>
                         </button>
                       </div>
                     </div>
 
                     {windowWidth >= 768 && (
                       <div className="shrink-0 pt-1.5 md:pt-3 mb-4 md:mb-0 text-center touch-none">
-                        <div className="flex items-center justify-center gap-1 text-[9px] md:text-[10px] font-semibold text-white">
+                        <div className="flex items-center justify-center gap-1 text-[9px] md:text-[10px] font-semibold text-[#171421] dark:text-white">
                           Made with <Heart className="h-3.5 w-3.5 fill-[#ff3f5f] text-[#ff3f5f]" /> by <span className="font-bold text-primary">Promptro</span>
                         </div>
-                        <p className="mt-0.5 md:mt-1.5 text-[9px] md:text-[10px] font-medium text-white/90">v1.1.0</p>
+                        <p className="mt-0.5 md:mt-1.5 text-[9px] md:text-[10px] font-medium text-[#242033] dark:text-white/90">v1.1.0</p>
                       </div>
                     )}
                   </motion.div>
