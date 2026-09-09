@@ -87,6 +87,7 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [qualityModalOpen, setQualityModalOpen] = useState(false);
+  const [badgeAnchorRect, setBadgeAnchorRect] = useState<DOMRect | null>(null);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
   const [shared, setShared] = useState(false);
@@ -432,6 +433,8 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            const rect = e.currentTarget.getBoundingClientRect();
+            setBadgeAnchorRect(rect);
             setQualityModalOpen(true);
           }}
           title="Click to view AI Quality Rating details"
@@ -541,6 +544,7 @@ function ImageCard({ prompt, aspectRatio, priority }: ImageCardProps) {
         isOpen={qualityModalOpen}
         onClose={() => setQualityModalOpen(false)}
         prompt={prompt}
+        anchorRect={badgeAnchorRect}
       />
     </>
   );

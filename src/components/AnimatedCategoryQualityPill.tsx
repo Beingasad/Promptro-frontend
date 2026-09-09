@@ -59,6 +59,7 @@ const stopPillTimer = () => {
 export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md' }: AnimatedCategoryQualityPillProps) => {
   const [frameIndex, setFrameIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null);
 
   const score = prompt.final_quality_score;
   const getTopPercentile = (s: number) => {
@@ -139,6 +140,8 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
+          const rect = e.currentTarget.getBoundingClientRect();
+          setAnchorRect(rect);
           setIsModalOpen(true);
         }}
         title="Click to view AI Quality Rating & Tier details"
@@ -194,6 +197,7 @@ export const AnimatedCategoryQualityPill = ({ prompt, className = '', size = 'md
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         prompt={prompt}
+        anchorRect={anchorRect}
       />
     </>
   );
