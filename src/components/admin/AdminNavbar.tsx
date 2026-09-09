@@ -172,36 +172,36 @@ export function AdminNavbar({ isSidebarOpen, onToggleSidebar, activeTab }: Admin
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="fixed sm:absolute top-[72px] sm:top-auto left-1/2 sm:left-auto right-auto sm:right-0 -translate-x-1/2 sm:translate-x-0 mt-3 w-[calc(100vw-32px)] sm:w-80 max-w-[340px] rounded-3xl shadow-2xl overflow-hidden z-50 modal-glass"
+                  className="fixed sm:absolute top-[72px] sm:top-auto left-1/2 sm:left-auto right-auto sm:right-0 -translate-x-1/2 sm:translate-x-0 mt-3 w-[calc(100vw-32px)] sm:w-80 max-w-[340px] rounded-3xl overflow-hidden z-50 notification-panel-glass"
                 >
-                  <div className="p-5 border-b border-[#e9e2f3] dark:border-white/10 flex items-center justify-between">
-                    <h3 className="font-bold">Notifications</h3>
+                  <div className="p-4 border-b border-white/10 flex items-center justify-between">
+                    <h3 className="font-bold text-sm text-white">Notifications</h3>
                     {hasUnread && (
-                      <button onClick={handleMarkAllRead} className="text-[10px] font-bold text-primary uppercase hover:opacity-80 transition-opacity">
+                      <button onClick={handleMarkAllRead} className="text-[10px] font-bold text-white uppercase hover:opacity-80 transition-opacity bg-primary/40 px-2 py-0.5 rounded-full border border-primary/40">
                         Mark all read
                       </button>
                     )}
                   </div>
                   <div className="flex flex-col max-h-[350px] overflow-y-auto">
                     {notifications.map((n) => (
-                      <div key={n.id} className="p-4 flex items-start gap-3 hover:bg-[#f8f7fc] dark:hover:bg-white/5 transition-colors cursor-pointer border-b border-[#e9e2f3] dark:border-white/10 last:border-0">
+                      <div key={n.id} className="p-3.5 flex items-start gap-3 hover:bg-white/10 transition-colors cursor-pointer border-b border-white/5 last:border-0">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                          n.type === 'warning' ? 'bg-amber-500/10 text-amber-500' : 
-                          n.type === 'feedback' ? 'bg-primary/10 text-primary' :
-                          n.type === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'
+                          n.type === 'warning' ? 'bg-amber-500/20 text-white' : 
+                          n.type === 'feedback' ? 'bg-primary/30 text-white' :
+                          n.type === 'success' ? 'bg-green-500/20 text-white' : 'bg-blue-500/20 text-white'
                         }`}>
-                          {n.type === 'warning' ? <AlertCircle className="w-4 h-4" /> : 
-                           n.type === 'feedback' ? <MessageSquare className="w-4 h-4" /> :
-                           <CheckCircle2 className="w-4 h-4" />}
+                          {n.type === 'warning' ? <AlertCircle className="w-4 h-4 text-white" /> : 
+                           n.type === 'feedback' ? <MessageSquare className="w-4 h-4 text-white" /> :
+                           <CheckCircle2 className="w-4 h-4 text-white" />}
                         </div>
                         <div className="flex-grow min-w-0">
                           <div className="flex items-start justify-between gap-2">
-                            <p className="text-xs font-bold text-[#171421] dark:text-white leading-tight break-words">{n.text}</p>
+                            <p className="text-xs font-bold text-white leading-tight break-words">{n.text}</p>
                             {n.status === 'unread' && (
                               <span className="w-2 h-2 rounded-full bg-primary shrink-0 mt-1" title="Unread" />
                             )}
                           </div>
-                          <p className="text-[10px] text-[#756d8d] mt-1.5 font-medium">{n.time}</p>
+                          <p className="text-[10px] text-white/80 mt-1 font-medium">{n.time}</p>
                         </div>
                       </div>
                     ))}

@@ -2170,27 +2170,27 @@ export default function TopNavbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setNotificationsOpen(false)}
-              className="fixed inset-0 z-[110] bg-black/5 backdrop-blur-[3px] cursor-default pointer-events-auto touch-none"
+              className="fixed inset-0 z-[110] bg-transparent cursor-default pointer-events-auto touch-none"
             />
             <motion.div
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] p-3.5 profile-modal-glass shadow-[0_22px_54px_rgba(72,56,118,0.18)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_rgba(0,0,0,0.35)]"
+              className="fixed right-4 top-[4.2rem] md:right-20 md:top-[5.1rem] z-[120] w-[calc(100vw-2rem)] md:w-[20rem] max-w-sm md:max-w-none rounded-[1.45rem] p-3.5 notification-panel-glass"
             >
-              <div className="mb-2 flex items-center justify-between gap-3 touch-none">
+              <div className="mb-2.5 flex items-center justify-between gap-3 touch-none">
                 <button
                   type="button"
                   onClick={() => setNotificationsOpen(false)}
                   className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
                   aria-label="Back"
                 >
-                  <ArrowLeft className="h-4 w-4" />
+                  <ArrowLeft className="h-4 w-4 text-white" />
                 </button>
-                <h3 className="flex-1 text-sm font-bold text-white uppercase tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">Notifications</h3>
-                <span className="rounded-full bg-primary/30 px-2.5 py-1 text-[11px] font-extrabold text-white border border-primary/40 shadow-sm">{notifications.length} NEW</span>
+                <h3 className="flex-1 text-sm font-bold text-white uppercase tracking-wider">Notifications</h3>
+                <span className="rounded-full bg-primary/40 px-2.5 py-0.5 text-[11px] font-extrabold text-white border border-primary/40 shadow-sm">{notifications.length} NEW</span>
               </div>
-              <div className="flex flex-col gap-1 max-h-[224px] overflow-y-auto overscroll-contain pr-1 hide-scrollbar">
+              <div className="flex flex-col gap-1 max-h-[260px] overflow-y-auto overscroll-contain pr-1 hide-scrollbar">
                 {notifications.length > 0 ? (
                   notifications.map((notif) => (
                     <button
@@ -2203,21 +2203,21 @@ export default function TopNavbar() {
                         }
                         setNotificationsOpen(false);
                       }}
-                      className="flex w-full items-start gap-3 rounded-2xl px-3 py-3 text-left transition-all hover:bg-white/10 group"
+                      className="flex w-full items-start gap-3 rounded-2xl px-3 py-2.5 text-left transition-all hover:bg-white/10 group"
                     >
-                      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/25 text-white border border-primary/35 transition-transform group-hover:scale-110 shadow-sm">
-                        <CheckCircle2 className="h-4 w-4" />
+                      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/30 text-white border border-primary/40 transition-transform group-hover:scale-110 shadow-sm">
+                        <CheckCircle2 className="h-4 w-4 text-white" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-[13px] font-bold text-white leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">{notif.text}</p>
-                        <p className="mt-1 text-[10px] font-medium text-white/80 uppercase tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]">Just now</p>
+                        <p className="text-[13px] font-bold text-white leading-tight">{notif.text}</p>
+                        <p className="mt-1 text-[10px] font-medium text-white/80 uppercase tracking-wider">Just now</p>
                       </div>
                     </button>
                   ))
                 ) : (
                   <div className="py-8 text-center">
-                    <Bell className="mx-auto h-8 w-8 text-white/60 mb-3" />
-                    <p className="text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">No new notifications</p>
+                    <Bell className="mx-auto h-8 w-8 text-white/70 mb-3" />
+                    <p className="text-sm font-bold text-white">No new notifications</p>
                   </div>
                 )}
               </div>

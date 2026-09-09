@@ -1219,6 +1219,43 @@
     mix-blend-mode: screen;
   }
 
+  /* Authentic Liquid Glass: Notification Panel (matches BottomNav liquid glass) */
+  .notification-panel-glass {
+    position: relative;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.05) 45%,
+      rgba(18, 14, 28, 0.28) 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 
+      inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35),
+      0 8px 32px 0 rgba(0, 0, 0, 0.12) !important;
+    color: #ffffff !important;
+  }
+
+  .notification-panel-glass,
+  .notification-panel-glass * {
+    color: #ffffff !important;
+  }
+
+  [data-theme="dark"] .notification-panel-glass {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(255, 255, 255, 0.03) 45%,
+      rgba(14, 10, 22, 0.45) 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.18),
+      0 12px 36px 0 rgba(0, 0, 0, 0.24) !important;
+  }
+
   /* Liquid Glass: Floating Popovers & Side Panels */
   .profile-modal-glass {
     position: relative;
