@@ -205,6 +205,7 @@ export default function Admin() {
   const [selectedPromptsForCampaign, setSelectedPromptsForCampaign] = useState<string[]>([]);
   const [isLaunching, setIsLaunching] = useState(false);
   const [uploadingCatId, setUploadingCatId] = useState<number | null>(null);
+  const [newCatName, setNewCatName] = useState('');
   const [newCatImagePreview, setNewCatImagePreview] = useState<string>('');
   const [newCatImageFile, setNewCatImageFile] = useState<File | null>(null);
   const [editingCategory, setEditingCategory] = useState<any | null>(null);
@@ -245,6 +246,44 @@ export default function Admin() {
       localStorage.setItem('promptro:system_logs', JSON.stringify(updated));
       return updated;
     });
+  };
+
+  const handleCreateCategory = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const name = newCatName.trim();
+    if (!name) {
+      alert("Please enter a category name");
+      return;
+    }
+
+    setUploadingCatId(-1);
+    setUploadingCatText('Creating...');
+    try {
+      let file = newCatImageFile;
+      if (file) {
+        setUploadingCatText('Optimizing...');
+        try {
+          file = await compressImage(file);
+        } catch (compressErr: any) {
+          alert(compressErr.message || 'Image optimization failed.');
+          setUploadingCatId(null);
+          return;
+        }
+        setUploadingCatText('Uploading...');
+      }
+
+      await addCategory(name, file || undefined);
+      addLog('Category Created', 'Admin', `Successfully created category "${name}"`, 'Success');
+      setNewCatName('');
+      setNewCatImageFile(null);
+      setNewCatImagePreview('');
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.detail || err.message || "Failed to create category";
+      addLog('Category Creation Failed', 'Admin', `Failed to create category "${name}": ${errorMsg}`, 'Failed');
+      alert(`Failed to create category: ${errorMsg}`);
+    } finally {
+      setUploadingCatId(null);
+    }
   };
 
   const handleUpdateCategory = async (e: React.FormEvent) => {
@@ -1000,6 +1039,10 @@ export default function Admin() {
 
   const removeGalleryImage = (id: string) => {
     setGalleryItems(prev => {
+      const idx = prev.findIndex(item => item.id === id);
+      if (idx !== -1) {
+        setMultiPrompts(p => p.filter((_, i) => i !== idx));
+      }
       const updated = prev.filter(item => item.id !== id);
       const removed = prev.find(item => item.id === id);
       if (removed && removed.url.startsWith('blob:')) {
@@ -1010,6 +1053,13 @@ export default function Admin() {
   };
 
   const setGalleryImagePrimary = (index: number) => {
+    setMultiPrompts(p => {
+      if (index <= 0 || index >= p.length) return p;
+      const copy = [...p];
+      const [moved] = copy.splice(index, 1);
+      copy.unshift(moved);
+      return copy;
+    });
     setGalleryItems(prev => {
       if (index <= 0 || index >= prev.length) return prev;
       const updated = [...prev];
@@ -2622,77 +2672,24 @@ export default function Admin() {
                     </label>
                     <input 
                       id="new-category-input"
+                      value={newCatName}
+                      onChange={(e) => setNewCatName(e.target.value)}
                       placeholder={uploadingCatId === -1 ? uploadingCatText : "Category name..."}
                       disabled={uploadingCatId !== null}
                       className="bg-transparent border-none outline-none px-2 sm:px-4 py-2 text-sm font-medium flex-1 min-w-0 sm:w-48 text-[#171421] dark:text-white placeholder-[#8c84a6] disabled:opacity-50"
-                      onKeyDown={async (e) => {
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          const input = e.currentTarget;
-                          if (input.value) {
-                            const name = input.value;
-                            input.value = '';
-                            let file = newCatImageFile;
-                            setNewCatImageFile(null);
-                            setNewCatImagePreview('');
-                            try {
-                              if (file) {
-                                setUploadingCatId(-1);
-                                setUploadingCatText('Optimizing...');
-                                try {
-                                  file = await compressImage(file);
-                                } catch (compressErr: any) {
-                                  alert(compressErr.message || 'Image optimization failed.');
-                                  setUploadingCatId(null);
-                                  return;
-                                }
-                                setUploadingCatText('Uploading...');
-                              }
-                              await addCategory(name, file || undefined);
-                              addLog('Category Created', 'Admin', `Successfully created category "${name}"`, 'Success');
-                            } catch (err) {
-                              addLog('Category Creation Failed', 'Admin', `Failed to create category "${name}"`, 'Failed');
-                              alert("Failed to create category");
-                            } finally {
-                              setUploadingCatId(null);
-                            }
-                          }
+                          e.preventDefault();
+                          handleCreateCategory();
                         }
                       }}
                     />
                     <button 
-                      onClick={async () => {
-                        const input = document.getElementById('new-category-input') as HTMLInputElement;
-                        if (input && input.value) {
-                          const name = input.value;
-                          input.value = '';
-                          let file = newCatImageFile;
-                          setNewCatImageFile(null);
-                          setNewCatImagePreview('');
-                          try {
-                            if (file) {
-                              setUploadingCatId(-1);
-                              setUploadingCatText('Optimizing...');
-                              try {
-                                file = await compressImage(file);
-                              } catch (compressErr: any) {
-                                alert(compressErr.message || 'Image optimization failed.');
-                                setUploadingCatId(null);
-                                return;
-                              }
-                              setUploadingCatText('Uploading...');
-                            }
-                            await addCategory(name, file || undefined);
-                            addLog('Category Created', 'Admin', `Successfully created category "${name}"`, 'Success');
-                          } catch (err) {
-                            addLog('Category Creation Failed', 'Admin', `Failed to create category "${name}"`, 'Failed');
-                            alert("Failed to create category");
-                          } finally {
-                            setUploadingCatId(null);
-                          }
-                        }
-                      }}
+                      type="button"
+                      onClick={() => handleCreateCategory()}
                       disabled={uploadingCatId !== null}
                       className="p-2.5 rounded-xl bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105 transition-transform disabled:opacity-50"
+                      title="Create Category"
                     >
                       {uploadingCatId === -1 ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
                     </button>
@@ -3864,14 +3861,68 @@ export default function Admin() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-bold">Prompt</label>
-                    <textarea 
-                      value={form.prompt_text}
-                      onChange={(e) => updateForm('prompt_text', e.target.value)}
-                      rows={5}
-                      className="glass-input resize-none"
-                    />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-bold text-[#171421] dark:text-white">Prompt(s)</label>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-[#756d8d] dark:text-[#a09bb3]">Multiple Prompts</span>
+                        <div 
+                          onClick={() => {
+                            const newMode = !isMultiPromptMode;
+                            setIsMultiPromptMode(newMode);
+                            if (newMode) {
+                              setMultiPrompts(galleryItems.map((_, i) => multiPrompts[i] || form.prompt_text));
+                            }
+                          }}
+                          className={`w-10 h-5 rounded-full p-1 cursor-pointer transition-colors relative ${isMultiPromptMode ? 'bg-primary' : 'bg-[#e9e2f3] dark:bg-white/10'}`}
+                        >
+                          <div className={`w-3.5 h-3.5 rounded-full bg-white shadow-sm transition-transform ${isMultiPromptMode ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {!isMultiPromptMode ? (
+                      <div className="relative">
+                        <textarea 
+                          value={form.prompt_text}
+                          onChange={(e) => updateForm('prompt_text', e.target.value)}
+                          placeholder="Enter your main prompt..."
+                          rows={5}
+                          className="glass-input resize-none w-full"
+                          required
+                        />
+                        <span className="absolute bottom-4 right-5 text-[10px] font-bold opacity-30">{form.prompt_text.length} / 2000</span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-4">
+                        {galleryItems.length === 0 && (
+                          <div className="p-4 rounded-xl border border-dashed border-primary/30 bg-primary/5 text-sm text-center text-primary/70">
+                            Add images to assign specific prompts to each image.
+                          </div>
+                        )}
+                        {galleryItems.map((item, index) => (
+                          <div key={item.id || index} className="relative flex gap-3 p-3 rounded-xl border border-[#e9e2f3] dark:border-white/10 bg-white/30 dark:bg-black/10">
+                            <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-white/20">
+                              <img src={item.url} alt={`Preview ${index}`} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex-1 relative">
+                              <textarea 
+                                value={multiPrompts[index] || ''}
+                                onChange={(e) => {
+                                  const newPrompts = [...multiPrompts];
+                                  newPrompts[index] = e.target.value;
+                                  setMultiPrompts(newPrompts);
+                                }}
+                                placeholder={`Enter prompt for image ${index + 1}...`}
+                                rows={3}
+                                className="glass-input p-3 text-sm resize-none w-full"
+                                required
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-1.5">

@@ -74,14 +74,13 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   const addCategory = async (name: string, image?: File) => {
     try {
       const formData = new FormData();
-      formData.append('name', name);
+      formData.append('name', name.trim());
       if (image) formData.append('image', image);
 
       await axios.post(API_URL, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
         timeout: 120000
       });
-      fetchCategories();
+      await fetchCategories();
     } catch (error) {
       console.error('Failed to add category', error);
       throw error;
@@ -91,7 +90,7 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   const deleteCategory = async (id: number) => {
     try {
       await axios.delete(`${API_URL}/${id}`);
-      fetchCategories();
+      await fetchCategories();
     } catch (error) {
       console.error('Failed to delete category', error);
       throw error;
@@ -101,14 +100,13 @@ export function CategoryProvider({ children }: { children: React.ReactNode }) {
   const updateCategory = async (id: number, name: string, image?: File) => {
     try {
       const formData = new FormData();
-      formData.append('name', name);
+      formData.append('name', name.trim());
       if (image) formData.append('image', image);
 
       await axios.put(`${API_URL}/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
         timeout: 120000
       });
-      fetchCategories();
+      await fetchCategories();
     } catch (error) {
       console.error('Failed to update category', error);
       throw error;
