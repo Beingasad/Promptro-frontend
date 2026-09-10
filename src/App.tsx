@@ -18,6 +18,7 @@ import ImageDetail from './pages/ImageDetail';
 import Profile from './pages/Profile';
 
 // Lazy-load non-core pages for code splitting
+const StyleMixer = lazy(() => import('./pages/StyleMixer'));
 const Auth = lazy(() => import('./pages/Auth'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
@@ -56,6 +57,7 @@ function App() {
                   <Route path="saved" element={<Saved />} />
                   <Route path="collections" element={<Collections />} />
                   <Route path="categories" element={<Categories />} />
+                  <Route path="style-mixer" element={<StyleMixer />} />
                   <Route path="prompt/:id" element={<ImageDetail />} />
                   <Route path="auth" element={<Auth />} />
                   <Route path="profile" element={<Profile />} />

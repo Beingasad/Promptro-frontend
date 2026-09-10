@@ -270,6 +270,7 @@ export default function MainLayout() {
     location.pathname === '/terms';
   const isBlog = location.pathname === '/blog' || location.pathname.startsWith('/blog/');
   const isAuth = location.pathname === '/auth';
+  const isStyleMixer = location.pathname === '/style-mixer';
   const showPageSearch = location.pathname === '/explore' || location.pathname === '/saved';
   const showPageBack = !isHome && !isPromptDetail && !isAuth;
   const showBottomNav = 
@@ -278,8 +279,10 @@ export default function MainLayout() {
     location.pathname === '/saved' ||
     location.pathname === '/collections' ||
     location.pathname === '/categories';
-  const pagePillLabel = location.pathname === '/categories'
-    ? 'Prompt worlds'
+  const pagePillLabel = location.pathname === '/style-mixer'
+    ? 'AI Style Mixer'
+    : location.pathname === '/categories'
+      ? 'Prompt worlds'
     : location.pathname === '/explore'
       ? 'Explore prompts'
       : location.pathname === '/saved'
@@ -332,23 +335,29 @@ export default function MainLayout() {
 
       <main 
         style={isHome && isMobile ? { paddingTop: `${navbarHeight}px` } : undefined}
-        className={`flex-grow relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 ${
-          isAuth 
-            ? 'flex min-h-svh items-center py-3 sm:py-4' 
-            : isPromptDetail 
-              ? 'pt-5 pb-8' 
-              : isHome 
-                ? 'pb-6 md:pt-[84px] md:pb-10' 
-                : showPageSearch
-                  ? 'pt-[78px] pb-6 md:pt-[84px] md:pb-10'
-                  : 'pt-[68px] pb-6 md:pt-[72px] md:pb-10'
+        className={`flex-grow relative z-10 w-full ${
+          isStyleMixer
+            ? 'max-w-none px-2 sm:px-3 md:px-4 lg:px-6 pt-[54px] sm:pt-[58px] md:pt-[60px] pb-2'
+            : isAuth 
+              ? 'max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex min-h-svh items-center py-3 sm:py-4' 
+              : isPromptDetail 
+                ? 'max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-8' 
+                : isHome 
+                  ? 'max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pb-6 md:pt-[84px] md:pb-10' 
+                  : showPageSearch
+                    ? 'max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-[78px] pb-6 md:pt-[84px] md:pb-10'
+                    : 'max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-[68px] pb-6 md:pt-[72px] md:pb-10'
         }`}
       >
         <Outlet />
       </main>
 
       {!isAuth && (
-        <footer className={`relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 border-t border-white/5 pt-8 ${showBottomNav ? 'pb-24 md:pb-32' : 'pb-6 md:pb-8'}`}>
+        <footer className={`relative z-10 w-full ${
+          isStyleMixer
+            ? 'max-w-none px-4 sm:px-6 lg:px-8 mt-3 sm:mt-4 border-t border-white/10 dark:border-white/5 pt-3 sm:pt-4 pb-4 md:pb-5'
+            : `max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mt-10 border-t border-white/5 pt-8 ${showBottomNav ? 'pb-24 md:pb-32' : 'pb-6 md:pb-8'}`
+        }`}>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex flex-col items-center md:items-start gap-1">
               <p className="text-xs font-medium text-[#8d86a0]/70">

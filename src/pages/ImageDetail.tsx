@@ -327,6 +327,12 @@ export default function ImageDetail() {
     setTimeout(() => setCopiedNegative(false), 1800);
   };
 
+  const handleRemixPrompt = () => {
+    navigate('/style-mixer', {
+      state: { idea: promptText }
+    });
+  };
+
   const toggleSave = (event: React.MouseEvent) => {
     if (!prompt) return;
 
@@ -658,6 +664,19 @@ export default function ImageDetail() {
             </motion.div>
           </AnimatePresence>
         </motion.div>
+
+        {/* Remix Prompt in AI Style Mixer */}
+        <div className="flex items-center justify-start pt-0.5">
+          <button
+            type="button"
+            onClick={handleRemixPrompt}
+            className="mixer-cta-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-md cursor-pointer transition-all hover:scale-105 active:scale-95"
+            aria-label="Remix This Prompt"
+          >
+            <Sparkles className="w-4 h-4 text-yellow-300" />
+            <span>✨ Remix This Prompt</span>
+          </button>
+        </div>
       </section>
 
       {negativePrompt && (

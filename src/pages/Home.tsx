@@ -9,6 +9,7 @@ import { Flame, ChevronRight, Star } from 'lucide-react';
 import { useSearch } from '../context/SearchContext';
 import HomeBanners from '../components/HomeBanners';
 import MobileHeroCarousel from '../components/MobileHeroCarousel';
+import AIStyleMixerBanner from '../components/AIStyleMixerBanner';
 import { useCategories } from '../context/CategoryContext';
 import SEOMeta from '../components/common/SEOMeta';
 import { GridSkeleton } from '../components/common/Skeleton';
@@ -231,6 +232,9 @@ export default function Home() {
 
         <HomeBanners prompts={prompts} promptsLoading={loading} />
       </section>
+
+      {/* AI Style Mixer Section */}
+      <AIStyleMixerBanner />
 
       <div className="w-full">
         {loading ? (
