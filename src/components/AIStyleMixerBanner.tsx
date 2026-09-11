@@ -151,26 +151,30 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                   className="group relative overflow-hidden lg:hidden cursor-pointer mt-1.5 sm:mt-2.5 inline-flex items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-[12.5px] font-black px-3.5 py-1.5 sm:py-2 w-full max-w-[250px] sm:max-w-[310px] md:max-w-[360px] rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 outline-none
                     backdrop-blur-xl
                     bg-gradient-to-r from-purple-500/18 via-pink-500/16 to-amber-500/20
-                    dark:from-purple-500/28 dark:via-pink-500/22 dark:to-orange-500/26
                     hover:from-purple-500/30 hover:via-pink-500/25 hover:to-amber-500/30
-                    border border-purple-400/40 dark:border-purple-400/30
+                    border border-purple-400/40
                     shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.7),0_4px_14px_-2px_rgba(168,85,247,0.22)]
                     hover:shadow-[inset_0_1.5px_1px_0_rgba(255,255,255,0.85),0_6px_18px_-2px_rgba(168,85,247,0.3)]
+                    dark:bg-gradient-to-r dark:from-[#7c3aed]/95 dark:via-[#9333ea]/90 dark:to-[#c026d3]/95
+                    dark:hover:from-[#8b5cf6] dark:hover:via-[#a855f7] dark:hover:to-[#d946ef]
+                    dark:border-purple-300/50 dark:hover:border-purple-200/80
+                    dark:shadow-[0_4px_22px_rgba(147,51,234,0.5),inset_0_1px_1.5px_rgba(255,255,255,0.45)]
+                    dark:hover:shadow-[0_6px_28px_rgba(168,85,247,0.7),inset_0_1.5px_2px_rgba(255,255,255,0.6)]
                     whitespace-nowrap tracking-wide"
                   aria-label="Mix Your Style"
                 >
                   {/* Top curved specular gloss */}
-                  <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white/45 via-white/10 to-transparent rounded-t-full pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white/45 via-white/10 to-transparent dark:from-white/35 dark:via-white/5 dark:to-transparent rounded-t-full pointer-events-none" />
                   
                   {/* Shimmer light sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 dark:via-white/40 to-transparent pointer-events-none" />
 
-                  <span className="relative z-10 font-black bg-gradient-to-r from-purple-700 via-pink-600 to-amber-600 dark:from-white dark:via-purple-100 dark:to-amber-200 bg-clip-text text-transparent">
+                  <span className="relative z-10 font-black bg-gradient-to-r from-purple-700 via-pink-600 to-amber-600 bg-clip-text text-transparent dark:bg-none dark:text-white dark:drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]">
                     Mix Your Style
                   </span>
                   
                   {/* Professional Sparkles SVG Icon */}
-                  <svg className="relative z-10 w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 dark:text-amber-300 shrink-0 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="relative z-10 w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 dark:text-amber-300 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(251,191,36,0.85)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
                     <path d="M5 3v4" />
                     <path d="M19 17v4" />
@@ -294,32 +298,35 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                   className="group relative overflow-hidden cursor-pointer w-full mt-1.5 xl:mt-2 inline-flex items-center justify-center gap-2.5 py-2.5 xl:py-3 px-5 rounded-2xl transition-all duration-300 hover:scale-[1.015] active:scale-95 outline-none
                     backdrop-blur-2xl
                     bg-gradient-to-r from-white/35 via-purple-100/25 to-white/30
-                    dark:from-white/15 dark:via-purple-400/10 dark:to-white/12
                     hover:from-white/55 hover:via-purple-150/35 hover:to-white/50
-                    dark:hover:from-white/25 dark:hover:via-purple-400/20 dark:hover:to-white/20
-                    border border-white/60 dark:border-white/30
+                    border border-white/60
                     shadow-[inset_0_1.5px_1px_0_rgba(255,255,255,0.85),inset_0_-1px_1px_0_rgba(255,255,255,0.2),0_6px_20px_-2px_rgba(147,51,234,0.16)]
                     hover:shadow-[inset_0_2px_1px_0_rgba(255,255,255,0.95),0_10px_28px_-2px_rgba(147,51,234,0.25)]
+                    dark:bg-gradient-to-r dark:from-[#7c3aed]/95 dark:via-[#9333ea]/90 dark:to-[#c026d3]/95
+                    dark:hover:from-[#8b5cf6] dark:hover:via-[#a855f7] dark:hover:to-[#d946ef]
+                    dark:border-purple-300/50 dark:hover:border-purple-200/80
+                    dark:shadow-[0_4px_26px_rgba(147,51,234,0.5),inset_0_1px_2px_rgba(255,255,255,0.45)]
+                    dark:hover:shadow-[0_8px_36px_rgba(168,85,247,0.7),inset_0_1.5px_2px_rgba(255,255,255,0.6)]
                     tracking-wide"
                   aria-label="Mix Your Style"
                 >
                   {/* Top curved specular gloss */}
-                  <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white/50 via-white/15 to-transparent rounded-t-2xl pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white/50 via-white/15 to-transparent dark:from-white/35 dark:via-white/5 dark:to-transparent rounded-t-2xl pointer-events-none" />
 
                   {/* Shimmer light sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/35 dark:via-white/40 to-transparent pointer-events-none" />
 
                   <div className="relative z-10 flex items-center justify-center gap-2">
-                    <span className="font-black text-[13.5px] xl:text-[14.5px] bg-gradient-to-r from-purple-800 via-pink-700 to-amber-700 dark:from-white dark:via-purple-100 dark:to-amber-200 bg-clip-text text-transparent">
+                    <span className="font-black text-[13.5px] xl:text-[14.5px] bg-gradient-to-r from-purple-800 via-pink-700 to-amber-700 bg-clip-text text-transparent dark:bg-none dark:text-white dark:drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
                       Mix Your Style
                     </span>
-                    <svg className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-amber-500 dark:text-amber-300 shrink-0 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-amber-500 dark:text-amber-300 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_10px_rgba(251,191,36,0.9)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                       <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
                       <path d="M5 3v4" />
                       <path d="M19 17v4" />
                     </svg>
-                    <span className="text-[11px] xl:text-[12.5px] font-semibold text-purple-950/70 dark:text-white/80 ml-1">
-                      Open AI Mixer Engine →
+                    <span className="text-[11px] xl:text-[12.5px] font-bold text-purple-950/70 dark:text-purple-100 ml-1 inline-flex items-center gap-1 group-hover:text-purple-950 dark:group-hover:text-white transition-colors">
+                      Open AI Mixer Engine <span className="inline-block group-hover:translate-x-1.5 transition-transform duration-300">→</span>
                     </span>
                   </div>
                 </button>
