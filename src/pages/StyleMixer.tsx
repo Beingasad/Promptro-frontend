@@ -672,13 +672,6 @@ export default function StyleMixer() {
                 YOUR GENERATED PROMPT
               </h3>
             </div>
-            
-            {generatedPrompt && (
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2.5 py-0.5 rounded-full border border-purple-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Ready</span>
-              </div>
-            )}
           </div>
 
           {/* Prompt Display Area */}
@@ -693,19 +686,29 @@ export default function StyleMixer() {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#1f1738] dark:text-white min-w-0">
                     <svg
-                      className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                      className="w-4 h-4 shrink-0 drop-shadow-[0_0_10px_rgba(168,85,247,0.75)]"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
                     >
-                      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.8-1.912a2 2 0 0 1-1.275-1.275L12 3Z" fill="currentColor" fillOpacity="0.2" />
-                      <path d="M5 3v4" />
-                      <path d="M19 17v4" />
+                      <defs>
+                        <linearGradient id="premiumPurpleSparkle" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#e9d5ff" />
+                          <stop offset="45%" stopColor="#c084fc" />
+                          <stop offset="100%" stopColor="#9333ea" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M12 2.5L14.2 8.8C14.6 9.9 15.5 10.8 16.6 11.2L22.9 13.4L16.6 15.6C15.5 16 14.6 16.9 14.2 18L12 24.3L9.8 18C9.4 16.9 8.5 16 7.4 15.6L1.1 13.4L7.4 11.2C8.5 10.8 9.4 9.9 9.8 8.8L12 2.5Z"
+                        fill="url(#premiumPurpleSparkle)"
+                      />
+                      <circle cx="12" cy="13.4" r="1.5" fill="#ffffff" />
+                      <path
+                        d="M19 3L19.8 5.2C20 5.7 20.4 6.1 20.9 6.3L23.1 7.1L20.9 7.9C20.4 8.1 20 8.5 19.8 9L19 11.2L18.2 9C18 8.5 17.6 8.1 17.1 7.9L14.9 7.1L17.1 6.3C17.6 6.1 18 5.7 18.2 5.2L19 3Z"
+                        fill="url(#premiumPurpleSparkle)"
+                        opacity="0.9"
+                      />
                     </svg>
-                    <span className="truncate">Ready for Midjourney, ChatGPT & Google Gemini</span>
+                    <span className="truncate">Midjourney, ChatGPT & Google Gemini</span>
                   </div>
                   <span className="whitespace-nowrap shrink-0 text-[10px] sm:text-[10.5px] font-bold text-purple-600 dark:text-purple-300 bg-purple-100/80 dark:bg-purple-900/40 px-2.5 py-0.5 rounded-full border border-purple-200 dark:border-purple-800/50">
                     Master Quality
@@ -819,7 +822,7 @@ export default function StyleMixer() {
                   </svg>
                 </div>
                 <span className="text-sm font-extrabold text-[#1f1738] dark:text-white">
-                  Ready to generate your prompt
+                  Generate your AI prompt
                 </span>
                 <p className="text-[11.5px] max-w-xs leading-relaxed text-[#786e92] dark:text-[#a299ba]">
                   Describe your idea on the left, optionally pick style presets, and click <strong className="text-purple-600 dark:text-purple-400">Generate My Prompt</strong>.
