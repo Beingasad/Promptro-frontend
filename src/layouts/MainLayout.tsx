@@ -369,6 +369,9 @@ export default function MainLayout() {
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 text-[11px] font-medium text-[#8d86a0]/70">
+              <Link to="/style-mixer" className="text-purple-600 dark:text-purple-400 font-bold hover:underline transition-colors">AI Style Mixer</Link>
+              <Link to="/explore" className="hover:text-primary transition-colors">Explore</Link>
+              <Link to="/categories" className="hover:text-primary transition-colors">Categories</Link>
               <Link to="/about" className="hover:text-primary transition-colors">About</Link>
               <Link to="/founder" className="hover:text-primary transition-colors">Founder</Link>
               <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>

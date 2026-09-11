@@ -268,6 +268,57 @@ export default function StyleMixer() {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // Inject WebApplication JSON-LD Schema for rich Google Search ranking
+  useEffect(() => {
+    const scriptId = 'schema-ai-style-mixer';
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = scriptId;
+      script.type = 'application/ld+json';
+      document.head.appendChild(script);
+    }
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: 'Promptro AI Style Mixer',
+      alternateName: [
+        'AI Style Mixer',
+        'AI Prompt Generator',
+        'AI Prompt Writer',
+        'Promptro AI Prompt Mixer',
+        'Free AI Image Prompt Generator',
+      ],
+      url: 'https://promptro.in/style-mixer',
+      description: 'Free AI prompt generator and style mixer to create high-impact AI prompts for Midjourney, ChatGPT, Google Gemini, and Flux.',
+      applicationCategory: 'MultimediaApplication',
+      operatingSystem: 'All',
+      browserRequirements: 'Requires JavaScript. Requires HTML5.',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+      featureList: [
+        'AI Style Mixer',
+        'Free AI Prompt Generator',
+        'Instant Prompt Writer',
+        'ChatGPT & Google Gemini Compatibility',
+        '1-Click Prompt Copy',
+      ],
+      creator: {
+        '@type': 'Organization',
+        name: 'Promptro',
+        url: 'https://promptro.in',
+      },
+    };
+    script.textContent = JSON.stringify(schema);
+    return () => {
+      const el = document.getElementById(scriptId);
+      if (el) el.remove();
+    };
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -277,10 +328,15 @@ export default function StyleMixer() {
       className="w-full max-w-none px-1.5 sm:px-3 md:px-4 lg:px-6 py-1 sm:py-1.5 flex flex-col gap-2 sm:gap-2.5 select-none"
     >
       <SEOMeta
-        title="AI Style Mixer | Promptro"
-        description="Turn your ideas into professional AI image prompts with Promptro's AI Style Mixer."
-        keywords="AI style mixer, image prompt generator, prompt writer, Midjourney prompt mixer, DALL-E prompt engineer, cinematic prompts, Promptro"
+        title="AI Style Mixer - Free AI Prompt Generator & Prompt Writer | Promptro"
+        description="Generate viral, professional AI image prompts for Midjourney, ChatGPT, Google Gemini & Flux with Promptro's AI Style Mixer. Mix styles, lighting, camera looks & mood free."
+        keywords="AI style mixer, AI prompt, AI prompts, AI prompt generator, AI image prompt generator, AI prompt writer, free AI prompt maker, Midjourney prompt generator, ChatGPT image prompts, Google Gemini prompts, prompt engineering tool, Promptro AI mixer, Promptro"
         canonical="https://promptro.in/style-mixer"
+        ogType="website"
+        breadcrumbs={[
+          { name: 'Home', url: 'https://promptro.in' },
+          { name: 'AI Style Mixer', url: 'https://promptro.in/style-mixer' },
+        ]}
       />
 
       {/* ========================================================

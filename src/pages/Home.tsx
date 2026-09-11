@@ -222,9 +222,9 @@ export default function Home() {
       className="w-full flex flex-col gap-5 md:gap-9"
     >
       <SEOMeta
-        title="Promptro | AI Image Prompts Library"
-        description="Discover trending AI image prompts, cinematic prompts, creative templates and inspiration on Promptro."
-        keywords="AI image prompts, trending AI prompts, Midjourney prompts, DALL-E prompts, cinematic prompts, creative AI templates, Promptro"
+        title="Promptro | Trending AI Prompts Library & AI Style Mixer"
+        description="Discover trending AI image prompts, cinematic styles, and engineer prompts with Promptro's free AI Style Mixer. Copy prompts for Midjourney, ChatGPT & Google Gemini."
+        keywords="AI prompt, AI prompts, AI style mixer, trending AI prompts, AI image prompts, Midjourney prompts, ChatGPT prompts, Google Gemini prompts, free AI prompt generator, Promptro"
         canonical="https://promptro.in"
       />
 
