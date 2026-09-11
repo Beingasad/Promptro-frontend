@@ -48,22 +48,64 @@ export default function Explore() {
     selectedFilter && sortOptions.includes(selectedFilter) ? selectedFilter : 'All'
   ));
 
-  // Only truly loading if we have no prompts cached at all
-  const [loading, setLoading] = useState(() => prompts.length === 0);
+  // Navigation detection: browser reload vs initial site open
+  const isReload = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const entries = performance.getEntriesByType('navigation');
+      if (entries && entries.length > 0) {
+        return (entries[0] as PerformanceNavigationTiming).type === 'reload';
+      }
+      if (window.performance && (window.performance as any).navigation) {
+        return (window.performance as any).navigation.type === 1;
+      }
+    } catch {
+      return false;
+    }
+    return false;
+  }, []);
 
-  // Only show skeleton if network is actually slow (>180ms) and no prompts exist yet
-  const [showSkeleton, setShowSkeleton] = useState(false);
+  const isFirstOpen = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const opened = sessionStorage.getItem('promptro_opened');
+      if (!opened) {
+        sessionStorage.setItem('promptro_opened', 'true');
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  // When reloading or first opening, start loading=true to display skeleton
+  const [loading, setLoading] = useState(() => {
+    if (isReload || isFirstOpen) return true;
+    return prompts.length === 0;
+  });
+
+  // For initial site open: keep skeleton visible for exactly 1 second
+  const [oneSecondElapsed, setOneSecondElapsed] = useState(() => !(isFirstOpen && !isReload));
 
   useEffect(() => {
-    if (!loading || prompts.length > 0) {
-      setShowSkeleton(false);
-      return;
+    if (isFirstOpen && !isReload) {
+      const timer = setTimeout(() => {
+        setOneSecondElapsed(true);
+      }, 1000); // exactly 1 second on site open
+      return () => clearTimeout(timer);
     }
-    const timer = setTimeout(() => {
-      setShowSkeleton(true);
-    }, 180);
-    return () => clearTimeout(timer);
-  }, [loading, prompts.length]);
+  }, [isFirstOpen, isReload]);
+
+  // Skeleton active state:
+  // - On refresh/reload: visible as long as website takes to load from network
+  // - On initial site open: visible for 1 second (and until data is ready)
+  // - Subsequent in-app navigations: only if loading and prompts.length === 0
+  const isSkeletonActive = isReload
+    ? loading
+    : isFirstOpen
+    ? (loading || !oneSecondElapsed)
+    : (loading && prompts.length === 0);
 
   // Save scroll position continuously when user scrolls (to avoid browser back/page-transition zeroing window.scrollY)
   useEffect(() => {
@@ -245,7 +287,7 @@ export default function Explore() {
 
 
 
-      {loading && showSkeleton && prompts.length === 0 ? (
+      {isSkeletonActive ? (
         <GridSkeleton isHome={false} />
       ) : visiblePrompts.length ? (
         <MasonryGrid prompts={visiblePrompts} isTwoColumns={true} />

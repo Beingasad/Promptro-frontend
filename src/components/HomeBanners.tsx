@@ -217,8 +217,8 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
     ];
   }, [processedBanners, currentIndex]);
 
-  if (processedBanners.length === 0) {
-    if (showSkeleton) {
+  if (processedBanners.length === 0 || promptsLoading) {
+    if (showSkeleton || promptsLoading) {
       return <HomeBannersSkeleton />;
     }
     return <div className="hidden lg:grid lg:grid-cols-2 gap-5 lg:flex-[1.8] min-w-0" />;

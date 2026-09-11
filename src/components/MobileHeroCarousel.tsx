@@ -230,8 +230,8 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
     return () => clearInterval(interval);
   }, [processedBanners.length]);
 
-  if (processedBanners.length === 0) {
-    if (showSkeleton) {
+  if (processedBanners.length === 0 || promptsLoading) {
+    if (showSkeleton || promptsLoading) {
       return <MobileHeroCarouselSkeleton />;
     }
     return <div className="lg:hidden w-full h-[130px] md:h-[220px]" />;

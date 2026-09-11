@@ -43,22 +43,64 @@ export default function Home() {
     }
   });
 
-  // Only truly loading if we don't already have cached prompts in localStorage
-  const [loading, setLoading] = useState(() => prompts.length === 0);
+  // Navigation detection: browser reload vs initial site open
+  const isReload = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const entries = performance.getEntriesByType('navigation');
+      if (entries && entries.length > 0) {
+        return (entries[0] as PerformanceNavigationTiming).type === 'reload';
+      }
+      if (window.performance && (window.performance as any).navigation) {
+        return (window.performance as any).navigation.type === 1;
+      }
+    } catch {
+      return false;
+    }
+    return false;
+  }, []);
 
-  // Only show skeleton if network is actually slow (taking > 180ms) and no prompts exist yet
-  const [showSkeleton, setShowSkeleton] = useState(false);
+  const isFirstOpen = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const opened = sessionStorage.getItem('promptro_opened');
+      if (!opened) {
+        sessionStorage.setItem('promptro_opened', 'true');
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  // When reloading or first opening, start loading=true to display skeleton
+  const [loading, setLoading] = useState(() => {
+    if (isReload || isFirstOpen) return true;
+    return prompts.length === 0;
+  });
+
+  // For initial site open: keep skeleton visible for exactly 1 second
+  const [oneSecondElapsed, setOneSecondElapsed] = useState(() => !(isFirstOpen && !isReload));
 
   useEffect(() => {
-    if (!loading || prompts.length > 0) {
-      setShowSkeleton(false);
-      return;
+    if (isFirstOpen && !isReload) {
+      const timer = setTimeout(() => {
+        setOneSecondElapsed(true);
+      }, 1000); // exactly 1 second on site open
+      return () => clearTimeout(timer);
     }
-    const timer = setTimeout(() => {
-      setShowSkeleton(true);
-    }, 180);
-    return () => clearTimeout(timer);
-  }, [loading, prompts.length]);
+  }, [isFirstOpen, isReload]);
+
+  // Skeleton active state:
+  // - On refresh/reload: visible as long as website takes to load from network
+  // - On initial site open: visible for 1 second (and until data is ready)
+  // - Subsequent in-app navigations: only if loading and prompts.length === 0
+  const isSkeletonActive = isReload
+    ? loading
+    : isFirstOpen
+    ? (loading || !oneSecondElapsed)
+    : (loading && prompts.length === 0);
 
   // Sync category state from URL query parameter
   useEffect(() => {
@@ -218,16 +260,16 @@ export default function Home() {
         </div>
 
         {/* Mobile Unified Carousel */}
-        <MobileHeroCarousel prompts={prompts} promptsLoading={loading && showSkeleton && prompts.length === 0} />
+        <MobileHeroCarousel prompts={prompts} promptsLoading={isSkeletonActive} />
 
-        <HomeBanners prompts={prompts} promptsLoading={loading && showSkeleton && prompts.length === 0} />
+        <HomeBanners prompts={prompts} promptsLoading={isSkeletonActive} />
       </section>
 
       {/* AI Style Mixer Section */}
       <AIStyleMixerBanner />
 
       <div className="w-full">
-        {loading && showSkeleton && prompts.length === 0 ? (
+        {isSkeletonActive ? (
           <>
             {/* Skeleton for Trending Now header */}
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">
