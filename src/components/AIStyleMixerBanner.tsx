@@ -94,16 +94,11 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
               {/* LEFT CONTENT COLUMN: Responsive for mobile and wide on desktop */}
               <div className="flex-1 min-w-0 sm:min-w-[240px] max-w-full sm:max-w-[340px] md:max-w-[400px] lg:max-w-[430px] flex flex-col items-start pl-0.5 sm:pl-1 shrink-0">
                 
-                {/* Badge: "NEW" (Clean text without any icon/animation, positioned close to heading) */}
+                {/* Clean "NEW" text without any box (Same as phone view) */}
                 <div className="pt-0.5 sm:pt-0 mb-0 leading-none">
-                  <span className="sm:hidden text-[8.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 select-none">
+                  <span className="text-[8.5px] sm:text-[10.5px] md:text-[11px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 select-none">
                     NEW
                   </span>
-                  <div className="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-[10.5px] font-black uppercase tracking-widest text-white shadow-[0_2px_12px_rgba(124,58,237,0.4)] dark:shadow-[0_0_16px_rgba(168,85,247,0.65)]
-                    bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#ec4899] border border-white/30 dark:border-white/40 backdrop-blur-md select-none"
-                  >
-                    NEW
-                  </div>
                 </div>
 
                 {/* Title (Spans horizontally matching the subtext width, tight to NEW) */}

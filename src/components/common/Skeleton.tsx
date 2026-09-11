@@ -312,8 +312,8 @@ export function AIStyleMixerBannerSkeleton() {
             <div className="relative z-10 flex flex-row items-center justify-between gap-2 sm:gap-4 md:gap-6 w-full">
               {/* Left column skeleton */}
               <div className="flex-1 min-w-0 sm:min-w-[240px] max-w-full sm:max-w-[340px] md:max-w-[400px] lg:max-w-[430px] flex flex-col items-start pl-0.5 sm:pl-1 shrink-0 gap-2">
-                {/* Badge skeleton */}
-                <div className="h-4 w-12 rounded-full bg-purple-200/60 dark:bg-white/15 animate-pulse" />
+                {/* NEW text skeleton */}
+                <div className="h-2.5 w-8 rounded-full bg-purple-300/50 dark:bg-purple-400/30 animate-pulse" />
                 {/* Heading skeleton */}
                 <div className="h-7 sm:h-9 md:h-10 w-44 sm:w-56 rounded-xl bg-purple-300/40 dark:bg-white/20 animate-pulse" />
                 {/* Subtitle skeleton */}
