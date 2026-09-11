@@ -42,18 +42,23 @@ export default function Home() {
       return [];
     }
   });
-  const [loading, setLoading] = useState(() => {
-    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
-    if (isInitial) {
-      return true;
+
+  // Only truly loading if we don't already have cached prompts in localStorage
+  const [loading, setLoading] = useState(() => prompts.length === 0);
+
+  // Only show skeleton if network is actually slow (taking > 180ms) and no prompts exist yet
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  useEffect(() => {
+    if (!loading || prompts.length > 0) {
+      setShowSkeleton(false);
+      return;
     }
-    try {
-      const cached = localStorage.getItem('promptro_home_prompts');
-      return !cached;
-    } catch {
-      return true;
-    }
-  });
+    const timer = setTimeout(() => {
+      setShowSkeleton(true);
+    }, 180);
+    return () => clearTimeout(timer);
+  }, [loading, prompts.length]);
 
   // Sync category state from URL query parameter
   useEffect(() => {
@@ -182,62 +187,47 @@ export default function Home() {
       />
 
       <section className="mt-5 px-2 sm:px-4 md:px-6 pt-0 md:mt-[10px] md:pt-2 flex flex-col lg:flex-row lg:items-center lg:gap-8 justify-between relative min-h-0 lg:min-h-0">
-        {/* Desktop View (Always visible on lg) */}
+        {/* Desktop View (Always visible on lg, immediate render) */}
         <div className="hidden lg:block lg:max-w-[40%]">
-          {loading ? (
-            <>
-              {/* Skeleton for subtitle */}
-              <div className="h-5 w-48 rounded-md bg-[#e8e2f0]/50 animate-pulse md:h-6 md:w-56" />
-              {/* Skeleton for main heading */}
-              <div className="mt-3 h-11 w-80 rounded-lg bg-gradient-to-r from-[#e8e2f0]/60 to-[#e8e2f0]/30 animate-pulse md:h-14 md:w-96" />
-              {/* Skeleton for description line 1 */}
-              <div className="mt-5 h-4 w-full max-w-lg rounded-md bg-[#e8e2f0]/40 animate-pulse md:h-5" />
-              {/* Skeleton for description line 2 */}
-              <div className="mt-2.5 h-4 w-4/5 max-w-lg rounded-md bg-[#e8e2f0]/30 animate-pulse md:h-5" />
-            </>
-          ) : (
-            <>
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05, duration: 0.45 }}
-                className="text-[15px] font-medium leading-6 text-[#6f6684] md:text-lg"
-              >
-                Discover, Copy & Create
-              </motion.p>
-              <motion.h1
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12, duration: 0.55 }}
-                className="mt-2 max-w-5xl whitespace-nowrap text-[8.5vw] sm:text-[44px] md:text-5xl font-bold leading-tight tracking-normal"
-              >
-                <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent drop-shadow-[0_18px_34px_rgba(109,77,236,0.12)]">
-                  Trending AI Prompts
-                </span>
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.18, duration: 0.55 }}
-                className="mt-3 max-w-lg text-[16px] font-medium leading-[1.62] text-[#6f6684] md:mt-5 md:text-lg md:leading-8"
-              >
-                Explore thousands of cinematic, aesthetic and creative AI prompts to create stunning images instantly.
-              </motion.p>
-            </>
-          )}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05, duration: 0.45 }}
+            className="text-[15px] font-medium leading-6 text-[#6f6684] md:text-lg"
+          >
+            Discover, Copy & Create
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12, duration: 0.55 }}
+            className="mt-2 max-w-5xl whitespace-nowrap text-[8.5vw] sm:text-[44px] md:text-5xl font-bold leading-tight tracking-normal"
+          >
+            <span className="bg-gradient-to-r from-[#7437ff] via-[#dd4bd2] to-[#ff642d] bg-clip-text text-transparent drop-shadow-[0_18px_34px_rgba(109,77,236,0.12)]">
+              Trending AI Prompts
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18, duration: 0.55 }}
+            className="mt-3 max-w-lg text-[16px] font-medium leading-[1.62] text-[#6f6684] md:mt-5 md:text-lg md:leading-8"
+          >
+            Explore thousands of cinematic, aesthetic and creative AI prompts to create stunning images instantly.
+          </motion.p>
         </div>
 
         {/* Mobile Unified Carousel */}
-        <MobileHeroCarousel prompts={prompts} promptsLoading={loading} />
+        <MobileHeroCarousel prompts={prompts} promptsLoading={loading && showSkeleton && prompts.length === 0} />
 
-        <HomeBanners prompts={prompts} promptsLoading={loading} />
+        <HomeBanners prompts={prompts} promptsLoading={loading && showSkeleton && prompts.length === 0} />
       </section>
 
       {/* AI Style Mixer Section */}
       <AIStyleMixerBanner />
 
       <div className="w-full">
-        {loading ? (
+        {loading && showSkeleton && prompts.length === 0 ? (
           <>
             {/* Skeleton for Trending Now header */}
             <div className="mb-3 flex items-center justify-between gap-3 px-0 sm:px-2">

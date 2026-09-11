@@ -30,7 +30,9 @@ export default function Explore() {
   const [prompts, setPrompts] = useState<Prompt[]>(() => {
     try {
       const cached = localStorage.getItem('promptro_explore_prompts');
-      return cached ? JSON.parse(cached) : [];
+      if (cached) return JSON.parse(cached);
+      const homeCached = localStorage.getItem('promptro_home_prompts');
+      return homeCached ? JSON.parse(homeCached) : [];
     } catch {
       return [];
     }
@@ -46,18 +48,22 @@ export default function Explore() {
     selectedFilter && sortOptions.includes(selectedFilter) ? selectedFilter : 'All'
   ));
 
-  const [loading, setLoading] = useState(() => {
-    const isInitial = typeof window !== 'undefined' && (window as any).__promptroAppLoaded === false;
-    if (isInitial) {
-      return true;
+  // Only truly loading if we have no prompts cached at all
+  const [loading, setLoading] = useState(() => prompts.length === 0);
+
+  // Only show skeleton if network is actually slow (>180ms) and no prompts exist yet
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  useEffect(() => {
+    if (!loading || prompts.length > 0) {
+      setShowSkeleton(false);
+      return;
     }
-    try {
-      const cached = localStorage.getItem('promptro_explore_prompts');
-      return !cached;
-    } catch {
-      return true;
-    }
-  });
+    const timer = setTimeout(() => {
+      setShowSkeleton(true);
+    }, 180);
+    return () => clearTimeout(timer);
+  }, [loading, prompts.length]);
 
   // Save scroll position continuously when user scrolls (to avoid browser back/page-transition zeroing window.scrollY)
   useEffect(() => {
@@ -239,11 +245,11 @@ export default function Explore() {
 
 
 
-      {loading ? (
+      {loading && showSkeleton && prompts.length === 0 ? (
         <GridSkeleton isHome={false} />
       ) : visiblePrompts.length ? (
         <MasonryGrid prompts={visiblePrompts} isTwoColumns={true} />
-      ) : (
+      ) : loading && prompts.length === 0 ? null : (
         <div className="flex flex-col items-center justify-center py-20 text-center rounded-[1.25rem] border border-white/70 bg-white/64 dark:bg-[#14111f]/45 dark:border-white/10 shadow-[0_16px_38px_rgba(72,56,118,0.1)]">
           <p className="text-lg font-bold text-[#171421] dark:text-white">No prompts found</p>
           <p className="mt-2 text-sm font-semibold text-[#0A0910] dark:text-white">Try adjusting your filters or search query.</p>

@@ -77,13 +77,45 @@ const getModelUrl = (model: string): string => {
 export default function ImageDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { setSearchQuery } = useSearch();
   const isMobile = useIsMobileDevice();
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [copiedNegative, setCopiedNegative] = useState(false);
-  const [prompt, setPrompt] = useState<PromptDetail | null>(null);
+  
+  const [prompt, setPrompt] = useState<PromptDetail | null>(() => {
+    if (location.state?.prompt) {
+      return location.state.prompt as PromptDetail;
+    }
+    if (id) {
+      try {
+        const homePrompts = JSON.parse(localStorage.getItem('promptro_home_prompts') || '[]');
+        const found = homePrompts.find((p: any) => p.id === id);
+        if (found) return found;
+        const explorePrompts = JSON.parse(localStorage.getItem('promptro_explore_prompts') || '[]');
+        return explorePrompts.find((p: any) => p.id === id) || null;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
+
   const [related, setRelated] = useState<PromptDetail[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !prompt);
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  useEffect(() => {
+    if (!loading || prompt) {
+      setShowSkeleton(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setShowSkeleton(true);
+    }, 180);
+    return () => clearTimeout(timer);
+  }, [loading, prompt]);
+
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
   const [inCollection, setInCollection] = useState(false);
@@ -452,12 +484,15 @@ export default function ImageDetail() {
     }
   };
 
-  const location = useLocation();
   const stateIsPortrait = location.state?.isPortrait;
   const stateHasMultipleImages = location.state?.hasMultipleImages;
 
-  if (loading) {
+  if (loading && showSkeleton && !prompt) {
     return <DetailSkeleton isPortrait={stateIsPortrait ?? true} hasMultipleImages={stateHasMultipleImages ?? false} />;
+  }
+
+  if (loading && !prompt) {
+    return null;
   }
 
 

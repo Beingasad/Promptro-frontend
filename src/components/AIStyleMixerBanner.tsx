@@ -8,7 +8,7 @@ export default function AIStyleMixerBanner() {
       className="w-full px-2 sm:px-4 md:px-6 relative -mt-2 sm:-mt-2.5 -mb-2 sm:-mb-2.5 select-none"
       aria-label="AI Style Mixer Feature"
     >
-      <div className="relative w-full">
+      <div className="relative w-full -mx-0.5 md:mx-0 scale-[1.02] md:scale-100">
         
         {/* Clean Banner Container with Continuous Rotating Flowing Border Beam */}
         <div

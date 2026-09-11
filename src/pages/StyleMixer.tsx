@@ -308,17 +308,17 @@ export default function StyleMixer() {
           <div className="flex items-center gap-1 sm:gap-1.5 text-[9.5px] sm:text-xs lg:text-[13px] font-black italic text-purple-600 dark:text-purple-300 drop-shadow-sm whitespace-nowrap mb-0.5">
             <span>Turn ideas into stunning prompts</span>
             <svg
-              className="w-3 h-3 sm:w-4 sm:h-4 text-purple-600 dark:text-purple-400 shrink-0"
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600 dark:text-purple-400 shrink-0"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.5"
+              strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <path d="M3 6c5-2.5 11 0 13 8" />
-              <path d="m12 11 4 4 4-4" />
+              <path d="M4 6c6-1 12 2 13 9" />
+              <path d="m13 12 4 4 4-4" />
             </svg>
           </div>
 
@@ -630,7 +630,10 @@ export default function StyleMixer() {
                 </>
               ) : (
                 <>
-                  <span>✨</span>
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 shrink-0 drop-shadow-[0_0_8px_rgba(252,211,77,0.85)]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L14.4 8.6L21 11L14.4 13.4L12 20L9.6 13.4L3 11L9.6 8.6L12 2Z" />
+                    <path d="M19 16L20.2 19.3L23.5 20.5L20.2 21.7L19 25L17.8 21.7L14.5 20.5L17.8 19.3L19 16Z" opacity="0.85" />
+                  </svg>
                   <span>Generate My Prompt</span>
                 </>
               )}
@@ -687,33 +690,29 @@ export default function StyleMixer() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="rounded-2xl bg-white/70 dark:bg-white/[0.03] border border-white/60 dark:border-white/10 p-3.5 sm:p-4 shadow-sm backdrop-blur-md flex flex-col gap-3 h-full justify-between"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#1f1738] dark:text-white">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#1f1738] dark:text-white min-w-0">
                     <svg
-                      className="w-3.5 h-3.5 text-amber-500 shrink-0"
+                      className="w-3.5 h-3.5 text-amber-500 shrink-0 drop-shadow-[0_0_4px_rgba(245,158,11,0.5)]"
                       viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      fill="currentColor"
                     >
-                      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
+                      <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
                     </svg>
-                    <span>Ready for Midjourney, FLUX & DALL-E</span>
+                    <span className="truncate">Ready for Midjourney, FLUX & DALL-E</span>
                   </div>
-                  <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 bg-purple-100/70 dark:bg-purple-900/40 px-2 py-0.5 rounded-md border border-purple-200 dark:border-purple-800/40">
+                  <span className="whitespace-nowrap shrink-0 text-[10px] sm:text-[10.5px] font-bold text-purple-600 dark:text-purple-300 bg-purple-100/80 dark:bg-purple-900/40 px-2.5 py-0.5 rounded-full border border-purple-200 dark:border-purple-800/50">
                     Master Quality
                   </span>
                 </div>
 
-                {/* Prompt Text Box */}
-                <div className="p-3.5 rounded-xl bg-white/85 dark:bg-white/[0.04] border border-[#ede5f7] dark:border-white/10 text-xs sm:text-sm leading-relaxed text-[#2a233c] dark:text-[#f3effb] select-all flex-1 min-h-[140px] max-h-[260px] overflow-y-auto">
+                {/* Prompt Text directly in the single card (No extra nested card behind it) */}
+                <div className="text-xs sm:text-[13px] leading-relaxed text-[#2a233c] dark:text-[#f3effb] select-all flex-1 min-h-[140px] max-h-[260px] overflow-y-auto py-1 px-1">
                   {generatedPrompt}
                 </div>
 
-                {/* Actions: [ Copy Prompt ] [ Open in ChatGPT ] and "↻ Improve Prompt" */}
-                <div className="flex flex-wrap items-center gap-2 pt-1">
+                {/* Actions: [ Copy Prompt ] [ Open in ChatGPT ] and "Improve Prompt" */}
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/40 dark:border-white/10">
                   <button
                     type="button"
                     onClick={handleCopyPrompt}
@@ -726,7 +725,7 @@ export default function StyleMixer() {
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          strokeWidth="2"
+                          strokeWidth="2.2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
@@ -760,7 +759,7 @@ export default function StyleMixer() {
                   >
                     <span>Open in ChatGPT</span>
                     <svg
-                      className="w-3 h-3 shrink-0"
+                      className="w-3.5 h-3.5 shrink-0"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -785,7 +784,7 @@ export default function StyleMixer() {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="2"
+                      strokeWidth="2.2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
@@ -794,7 +793,7 @@ export default function StyleMixer() {
                       <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
                       <path d="M16 21h5v-5" />
                     </svg>
-                    <span>{improving ? 'Improving...' : '↻ Improve Prompt'}</span>
+                    <span>{improving ? 'Improving...' : 'Improve Prompt'}</span>
                   </button>
                 </div>
               </motion.div>
@@ -817,14 +816,14 @@ export default function StyleMixer() {
                   Ready to generate your prompt
                 </span>
                 <p className="text-[11.5px] max-w-xs leading-relaxed text-[#786e92] dark:text-[#a299ba]">
-                  Describe your idea on the left, optionally pick style presets, and click <strong className="text-purple-600 dark:text-purple-400">✨ Generate My Prompt</strong>.
+                  Describe your idea on the left, optionally pick style presets, and click <strong className="text-purple-600 dark:text-purple-400">Generate My Prompt</strong>.
                 </p>
               </div>
             )}
           </div>
 
           {/* Right Card Bottom Tip */}
-          <div className="flex items-center justify-center gap-1.5 text-xs text-[#71688b] dark:text-[#a59cb8] pt-2 border-t border-white/40 dark:border-white/10">
+          <div className="flex items-center justify-center gap-1.5 text-xs text-[#71688b] dark:text-[#a59cb8] pt-2 border-t border-white/40 dark:border-white/10 text-center">
             <svg
               className="w-3.5 h-3.5 text-amber-500 shrink-0"
               viewBox="0 0 24 24"
@@ -839,7 +838,7 @@ export default function StyleMixer() {
               <path d="M10 22h4" />
             </svg>
             <span className="font-medium">
-              Click &quot;↻ Improve Prompt&quot; anytime to elevate detail and cinematic lighting
+              Click &quot;Improve Prompt&quot; anytime to elevate detail and cinematic lighting
             </span>
           </div>
 

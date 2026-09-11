@@ -75,14 +75,19 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
     }
   });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [bannersLoading, setBannersLoading] = useState(() => {
-    try {
-      const cached = localStorage.getItem('promptro_mobile_banners');
-      return !cached;
-    } catch {
-      return true;
+  const [bannersLoading, setBannersLoading] = useState(() => banners.length === 0);
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  useEffect(() => {
+    if (!bannersLoading || banners.length > 0) {
+      setShowSkeleton(false);
+      return;
     }
-  });
+    const timer = setTimeout(() => {
+      setShowSkeleton(true);
+    }, 180);
+    return () => clearTimeout(timer);
+  }, [bannersLoading, banners.length]);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -114,7 +119,7 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
   const loading = bannersLoading || promptsLoading;
 
   const processedBanners = useMemo(() => {
-    if (loading || banners.length === 0 || prompts.length === 0) return [];
+    if (banners.length === 0 && prompts.length === 0) return [];
 
     const latest = [...prompts].sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime());
     const loved = [...prompts].sort((a, b) => ((b.likes || 0) + (b.views || 0)) - ((a.likes || 0) + (a.views || 0)));
@@ -225,8 +230,11 @@ export default function MobileHeroCarousel({ prompts, promptsLoading }: MobileHe
     return () => clearInterval(interval);
   }, [processedBanners.length]);
 
-  if (loading || processedBanners.length === 0) {
-    return <MobileHeroCarouselSkeleton />;
+  if (processedBanners.length === 0) {
+    if (showSkeleton) {
+      return <MobileHeroCarouselSkeleton />;
+    }
+    return <div className="lg:hidden w-full h-[130px] md:h-[220px]" />;
   }
 
   const current = processedBanners[currentIndex];

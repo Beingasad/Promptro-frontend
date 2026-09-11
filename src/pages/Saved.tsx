@@ -12,10 +12,16 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 export default function Saved() {
   const navigate = useNavigate();
-  const [savedPrompts, setSavedPrompts] = useState<Prompt[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const [savedPrompts, setSavedPrompts] = useState<Prompt[]>(() => {
+    try {
+      return readLocalActivity().savedPrompts || [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(() => auth?.currentUser || null);
+  const [authLoading, setAuthLoading] = useState(() => Boolean(auth && !auth.currentUser));
 
   useEffect(() => {
     if (!auth) {
@@ -30,17 +36,11 @@ export default function Saved() {
   }, []);
 
   useEffect(() => {
-    const updateSavedPrompts = () => setSavedPrompts(readLocalActivity().savedPrompts);
+    const updateSavedPrompts = () => setSavedPrompts(readLocalActivity().savedPrompts || []);
     updateSavedPrompts();
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 450);
-
     const unsubscribe = onActivityUpdated(updateSavedPrompts);
-
     return () => {
-      clearTimeout(timer);
       unsubscribe();
     };
   }, []);

@@ -7,7 +7,7 @@ import { applyThemeMode, readThemeMode } from './lib/theme'
 applyThemeMode(readThemeMode())
 
 if (typeof window !== 'undefined') {
-  (window as any).__promptroAppLoaded = false;
+  (window as any).__promptroAppLoaded = true;
 
   // Intercept native browser alert calls and redirect them to our custom glassmorphism modal
   window.alert = (message?: any) => {

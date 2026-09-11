@@ -12,8 +12,25 @@ const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57
 
 export default function Categories() {
   const { categories } = useCategories();
-  const [prompts, setPrompts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [prompts, setPrompts] = useState<any[]>(() => {
+    try {
+      const cached = localStorage.getItem('promptro_home_prompts') || localStorage.getItem('promptro_explore_prompts');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => prompts.length === 0);
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      const timer = setTimeout(() => setShowSkeleton(true), 180);
+      return () => clearTimeout(timer);
+    } else {
+      setShowSkeleton(false);
+    }
+  }, [categories.length]);
 
   useEffect(() => {
     let isMounted = true;
@@ -77,7 +94,7 @@ export default function Categories() {
           </motion.p>
         </header>
 
-        {loading || categories.length === 0 ? (
+        {categories.length === 0 && showSkeleton ? (
           <CategoriesSkeleton />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0">

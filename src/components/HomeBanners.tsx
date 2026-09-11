@@ -75,14 +75,19 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
       return [];
     }
   });
-  const [bannersLoading, setBannersLoading] = useState(() => {
-    try {
-      const cached = localStorage.getItem('promptro_home_banners');
-      return !cached;
-    } catch {
-      return true;
+  const [bannersLoading, setBannersLoading] = useState(() => banners.length === 0);
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  useEffect(() => {
+    if (!bannersLoading || banners.length > 0) {
+      setShowSkeleton(false);
+      return;
     }
-  });
+    const timer = setTimeout(() => {
+      setShowSkeleton(true);
+    }, 180);
+    return () => clearTimeout(timer);
+  }, [bannersLoading, banners.length]);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -113,7 +118,7 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
   const loading = bannersLoading || promptsLoading;
 
   const processedBanners = useMemo(() => {
-    if (loading || banners.length === 0 || prompts.length === 0) return [];
+    if (banners.length === 0 || prompts.length === 0) return [];
 
     const editorsPick = [...prompts].sort((a, b) => ((b.saves || 0) + (b.copies || 0)) - ((a.saves || 0) + (a.copies || 0)));
     
@@ -212,8 +217,11 @@ export default function HomeBanners({ prompts, promptsLoading }: HomeBannersProp
     ];
   }, [processedBanners, currentIndex]);
 
-  if (loading || processedBanners.length === 0) {
-    return <HomeBannersSkeleton />;
+  if (processedBanners.length === 0) {
+    if (showSkeleton) {
+      return <HomeBannersSkeleton />;
+    }
+    return <div className="hidden lg:grid lg:grid-cols-2 gap-5 lg:flex-[1.8] min-w-0" />;
   }
 
   return (

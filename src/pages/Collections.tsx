@@ -34,8 +34,8 @@ import { CollectionsSkeleton } from '../components/common/Skeleton';
 export default function Collections() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<any>(() => auth?.currentUser || null);
+  const [authLoading, setAuthLoading] = useState(() => Boolean(auth && !auth.currentUser));
 
   useEffect(() => {
     if (!auth) {
@@ -58,7 +58,13 @@ export default function Collections() {
       navigate('/collections');
     }
   };
-  const [collections, setCollections] = useState<Collection[]>([]);
+  const [collections, setCollections] = useState<Collection[]>(() => {
+    try {
+      return readLocalActivity().collections || [];
+    } catch {
+      return [];
+    }
+  });
   
   const [createOpen, setCreateOpen] = useState(false);
   const [newColName, setNewColName] = useState('');
@@ -73,7 +79,7 @@ export default function Collections() {
   const [copiedShare, setCopiedShare] = useState(false);
 
   // Loading states
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const loadCollections = () => {
     setCollections(readLocalActivity().collections || []);
@@ -81,13 +87,9 @@ export default function Collections() {
 
   useEffect(() => {
     loadCollections();
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 450);
 
     const unsubscribe = onActivityUpdated(loadCollections);
     return () => {
-      clearTimeout(timer);
       unsubscribe();
     };
   }, []);
