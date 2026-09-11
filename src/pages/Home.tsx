@@ -266,7 +266,7 @@ export default function Home() {
       </section>
 
       {/* AI Style Mixer Section */}
-      <AIStyleMixerBanner />
+      <AIStyleMixerBanner loading={isSkeletonActive} />
 
       <div className="w-full">
         {isSkeletonActive ? (

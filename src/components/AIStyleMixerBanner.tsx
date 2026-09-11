@@ -1,7 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import { AIStyleMixerBannerSkeleton } from './common/Skeleton';
 
-export default function AIStyleMixerBanner() {
+interface AIStyleMixerBannerProps {
+  loading?: boolean;
+}
+
+export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps) {
   const navigate = useNavigate();
+
+  if (loading) {
+    return <AIStyleMixerBannerSkeleton />;
+  }
 
   return (
     <section 

@@ -289,6 +289,74 @@ export function MobileHeroCarouselSkeleton() {
   );
 }
 
+export function AIStyleMixerBannerSkeleton() {
+  return (
+    <section 
+      className="w-full px-2 sm:px-4 md:px-6 relative -mt-2 sm:-mt-2.5 -mb-2 sm:-mb-2.5 select-none"
+      aria-label="AI Style Mixer Feature Skeleton"
+    >
+      <div className="relative w-full -mx-0.5 md:mx-0 scale-[1.02] md:scale-100">
+        <div
+          className="relative z-10 w-full overflow-hidden rounded-[1.35rem] md:rounded-[2rem]
+            p-[1.5px] sm:p-[2px] shadow-[0_4px_20px_rgba(139,92,246,0.08)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]
+            border border-purple-200/40 dark:border-white/10"
+        >
+          {/* Shimmer background overlay */}
+          <div className="absolute inset-0 shimmer-bg w-full h-full" />
+          
+          <div
+            className="relative z-10 w-full overflow-hidden pt-2 pb-2 px-3 sm:pt-2.5 sm:pb-3 sm:px-5 md:py-4 md:px-7 lg:px-9 backdrop-blur-2xl rounded-[calc(1.35rem-1.5px)] md:rounded-[calc(2rem-2px)]
+              bg-gradient-to-br from-[#f9f5ff]/90 via-[#fcfaff]/90 to-[#fff6f0]/90
+              dark:bg-gradient-to-br dark:from-[#140c2a]/90 dark:via-[#191034]/90 dark:to-[#200d2b]/90"
+          >
+            <div className="relative z-10 flex flex-row items-center justify-between gap-2 sm:gap-4 md:gap-6 w-full">
+              {/* Left column skeleton */}
+              <div className="flex-1 min-w-0 sm:min-w-[240px] max-w-full sm:max-w-[340px] md:max-w-[400px] lg:max-w-[430px] flex flex-col items-start pl-0.5 sm:pl-1 shrink-0 gap-2">
+                {/* Badge skeleton */}
+                <div className="h-4 w-12 rounded-full bg-purple-200/60 dark:bg-white/15 animate-pulse" />
+                {/* Heading skeleton */}
+                <div className="h-7 sm:h-9 md:h-10 w-44 sm:w-56 rounded-xl bg-purple-300/40 dark:bg-white/20 animate-pulse" />
+                {/* Subtitle skeleton */}
+                <div className="flex flex-col gap-1.5 w-full">
+                  <div className="h-3 sm:h-3.5 w-[90%] rounded-full bg-purple-100/70 dark:bg-white/10 animate-pulse" />
+                  <div className="h-3 sm:h-3.5 w-[70%] rounded-full bg-purple-100/60 dark:bg-white/10 animate-pulse" />
+                </div>
+                {/* Button skeleton on mobile */}
+                <div className="h-7 sm:h-8 w-36 rounded-full bg-purple-300/50 dark:bg-purple-500/20 animate-pulse mt-1" />
+              </div>
+
+              {/* Middle chips skeleton (Desktop only) */}
+              <div className="hidden lg:flex flex-col justify-between items-center self-stretch flex-1 min-w-0 px-2 xl:px-3 py-1 gap-2">
+                <div className="h-3.5 w-48 rounded-full bg-purple-200/50 dark:bg-white/15 animate-pulse" />
+                <div className="flex items-center justify-center gap-2.5 xl:gap-3 w-full my-auto">
+                  {Array.from({ length: 4 }).map((_, idx) => (
+                    <div
+                      key={idx}
+                      className="flex-1 max-w-[125px] xl:max-w-[140px] h-[68px] xl:h-[78px] rounded-2xl bg-white/50 dark:bg-white/10 border border-purple-200/40 dark:border-white/10 p-2 flex flex-col justify-between animate-pulse"
+                    >
+                      <div className="h-3 w-12 rounded bg-purple-300/40 dark:bg-white/15" />
+                      <div className="h-7 w-full rounded-xl bg-purple-400/30 dark:bg-white/20" />
+                    </div>
+                  ))}
+                </div>
+                <div className="h-9 w-full rounded-2xl bg-white/40 dark:bg-white/10 border border-purple-200/30 dark:border-white/10 animate-pulse" />
+              </div>
+
+              {/* Right image skeleton */}
+              <div className="shrink-0 flex flex-col items-center pr-0.5 sm:pr-1 gap-1.5">
+                <div className="h-[102px] sm:h-[120px] md:h-[142px] lg:h-[168px] xl:h-[188px] w-[110px] sm:w-[150px] md:w-[190px] lg:w-[220px] rounded-2xl bg-purple-200/40 dark:bg-white/10 border border-purple-200/30 dark:border-white/10 animate-pulse flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 shimmer-bg" />
+                </div>
+                <div className="h-2.5 w-24 sm:w-32 rounded-full bg-purple-100/70 dark:bg-white/10 animate-pulse" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function CategoriesSkeleton() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 px-0 mt-4">
