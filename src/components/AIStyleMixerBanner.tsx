@@ -99,9 +99,8 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                   <span className="sm:hidden text-[8.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 select-none">
                     NEW
                   </span>
-                  <div className="hidden sm:inline-flex items-center px-2 py-0.5 sm:px-2.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm backdrop-blur-md
-                    bg-purple-500/15 border border-purple-500/30 text-purple-700
-                    dark:bg-[#7c3aed]/30 dark:border-white/30 dark:text-white"
+                  <div className="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-[10.5px] font-black uppercase tracking-widest text-white shadow-[0_2px_12px_rgba(124,58,237,0.4)] dark:shadow-[0_0_16px_rgba(168,85,247,0.65)]
+                    bg-gradient-to-r from-[#7c3aed] via-[#9333ea] to-[#ec4899] border border-white/30 dark:border-white/40 backdrop-blur-md select-none"
                   >
                     NEW
                   </div>
