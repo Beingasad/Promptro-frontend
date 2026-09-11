@@ -693,13 +693,19 @@ export default function StyleMixer() {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#1f1738] dark:text-white min-w-0">
                     <svg
-                      className="w-3.5 h-3.5 text-amber-500 shrink-0 drop-shadow-[0_0_4px_rgba(245,158,11,0.5)]"
+                      className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]"
                       viewBox="0 0 24 24"
-                      fill="currentColor"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
-                      <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" />
+                      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.8-1.912a2 2 0 0 1-1.275-1.275L12 3Z" fill="currentColor" fillOpacity="0.2" />
+                      <path d="M5 3v4" />
+                      <path d="M19 17v4" />
                     </svg>
-                    <span className="truncate">Ready for Midjourney, FLUX & DALL-E</span>
+                    <span className="truncate">Ready for Midjourney, ChatGPT & Google Gemini</span>
                   </div>
                   <span className="whitespace-nowrap shrink-0 text-[10px] sm:text-[10.5px] font-bold text-purple-600 dark:text-purple-300 bg-purple-100/80 dark:bg-purple-900/40 px-2.5 py-0.5 rounded-full border border-purple-200 dark:border-purple-800/50">
                     Master Quality
