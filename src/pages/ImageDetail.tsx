@@ -700,19 +700,6 @@ export default function ImageDetail() {
             </motion.div>
           </AnimatePresence>
         </motion.div>
-
-        {/* Remix Prompt in AI Style Mixer */}
-        <div className="flex items-center justify-start pt-0.5">
-          <button
-            type="button"
-            onClick={handleRemixPrompt}
-            className="mixer-cta-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-md cursor-pointer transition-all hover:scale-105 active:scale-95"
-            aria-label="Remix This Prompt"
-          >
-            <SparkleIcon className="w-4 h-4 shrink-0 drop-shadow-[0_0_8px_rgba(252,211,77,0.85)]" variant="amber" />
-            <span>Remix This Prompt</span>
-          </button>
-        </div>
       </section>
 
       {negativePrompt && (
@@ -744,6 +731,19 @@ export default function ImageDetail() {
           </motion.div>
         </section>
       )}
+
+      {/* Remix Prompt in AI Style Mixer (Positioned cleanly after all prompt cards) */}
+      <div className="flex items-center justify-start pt-1.5">
+        <button
+          type="button"
+          onClick={handleRemixPrompt}
+          className="mixer-cta-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-md cursor-pointer transition-all hover:scale-105 active:scale-95"
+          aria-label="Remix This Prompt"
+        >
+          <SparkleIcon className="w-4 h-4 shrink-0 drop-shadow-[0_0_8px_rgba(252,211,77,0.85)]" variant="amber" />
+          <span>Remix This Prompt</span>
+        </button>
+      </div>
 
       {prompt.tags && prompt.tags.length > 0 && (
         <section className="shrink-0 flex flex-col gap-2 mt-5 pt-4">
