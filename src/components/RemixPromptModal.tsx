@@ -308,19 +308,19 @@ export default function RemixPromptModal({
               onClose();
             }
           }}
-          className="relative z-10 w-full max-w-2xl mx-auto rounded-t-[2.25rem] sm:rounded-t-[2.5rem] bg-[#fcfbff]/95 dark:bg-[#0c0818]/95 border-t border-x border-[#e4dcf2] dark:border-white/12 p-4 sm:p-6 shadow-[0_-12px_45px_rgba(72,56,118,0.15)] dark:shadow-[0_-12px_45px_rgba(0,0,0,0.6),inset_0_1.5px_1.5px_0_rgba(255,255,255,0.35)] backdrop-blur-3xl max-h-[85vh] sm:max-h-[88vh] flex flex-col justify-between overflow-hidden text-[#171421] dark:text-white"
+          className="relative z-10 w-full max-w-2xl mx-auto rounded-t-[2.25rem] sm:rounded-t-[2.5rem] bg-[#fcfbff]/95 dark:bg-[#0c0818]/95 border-t border-x border-[#e4dcf2] dark:border-white/12 px-4 pt-3 pb-4 sm:px-6 sm:pt-4 sm:pb-6 shadow-[0_-12px_45px_rgba(72,56,118,0.15)] dark:shadow-[0_-12px_45px_rgba(0,0,0,0.6),inset_0_1.5px_1.5px_0_rgba(255,255,255,0.35)] backdrop-blur-3xl max-h-[85vh] sm:max-h-[88vh] flex flex-col overflow-hidden text-[#171421] dark:text-white"
           style={{ willChange: 'transform' }}
         >
           {/* Ambient Top Glow Effects */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(139,92,246,0.12),transparent_70%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(139,92,246,0.25),transparent_70%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.14),transparent_50%)]" />
 
           {/* Top Drag Handle */}
-          <div className="flex justify-center pb-2.5 cursor-grab active:cursor-grabbing relative z-10 select-none">
+          <div className="flex justify-center pb-2 cursor-grab active:cursor-grabbing relative z-10 select-none">
             <div className="w-12 h-1.5 rounded-full bg-black/15 dark:bg-white/30 hover:bg-black/25 dark:hover:bg-white/50 transition-colors shadow-sm" />
           </div>
 
           {/* Modal Header (Clean Icon Without Box) */}
-          <div className="flex items-center justify-between gap-3 pb-3.5 border-b border-[#ece4f6] dark:border-white/8 shrink-0 relative z-10">
+          <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#ece4f6] dark:border-white/8 shrink-0 relative z-10">
             <div className="flex items-center gap-2.5 min-w-0">
               <SparkleIcon className="w-6 h-6 shrink-0 text-purple-600 dark:text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]" variant="purple" />
               <div className="min-w-0">
@@ -344,7 +344,7 @@ export default function RemixPromptModal({
           </div>
 
           {/* Scrollable Modal Body (Completely Hidden Scrollbars + Butter-Smooth Scroll) */}
-          <div className="flex-1 overflow-y-auto overscroll-contain hide-scrollbar py-3.5 space-y-4 relative z-10">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain hide-scrollbar py-3 space-y-4 relative z-10">
             
             {/* BOX 1: Prompt Display (Shows Main Prompt + Negative Prompt if present, updates with Remixed result) */}
             <div className="flex flex-col gap-1.5">
@@ -800,8 +800,8 @@ export default function RemixPromptModal({
 
           </div>
 
-          {/* Modal Footer Action Button (Mix & In-Place Generation) */}
-          <div className="pt-3.5 border-t border-[#ebe3f6] dark:border-white/8 shrink-0 relative z-10">
+          {/* Modal Footer Action Button (Mix & In-Place Generation - Fixed at Bottom) */}
+          <div className="pt-3 border-t border-[#ebe3f6] dark:border-white/8 shrink-0 relative z-20 bg-[#fcfbff]/95 dark:bg-[#0c0818]/95 backdrop-blur-sm">
             <button
               type="button"
               onClick={handleMixAndGenerate}
