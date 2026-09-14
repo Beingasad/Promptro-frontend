@@ -382,12 +382,20 @@ export default function RemixPromptModal({
                         </>
                       ) : (
                         <>
+                          {/* Non-clickable Original Status Badge */}
+                          <span
+                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-gray-100 dark:bg-white/[0.08] border border-gray-200 dark:border-white/15 text-[10.5px] font-bold text-gray-700 dark:text-gray-300 select-none pointer-events-none"
+                          >
+                            <RotateCcw className="w-3 h-3 text-gray-500 dark:text-gray-400 shrink-0" />
+                            <span>Original</span>
+                          </span>
+
                           {/* Switch back to Recreated New Prompt Button */}
                           <button
                             type="button"
                             onClick={handleTogglePromptTab}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-[11px] font-bold shadow-sm transition-all cursor-pointer active:scale-95"
-                            title="Restore new prompt"
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-[11px] font-bold shadow-sm transition-all cursor-pointer active:scale-95 ring-2 ring-purple-500/30"
+                            title="Restore remixed new prompt"
                           >
                             <Sparkles className="w-3 h-3 text-white shrink-0" />
                             <span>Restore New</span>
