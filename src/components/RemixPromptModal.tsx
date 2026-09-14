@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { X, Copy, Check, SlidersHorizontal, ChevronRight, Wand2 } from 'lucide-react';
+import { X, Copy, Check, SlidersHorizontal, ChevronRight, ChevronDown } from 'lucide-react';
 import { SparkleIcon } from './icons/SparkleIcon';
 
 interface RemixPromptModalProps {
@@ -12,6 +12,24 @@ interface RemixPromptModalProps {
   category?: string;
   model?: string;
 }
+
+const RATIO_OPTIONS = [
+  '1:1',
+  '9:16',
+  '16:9',
+  '4:5',
+  '3:2',
+  '21:9',
+];
+
+const QUALITY_OPTIONS = [
+  '8K UHD',
+  'Masterpiece',
+  'Ultra-Realistic',
+  'Hyper-Detailed',
+  'Raw Photo',
+  'Unreal Engine 5',
+];
 
 const STYLE_OPTIONS = [
   'Cinematic',
@@ -59,26 +77,40 @@ export default function RemixPromptModal({
 }: RemixPromptModalProps) {
   const navigate = useNavigate();
   const [modifications, setModifications] = useState('');
+  
+  // Quick Primary Attributes
+  const [selectedRatio, setSelectedRatio] = useState<string>('');
+  const [selectedQuality, setSelectedQuality] = useState<string>('');
   const [selectedStyle, setSelectedStyle] = useState<string>('');
+  
+  // Extra / Advanced Attributes
   const [selectedLighting, setSelectedLighting] = useState<string>('');
   const [selectedCamera, setSelectedCamera] = useState<string>('');
   const [selectedMood, setSelectedMood] = useState<string>('');
+  
+  // Advanced Styles Section Expand Toggle
+  const [showAdvancedStyles, setShowAdvancedStyles] = useState(false);
+
   const [copiedOriginal, setCopiedOriginal] = useState(false);
 
-  // Row expand toggles for "+ More" / "- Less" (matching AI Style Mixer page)
+  // Row expand toggles for "+ More" / "- Less" within each category
   const [expandedRows, setExpandedRows] = useState<{
+    ratio: boolean;
+    quality: boolean;
     style: boolean;
     lighting: boolean;
     camera: boolean;
     mood: boolean;
   }>({
+    ratio: false,
+    quality: false,
     style: false,
     lighting: false,
     camera: false,
     mood: false,
   });
 
-  const toggleRowMore = (row: 'style' | 'lighting' | 'camera' | 'mood') => {
+  const toggleRowMore = (row: keyof typeof expandedRows) => {
     setExpandedRows((prev) => ({ ...prev, [row]: !prev[row] }));
   };
 
@@ -106,10 +138,16 @@ export default function RemixPromptModal({
   };
 
   const handleProceedToMixer = () => {
-    // Construct refined idea prompt blending original + custom modifications
+    // Construct refined idea prompt blending original + custom modifications + quality & ratio specs
     let combinedIdea = originalPrompt.trim();
-    if (modifications.trim()) {
-      combinedIdea = `${combinedIdea}. Modifications & Changes: ${modifications.trim()}`;
+    const extraSpecs: string[] = [];
+    
+    if (selectedRatio) extraSpecs.push(`Aspect Ratio: ${selectedRatio}`);
+    if (selectedQuality) extraSpecs.push(`Quality: ${selectedQuality}`);
+    if (modifications.trim()) extraSpecs.push(`Modifications: ${modifications.trim()}`);
+    
+    if (extraSpecs.length > 0) {
+      combinedIdea = `${combinedIdea}. [${extraSpecs.join(', ')}]`;
     }
 
     onClose();
@@ -120,10 +158,14 @@ export default function RemixPromptModal({
         lighting: selectedLighting,
         camera: selectedCamera,
         mood: selectedMood,
+        ratio: selectedRatio,
+        quality: selectedQuality,
         autoGenerate: true,
       },
     });
   };
+
+  const activeAdvancedCount = [selectedLighting, selectedCamera, selectedMood].filter(Boolean).length;
 
   if (!isOpen) return null;
 
@@ -166,18 +208,16 @@ export default function RemixPromptModal({
             <div className="w-12 h-1.5 rounded-full bg-white/30 hover:bg-white/50 transition-colors shadow-sm" />
           </div>
 
-          {/* Modal Header */}
+          {/* Modal Header (Clean Icon Without Box) */}
           <div className="flex items-center justify-between gap-3 pb-3.5 border-b border-white/10 dark:border-white/8 shrink-0 relative z-10">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/25 via-purple-500/10 to-orange-500/20 border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
-                <SparkleIcon className="w-5 h-5 shrink-0" variant="purple" />
-              </div>
+            <div className="flex items-center gap-2.5 min-w-0">
+              <SparkleIcon className="w-6 h-6 shrink-0 text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.7)]" variant="purple" />
               <div className="min-w-0">
                 <h3 className="text-base sm:text-lg font-black text-white leading-tight flex items-center gap-2">
                   <span>Remix This Prompt</span>
                 </h3>
                 <p className="text-[11px] sm:text-xs font-medium text-white/60 truncate">
-                  Personalize and blend new creative styles into this prompt
+                  Personalize, tune aspect ratio, quality &amp; blend creative styles
                 </p>
               </div>
             </div>
@@ -221,7 +261,7 @@ export default function RemixPromptModal({
                 </button>
               </div>
 
-              <div className="rounded-2xl bg-white/[0.04] dark:bg-white/[0.03] border border-white/12 dark:border-white/8 p-3.5 text-xs sm:text-[13px] leading-relaxed text-white/90 max-h-[110px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm">
+              <div className="rounded-2xl bg-white/[0.04] dark:bg-white/[0.03] border border-white/12 dark:border-white/8 p-3.5 text-xs sm:text-[13px] leading-relaxed text-white/90 max-h-[105px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm">
                 {originalPrompt}
               </div>
             </div>
@@ -243,32 +283,125 @@ export default function RemixPromptModal({
                   value={modifications}
                   onChange={(e) => setModifications(e.target.value.slice(0, 300))}
                   placeholder="Describe your adjustments (e.g., change background to futuristic cyberpunk neon city, make lighting dramatic sunset, add rain reflections on road...)"
-                  rows={3}
+                  rows={2}
                   className="w-full rounded-2xl bg-white/[0.06] dark:bg-white/[0.04] border border-white/15 dark:border-white/10 focus:border-purple-400/80 p-3.5 text-xs sm:text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/25 transition-all resize-none hide-scrollbar shadow-inner"
                 />
               </div>
             </div>
 
-            {/* BOX 3: Style Mixer Options (Presets with "+ More / - Less" toggles) */}
+            {/* BOX 3: Tuning & Style Presets (Ratio, Quality, Main Style, and More Styles) */}
             <div className="flex flex-col gap-3 pt-1">
               <div className="flex items-center justify-between text-xs font-bold text-purple-300 px-0.5">
                 <span className="flex items-center gap-1.5">
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500/30 text-[10px] font-black text-indigo-200 border border-indigo-400/40">3</span>
                   <span className="flex items-center gap-1.5 tracking-wide">
                     <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
-                    <span>Add AI Style Presets (Optional)</span>
+                    <span>Tuning &amp; AI Style Presets</span>
                   </span>
                 </span>
               </div>
 
-              {/* Style Presets List */}
+              {/* Presets Container */}
               <div className="space-y-2.5 text-[11px]">
-                {/* 1. Visual Style */}
+                
+                {/* 1. ASPECT RATIO */}
+                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                  <div className="flex items-center justify-between gap-1.5 mb-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Aspect Ratio</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(expandedRows.ratio ? RATIO_OPTIONS : RATIO_OPTIONS.slice(0, 3)).map((opt) => {
+                      const isSelected = selectedRatio === opt;
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => handleToggle(selectedRatio, opt, setSelectedRatio)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_2px_12px_rgba(6,182,212,0.4)] border border-cyan-300/80 scale-[1.02]'
+                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      );
+                    })}
+                    <button
+                      type="button"
+                      onClick={() => toggleRowMore('ratio')}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-cyan-300 hover:text-white bg-cyan-500/15 hover:bg-cyan-500/25 border border-dashed border-cyan-400/40 transition-colors cursor-pointer active:scale-95"
+                    >
+                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        {expandedRows.ratio ? (
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        ) : (
+                          <>
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </>
+                        )}
+                      </svg>
+                      <span>{expandedRows.ratio ? 'Less' : 'More'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. QUALITY TIER */}
+                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                  <div className="flex items-center justify-between gap-1.5 mb-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Quality Preset</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(expandedRows.quality ? QUALITY_OPTIONS : QUALITY_OPTIONS.slice(0, 3)).map((opt) => {
+                      const isSelected = selectedQuality === opt;
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => handleToggle(selectedQuality, opt, setSelectedQuality)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_2px_12px_rgba(16,185,129,0.4)] border border-emerald-300/80 scale-[1.02]'
+                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      );
+                    })}
+                    <button
+                      type="button"
+                      onClick={() => toggleRowMore('quality')}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-emerald-300 hover:text-white bg-emerald-500/15 hover:bg-emerald-500/25 border border-dashed border-emerald-400/40 transition-colors cursor-pointer active:scale-95"
+                    >
+                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        {expandedRows.quality ? (
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        ) : (
+                          <>
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </>
+                        )}
+                      </svg>
+                      <span>{expandedRows.quality ? 'Less' : 'More'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. MAIN VISUAL STYLE */}
                 <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
                   <div className="flex items-center justify-between gap-1.5 mb-2">
                     <div className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
-                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Visual Style</span>
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Main Visual Style</span>
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-1.5">
@@ -309,143 +442,176 @@ export default function RemixPromptModal({
                   </div>
                 </div>
 
-                {/* 2. Lighting */}
-                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
-                  <div className="flex items-center justify-between gap-1.5 mb-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.8)]" />
-                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Lighting</span>
-                    </div>
+                {/* 4. EXPANDABLE "MORE STYLES & CONTROLS" BUTTON */}
+                <button
+                  type="button"
+                  onClick={() => setShowAdvancedStyles(!showAdvancedStyles)}
+                  className="w-full py-2.5 px-3.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-purple-400/40 flex items-center justify-between text-xs font-bold text-purple-200 transition-all cursor-pointer group shadow-sm"
+                >
+                  <div className="flex items-center gap-2">
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-45 transition-transform" />
+                    <span>{showAdvancedStyles ? 'Hide More Styles (Lighting, Camera, Mood)' : '+ More Styles (Lighting, Camera, Mood)'}</span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {(expandedRows.lighting ? LIGHTING_OPTIONS : LIGHTING_OPTIONS.slice(0, 3)).map((opt) => {
-                      const isSelected = selectedLighting === opt;
-                      return (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => handleToggle(selectedLighting, opt, setSelectedLighting)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-[0_2px_12px_rgba(225,29,72,0.4)] border border-pink-300/80 scale-[1.02]'
-                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      );
-                    })}
-                    <button
-                      type="button"
-                      onClick={() => toggleRowMore('lighting')}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-pink-300 hover:text-white bg-pink-500/15 hover:bg-pink-500/25 border border-dashed border-pink-400/40 transition-colors cursor-pointer active:scale-95"
-                    >
-                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        {expandedRows.lighting ? (
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        ) : (
-                          <>
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                          </>
-                        )}
-                      </svg>
-                      <span>{expandedRows.lighting ? 'Less' : 'More'}</span>
-                    </button>
+                  <div className="flex items-center gap-2">
+                    {activeAdvancedCount > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-200 text-[10px] font-black border border-purple-400/40">
+                        {activeAdvancedCount} Selected
+                      </span>
+                    )}
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvancedStyles ? 'rotate-180 text-purple-300' : 'text-white/40'}`} />
                   </div>
-                </div>
+                </button>
 
-                {/* 3. Camera */}
-                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
-                  <div className="flex items-center justify-between gap-1.5 mb-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
-                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Camera Look</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {(expandedRows.camera ? CAMERA_OPTIONS : CAMERA_OPTIONS.slice(0, 3)).map((opt) => {
-                      const isSelected = selectedCamera === opt;
-                      return (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => handleToggle(selectedCamera, opt, setSelectedCamera)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_2px_12px_rgba(245,158,11,0.4)] border border-amber-300/80 scale-[1.02]'
-                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      );
-                    })}
-                    <button
-                      type="button"
-                      onClick={() => toggleRowMore('camera')}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-amber-300 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-dashed border-amber-400/40 transition-colors cursor-pointer active:scale-95"
+                {/* EXPANDABLE SECTIONS (Lighting, Camera, Mood) */}
+                <AnimatePresence>
+                  {showAdvancedStyles && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      className="space-y-2.5 overflow-hidden pt-0.5"
                     >
-                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        {expandedRows.camera ? (
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        ) : (
-                          <>
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                          </>
-                        )}
-                      </svg>
-                      <span>{expandedRows.camera ? 'Less' : 'More'}</span>
-                    </button>
-                  </div>
-                </div>
+                      {/* Lighting */}
+                      <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                        <div className="flex items-center justify-between gap-1.5 mb-2">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.8)]" />
+                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Lighting</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {(expandedRows.lighting ? LIGHTING_OPTIONS : LIGHTING_OPTIONS.slice(0, 3)).map((opt) => {
+                            const isSelected = selectedLighting === opt;
+                            return (
+                              <button
+                                key={opt}
+                                type="button"
+                                onClick={() => handleToggle(selectedLighting, opt, setSelectedLighting)}
+                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-[0_2px_12px_rgba(225,29,72,0.4)] border border-pink-300/80 scale-[1.02]'
+                                    : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                                }`}
+                              >
+                                {opt}
+                              </button>
+                            );
+                          })}
+                          <button
+                            type="button"
+                            onClick={() => toggleRowMore('lighting')}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-pink-300 hover:text-white bg-pink-500/15 hover:bg-pink-500/25 border border-dashed border-pink-400/40 transition-colors cursor-pointer active:scale-95"
+                          >
+                            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              {expandedRows.lighting ? (
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                              ) : (
+                                <>
+                                  <line x1="12" y1="5" x2="12" y2="19" />
+                                  <line x1="5" y1="12" x2="19" y2="12" />
+                                </>
+                              )}
+                            </svg>
+                            <span>{expandedRows.lighting ? 'Less' : 'More'}</span>
+                          </button>
+                        </div>
+                      </div>
 
-                {/* 4. Mood */}
-                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
-                  <div className="flex items-center justify-between gap-1.5 mb-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
-                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Mood</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {(expandedRows.mood ? MOOD_OPTIONS : MOOD_OPTIONS.slice(0, 3)).map((opt) => {
-                      const isSelected = selectedMood === opt;
-                      return (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => handleToggle(selectedMood, opt, setSelectedMood)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_2px_12px_rgba(139,92,246,0.4)] border border-violet-300/80 scale-[1.02]'
-                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      );
-                    })}
-                    <button
-                      type="button"
-                      onClick={() => toggleRowMore('mood')}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-indigo-300 hover:text-white bg-indigo-500/15 hover:bg-indigo-500/25 border border-dashed border-indigo-400/40 transition-colors cursor-pointer active:scale-95"
-                    >
-                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        {expandedRows.mood ? (
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        ) : (
-                          <>
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                          </>
-                        )}
-                      </svg>
-                      <span>{expandedRows.mood ? 'Less' : 'More'}</span>
-                    </button>
-                  </div>
-                </div>
+                      {/* Camera */}
+                      <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                        <div className="flex items-center justify-between gap-1.5 mb-2">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
+                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Camera Look</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {(expandedRows.camera ? CAMERA_OPTIONS : CAMERA_OPTIONS.slice(0, 3)).map((opt) => {
+                            const isSelected = selectedCamera === opt;
+                            return (
+                              <button
+                                key={opt}
+                                type="button"
+                                onClick={() => handleToggle(selectedCamera, opt, setSelectedCamera)}
+                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_2px_12px_rgba(245,158,11,0.4)] border border-amber-300/80 scale-[1.02]'
+                                    : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                                }`}
+                              >
+                                {opt}
+                              </button>
+                            );
+                          })}
+                          <button
+                            type="button"
+                            onClick={() => toggleRowMore('camera')}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-amber-300 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-dashed border-amber-400/40 transition-colors cursor-pointer active:scale-95"
+                          >
+                            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              {expandedRows.camera ? (
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                              ) : (
+                                <>
+                                  <line x1="12" y1="5" x2="12" y2="19" />
+                                  <line x1="5" y1="12" x2="19" y2="12" />
+                                </>
+                              )}
+                            </svg>
+                            <span>{expandedRows.camera ? 'Less' : 'More'}</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Mood */}
+                      <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                        <div className="flex items-center justify-between gap-1.5 mb-2">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
+                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Mood</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {(expandedRows.mood ? MOOD_OPTIONS : MOOD_OPTIONS.slice(0, 3)).map((opt) => {
+                            const isSelected = selectedMood === opt;
+                            return (
+                              <button
+                                key={opt}
+                                type="button"
+                                onClick={() => handleToggle(selectedMood, opt, setSelectedMood)}
+                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_2px_12px_rgba(139,92,246,0.4)] border border-violet-300/80 scale-[1.02]'
+                                    : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                                }`}
+                              >
+                                {opt}
+                              </button>
+                            );
+                          })}
+                          <button
+                            type="button"
+                            onClick={() => toggleRowMore('mood')}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-indigo-300 hover:text-white bg-indigo-500/15 hover:bg-indigo-500/25 border border-dashed border-indigo-400/40 transition-colors cursor-pointer active:scale-95"
+                          >
+                            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              {expandedRows.mood ? (
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                              ) : (
+                                <>
+                                  <line x1="12" y1="5" x2="12" y2="19" />
+                                  <line x1="5" y1="12" x2="19" y2="12" />
+                                </>
+                              )}
+                            </svg>
+                            <span>{expandedRows.mood ? 'Less' : 'More'}</span>
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
               </div>
             </div>
