@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown, Minus } from 'lucide-react';
+import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown, Minus, Sparkles } from 'lucide-react';
 import { SparkleIcon } from './icons/SparkleIcon';
 import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter } from '../lib/puter';
 import PuterAuthModal from './PuterAuthModal';
@@ -82,6 +82,8 @@ export default function RemixPromptModal({
   
   // Prompt state in Box 1 (starts with original, updates with new remixed prompt)
   const [displayedPrompt, setDisplayedPrompt] = useState(originalPrompt);
+  const [remixedPrompt, setRemixedPrompt] = useState('');
+  const [activePromptTab, setActivePromptTab] = useState<'new' | 'original'>('original');
   const [isRemixed, setIsRemixed] = useState(false);
   
   // Quick Primary Attributes
@@ -107,6 +109,8 @@ export default function RemixPromptModal({
   useEffect(() => {
     if (isOpen) {
       setDisplayedPrompt(originalPrompt);
+      setRemixedPrompt('');
+      setActivePromptTab('original');
       setIsRemixed(false);
       setModifications('');
       setSelectedRatio('');
@@ -170,7 +174,7 @@ export default function RemixPromptModal({
   const handleRestoreOriginal = (e: React.MouseEvent) => {
     e.stopPropagation();
     setDisplayedPrompt(originalPrompt);
-    setIsRemixed(false);
+    setActivePromptTab('original');
   };
 
   const handleToggle = (current: string, val: string, setter: (v: string) => void) => {
@@ -200,7 +204,9 @@ export default function RemixPromptModal({
       synthesized += ` --ar ${selectedRatio}`;
     }
 
+    setRemixedPrompt(synthesized);
     setDisplayedPrompt(synthesized);
+    setActivePromptTab('new');
     setIsRemixed(true);
     setGenerating(false);
   };
@@ -232,7 +238,9 @@ export default function RemixPromptModal({
         finalPrompt = `${finalPrompt}, ${selectedQuality.toLowerCase()}`;
       }
 
+      setRemixedPrompt(finalPrompt);
       setDisplayedPrompt(finalPrompt);
+      setActivePromptTab('new');
       setIsRemixed(true);
       setGenerating(false);
     } catch (err) {
@@ -343,27 +351,47 @@ export default function RemixPromptModal({
                 <span className="flex items-center gap-1.5">
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-500/30 text-[10px] font-black text-purple-700 dark:text-purple-200 border border-purple-200 dark:border-purple-400/40">1</span>
                   <span className="tracking-wide">
-                    {isRemixed ? 'Remixed Prompt' : 'Original Prompt'}
+                    {remixedPrompt && activePromptTab === 'new' ? 'Remixed Prompt' : 'Original Prompt'}
                   </span>
-                  {isRemixed && (
-                    <span className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-purple-500/20 to-pink-500/20 dark:from-purple-500/30 dark:to-pink-500/30 border border-purple-300 dark:border-purple-400/40 text-[9px] font-black text-purple-700 dark:text-purple-200 tracking-wider uppercase">
-                      New ✨
-                    </span>
-                  )}
                 </span>
                 
                 <div className="flex items-center gap-1.5">
-                  {/* Restore / Original button (visible when prompt is remixed) */}
-                  {isRemixed && (
-                    <button
-                      type="button"
-                      onClick={handleRestoreOriginal}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[11px] font-semibold text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
-                      title="Restore original prompt"
-                    >
-                      <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300" />
-                      <span>Original</span>
-                    </button>
+                  {/* When prompt has been remixed, show New (with purple magic icon) and Original toggle buttons */}
+                  {remixedPrompt && (
+                    <>
+                      {/* New Button with Magic Icon in Purple */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDisplayedPrompt(remixedPrompt);
+                          setActivePromptTab('new');
+                        }}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] transition-all cursor-pointer shadow-sm active:scale-95 ${
+                          activePromptTab === 'new'
+                            ? 'bg-[#e9ddfa] dark:bg-purple-500/25 border border-purple-300 dark:border-purple-400/50 text-[#6b21a8] dark:text-purple-200 font-bold shadow-sm'
+                            : 'bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white font-semibold'
+                        }`}
+                        title="View Remixed New Prompt"
+                      >
+                        <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-300" />
+                        <span>New</span>
+                      </button>
+
+                      {/* Original Restore Button */}
+                      <button
+                        type="button"
+                        onClick={handleRestoreOriginal}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] transition-all cursor-pointer shadow-sm active:scale-95 ${
+                          activePromptTab === 'original'
+                            ? 'bg-[#e9ddfa] dark:bg-purple-500/25 border border-purple-300 dark:border-purple-400/50 text-[#6b21a8] dark:text-purple-200 font-bold shadow-sm'
+                            : 'bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white font-semibold'
+                        }`}
+                        title="View Original Prompt"
+                      >
+                        <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300" />
+                        <span>Original</span>
+                      </button>
+                    </>
                   )}
 
                   {/* Copy prompt button */}
