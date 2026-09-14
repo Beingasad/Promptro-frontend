@@ -360,37 +360,23 @@ export default function RemixPromptModal({
                 </span>
                 
                 <div className="flex items-center gap-1.5">
-                  {/* When prompt has been remixed, show New (with purple magic icon) and Original toggle buttons */}
+                  {/* When prompt has been remixed, show New status badge (non-clickable) and Original button */}
                   {(Boolean(remixedPrompt) || isRemixed) && (
                     <>
-                      {/* New Button with Magic Sparkles Icon in Purple */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (remixedPrompt) setDisplayedPrompt(remixedPrompt);
-                          setActivePromptTab('new');
-                        }}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] transition-all cursor-pointer shadow-sm active:scale-95 ${
-                          activePromptTab === 'new'
-                            ? 'bg-[#e9ddfa] dark:bg-purple-500/25 border border-purple-300 dark:border-purple-400/50 text-[#6b21a8] dark:text-purple-200 font-bold shadow-sm'
-                            : 'bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white font-semibold'
-                        }`}
-                        title="View Remixed New Prompt"
+                      {/* Non-clickable New Status Badge with Purple Sparkles */}
+                      <span
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100/90 dark:bg-purple-500/20 border border-purple-200/90 dark:border-purple-400/30 text-[10.5px] font-bold text-purple-700 dark:text-purple-300 select-none pointer-events-none"
                       >
-                        <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-300 shrink-0" />
+                        <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-400 shrink-0" />
                         <span>New</span>
-                      </button>
+                      </span>
 
                       {/* Original Restore Button */}
                       <button
                         type="button"
                         onClick={handleRestoreOriginal}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] transition-all cursor-pointer shadow-sm active:scale-95 ${
-                          activePromptTab === 'original'
-                            ? 'bg-[#e9ddfa] dark:bg-purple-500/25 border border-purple-300 dark:border-purple-400/50 text-[#6b21a8] dark:text-purple-200 font-bold shadow-sm'
-                            : 'bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white font-semibold'
-                        }`}
-                        title="View Original Prompt"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[11px] font-semibold text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                        title="Restore original prompt"
                       >
                         <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300 shrink-0" />
                         <span>Original</span>
