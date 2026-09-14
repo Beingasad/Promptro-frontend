@@ -167,9 +167,6 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                   <span className="relative z-10 font-black bg-gradient-to-r from-purple-700 via-pink-600 to-amber-600 bg-clip-text text-transparent dark:bg-none dark:text-white dark:drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]">
                     Mix Your Style
                   </span>
-                  
-                  {/* Professional Sparkles SVG Icon */}
-                  <SparkleIcon className="relative z-10 w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(251,191,36,0.85)]" variant="amber" />
                 </button>
 
               </div>
@@ -311,7 +308,6 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                     <span className="font-black text-[13.5px] xl:text-[14.5px] bg-gradient-to-r from-purple-800 via-pink-700 to-amber-700 bg-clip-text text-transparent dark:bg-none dark:text-white dark:drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
                       Mix Your Style
                     </span>
-                    <SparkleIcon className="w-3.5 h-3.5 xl:w-4 xl:h-4 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_10px_rgba(251,191,36,0.9)]" variant="amber" />
                     <span className="text-[11px] xl:text-[12.5px] font-bold text-purple-950/70 dark:text-purple-100 ml-1 inline-flex items-center gap-1 group-hover:text-purple-950 dark:group-hover:text-white transition-colors">
                       Open AI Mixer Engine <span className="inline-block group-hover:translate-x-1.5 transition-transform duration-300">→</span>
                     </span>

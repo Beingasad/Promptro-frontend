@@ -676,10 +676,7 @@ export default function StyleMixer() {
                   <span>Synthesizing Prompt with Puter AI...</span>
                 </>
               ) : (
-                <>
-                  <SparkleIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 drop-shadow-[0_0_8px_rgba(252,211,77,0.85)]" variant="amber" />
-                  <span>Generate My Prompt</span>
-                </>
+                <span>Generate My Prompt</span>
               )}
             </button>
             <p className="text-[10.5px] font-medium text-[#7a7192] dark:text-[#a097b8] text-center">
