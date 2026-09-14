@@ -1792,8 +1792,6 @@ export default function TopNavbar() {
 
         <div className="order-3 w-full md:order-none md:min-w-[280px] md:flex-1 md:max-w-[820px] relative">
           <div className={`relative flex items-center w-full transition-all duration-300 ${isFocused ? 'scale-[1.015]' : 'scale-100'}`}>
-            <div className={`absolute inset-0 rounded-full bg-gradient-to-r from-primary/24 via-fuchsia-300/22 to-secondary/22 blur-2xl transition-opacity duration-300 ${isHome ? 'opacity-45 md:hidden' : (isFocused ? 'opacity-100' : 'opacity-45')
-              }`}></div>
             <div className="liquid-glass-search liquid-glass-sheen relative flex h-11 w-full items-center justify-between overflow-hidden rounded-full md:h-14">
               <div className="flex flex-grow items-center h-full min-w-0">
                 <div className="pl-4 md:pl-5 pr-2.5 text-[#6f6684] dark:text-[#a59cb8]">
