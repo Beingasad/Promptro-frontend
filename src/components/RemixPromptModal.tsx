@@ -173,10 +173,15 @@ export default function RemixPromptModal({
     }
   };
 
-  const handleRestoreOriginal = (e: React.MouseEvent) => {
+  const handleTogglePromptTab = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setDisplayedPrompt(originalPrompt);
-    setActivePromptTab('original');
+    if (activePromptTab === 'new') {
+      setDisplayedPrompt(originalPrompt);
+      setActivePromptTab('original');
+    } else if (remixedPrompt) {
+      setDisplayedPrompt(remixedPrompt);
+      setActivePromptTab('new');
+    }
   };
 
   const handleToggle = (current: string, val: string, setter: (v: string) => void) => {
@@ -351,27 +356,44 @@ export default function RemixPromptModal({
                 </span>
                 
                 <div className="flex items-center gap-1.5">
-                  {/* When prompt has been remixed, show New status badge (non-clickable) and Original button */}
+                  {/* When prompt has been remixed, show toggle controls */}
                   {(Boolean(remixedPrompt) || isRemixed) && (
                     <>
-                      {/* Non-clickable New Status Badge with Purple Sparkles */}
-                      <span
-                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100/90 dark:bg-purple-500/20 border border-purple-200/90 dark:border-purple-400/30 text-[10.5px] font-bold text-purple-700 dark:text-purple-300 select-none pointer-events-none"
-                      >
-                        <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-400 shrink-0" />
-                        <span>New</span>
-                      </span>
+                      {activePromptTab === 'new' ? (
+                        <>
+                          {/* Non-clickable New Status Badge with Purple Sparkles */}
+                          <span
+                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-purple-100/90 dark:bg-purple-500/20 border border-purple-200/90 dark:border-purple-400/30 text-[10.5px] font-bold text-purple-700 dark:text-purple-300 select-none pointer-events-none"
+                          >
+                            <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-400 shrink-0" />
+                            <span>New</span>
+                          </span>
 
-                      {/* Original Restore Button */}
-                      <button
-                        type="button"
-                        onClick={handleRestoreOriginal}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[11px] font-semibold text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
-                        title="Restore original prompt"
-                      >
-                        <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300 shrink-0" />
-                        <span>Original</span>
-                      </button>
+                          {/* Switch to Original Button */}
+                          <button
+                            type="button"
+                            onClick={handleTogglePromptTab}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[11px] font-semibold text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                            title="Show original prompt"
+                          >
+                            <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300 shrink-0" />
+                            <span>Original</span>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {/* Switch back to Recreated New Prompt Button */}
+                          <button
+                            type="button"
+                            onClick={handleTogglePromptTab}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-[11px] font-bold shadow-sm transition-all cursor-pointer active:scale-95"
+                            title="Restore new prompt"
+                          >
+                            <Sparkles className="w-3 h-3 text-white shrink-0" />
+                            <span>Restore New</span>
+                          </button>
+                        </>
+                      )}
                     </>
                   )}
 
