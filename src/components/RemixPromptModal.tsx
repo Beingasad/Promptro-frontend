@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown } from 'lucide-react';
+import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown, Minus } from 'lucide-react';
 import { SparkleIcon } from './icons/SparkleIcon';
 import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter } from '../lib/puter';
 import PuterAuthModal from './PuterAuthModal';
@@ -10,6 +10,7 @@ interface RemixPromptModalProps {
   isOpen: boolean;
   onClose: () => void;
   originalPrompt: string;
+  negativePrompt?: string;
   category?: string;
   model?: string;
 }
@@ -73,6 +74,7 @@ export default function RemixPromptModal({
   isOpen,
   onClose,
   originalPrompt,
+  negativePrompt,
   category,
   model,
 }: RemixPromptModalProps) {
@@ -97,6 +99,7 @@ export default function RemixPromptModal({
 
   // Status states
   const [copied, setCopied] = useState(false);
+  const [copiedNegative, setCopiedNegative] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [showPuterModal, setShowPuterModal] = useState(false);
 
@@ -155,6 +158,15 @@ export default function RemixPromptModal({
     setTimeout(() => setCopied(false), 1800);
   };
 
+  const handleCopyNegative = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (negativePrompt) {
+      navigator.clipboard.writeText(negativePrompt);
+      setCopiedNegative(true);
+      setTimeout(() => setCopiedNegative(false), 1800);
+    }
+  };
+
   const handleRestoreOriginal = (e: React.MouseEvent) => {
     e.stopPropagation();
     setDisplayedPrompt(originalPrompt);
@@ -200,6 +212,7 @@ export default function RemixPromptModal({
       const extraSpecs: string[] = [];
       if (selectedRatio) extraSpecs.push(`Aspect Ratio: ${selectedRatio}`);
       if (selectedQuality) extraSpecs.push(`Quality: ${selectedQuality}`);
+      if (negativePrompt?.trim()) extraSpecs.push(`Negative Exclusions: ${negativePrompt.trim()}`);
       if (modifications.trim()) extraSpecs.push(`Modifications: ${modifications.trim()}`);
 
       const res = await generateStyleMixerPrompt({
@@ -333,7 +346,7 @@ export default function RemixPromptModal({
           {/* Scrollable Modal Body (Completely Hidden Scrollbars + Butter-Smooth Scroll) */}
           <div className="flex-1 overflow-y-auto overscroll-contain hide-scrollbar py-3.5 space-y-4 relative z-10">
             
-            {/* BOX 1: Prompt Display (Updates to New Remixed Prompt with Copy & Restore Options) */}
+            {/* BOX 1: Prompt Display (Shows Main Prompt + Negative Prompt if present, updates with Remixed result) */}
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-bold text-[#6b21a8] dark:text-purple-300 px-0.5">
                 <span className="flex items-center gap-1.5">
@@ -383,12 +396,45 @@ export default function RemixPromptModal({
                 </div>
               </div>
 
-              <div className={`rounded-2xl border p-3.5 text-xs sm:text-[13px] leading-relaxed max-h-[110px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
+              {/* Main Prompt Content Box */}
+              <div className={`rounded-2xl border p-3.5 text-xs sm:text-[13px] leading-relaxed max-h-[140px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
                 isRemixed 
                   ? 'border-purple-300 dark:border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.12)] bg-purple-50/90 dark:bg-purple-950/20 text-[#171124] dark:text-white/90' 
                   : 'border-[#e5dcf2] dark:border-white/8 bg-[#f4effa] dark:bg-white/[0.03] text-[#282138] dark:text-white/90'
               }`}>
-                {displayedPrompt}
+                <div>{displayedPrompt}</div>
+
+                {/* If image prompt has Negative Prompt, display it clearly inside Box 1 */}
+                {negativePrompt && negativePrompt.trim() && (
+                  <div className="mt-2.5 pt-2.5 border-t border-[#e2d7f0] dark:border-white/10 flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10.5px] font-bold text-[#e11d48] dark:text-pink-400 flex items-center gap-1 uppercase tracking-wider">
+                        <Minus className="w-3 h-3" />
+                        <span>Negative Prompt</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleCopyNegative}
+                        className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#e11d48] dark:text-pink-300 hover:underline cursor-pointer"
+                      >
+                        {copiedNegative ? (
+                          <>
+                            <Check className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
+                            <span className="text-emerald-600 dark:text-emerald-400">Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-2.5 h-2.5" />
+                            <span>Copy Negative</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-[11.5px] text-[#554b6d] dark:text-white/70 italic leading-relaxed select-text">
+                      {negativePrompt}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
