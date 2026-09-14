@@ -361,13 +361,13 @@ export default function RemixPromptModal({
                 
                 <div className="flex items-center gap-1.5">
                   {/* When prompt has been remixed, show New (with purple magic icon) and Original toggle buttons */}
-                  {remixedPrompt && (
+                  {(Boolean(remixedPrompt) || isRemixed) && (
                     <>
-                      {/* New Button with Magic Icon in Purple */}
+                      {/* New Button with Magic Sparkles Icon in Purple */}
                       <button
                         type="button"
                         onClick={() => {
-                          setDisplayedPrompt(remixedPrompt);
+                          if (remixedPrompt) setDisplayedPrompt(remixedPrompt);
                           setActivePromptTab('new');
                         }}
                         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] transition-all cursor-pointer shadow-sm active:scale-95 ${
@@ -377,7 +377,7 @@ export default function RemixPromptModal({
                         }`}
                         title="View Remixed New Prompt"
                       >
-                        <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-300" />
+                        <Sparkles className="w-3 h-3 text-purple-600 dark:text-purple-300 shrink-0" />
                         <span>New</span>
                       </button>
 
@@ -392,7 +392,7 @@ export default function RemixPromptModal({
                         }`}
                         title="View Original Prompt"
                       >
-                        <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300" />
+                        <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300 shrink-0" />
                         <span>Original</span>
                       </button>
                     </>
