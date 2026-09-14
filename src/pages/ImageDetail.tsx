@@ -523,17 +523,17 @@ export default function ImageDetail() {
             className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Go back"
           >
-            <ArrowLeft className="h-4 w-4 md:h-5 md:w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
+            <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" />
           </button>
           <button
             onClick={handleDownload}
             className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Download image"
           >
-            <Download className="h-4 w-4 md:h-5 md:w-5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
+            <Download className="h-4 w-4 md:h-5 md:w-5 text-white" />
           </button>
           {galleryImages.length > 1 && (
-            <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white font-bold text-[10px] select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+            <div className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white font-bold text-[10px] select-none md:h-10 md:w-10 md:rounded-[18px] md:text-[12px] pointer-events-none">
               {currentImageIndex + 1}/{galleryImages.length}
             </div>
           )}
@@ -544,14 +544,14 @@ export default function ImageDetail() {
             className="liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px]"
             aria-label="Share prompt"
           >
-            {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />}
+            {shared ? <Check className="h-4 w-4 md:h-5 md:w-5 text-emerald-400" /> : <Share2 className="h-4 w-4 md:h-5 md:w-5" />}
           </button>
           <button
             onClick={toggleSave}
             className={`liquid-glass-dark-control flex h-8 w-8 items-center justify-center rounded-[14px] text-white md:h-10 md:w-10 md:rounded-[18px] ${saved ? '!bg-purple-600/70 !border-purple-400/60' : ''}`}
             aria-label={saved ? 'Remove saved prompt' : 'Save prompt'}
           >
-            <Bookmark className="h-4 w-4 md:h-5 md:w-5 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" fill={saved ? 'currentColor' : 'none'} />
+            <Bookmark className="h-4 w-4 md:h-5 md:w-5" fill={saved ? 'currentColor' : 'none'} />
           </button>
           <button
             onClick={handleCollectionClick}
@@ -559,7 +559,7 @@ export default function ImageDetail() {
             aria-label="Add to Collection"
           >
             <GalleryVerticalEnd 
-              className="h-4 w-4 md:h-5 md:w-5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+              className="h-4 w-4 md:h-5 md:w-5 text-white"
               fill={inCollection ? 'currentColor' : 'none'}
             />
           </button>
