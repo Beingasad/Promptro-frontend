@@ -199,8 +199,8 @@ export default function RemixPromptModal({
       base = `${base}, ${modDesc}`;
     }
 
-    const styleTags = descriptors.length > 0 ? `${descriptors.join(', ')} style` : 'ultra-detailed cinematic style';
-    let synthesized = `${base}, rendered in a stunning ${styleTags}${lightingDesc ? `, ${lightingDesc}` : ''}${cameraDesc ? `, ${cameraDesc}` : ''}, highly detailed, photorealistic masterpiece.`;
+    const styleTags = descriptors.length > 0 ? `${descriptors.join(', ')} style` : 'ultra-detailed cinematic aesthetic';
+    let synthesized = `${base}, rendered in a breathtaking ${styleTags}${lightingDesc ? `, ${lightingDesc}` : ', with atmospheric cinematic illumination'}${cameraDesc ? `, ${cameraDesc}` : ', captured with sharp photographic depth'}, highly detailed, 8k resolution masterpiece.`;
 
     if (selectedRatio && !synthesized.includes(selectedRatio)) {
       synthesized += ` --ar ${selectedRatio}`;
@@ -223,8 +223,9 @@ export default function RemixPromptModal({
       if (negativePrompt?.trim()) extraSpecs.push(`Negative Exclusions: ${negativePrompt.trim()}`);
       if (modifications.trim()) extraSpecs.push(`Modifications: ${modifications.trim()}`);
 
+      const userMod = modifications.trim();
       const res = await generateStyleMixerPrompt({
-        idea: extraSpecs.length > 0 ? `${originalPrompt}. Special Instructions: ${extraSpecs.join(', ')}` : originalPrompt,
+        idea: userMod || (extraSpecs.length > 0 ? extraSpecs.join(', ') : 'Elevate, enrich and stylize this prompt creatively'),
         style: selectedStyle || undefined,
         lighting: selectedLighting || undefined,
         camera: selectedCamera || undefined,
@@ -264,20 +265,19 @@ export default function RemixPromptModal({
   };
 
   const handlePuterModalContinue = async () => {
-    const alreadySignedIn = await isPuterSignedIn();
-    if (alreadySignedIn) {
+    try {
+      const success = await signInWithPuter();
       setShowPuterModal(false);
-      await executeGeneration();
-      return;
-    }
 
-    const success = await signInWithPuter();
-    setShowPuterModal(false);
-
-    if (success) {
-      await executeGeneration();
-    } else {
-      // User cancelled Puter popup or closed it -> synthesize locally without popups
+      if (success) {
+        await executeGeneration();
+      } else {
+        // User cancelled Puter popup or closed it -> synthesize locally with rich creative styling
+        executeLocalSynthesis();
+      }
+    } catch (err) {
+      setShowPuterModal(false);
+      console.warn('Puter sign in error, using fallback:', err);
       executeLocalSynthesis();
     }
   };

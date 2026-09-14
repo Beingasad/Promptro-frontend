@@ -110,7 +110,10 @@ export const isPuterSignedIn = async (): Promise<boolean> => {
  */
 export const signInWithPuter = async (): Promise<boolean> => {
   try {
-    const puter = await loadPuterSdk();
+    let puter = typeof window !== 'undefined' ? window.puter : undefined;
+    if (!puter?.auth) {
+      puter = await loadPuterSdk();
+    }
     if (!puter?.auth || typeof puter.auth.signIn !== 'function') {
       return false;
     }
@@ -122,10 +125,9 @@ export const signInWithPuter = async (): Promise<boolean> => {
         return true;
       }
     }
-    return false;
+    return localStorage.getItem('promptro_puter_signed_in') === 'true';
   } catch (err: any) {
-    // Gracefully handle cancellation, closed popups, or blocked popups
-    console.info('Puter sign in cancelled or closed by user.');
+    console.info('Puter sign in cancelled or closed by user:', err);
     return false;
   }
 };
