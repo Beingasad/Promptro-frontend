@@ -420,7 +420,7 @@ export default function RemixPromptModal({
               {/* Presets Container */}
               <div className="space-y-2.5 text-[11px]">
                 
-                {/* 1. ASPECT RATIO */}
+                {/* 1. ASPECT RATIO (Single Line Edge-to-Edge Grid) */}
                 <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
                   <div className="flex items-center justify-between gap-1.5 mb-2">
                     <div className="flex items-center gap-1.5">
@@ -428,7 +428,7 @@ export default function RemixPromptModal({
                       <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Aspect Ratio</span>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
+                  <div className="grid grid-cols-4 gap-1.5 w-full items-center">
                     {(expandedRows.ratio ? RATIO_OPTIONS : RATIO_OPTIONS.slice(0, 3)).map((opt) => {
                       const isSelected = selectedRatio === opt;
                       return (
@@ -436,22 +436,24 @@ export default function RemixPromptModal({
                           key={opt}
                           type="button"
                           onClick={() => handleToggle(selectedRatio, opt, setSelectedRatio)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                             isSelected
                               ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_2px_12px_rgba(6,182,212,0.4)] border border-cyan-300/80 scale-[1.02]'
                               : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
                           }`}
                         >
-                          {opt}
+                          <span className="truncate">{opt}</span>
                         </button>
                       );
                     })}
                     <button
                       type="button"
                       onClick={() => toggleRowMore('ratio')}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-cyan-300 hover:text-white bg-cyan-500/15 hover:bg-cyan-500/25 border border-dashed border-cyan-400/40 transition-colors cursor-pointer active:scale-95"
+                      className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-cyan-300 hover:text-white bg-cyan-500/15 hover:bg-cyan-500/25 border border-dashed border-cyan-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                        expandedRows.ratio ? 'col-span-2' : 'col-span-1'
+                      }`}
                     >
-                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         {expandedRows.ratio ? (
                           <line x1="5" y1="12" x2="19" y2="12" />
                         ) : (
@@ -461,12 +463,12 @@ export default function RemixPromptModal({
                           </>
                         )}
                       </svg>
-                      <span>{expandedRows.ratio ? 'Less' : 'More'}</span>
+                      <span className="truncate">{expandedRows.ratio ? 'Less' : 'More'}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* 2. QUALITY TIER */}
+                {/* 2. QUALITY TIER (Single Line Edge-to-Edge Grid) */}
                 <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
                   <div className="flex items-center justify-between gap-1.5 mb-2">
                     <div className="flex items-center gap-1.5">
@@ -474,7 +476,7 @@ export default function RemixPromptModal({
                       <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Quality Preset</span>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
+                  <div className="grid grid-cols-4 gap-1.5 w-full items-center">
                     {(expandedRows.quality ? QUALITY_OPTIONS : QUALITY_OPTIONS.slice(0, 3)).map((opt) => {
                       const isSelected = selectedQuality === opt;
                       return (
@@ -482,22 +484,24 @@ export default function RemixPromptModal({
                           key={opt}
                           type="button"
                           onClick={() => handleToggle(selectedQuality, opt, setSelectedQuality)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                             isSelected
                               ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_2px_12px_rgba(16,185,129,0.4)] border border-emerald-300/80 scale-[1.02]'
                               : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
                           }`}
                         >
-                          {opt}
+                          <span className="truncate">{opt}</span>
                         </button>
                       );
                     })}
                     <button
                       type="button"
                       onClick={() => toggleRowMore('quality')}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-emerald-300 hover:text-white bg-emerald-500/15 hover:bg-emerald-500/25 border border-dashed border-emerald-400/40 transition-colors cursor-pointer active:scale-95"
+                      className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-emerald-300 hover:text-white bg-emerald-500/15 hover:bg-emerald-500/25 border border-dashed border-emerald-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                        expandedRows.quality ? 'col-span-2' : 'col-span-1'
+                      }`}
                     >
-                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         {expandedRows.quality ? (
                           <line x1="5" y1="12" x2="19" y2="12" />
                         ) : (
@@ -507,12 +511,12 @@ export default function RemixPromptModal({
                           </>
                         )}
                       </svg>
-                      <span>{expandedRows.quality ? 'Less' : 'More'}</span>
+                      <span className="truncate">{expandedRows.quality ? 'Less' : 'More'}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* 3. MAIN VISUAL STYLE */}
+                {/* 3. MAIN VISUAL STYLE (Single Line Edge-to-Edge Grid) */}
                 <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
                   <div className="flex items-center justify-between gap-1.5 mb-2">
                     <div className="flex items-center gap-1.5">
@@ -520,7 +524,7 @@ export default function RemixPromptModal({
                       <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Main Visual Style</span>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
+                  <div className="grid grid-cols-4 gap-1.5 w-full items-center">
                     {(expandedRows.style ? STYLE_OPTIONS : STYLE_OPTIONS.slice(0, 3)).map((opt) => {
                       const isSelected = selectedStyle === opt;
                       return (
@@ -528,22 +532,22 @@ export default function RemixPromptModal({
                           key={opt}
                           type="button"
                           onClick={() => handleToggle(selectedStyle, opt, setSelectedStyle)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                             isSelected
                               ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_2px_12px_rgba(147,51,234,0.4)] border border-purple-300/80 scale-[1.02]'
                               : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
                           }`}
                         >
-                          {opt}
+                          <span className="truncate">{opt}</span>
                         </button>
                       );
                     })}
                     <button
                       type="button"
                       onClick={() => toggleRowMore('style')}
-                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-purple-300 hover:text-white bg-purple-500/15 hover:bg-purple-500/25 border border-dashed border-purple-400/40 transition-colors cursor-pointer active:scale-95"
+                      className="w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-purple-300 hover:text-white bg-purple-500/15 hover:bg-purple-500/25 border border-dashed border-purple-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate col-span-1"
                     >
-                      <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         {expandedRows.style ? (
                           <line x1="5" y1="12" x2="19" y2="12" />
                         ) : (
@@ -553,7 +557,7 @@ export default function RemixPromptModal({
                           </>
                         )}
                       </svg>
-                      <span>{expandedRows.style ? 'Less' : 'More'}</span>
+                      <span className="truncate">{expandedRows.style ? 'Less' : 'More'}</span>
                     </button>
                   </div>
                 </div>
@@ -588,7 +592,7 @@ export default function RemixPromptModal({
                       transition={{ duration: 0.25, ease: 'easeInOut' }}
                       className="space-y-2.5 overflow-hidden pt-0.5"
                     >
-                      {/* Lighting */}
+                      {/* Lighting (Single Line Edge-to-Edge Grid) */}
                       <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
                         <div className="flex items-center justify-between gap-1.5 mb-2">
                           <div className="flex items-center gap-1.5">
@@ -596,7 +600,7 @@ export default function RemixPromptModal({
                             <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Lighting</span>
                           </div>
                         </div>
-                        <div className="flex flex-wrap items-center gap-1.5">
+                        <div className="grid grid-cols-4 gap-1.5 w-full items-center">
                           {(expandedRows.lighting ? LIGHTING_OPTIONS : LIGHTING_OPTIONS.slice(0, 3)).map((opt) => {
                             const isSelected = selectedLighting === opt;
                             return (
@@ -604,22 +608,24 @@ export default function RemixPromptModal({
                                 key={opt}
                                 type="button"
                                 onClick={() => handleToggle(selectedLighting, opt, setSelectedLighting)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                                className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                                   isSelected
                                     ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-[0_2px_12px_rgba(225,29,72,0.4)] border border-pink-300/80 scale-[1.02]'
                                     : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
                                 }`}
                               >
-                                {opt}
+                                <span className="truncate">{opt}</span>
                               </button>
                             );
                           })}
                           <button
                             type="button"
                             onClick={() => toggleRowMore('lighting')}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-pink-300 hover:text-white bg-pink-500/15 hover:bg-pink-500/25 border border-dashed border-pink-400/40 transition-colors cursor-pointer active:scale-95"
+                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-pink-300 hover:text-white bg-pink-500/15 hover:bg-pink-500/25 border border-dashed border-pink-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                              expandedRows.lighting ? 'col-span-2' : 'col-span-1'
+                            }`}
                           >
-                            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <svg className="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                               {expandedRows.lighting ? (
                                 <line x1="5" y1="12" x2="19" y2="12" />
                               ) : (
@@ -629,12 +635,12 @@ export default function RemixPromptModal({
                                 </>
                               )}
                             </svg>
-                            <span>{expandedRows.lighting ? 'Less' : 'More'}</span>
+                            <span className="truncate">{expandedRows.lighting ? 'Less' : 'More'}</span>
                           </button>
                         </div>
                       </div>
 
-                      {/* Camera */}
+                      {/* Camera (Single Line Edge-to-Edge Grid) */}
                       <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
                         <div className="flex items-center justify-between gap-1.5 mb-2">
                           <div className="flex items-center gap-1.5">
@@ -642,7 +648,7 @@ export default function RemixPromptModal({
                             <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Camera Look</span>
                           </div>
                         </div>
-                        <div className="flex flex-wrap items-center gap-1.5">
+                        <div className="grid grid-cols-4 gap-1.5 w-full items-center">
                           {(expandedRows.camera ? CAMERA_OPTIONS : CAMERA_OPTIONS.slice(0, 3)).map((opt) => {
                             const isSelected = selectedCamera === opt;
                             return (
@@ -650,22 +656,24 @@ export default function RemixPromptModal({
                                 key={opt}
                                 type="button"
                                 onClick={() => handleToggle(selectedCamera, opt, setSelectedCamera)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                                className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                                   isSelected
                                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_2px_12px_rgba(245,158,11,0.4)] border border-amber-300/80 scale-[1.02]'
                                     : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
                                 }`}
                               >
-                                {opt}
+                                <span className="truncate">{opt}</span>
                               </button>
                             );
                           })}
                           <button
                             type="button"
                             onClick={() => toggleRowMore('camera')}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-amber-300 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-dashed border-amber-400/40 transition-colors cursor-pointer active:scale-95"
+                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-amber-300 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-dashed border-amber-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                              expandedRows.camera ? 'col-span-2' : 'col-span-1'
+                            }`}
                           >
-                            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <svg className="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                               {expandedRows.camera ? (
                                 <line x1="5" y1="12" x2="19" y2="12" />
                               ) : (
@@ -675,12 +683,12 @@ export default function RemixPromptModal({
                                 </>
                               )}
                             </svg>
-                            <span>{expandedRows.camera ? 'Less' : 'More'}</span>
+                            <span className="truncate">{expandedRows.camera ? 'Less' : 'More'}</span>
                           </button>
                         </div>
                       </div>
 
-                      {/* Mood */}
+                      {/* Mood (Single Line Edge-to-Edge Grid) */}
                       <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
                         <div className="flex items-center justify-between gap-1.5 mb-2">
                           <div className="flex items-center gap-1.5">
@@ -688,7 +696,7 @@ export default function RemixPromptModal({
                             <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Mood</span>
                           </div>
                         </div>
-                        <div className="flex flex-wrap items-center gap-1.5">
+                        <div className="grid grid-cols-4 gap-1.5 w-full items-center">
                           {(expandedRows.mood ? MOOD_OPTIONS : MOOD_OPTIONS.slice(0, 3)).map((opt) => {
                             const isSelected = selectedMood === opt;
                             return (
@@ -696,22 +704,24 @@ export default function RemixPromptModal({
                                 key={opt}
                                 type="button"
                                 onClick={() => handleToggle(selectedMood, opt, setSelectedMood)}
-                                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                                className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                                   isSelected
                                     ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_2px_12px_rgba(139,92,246,0.4)] border border-violet-300/80 scale-[1.02]'
                                     : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
                                 }`}
                               >
-                                {opt}
+                                <span className="truncate">{opt}</span>
                               </button>
                             );
                           })}
                           <button
                             type="button"
                             onClick={() => toggleRowMore('mood')}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10.5px] sm:text-xs font-bold text-indigo-300 hover:text-white bg-indigo-500/15 hover:bg-indigo-500/25 border border-dashed border-indigo-400/40 transition-colors cursor-pointer active:scale-95"
+                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-indigo-300 hover:text-white bg-indigo-500/15 hover:bg-indigo-500/25 border border-dashed border-indigo-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                              expandedRows.mood ? 'col-span-2' : 'col-span-1'
+                            }`}
                           >
-                            <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <svg className="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                               {expandedRows.mood ? (
                                 <line x1="5" y1="12" x2="19" y2="12" />
                               ) : (
@@ -721,7 +731,7 @@ export default function RemixPromptModal({
                                 </>
                               )}
                             </svg>
-                            <span>{expandedRows.mood ? 'Less' : 'More'}</span>
+                            <span className="truncate">{expandedRows.mood ? 'Less' : 'More'}</span>
                           </button>
                         </div>
                       </div>
