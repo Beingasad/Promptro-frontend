@@ -283,13 +283,13 @@ export default function RemixPromptModal({
   return createPortal(
     <AnimatePresence>
       <div className="fixed inset-0 z-[150] flex flex-col justify-end">
-        {/* Backdrop Overlay with Translucent Glass Blur (Background stays visible & frosted) */}
+        {/* Backdrop Overlay with Subtle Glass Blur (Background stays clearly visible) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 bg-black/20 dark:bg-black/45 backdrop-blur-md"
+          className="fixed inset-0 bg-black/15 dark:bg-black/35 backdrop-blur-[3.5px]"
           onClick={onClose}
           aria-label="Close modal backdrop"
         />
