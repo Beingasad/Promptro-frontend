@@ -513,7 +513,7 @@ export default function ImageDetail() {
   const renderOverlays = () => (
     <>
       {/* Top and bottom subtle gradients for high contrast on pure white images */}
-      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/40 via-black/10 to-transparent pointer-events-none z-[5]" />
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/15 via-transparent to-transparent pointer-events-none z-[5]" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-transparent to-transparent pointer-events-none" />
 
       <div className="absolute left-3 right-3 top-3 md:left-4 md:right-4 md:top-4 z-10 flex items-start justify-between">
