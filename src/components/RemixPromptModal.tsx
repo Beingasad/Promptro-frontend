@@ -276,12 +276,12 @@ export default function RemixPromptModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 bg-black/25 dark:bg-black/40 backdrop-blur-md"
+          className="fixed inset-0 bg-black/20 dark:bg-black/45 backdrop-blur-md"
           onClick={onClose}
           aria-label="Close modal backdrop"
         />
 
-        {/* Bottom Sheet Modal Container (Ultra-Premium Liquid Glass & Hidden Scrollbars) */}
+        {/* Bottom Sheet Modal Container (Adaptive Light & Dark Mode Liquid Glass) */}
         <motion.div
           initial={{ y: '100%' }}
           animate={{ y: 0 }}
@@ -295,26 +295,26 @@ export default function RemixPromptModal({
               onClose();
             }
           }}
-          className="relative z-10 w-full max-w-2xl mx-auto rounded-t-[2.25rem] sm:rounded-t-[2.5rem] bg-[#100a20]/95 dark:bg-[#0c0818]/95 border-t border-x border-white/20 dark:border-white/12 p-4 sm:p-6 shadow-[0_-12px_45px_rgba(0,0,0,0.6),inset_0_1.5px_1.5px_0_rgba(255,255,255,0.35)] backdrop-blur-3xl max-h-[85vh] sm:max-h-[88vh] flex flex-col justify-between overflow-hidden"
+          className="relative z-10 w-full max-w-2xl mx-auto rounded-t-[2.25rem] sm:rounded-t-[2.5rem] bg-[#fcfbff]/95 dark:bg-[#0c0818]/95 border-t border-x border-[#e4dcf2] dark:border-white/12 p-4 sm:p-6 shadow-[0_-12px_45px_rgba(72,56,118,0.15)] dark:shadow-[0_-12px_45px_rgba(0,0,0,0.6),inset_0_1.5px_1.5px_0_rgba(255,255,255,0.35)] backdrop-blur-3xl max-h-[85vh] sm:max-h-[88vh] flex flex-col justify-between overflow-hidden text-[#171421] dark:text-white"
           style={{ willChange: 'transform' }}
         >
           {/* Ambient Top Glow Effects */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(139,92,246,0.25),transparent_70%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.14),transparent_50%)]" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(139,92,246,0.12),transparent_70%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(139,92,246,0.25),transparent_70%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.14),transparent_50%)]" />
 
           {/* Top Drag Handle */}
           <div className="flex justify-center pb-2.5 cursor-grab active:cursor-grabbing relative z-10 select-none">
-            <div className="w-12 h-1.5 rounded-full bg-white/30 hover:bg-white/50 transition-colors shadow-sm" />
+            <div className="w-12 h-1.5 rounded-full bg-black/15 dark:bg-white/30 hover:bg-black/25 dark:hover:bg-white/50 transition-colors shadow-sm" />
           </div>
 
           {/* Modal Header (Clean Icon Without Box) */}
-          <div className="flex items-center justify-between gap-3 pb-3.5 border-b border-white/10 dark:border-white/8 shrink-0 relative z-10">
+          <div className="flex items-center justify-between gap-3 pb-3.5 border-b border-[#ece4f6] dark:border-white/8 shrink-0 relative z-10">
             <div className="flex items-center gap-2.5 min-w-0">
-              <SparkleIcon className="w-6 h-6 shrink-0 text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.7)]" variant="purple" />
+              <SparkleIcon className="w-6 h-6 shrink-0 text-purple-600 dark:text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]" variant="purple" />
               <div className="min-w-0">
-                <h3 className="text-base sm:text-lg font-black text-white leading-tight flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-black text-[#171421] dark:text-white leading-tight flex items-center gap-2">
                   <span>Remix This Prompt</span>
                 </h3>
-                <p className="text-[11px] sm:text-xs font-medium text-white/60 truncate">
+                <p className="text-[11px] sm:text-xs font-medium text-[#6b6284] dark:text-white/60 truncate">
                   Personalize, tune aspect ratio, quality &amp; blend creative styles
                 </p>
               </div>
@@ -323,7 +323,7 @@ export default function RemixPromptModal({
             <button
               type="button"
               onClick={onClose}
-              className="liquid-glass-control flex h-8 w-8 items-center justify-center rounded-full text-white/75 hover:text-white transition-all cursor-pointer shrink-0"
+              className="liquid-glass-control flex h-8 w-8 items-center justify-center rounded-full text-[#554d6e] dark:text-white/75 hover:text-[#171421] dark:hover:text-white transition-all cursor-pointer shrink-0"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
@@ -331,18 +331,18 @@ export default function RemixPromptModal({
           </div>
 
           {/* Scrollable Modal Body (Completely Hidden Scrollbars + Butter-Smooth Scroll) */}
-          <div className="flex-1 overflow-y-auto overscroll-contain hide-scrollbar py-3.5 space-y-4 text-white relative z-10">
+          <div className="flex-1 overflow-y-auto overscroll-contain hide-scrollbar py-3.5 space-y-4 relative z-10">
             
             {/* BOX 1: Prompt Display (Updates to New Remixed Prompt with Copy & Restore Options) */}
             <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between text-xs font-bold text-purple-300 px-0.5">
+              <div className="flex items-center justify-between text-xs font-bold text-[#6b21a8] dark:text-purple-300 px-0.5">
                 <span className="flex items-center gap-1.5">
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-500/30 text-[10px] font-black text-purple-200 border border-purple-400/40">1</span>
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-500/30 text-[10px] font-black text-purple-700 dark:text-purple-200 border border-purple-200 dark:border-purple-400/40">1</span>
                   <span className="tracking-wide">
                     {isRemixed ? 'Remixed Prompt' : 'Original Prompt'}
                   </span>
                   {isRemixed && (
-                    <span className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-purple-500/30 to-pink-500/30 border border-purple-400/40 text-[9px] font-black text-purple-200 tracking-wider uppercase">
+                    <span className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-purple-500/20 to-pink-500/20 dark:from-purple-500/30 dark:to-pink-500/30 border border-purple-300 dark:border-purple-400/40 text-[9px] font-black text-purple-700 dark:text-purple-200 tracking-wider uppercase">
                       New ✨
                     </span>
                   )}
@@ -354,10 +354,10 @@ export default function RemixPromptModal({
                     <button
                       type="button"
                       onClick={handleRestoreOriginal}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-[11px] font-semibold text-amber-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100/80 border border-amber-200 text-[11px] font-semibold text-amber-700 dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-amber-300 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                       title="Restore original prompt"
                     >
-                      <RotateCcw className="w-3 h-3 text-amber-300" />
+                      <RotateCcw className="w-3 h-3 text-amber-600 dark:text-amber-300" />
                       <span>Original</span>
                     </button>
                   )}
@@ -366,16 +366,16 @@ export default function RemixPromptModal({
                   <button
                     type="button"
                     onClick={handleCopyDisplayed}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-[11px] font-semibold text-purple-200 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[11px] font-semibold text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                   >
                     {copied ? (
                       <>
-                        <Check className="w-3 h-3 text-emerald-400" />
-                        <span className="text-emerald-400 font-bold">Copied</span>
+                        <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">Copied</span>
                       </>
                     ) : (
                       <>
-                        <Copy className="w-3 h-3 text-purple-300" />
+                        <Copy className="w-3 h-3 text-purple-600 dark:text-purple-300" />
                         <span>Copy</span>
                       </>
                     )}
@@ -383,8 +383,10 @@ export default function RemixPromptModal({
                 </div>
               </div>
 
-              <div className={`rounded-2xl bg-white/[0.04] dark:bg-white/[0.03] border p-3.5 text-xs sm:text-[13px] leading-relaxed text-white/90 max-h-[110px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
-                isRemixed ? 'border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.15)] bg-purple-950/20' : 'border-white/12 dark:border-white/8'
+              <div className={`rounded-2xl border p-3.5 text-xs sm:text-[13px] leading-relaxed max-h-[110px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
+                isRemixed 
+                  ? 'border-purple-300 dark:border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.12)] bg-purple-50/90 dark:bg-purple-950/20 text-[#171124] dark:text-white/90' 
+                  : 'border-[#e5dcf2] dark:border-white/8 bg-[#f4effa] dark:bg-white/[0.03] text-[#282138] dark:text-white/90'
               }`}>
                 {displayedPrompt}
               </div>
@@ -392,12 +394,12 @@ export default function RemixPromptModal({
 
             {/* BOX 2: Modifications / What changes to make */}
             <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between text-xs font-bold text-orange-300 px-0.5">
+              <div className="flex items-center justify-between text-xs font-bold text-[#c2410c] dark:text-orange-300 px-0.5">
                 <span className="flex items-center gap-1.5">
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-orange-500/30 text-[10px] font-black text-orange-200 border border-orange-400/40">2</span>
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-500/30 text-[10px] font-black text-orange-700 dark:text-orange-200 border border-orange-200 dark:border-orange-400/40">2</span>
                   <span className="tracking-wide">What changes do you want to make?</span>
                 </span>
-                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/50">
+                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#f2ebfa] dark:bg-white/5 border border-[#e4dcf0] dark:border-white/10 text-[#7a7192] dark:text-white/50">
                   {modifications.length}/300
                 </span>
               </div>
@@ -408,18 +410,18 @@ export default function RemixPromptModal({
                   onChange={(e) => setModifications(e.target.value.slice(0, 300))}
                   placeholder="Describe your adjustments (e.g., change background to futuristic cyberpunk neon city, make lighting dramatic sunset, add rain reflections on road...)"
                   rows={2}
-                  className="w-full rounded-2xl bg-white/[0.06] dark:bg-white/[0.04] border border-white/15 dark:border-white/10 focus:border-purple-400/80 p-3.5 text-xs sm:text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/25 transition-all resize-none hide-scrollbar shadow-inner"
+                  className="w-full rounded-2xl bg-white dark:bg-white/[0.04] border border-[#dfd5ed] dark:border-white/10 focus:border-purple-500 dark:focus:border-purple-400/80 p-3.5 text-xs sm:text-sm text-[#171421] dark:text-white placeholder-[#9b93b2] dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all resize-none hide-scrollbar shadow-inner"
                 />
               </div>
             </div>
 
             {/* BOX 3: Tuning & Style Presets (Ratio, Quality, Main Style, and More Styles) */}
             <div className="flex flex-col gap-3 pt-1">
-              <div className="flex items-center justify-between text-xs font-bold text-purple-300 px-0.5">
+              <div className="flex items-center justify-between text-xs font-bold text-[#6b21a8] dark:text-purple-300 px-0.5">
                 <span className="flex items-center gap-1.5">
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500/30 text-[10px] font-black text-indigo-200 border border-indigo-400/40">3</span>
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-100 dark:bg-indigo-500/30 text-[10px] font-black text-purple-700 dark:text-indigo-200 border border-purple-200 dark:border-indigo-400/40">3</span>
                   <span className="flex items-center gap-1.5 tracking-wide">
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                     <span>Tuning &amp; AI Style Presets</span>
                   </span>
                 </span>
@@ -429,11 +431,11 @@ export default function RemixPromptModal({
               <div className="space-y-2.5 text-[11px]">
                 
                 {/* 1. ASPECT RATIO (Single Line Edge-to-Edge Grid) */}
-                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                <div className="rounded-2xl bg-[#f7f3fb] dark:bg-white/[0.025] border border-[#e8dff4] dark:border-white/8 p-3">
                   <div className="flex items-center justify-between gap-1.5 mb-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Aspect Ratio</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]" />
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#5e5576] dark:text-white/60">Aspect Ratio</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-4 gap-1.5 w-full items-center">
@@ -446,8 +448,8 @@ export default function RemixPromptModal({
                           onClick={() => handleToggle(selectedRatio, opt, setSelectedRatio)}
                           className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                             isSelected
-                              ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_2px_12px_rgba(6,182,212,0.4)] border border-cyan-300/80 scale-[1.02]'
-                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                              ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/25 border border-cyan-400 scale-[1.02]'
+                              : 'bg-white dark:bg-white/[0.05] text-[#342d48] dark:text-white/80 hover:bg-[#f0e9f8] dark:hover:bg-white/10 hover:text-[#171421] dark:hover:text-white border border-[#e2d7f0] dark:border-white/10 active:scale-95'
                           }`}
                         >
                           <span className="truncate">{opt}</span>
@@ -457,7 +459,7 @@ export default function RemixPromptModal({
                     <button
                       type="button"
                       onClick={() => toggleRowMore('ratio')}
-                      className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-cyan-300 hover:text-white bg-cyan-500/15 hover:bg-cyan-500/25 border border-dashed border-cyan-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                      className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold bg-[#edf7f9] hover:bg-[#dff0f3] text-cyan-700 border border-dashed border-cyan-300 dark:bg-cyan-500/15 dark:hover:bg-cyan-500/25 dark:border-cyan-400/40 dark:text-cyan-300 dark:hover:text-white transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
                         expandedRows.ratio ? 'col-span-2' : 'col-span-1'
                       }`}
                     >
@@ -477,11 +479,11 @@ export default function RemixPromptModal({
                 </div>
 
                 {/* 2. QUALITY TIER (Single Line Edge-to-Edge Grid) */}
-                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                <div className="rounded-2xl bg-[#f7f3fb] dark:bg-white/[0.025] border border-[#e8dff4] dark:border-white/8 p-3">
                   <div className="flex items-center justify-between gap-1.5 mb-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Quality Preset</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#5e5576] dark:text-white/60">Quality Preset</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-4 gap-1.5 w-full items-center">
@@ -494,8 +496,8 @@ export default function RemixPromptModal({
                           onClick={() => handleToggle(selectedQuality, opt, setSelectedQuality)}
                           className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                             isSelected
-                              ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_2px_12px_rgba(16,185,129,0.4)] border border-emerald-300/80 scale-[1.02]'
-                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/25 border border-emerald-400 scale-[1.02]'
+                              : 'bg-white dark:bg-white/[0.05] text-[#342d48] dark:text-white/80 hover:bg-[#f0e9f8] dark:hover:bg-white/10 hover:text-[#171421] dark:hover:text-white border border-[#e2d7f0] dark:border-white/10 active:scale-95'
                           }`}
                         >
                           <span className="truncate">{opt}</span>
@@ -505,7 +507,7 @@ export default function RemixPromptModal({
                     <button
                       type="button"
                       onClick={() => toggleRowMore('quality')}
-                      className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-emerald-300 hover:text-white bg-emerald-500/15 hover:bg-emerald-500/25 border border-dashed border-emerald-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                      className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold bg-[#edf9f2] hover:bg-[#dff3e7] text-emerald-700 border border-dashed border-emerald-300 dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 dark:border-emerald-400/40 dark:text-emerald-300 dark:hover:text-white transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
                         expandedRows.quality ? 'col-span-2' : 'col-span-1'
                       }`}
                     >
@@ -525,11 +527,11 @@ export default function RemixPromptModal({
                 </div>
 
                 {/* 3. MAIN VISUAL STYLE (Single Line Edge-to-Edge Grid) */}
-                <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                <div className="rounded-2xl bg-[#f7f3fb] dark:bg-white/[0.025] border border-[#e8dff4] dark:border-white/8 p-3">
                   <div className="flex items-center justify-between gap-1.5 mb-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
-                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Main Visual Style</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.7)]" />
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#5e5576] dark:text-white/60">Main Visual Style</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-4 gap-1.5 w-full items-center">
@@ -542,8 +544,8 @@ export default function RemixPromptModal({
                           onClick={() => handleToggle(selectedStyle, opt, setSelectedStyle)}
                           className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                             isSelected
-                              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_2px_12px_rgba(147,51,234,0.4)] border border-purple-300/80 scale-[1.02]'
-                              : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                              ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/25 border border-purple-300 scale-[1.02]'
+                              : 'bg-white dark:bg-white/[0.05] text-[#342d48] dark:text-white/80 hover:bg-[#f0e9f8] dark:hover:bg-white/10 hover:text-[#171421] dark:hover:text-white border border-[#e2d7f0] dark:border-white/10 active:scale-95'
                           }`}
                         >
                           <span className="truncate">{opt}</span>
@@ -553,7 +555,7 @@ export default function RemixPromptModal({
                     <button
                       type="button"
                       onClick={() => toggleRowMore('style')}
-                      className="w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-purple-300 hover:text-white bg-purple-500/15 hover:bg-purple-500/25 border border-dashed border-purple-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate col-span-1"
+                      className="w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold bg-[#f2ebfa] hover:bg-[#e8ddf4] text-purple-700 border border-dashed border-purple-300 dark:bg-purple-500/15 dark:hover:bg-purple-500/25 dark:border-purple-400/40 dark:text-purple-300 dark:hover:text-white transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate col-span-1"
                     >
                       <svg className="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         {expandedRows.style ? (
@@ -574,19 +576,19 @@ export default function RemixPromptModal({
                 <button
                   type="button"
                   onClick={() => setShowAdvancedStyles(!showAdvancedStyles)}
-                  className="w-full py-2.5 px-3.5 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-purple-400/40 flex items-center justify-between text-xs font-bold text-purple-200 transition-all cursor-pointer group shadow-sm"
+                  className="w-full py-2.5 px-3.5 rounded-2xl bg-[#f7f3fb] hover:bg-[#efe7f7] border border-[#e6dcf3] hover:border-purple-300 text-[#4c4269] dark:bg-white/[0.04] dark:hover:bg-white/[0.08] dark:border-white/10 dark:hover:border-purple-400/40 dark:text-purple-200 flex items-center justify-between text-xs font-bold transition-all cursor-pointer group shadow-sm"
                 >
                   <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400 group-hover:rotate-45 transition-transform" />
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 group-hover:rotate-45 transition-transform" />
                     <span>{showAdvancedStyles ? 'Hide More Styles (Lighting, Camera, Mood)' : '+ More Styles (Lighting, Camera, Mood)'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     {activeAdvancedCount > 0 && (
-                      <span className="px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-200 text-[10px] font-black border border-purple-400/40">
+                      <span className="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-500/30 text-purple-700 dark:text-purple-200 text-[10px] font-black border border-purple-200 dark:border-purple-400/40">
                         {activeAdvancedCount} Selected
                       </span>
                     )}
-                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvancedStyles ? 'rotate-180 text-purple-300' : 'text-white/40'}`} />
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showAdvancedStyles ? 'rotate-180 text-purple-600 dark:text-purple-300' : 'text-[#7e7598] dark:text-white/40'}`} />
                   </div>
                 </button>
 
@@ -601,11 +603,11 @@ export default function RemixPromptModal({
                       className="space-y-2.5 overflow-hidden pt-0.5"
                     >
                       {/* Lighting (Single Line Edge-to-Edge Grid) */}
-                      <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                      <div className="rounded-2xl bg-[#f7f3fb] dark:bg-white/[0.025] border border-[#e8dff4] dark:border-white/8 p-3">
                         <div className="flex items-center justify-between gap-1.5 mb-2">
                           <div className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.8)]" />
-                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Lighting</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-pink-500 dark:bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.7)]" />
+                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#5e5576] dark:text-white/60">Lighting</span>
                           </div>
                         </div>
                         <div className="grid grid-cols-4 gap-1.5 w-full items-center">
@@ -618,8 +620,8 @@ export default function RemixPromptModal({
                                 onClick={() => handleToggle(selectedLighting, opt, setSelectedLighting)}
                                 className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                                   isSelected
-                                    ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-[0_2px_12px_rgba(225,29,72,0.4)] border border-pink-300/80 scale-[1.02]'
-                                    : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                                    ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-md shadow-pink-500/25 border border-pink-300 scale-[1.02]'
+                                    : 'bg-white dark:bg-white/[0.05] text-[#342d48] dark:text-white/80 hover:bg-[#f0e9f8] dark:hover:bg-white/10 hover:text-[#171421] dark:hover:text-white border border-[#e2d7f0] dark:border-white/10 active:scale-95'
                                 }`}
                               >
                                 <span className="truncate">{opt}</span>
@@ -629,7 +631,7 @@ export default function RemixPromptModal({
                           <button
                             type="button"
                             onClick={() => toggleRowMore('lighting')}
-                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-pink-300 hover:text-white bg-pink-500/15 hover:bg-pink-500/25 border border-dashed border-pink-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold bg-[#faebf3] hover:bg-[#f5dded] text-pink-700 border border-dashed border-pink-300 dark:bg-pink-500/15 dark:hover:bg-pink-500/25 dark:border-pink-400/40 dark:text-pink-300 dark:hover:text-white transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
                               expandedRows.lighting ? 'col-span-2' : 'col-span-1'
                             }`}
                           >
@@ -649,11 +651,11 @@ export default function RemixPromptModal({
                       </div>
 
                       {/* Camera (Single Line Edge-to-Edge Grid) */}
-                      <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                      <div className="rounded-2xl bg-[#f7f3fb] dark:bg-white/[0.025] border border-[#e8dff4] dark:border-white/8 p-3">
                         <div className="flex items-center justify-between gap-1.5 mb-2">
                           <div className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
-                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Camera Look</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.7)]" />
+                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#5e5576] dark:text-white/60">Camera Look</span>
                           </div>
                         </div>
                         <div className="grid grid-cols-4 gap-1.5 w-full items-center">
@@ -666,8 +668,8 @@ export default function RemixPromptModal({
                                 onClick={() => handleToggle(selectedCamera, opt, setSelectedCamera)}
                                 className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                                   isSelected
-                                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_2px_12px_rgba(245,158,11,0.4)] border border-amber-300/80 scale-[1.02]'
-                                    : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/25 border border-amber-300 scale-[1.02]'
+                                    : 'bg-white dark:bg-white/[0.05] text-[#342d48] dark:text-white/80 hover:bg-[#f0e9f8] dark:hover:bg-white/10 hover:text-[#171421] dark:hover:text-white border border-[#e2d7f0] dark:border-white/10 active:scale-95'
                                 }`}
                               >
                                 <span className="truncate">{opt}</span>
@@ -677,7 +679,7 @@ export default function RemixPromptModal({
                           <button
                             type="button"
                             onClick={() => toggleRowMore('camera')}
-                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-amber-300 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-dashed border-amber-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold bg-[#fef3e7] hover:bg-[#fce7d1] text-amber-800 border border-dashed border-amber-300 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 dark:border-amber-400/40 dark:text-amber-300 dark:hover:text-white transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
                               expandedRows.camera ? 'col-span-2' : 'col-span-1'
                             }`}
                           >
@@ -697,11 +699,11 @@ export default function RemixPromptModal({
                       </div>
 
                       {/* Mood (Single Line Edge-to-Edge Grid) */}
-                      <div className="rounded-2xl bg-white/[0.025] border border-white/8 p-3">
+                      <div className="rounded-2xl bg-[#f7f3fb] dark:bg-white/[0.025] border border-[#e8dff4] dark:border-white/8 p-3">
                         <div className="flex items-center justify-between gap-1.5 mb-2">
                           <div className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
-                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-white/60">Mood</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.7)]" />
+                            <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#5e5576] dark:text-white/60">Mood</span>
                           </div>
                         </div>
                         <div className="grid grid-cols-4 gap-1.5 w-full items-center">
@@ -714,8 +716,8 @@ export default function RemixPromptModal({
                                 onClick={() => handleToggle(selectedMood, opt, setSelectedMood)}
                                 className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer text-center truncate flex items-center justify-center ${
                                   isSelected
-                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_2px_12px_rgba(139,92,246,0.4)] border border-violet-300/80 scale-[1.02]'
-                                    : 'bg-white/[0.05] text-white/80 hover:bg-white/10 hover:text-white border border-white/10 active:scale-95'
+                                    ? 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-md shadow-violet-500/25 border border-violet-300 scale-[1.02]'
+                                    : 'bg-white dark:bg-white/[0.05] text-[#342d48] dark:text-white/80 hover:bg-[#f0e9f8] dark:hover:bg-white/10 hover:text-[#171421] dark:hover:text-white border border-[#e2d7f0] dark:border-white/10 active:scale-95'
                                 }`}
                               >
                                 <span className="truncate">{opt}</span>
@@ -725,7 +727,7 @@ export default function RemixPromptModal({
                           <button
                             type="button"
                             onClick={() => toggleRowMore('mood')}
-                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold text-indigo-300 hover:text-white bg-indigo-500/15 hover:bg-indigo-500/25 border border-dashed border-indigo-400/40 transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
+                            className={`w-full py-1.5 px-1 sm:px-2 rounded-xl text-[10.5px] sm:text-xs font-bold bg-[#f1edfb] hover:bg-[#e4ddf7] text-indigo-700 border border-dashed border-indigo-300 dark:bg-indigo-500/15 dark:hover:bg-indigo-500/25 dark:border-indigo-400/40 dark:text-indigo-300 dark:hover:text-white transition-colors cursor-pointer active:scale-95 flex items-center justify-center gap-1 text-center truncate ${
                               expandedRows.mood ? 'col-span-2' : 'col-span-1'
                             }`}
                           >
@@ -753,7 +755,7 @@ export default function RemixPromptModal({
           </div>
 
           {/* Modal Footer Action Button (Mix & In-Place Generation) */}
-          <div className="pt-3.5 border-t border-white/10 dark:border-white/8 shrink-0 relative z-10">
+          <div className="pt-3.5 border-t border-[#ebe3f6] dark:border-white/8 shrink-0 relative z-10">
             <button
               type="button"
               onClick={handleMixAndGenerate}
