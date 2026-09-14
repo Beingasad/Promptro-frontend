@@ -128,31 +128,93 @@
 
 @layer components {
   .top-nav-glass {
-    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-    backdrop-filter: blur(16px) saturate(180%) !important;
+    position: relative !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+    -webkit-backdrop-filter: blur(28px) saturate(210%) !important;
+    backdrop-filter: blur(28px) saturate(210%) !important;
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.20) 0%,
-      rgba(255, 255, 255, 0.06) 45%,
-      rgba(18, 14, 28, 0.16) 100%
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(255, 255, 255, 0.18) 100%
     ) !important;
-    border: 1px solid rgba(255, 255, 255, 0.35) !important;
-    box-shadow: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    box-shadow: 
+      inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.75),
+      inset 0 -1px 1px 0 rgba(255, 255, 255, 0.20),
+      inset 0 0 20px 0 rgba(255, 255, 255, 0.08) !important;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
+  /* Specular Curved Light Reflection across the top dome */
+  .top-nav-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 85% 65% at 50% -15%,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0.08) 45%,
+      transparent 75%
+    );
+    z-index: 0;
+    mix-blend-mode: overlay;
+  }
+
+  /* Prismatic edge sheen at bottom rim */
+  .top-nav-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.25) 0%,
+      transparent 35%,
+      transparent 85%,
+      rgba(255, 255, 255, 0.12) 100%
+    );
+    z-index: 0;
+  }
+
   [data-theme="dark"] .top-nav-glass {
-    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(220%) !important;
+    backdrop-filter: blur(32px) saturate(220%) !important;
     background: linear-gradient(
       135deg,
-      rgba(24, 18, 38, 0.50) 0%,
-      rgba(14, 10, 22, 0.34) 45%,
-      rgba(18, 14, 28, 0.45) 100%
+      rgba(36, 26, 56, 0.42) 0%,
+      rgba(18, 13, 30, 0.26) 45%,
+      rgba(28, 20, 46, 0.38) 100%
     ) !important;
-    border: 1px solid rgba(255, 255, 255, 0.13) !important;
-    box-shadow: none !important;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 
+      inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.38),
+      inset 0 -1px 1px 0 rgba(255, 255, 255, 0.10),
+      inset 0 0 24px 0 rgba(168, 85, 247, 0.06) !important;
+  }
+
+  [data-theme="dark"] .top-nav-glass::before {
+    background: radial-gradient(
+      ellipse 85% 65% at 50% -15%,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0.04) 45%,
+      transparent 75%
+    );
+    mix-blend-mode: screen;
+  }
+
+  [data-theme="dark"] .top-nav-glass::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.18) 0%,
+      transparent 35%,
+      transparent 85%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
   }
 
   .glass-panel {

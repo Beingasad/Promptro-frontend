@@ -4,6 +4,7 @@ import { SparkleIcon } from '../components/icons/SparkleIcon';
 import { useState, useEffect } from 'react';
 import CollectionSelectModal from '../components/CollectionSelectModal';
 import AuthModal from '../components/AuthModal';
+import RemixPromptModal from '../components/RemixPromptModal';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -123,6 +124,7 @@ export default function ImageDetail() {
   const [shared, setShared] = useState(false);
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [remixModalOpen, setRemixModalOpen] = useState(false);
   const [showHeart, setShowHeart] = useState(false);
   const [heartKey, setHeartKey] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -361,9 +363,7 @@ export default function ImageDetail() {
   };
 
   const handleRemixPrompt = () => {
-    navigate('/style-mixer', {
-      state: { idea: promptText }
-    });
+    setRemixModalOpen(true);
   };
 
   const toggleSave = (event: React.MouseEvent) => {
@@ -971,6 +971,13 @@ export default function ImageDetail() {
       <AuthModal 
         isOpen={authModalOpen} 
         onClose={() => setAuthModalOpen(false)} 
+      />
+      <RemixPromptModal
+        isOpen={remixModalOpen}
+        onClose={() => setRemixModalOpen(false)}
+        originalPrompt={promptText}
+        category={prompt?.category}
+        model={prompt?.model}
       />
     </motion.div>
   );

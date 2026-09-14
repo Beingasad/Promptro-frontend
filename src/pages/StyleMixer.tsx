@@ -114,12 +114,22 @@ export default function StyleMixer() {
 
   // Check URL params for remix or idea queries
   useEffect(() => {
-    const navState = location.state as { idea?: string } | null;
+    const navState = location.state as {
+      idea?: string;
+      style?: string;
+      lighting?: string;
+      camera?: string;
+      mood?: string;
+    } | null;
     const searchParams = new URLSearchParams(location.search);
     const remixParam = searchParams.get('remix') || searchParams.get('idea');
 
     if (navState?.idea) {
       setIdea(navState.idea);
+      if (navState.style) setStyle(navState.style);
+      if (navState.lighting) setLighting(navState.lighting);
+      if (navState.camera) setCamera(navState.camera);
+      if (navState.mood) setMood(navState.mood);
     } else if (remixParam) {
       setIdea(decodeURIComponent(remixParam));
     }
