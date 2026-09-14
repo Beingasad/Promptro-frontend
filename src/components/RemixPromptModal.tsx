@@ -397,7 +397,7 @@ export default function RemixPromptModal({
               </div>
 
               {/* Main Prompt Content Box */}
-              <div className={`rounded-2xl border p-3.5 text-xs sm:text-[13px] leading-relaxed max-h-[140px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
+              <div className={`rounded-2xl border px-3.5 py-2.5 sm:py-3 text-xs sm:text-[13px] leading-normal sm:leading-relaxed max-h-[140px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
                 isRemixed 
                   ? 'border-purple-300 dark:border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.12)] bg-purple-50/90 dark:bg-purple-950/20 text-[#171124] dark:text-white/90' 
                   : 'border-[#e5dcf2] dark:border-white/8 bg-[#f4effa] dark:bg-white/[0.03] text-[#282138] dark:text-white/90'
@@ -406,7 +406,7 @@ export default function RemixPromptModal({
 
                 {/* If image prompt has Negative Prompt, display it clearly inside Box 1 */}
                 {negativePrompt && negativePrompt.trim() && (
-                  <div className="mt-2.5 pt-2.5 border-t border-[#e2d7f0] dark:border-white/10 flex flex-col gap-1">
+                  <div className="mt-2 pt-2 border-t border-[#e2d7f0] dark:border-white/10 flex flex-col gap-1">
                     <div className="flex items-center justify-between">
                       <span className="text-[10.5px] font-bold text-[#e11d48] dark:text-pink-400 flex items-center gap-1 uppercase tracking-wider">
                         <Minus className="w-3 h-3" />
@@ -430,7 +430,7 @@ export default function RemixPromptModal({
                         )}
                       </button>
                     </div>
-                    <p className="text-[11.5px] text-[#554b6d] dark:text-white/70 italic leading-relaxed select-text">
+                    <p className="text-[11.5px] text-[#554b6d] dark:text-white/70 italic leading-normal select-text">
                       {negativePrompt}
                     </p>
                   </div>
@@ -456,7 +456,7 @@ export default function RemixPromptModal({
                   onChange={(e) => setModifications(e.target.value.slice(0, 300))}
                   placeholder="Describe your adjustments (e.g., change background to futuristic cyberpunk neon city, make lighting dramatic sunset, add rain reflections on road...)"
                   rows={2}
-                  className="w-full rounded-2xl bg-white dark:bg-white/[0.04] border border-[#dfd5ed] dark:border-white/10 focus:border-purple-500 dark:focus:border-purple-400/80 p-3.5 text-xs sm:text-sm text-[#171421] dark:text-white placeholder-[#9b93b2] dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all resize-none hide-scrollbar shadow-inner"
+                  className="w-full rounded-2xl bg-white dark:bg-white/[0.04] border border-[#dfd5ed] dark:border-white/10 focus:border-purple-500 dark:focus:border-purple-400/80 px-3.5 py-2.5 text-xs sm:text-sm leading-normal text-[#171421] dark:text-white placeholder-[#9b93b2] dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all resize-none hide-scrollbar shadow-inner"
                 />
               </div>
             </div>
