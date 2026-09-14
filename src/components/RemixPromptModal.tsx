@@ -454,9 +454,9 @@ export default function RemixPromptModal({
                 <textarea
                   value={modifications}
                   onChange={(e) => setModifications(e.target.value.slice(0, 300))}
-                  placeholder="Describe your adjustments (e.g., change background to futuristic cyberpunk neon city, make lighting dramatic sunset, add rain reflections on road...)"
+                  placeholder="e.g. Change background to futuristic cyberpunk neon city, dramatic sunset lighting, rain reflections..."
                   rows={2}
-                  className="w-full rounded-2xl bg-white dark:bg-white/[0.04] border border-[#dfd5ed] dark:border-white/10 focus:border-purple-500 dark:focus:border-purple-400/80 px-3.5 py-2.5 text-xs sm:text-sm leading-normal text-[#171421] dark:text-white placeholder-[#9b93b2] dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all resize-none hide-scrollbar shadow-inner"
+                  className="w-full min-h-[58px] rounded-2xl bg-white dark:bg-white/[0.04] border border-[#dfd5ed] dark:border-white/10 focus:border-purple-500 dark:focus:border-purple-400/80 px-3.5 py-2.5 text-xs sm:text-[13px] leading-snug sm:leading-normal text-[#171421] dark:text-white placeholder-[#9b93b2] dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all resize-none hide-scrollbar shadow-inner"
                 />
               </div>
             </div>
