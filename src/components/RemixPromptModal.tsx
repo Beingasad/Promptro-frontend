@@ -281,9 +281,11 @@ export default function RemixPromptModal({
 
   if (!isOpen) return null;
 
-  return createPortal(
-    <AnimatePresence>
-      <div className="fixed inset-0 z-[150] flex flex-col justify-end">
+  return (
+    <>
+      {createPortal(
+        <AnimatePresence>
+          <div className="fixed inset-0 z-[150] flex flex-col justify-end">
         {/* Backdrop Overlay with Subtle Glass Blur (Background stays clearly visible) */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -818,15 +820,17 @@ export default function RemixPromptModal({
           </div>
 
         </motion.div>
-
-        {/* Puter Authentication Confirmation Modal */}
-        <PuterAuthModal
-          isOpen={showPuterModal}
-          onContinue={handlePuterModalContinue}
-          onCancel={handlePuterModalCancel}
-        />
       </div>
     </AnimatePresence>,
     document.body
-  );
+  )}
+
+  {/* Puter Authentication Confirmation Modal */}
+  <PuterAuthModal
+    isOpen={showPuterModal}
+    onContinue={handlePuterModalContinue}
+    onCancel={handlePuterModalCancel}
+  />
+</>
+);
 }

@@ -30,7 +30,8 @@ export const loadPuterSdk = (): Promise<typeof window.puter> => {
     return Promise.reject(new Error('Window is undefined'));
   }
 
-  if (window.puter && window.puter.ai) {
+  // 1. If already on window, resolve immediately
+  if (window.puter && window.puter.auth) {
     return Promise.resolve(window.puter);
   }
 
@@ -39,37 +40,50 @@ export const loadPuterSdk = (): Promise<typeof window.puter> => {
   }
 
   puterLoadPromise = new Promise((resolve, reject) => {
-    // Check if script already exists in document
-    const existingScript = document.querySelector('script[src*="js.puter.com"]');
-    if (existingScript) {
-      existingScript.addEventListener('load', () => resolve(window.puter));
-      existingScript.addEventListener('error', (err) => reject(err));
+    // If window.puter is already ready
+    if (window.puter && window.puter.auth) {
+      resolve(window.puter);
       return;
     }
 
-    const script = document.createElement('script');
-    script.src = 'https://js.puter.com/v2/';
-    script.async = true;
-    script.onload = () => {
-      if (window.puter && window.puter.ai) {
+    let elapsed = 0;
+    const interval = 30;
+    const maxWait = 4000;
+    const timer = setInterval(() => {
+      elapsed += interval;
+      if (window.puter && window.puter.auth) {
+        clearInterval(timer);
         resolve(window.puter);
-      } else {
-        // Give it a tick to initialize
-        setTimeout(() => {
-          if (window.puter) {
-            resolve(window.puter);
-          } else {
-            reject(new Error('Puter SDK loaded but puter object is unavailable.'));
-          }
-        }, 100);
+        return;
       }
-    };
-    script.onerror = () => {
-      puterLoadPromise = null;
-      reject(new Error('Failed to load Puter.js SDK. Please check your internet connection.'));
-    };
+      if (elapsed >= maxWait) {
+        clearInterval(timer);
+        if (window.puter) {
+          resolve(window.puter);
+        } else {
+          puterLoadPromise = null;
+          reject(new Error('Puter SDK loading timed out.'));
+        }
+      }
+    }, interval);
 
-    document.head.appendChild(script);
+    // If script not in DOM at all, append it
+    if (!document.querySelector('script[src*="js.puter.com"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://js.puter.com/v2/';
+      script.onload = () => {
+        if (window.puter) {
+          clearInterval(timer);
+          resolve(window.puter);
+        }
+      };
+      script.onerror = () => {
+        clearInterval(timer);
+        puterLoadPromise = null;
+        reject(new Error('Failed to load Puter.js SDK.'));
+      };
+      document.head.appendChild(script);
+    }
   });
 
   return puterLoadPromise;
@@ -111,10 +125,11 @@ export const isPuterSignedIn = async (): Promise<boolean> => {
 export const signInWithPuter = async (): Promise<boolean> => {
   try {
     let puter = typeof window !== 'undefined' ? window.puter : undefined;
-    if (!puter?.auth) {
+    if (!puter || !puter.auth) {
       puter = await loadPuterSdk();
     }
-    if (!puter?.auth || typeof puter.auth.signIn !== 'function') {
+    if (!puter || !puter.auth || typeof puter.auth.signIn !== 'function') {
+      console.warn('Puter auth is unavailable.');
       return false;
     }
     await puter.auth.signIn();
