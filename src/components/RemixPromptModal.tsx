@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown, Minus, Sparkles } from 'lucide-react';
 import { SparkleIcon } from './icons/SparkleIcon';
-import { generateStyleMixerPrompt, loadPuterSdk } from '../lib/puter';
+import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter, loadPuterSdk } from '../lib/puter';
+import PuterAuthModal from './PuterAuthModal';
 
 interface RemixPromptModalProps {
   isOpen: boolean;
@@ -102,6 +103,7 @@ export default function RemixPromptModal({
   const [copied, setCopied] = useState(false);
   const [copiedNegative, setCopiedNegative] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [showPuterModal, setShowPuterModal] = useState(false);
 
   // Reset/sync state when modal opens or originalPrompt changes
   useEffect(() => {
@@ -251,7 +253,28 @@ export default function RemixPromptModal({
   };
 
   const handleMixAndGenerate = async () => {
-    await executeGeneration();
+    // Check if user is already signed into Puter
+    const signedIn = await isPuterSignedIn();
+    if (signedIn) {
+      await executeGeneration();
+    } else {
+      setShowPuterModal(true);
+    }
+  };
+
+  const handlePuterModalContinue = async () => {
+    const success = await signInWithPuter();
+    setShowPuterModal(false);
+    if (success || (await isPuterSignedIn())) {
+      await executeGeneration();
+    } else {
+      executeLocalSynthesis();
+    }
+  };
+
+  const handlePuterModalCancel = () => {
+    setShowPuterModal(false);
+    executeLocalSynthesis();
   };
 
   const activeAdvancedCount = [selectedLighting, selectedCamera, selectedMood].filter(Boolean).length;
@@ -796,6 +819,12 @@ export default function RemixPromptModal({
 
         </motion.div>
 
+        {/* Puter Authentication Confirmation Modal */}
+        <PuterAuthModal
+          isOpen={showPuterModal}
+          onContinue={handlePuterModalContinue}
+          onCancel={handlePuterModalCancel}
+        />
       </div>
     </AnimatePresence>,
     document.body
