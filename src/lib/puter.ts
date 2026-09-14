@@ -77,21 +77,29 @@ export const loadPuterSdk = (): Promise<typeof window.puter> => {
 
 /**
  * Checks if the user is already signed into Puter
- * Returns true if signed in, false if guest or not loaded yet.
+ * Checks both live SDK status and cached persistent session
  * Never throws.
  */
 export const isPuterSignedIn = async (): Promise<boolean> => {
   try {
     if (typeof window !== 'undefined' && window.puter?.auth && typeof window.puter.auth.isSignedIn === 'function') {
-      return Boolean(window.puter.auth.isSignedIn());
+      const signedIn = Boolean(window.puter.auth.isSignedIn());
+      if (signedIn) {
+        localStorage.setItem('promptro_puter_signed_in', 'true');
+        return true;
+      }
     }
     const puter = await loadPuterSdk();
     if (puter?.auth && typeof puter.auth.isSignedIn === 'function') {
-      return Boolean(puter.auth.isSignedIn());
+      const signedIn = Boolean(puter.auth.isSignedIn());
+      if (signedIn) {
+        localStorage.setItem('promptro_puter_signed_in', 'true');
+        return true;
+      }
     }
-    return false;
+    return localStorage.getItem('promptro_puter_signed_in') === 'true';
   } catch {
-    return false;
+    return typeof localStorage !== 'undefined' && localStorage.getItem('promptro_puter_signed_in') === 'true';
   }
 };
 
@@ -108,9 +116,13 @@ export const signInWithPuter = async (): Promise<boolean> => {
     }
     await puter.auth.signIn();
     if (typeof puter.auth.isSignedIn === 'function') {
-      return Boolean(puter.auth.isSignedIn());
+      const signedIn = Boolean(puter.auth.isSignedIn());
+      if (signedIn) {
+        localStorage.setItem('promptro_puter_signed_in', 'true');
+        return true;
+      }
     }
-    return true;
+    return false;
   } catch (err: any) {
     // Gracefully handle cancellation, closed popups, or blocked popups
     console.info('Puter sign in cancelled or closed by user.');

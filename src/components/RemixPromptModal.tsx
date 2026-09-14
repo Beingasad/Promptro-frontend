@@ -165,6 +165,35 @@ export default function RemixPromptModal({
     setter(current === val ? '' : val);
   };
 
+  // Pure deterministic client-side creative synthesis (Zero Puter API calls, zero popups)
+  const executeLocalSynthesis = () => {
+    const descriptors: string[] = [];
+    if (selectedStyle) descriptors.push(selectedStyle.toLowerCase());
+    if (selectedMood) descriptors.push(selectedMood.toLowerCase());
+    if (selectedQuality) descriptors.push(selectedQuality.toLowerCase());
+
+    const lightingDesc = selectedLighting ? `bathed in ${selectedLighting.toLowerCase()} lighting` : '';
+    const cameraDesc = selectedCamera ? `captured on a ${selectedCamera} lens with precise depth of field` : '';
+    const modDesc = modifications.trim() ? `featuring ${modifications.trim()}` : '';
+
+    let base = originalPrompt.trim().replace(/\.+$/, '');
+    if (modDesc) {
+      base = `${base}, ${modDesc}`;
+    }
+
+    const styleTags = descriptors.length > 0 ? `${descriptors.join(', ')} style` : 'ultra-detailed cinematic style';
+    let synthesized = `${base}, rendered in a stunning ${styleTags}${lightingDesc ? `, ${lightingDesc}` : ''}${cameraDesc ? `, ${cameraDesc}` : ''}, highly detailed, photorealistic masterpiece.`;
+
+    if (selectedRatio && !synthesized.includes(selectedRatio)) {
+      synthesized += ` --ar ${selectedRatio}`;
+    }
+
+    setDisplayedPrompt(synthesized);
+    setIsRemixed(true);
+    setGenerating(false);
+  };
+
+  // Generation using Puter AI when user is signed in
   const executeGeneration = async () => {
     setGenerating(true);
     try {
@@ -192,67 +221,46 @@ export default function RemixPromptModal({
 
       setDisplayedPrompt(finalPrompt);
       setIsRemixed(true);
-    } catch (err) {
-      console.warn('Puter AI generation failed, applying creative synthesis fallback:', err);
-      // High-quality deterministic fallback synthesis
-      const descriptors: string[] = [];
-      if (selectedStyle) descriptors.push(selectedStyle.toLowerCase());
-      if (selectedMood) descriptors.push(selectedMood.toLowerCase());
-      if (selectedQuality) descriptors.push(selectedQuality.toLowerCase());
-
-      const lightingDesc = selectedLighting ? `bathed in ${selectedLighting.toLowerCase()} lighting` : '';
-      const cameraDesc = selectedCamera ? `captured on ${selectedCamera} lens` : '';
-      const modDesc = modifications.trim() ? `with ${modifications.trim()}` : '';
-
-      let base = originalPrompt.trim().replace(/\.+$/, '');
-      if (modDesc) {
-        base = `${base}, ${modDesc}`;
-      }
-
-      const styleTags = descriptors.length > 0 ? `${descriptors.join(', ')} style` : 'ultra-detailed artistic style';
-      let synthesized = `${base}, rendered in a stunning ${styleTags}${lightingDesc ? `, ${lightingDesc}` : ''}${cameraDesc ? `, ${cameraDesc}` : ''}, highly detailed, photorealistic masterpiece.`;
-
-      if (selectedRatio) {
-        synthesized += ` --ar ${selectedRatio}`;
-      }
-
-      setDisplayedPrompt(synthesized);
-      setIsRemixed(true);
-    } finally {
       setGenerating(false);
+    } catch (err) {
+      console.warn('Puter AI generation error, using creative synthesis fallback:', err);
+      executeLocalSynthesis();
     }
   };
 
   const handleMixAndGenerate = async () => {
-    setGenerating(true);
+    // Check if user is already signed into Puter (e.g. from StyleMixer page or past session)
     const signedIn = await isPuterSignedIn();
     if (signedIn) {
+      // Direct generation with Puter AI, no modal prompt needed!
       await executeGeneration();
     } else {
+      // Prompt user with PuterAuthModal
       setShowPuterModal(true);
     }
   };
 
   const handlePuterModalContinue = async () => {
+    setShowPuterModal(false);
     const alreadySignedIn = await isPuterSignedIn();
     if (alreadySignedIn) {
-      setShowPuterModal(false);
       await executeGeneration();
       return;
     }
 
     const success = await signInWithPuter();
-    setShowPuterModal(false);
     if (success) {
       await executeGeneration();
     } else {
-      await executeGeneration();
+      // User cancelled Puter popup or closed it -> synthesize locally without popups
+      executeLocalSynthesis();
     }
   };
 
   const handlePuterModalCancel = () => {
     setShowPuterModal(false);
-    executeGeneration();
+    // User cancelled PuterAuthModal -> synthesize locally immediately (NO Puter login popup will appear)
+    executeLocalSynthesis();
   };
 
   const activeAdvancedCount = [selectedLighting, selectedCamera, selectedMood].filter(Boolean).length;
