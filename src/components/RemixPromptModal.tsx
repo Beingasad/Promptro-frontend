@@ -300,23 +300,14 @@ export default function RemixPromptModal({
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-          drag="y"
-          dragConstraints={{ top: 0 }}
-          dragElastic={0.15}
-          onDragEnd={(_, info) => {
-            if (info.offset.y > 110 || info.velocity.y > 350) {
-              onClose();
-            }
-          }}
           className="relative z-10 w-full max-w-2xl mx-auto rounded-t-[2.25rem] sm:rounded-t-[2.5rem] bg-[#fcfbff]/95 dark:bg-[#0c0818]/95 border-t border-x border-[#e4dcf2] dark:border-white/12 px-4 pt-3 pb-4 sm:px-6 sm:pt-4 sm:pb-6 shadow-[0_-12px_45px_rgba(72,56,118,0.15)] dark:shadow-[0_-12px_45px_rgba(0,0,0,0.6),inset_0_1.5px_1.5px_0_rgba(255,255,255,0.35)] backdrop-blur-3xl max-h-[85vh] sm:max-h-[88vh] flex flex-col overflow-hidden text-[#171421] dark:text-white"
-          style={{ willChange: 'transform' }}
         >
           {/* Ambient Top Glow Effects */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(139,92,246,0.12),transparent_70%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.08),transparent_50%)] dark:bg-[radial-gradient(ellipse_75%_55%_at_50%_0%,rgba(139,92,246,0.25),transparent_70%),radial-gradient(circle_at_85%_0%,rgba(255,106,61,0.14),transparent_50%)]" />
 
-          {/* Top Drag Handle */}
-          <div className="flex justify-center pb-2 cursor-grab active:cursor-grabbing relative z-10 select-none">
-            <div className="w-12 h-1.5 rounded-full bg-black/15 dark:bg-white/30 hover:bg-black/25 dark:hover:bg-white/50 transition-colors shadow-sm" />
+          {/* Top Handle Pill */}
+          <div className="flex justify-center pb-2 relative z-10 select-none pointer-events-none">
+            <div className="w-12 h-1.5 rounded-full bg-black/15 dark:bg-white/30 transition-colors shadow-sm" />
           </div>
 
           {/* Modal Header (Clean Icon Without Box) */}
