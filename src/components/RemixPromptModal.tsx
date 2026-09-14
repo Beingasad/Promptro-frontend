@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { X, Copy, Check, SlidersHorizontal, ChevronRight, ChevronDown } from 'lucide-react';
+import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown } from 'lucide-react';
 import { SparkleIcon } from './icons/SparkleIcon';
+import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter } from '../lib/puter';
+import PuterAuthModal from './PuterAuthModal';
 
 interface RemixPromptModalProps {
   isOpen: boolean;
@@ -75,8 +76,11 @@ export default function RemixPromptModal({
   category,
   model,
 }: RemixPromptModalProps) {
-  const navigate = useNavigate();
   const [modifications, setModifications] = useState('');
+  
+  // Prompt state in Box 1 (starts with original, updates with new remixed prompt)
+  const [displayedPrompt, setDisplayedPrompt] = useState(originalPrompt);
+  const [isRemixed, setIsRemixed] = useState(false);
   
   // Quick Primary Attributes
   const [selectedRatio, setSelectedRatio] = useState<string>('');
@@ -91,7 +95,25 @@ export default function RemixPromptModal({
   // Advanced Styles Section Expand Toggle
   const [showAdvancedStyles, setShowAdvancedStyles] = useState(false);
 
-  const [copiedOriginal, setCopiedOriginal] = useState(false);
+  // Status states
+  const [copied, setCopied] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [showPuterModal, setShowPuterModal] = useState(false);
+
+  // Reset/sync state when modal opens or originalPrompt changes
+  useEffect(() => {
+    if (isOpen) {
+      setDisplayedPrompt(originalPrompt);
+      setIsRemixed(false);
+      setModifications('');
+      setSelectedRatio('');
+      setSelectedQuality('');
+      setSelectedStyle('');
+      setSelectedLighting('');
+      setSelectedCamera('');
+      setSelectedMood('');
+    }
+  }, [isOpen, originalPrompt]);
 
   // Row expand toggles for "+ More" / "- Less" within each category
   const [expandedRows, setExpandedRows] = useState<{
@@ -126,43 +148,111 @@ export default function RemixPromptModal({
     };
   }, [isOpen]);
 
-  const handleCopyOriginal = (e: React.MouseEvent) => {
+  const handleCopyDisplayed = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(originalPrompt);
-    setCopiedOriginal(true);
-    setTimeout(() => setCopiedOriginal(false), 1800);
+    navigator.clipboard.writeText(displayedPrompt);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
+
+  const handleRestoreOriginal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDisplayedPrompt(originalPrompt);
+    setIsRemixed(false);
   };
 
   const handleToggle = (current: string, val: string, setter: (v: string) => void) => {
     setter(current === val ? '' : val);
   };
 
-  const handleProceedToMixer = () => {
-    // Construct refined idea prompt blending original + custom modifications + quality & ratio specs
-    let combinedIdea = originalPrompt.trim();
-    const extraSpecs: string[] = [];
-    
-    if (selectedRatio) extraSpecs.push(`Aspect Ratio: ${selectedRatio}`);
-    if (selectedQuality) extraSpecs.push(`Quality: ${selectedQuality}`);
-    if (modifications.trim()) extraSpecs.push(`Modifications: ${modifications.trim()}`);
-    
-    if (extraSpecs.length > 0) {
-      combinedIdea = `${combinedIdea}. [${extraSpecs.join(', ')}]`;
+  const executeGeneration = async () => {
+    setGenerating(true);
+    try {
+      const extraSpecs: string[] = [];
+      if (selectedRatio) extraSpecs.push(`Aspect Ratio: ${selectedRatio}`);
+      if (selectedQuality) extraSpecs.push(`Quality: ${selectedQuality}`);
+      if (modifications.trim()) extraSpecs.push(`Modifications: ${modifications.trim()}`);
+
+      const res = await generateStyleMixerPrompt({
+        idea: extraSpecs.length > 0 ? `${originalPrompt}. Special Instructions: ${extraSpecs.join(', ')}` : originalPrompt,
+        style: selectedStyle || undefined,
+        lighting: selectedLighting || undefined,
+        camera: selectedCamera || undefined,
+        mood: selectedMood || undefined,
+        refinePrompt: originalPrompt,
+      });
+
+      let finalPrompt = res.trim();
+      if (selectedRatio && !finalPrompt.includes(selectedRatio)) {
+        finalPrompt = `${finalPrompt} --ar ${selectedRatio}`;
+      }
+      if (selectedQuality && !finalPrompt.toLowerCase().includes(selectedQuality.toLowerCase())) {
+        finalPrompt = `${finalPrompt}, ${selectedQuality.toLowerCase()}`;
+      }
+
+      setDisplayedPrompt(finalPrompt);
+      setIsRemixed(true);
+    } catch (err) {
+      console.warn('Puter AI generation failed, applying creative synthesis fallback:', err);
+      // High-quality deterministic fallback synthesis
+      const descriptors: string[] = [];
+      if (selectedStyle) descriptors.push(selectedStyle.toLowerCase());
+      if (selectedMood) descriptors.push(selectedMood.toLowerCase());
+      if (selectedQuality) descriptors.push(selectedQuality.toLowerCase());
+
+      const lightingDesc = selectedLighting ? `bathed in ${selectedLighting.toLowerCase()} lighting` : '';
+      const cameraDesc = selectedCamera ? `captured on ${selectedCamera} lens` : '';
+      const modDesc = modifications.trim() ? `with ${modifications.trim()}` : '';
+
+      let base = originalPrompt.trim().replace(/\.+$/, '');
+      if (modDesc) {
+        base = `${base}, ${modDesc}`;
+      }
+
+      const styleTags = descriptors.length > 0 ? `${descriptors.join(', ')} style` : 'ultra-detailed artistic style';
+      let synthesized = `${base}, rendered in a stunning ${styleTags}${lightingDesc ? `, ${lightingDesc}` : ''}${cameraDesc ? `, ${cameraDesc}` : ''}, highly detailed, photorealistic masterpiece.`;
+
+      if (selectedRatio) {
+        synthesized += ` --ar ${selectedRatio}`;
+      }
+
+      setDisplayedPrompt(synthesized);
+      setIsRemixed(true);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const handleMixAndGenerate = async () => {
+    setGenerating(true);
+    const signedIn = await isPuterSignedIn();
+    if (signedIn) {
+      await executeGeneration();
+    } else {
+      setShowPuterModal(true);
+    }
+  };
+
+  const handlePuterModalContinue = async () => {
+    const alreadySignedIn = await isPuterSignedIn();
+    if (alreadySignedIn) {
+      setShowPuterModal(false);
+      await executeGeneration();
+      return;
     }
 
-    onClose();
-    navigate('/style-mixer', {
-      state: {
-        idea: combinedIdea,
-        style: selectedStyle,
-        lighting: selectedLighting,
-        camera: selectedCamera,
-        mood: selectedMood,
-        ratio: selectedRatio,
-        quality: selectedQuality,
-        autoGenerate: true,
-      },
-    });
+    const success = await signInWithPuter();
+    setShowPuterModal(false);
+    if (success) {
+      await executeGeneration();
+    } else {
+      await executeGeneration();
+    }
+  };
+
+  const handlePuterModalCancel = () => {
+    setShowPuterModal(false);
+    executeGeneration();
   };
 
   const activeAdvancedCount = [selectedLighting, selectedCamera, selectedMood].filter(Boolean).length;
@@ -235,34 +325,60 @@ export default function RemixPromptModal({
           {/* Scrollable Modal Body (Completely Hidden Scrollbars + Butter-Smooth Scroll) */}
           <div className="flex-1 overflow-y-auto overscroll-contain hide-scrollbar py-3.5 space-y-4 text-white relative z-10">
             
-            {/* BOX 1: Original Prompt Display */}
+            {/* BOX 1: Prompt Display (Updates to New Remixed Prompt with Copy & Restore Options) */}
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-bold text-purple-300 px-0.5">
                 <span className="flex items-center gap-1.5">
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-500/30 text-[10px] font-black text-purple-200 border border-purple-400/40">1</span>
-                  <span className="tracking-wide">Original Prompt</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={handleCopyOriginal}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-[11px] font-semibold text-purple-200 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
-                >
-                  {copiedOriginal ? (
-                    <>
-                      <Check className="w-3 h-3 text-emerald-400" />
-                      <span className="text-emerald-400 font-bold">Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3 h-3 text-purple-300" />
-                      <span>Copy</span>
-                    </>
+                  <span className="tracking-wide">
+                    {isRemixed ? 'Remixed Prompt' : 'Original Prompt'}
+                  </span>
+                  {isRemixed && (
+                    <span className="px-1.5 py-0.5 rounded-md bg-gradient-to-r from-purple-500/30 to-pink-500/30 border border-purple-400/40 text-[9px] font-black text-purple-200 tracking-wider uppercase">
+                      New ✨
+                    </span>
                   )}
-                </button>
+                </span>
+                
+                <div className="flex items-center gap-1.5">
+                  {/* Restore / Original button (visible when prompt is remixed) */}
+                  {isRemixed && (
+                    <button
+                      type="button"
+                      onClick={handleRestoreOriginal}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-[11px] font-semibold text-amber-300 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                      title="Restore original prompt"
+                    >
+                      <RotateCcw className="w-3 h-3 text-amber-300" />
+                      <span>Original</span>
+                    </button>
+                  )}
+
+                  {/* Copy prompt button */}
+                  <button
+                    type="button"
+                    onClick={handleCopyDisplayed}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-[11px] font-semibold text-purple-200 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-3 h-3 text-emerald-400" />
+                        <span className="text-emerald-400 font-bold">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3 text-purple-300" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
 
-              <div className="rounded-2xl bg-white/[0.04] dark:bg-white/[0.03] border border-white/12 dark:border-white/8 p-3.5 text-xs sm:text-[13px] leading-relaxed text-white/90 max-h-[105px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm">
-                {originalPrompt}
+              <div className={`rounded-2xl bg-white/[0.04] dark:bg-white/[0.03] border p-3.5 text-xs sm:text-[13px] leading-relaxed text-white/90 max-h-[110px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
+                isRemixed ? 'border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.15)] bg-purple-950/20' : 'border-white/12 dark:border-white/8'
+              }`}>
+                {displayedPrompt}
               </div>
             </div>
 
@@ -618,20 +734,37 @@ export default function RemixPromptModal({
 
           </div>
 
-          {/* Modal Footer Action Button */}
+          {/* Modal Footer Action Button (Mix & In-Place Generation) */}
           <div className="pt-3.5 border-t border-white/10 dark:border-white/8 shrink-0 relative z-10">
             <button
               type="button"
-              onClick={handleProceedToMixer}
-              className="cursor-pointer w-full py-3.5 sm:py-4 px-5 rounded-full text-sm sm:text-base font-black text-white bg-gradient-to-r from-[#7437ff] via-[#cc3ce2] to-[#f97316] hover:brightness-110 active:scale-[0.99] transition-all duration-300 shadow-[0_6px_25px_rgba(116,55,255,0.4)] flex items-center justify-center gap-2 relative overflow-hidden group"
+              onClick={handleMixAndGenerate}
+              disabled={generating}
+              className="cursor-pointer w-full py-3.5 sm:py-4 px-5 rounded-full text-sm sm:text-base font-black text-white bg-gradient-to-r from-[#7437ff] via-[#cc3ce2] to-[#f97316] hover:brightness-110 active:scale-[0.99] transition-all duration-300 shadow-[0_6px_25px_rgba(116,55,255,0.4)] flex items-center justify-center gap-2 relative overflow-hidden group disabled:opacity-75 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none rounded-full" />
-              <span className="relative z-10">Mix &amp; Generate Remixed Prompt</span>
-              <ChevronRight className="w-4 h-4 relative z-10 group-hover:translate-x-0.5 transition-transform" />
+              {generating ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="relative z-10">Synthesizing New Prompt...</span>
+                </>
+              ) : (
+                <>
+                  <SparkleIcon className="w-4.5 h-4.5 relative z-10 text-white" />
+                  <span className="relative z-10">{isRemixed ? 'Re-Mix & Update Prompt' : 'Mix & Generate Remixed Prompt'}</span>
+                </>
+              )}
             </button>
           </div>
 
         </motion.div>
+
+        {/* Puter Auth Modal if needed */}
+        <PuterAuthModal
+          isOpen={showPuterModal}
+          onContinue={handlePuterModalContinue}
+          onCancel={handlePuterModalCancel}
+        />
       </div>
     </AnimatePresence>,
     document.body
