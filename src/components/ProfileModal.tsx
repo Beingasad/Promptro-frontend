@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
-  X, Mail, ShieldCheck, Clock, User, Sparkles, Loader2, 
+  X, Mail, ShieldCheck, Clock, User, Loader2, 
   BadgeCheck, Edit3, Save, LogOut, Camera, Layers, AlertCircle, ChevronDown, Check, RefreshCw,
   GalleryVerticalEnd, Bookmark
 } from 'lucide-react';
+import { SparkleIcon } from './icons/SparkleIcon';
 import axios from 'axios';
 import { updateProfile } from 'firebase/auth';
 import { API_BASE_URL } from '../config';
@@ -530,7 +531,7 @@ export default function ProfileModal({
                     animate={{ opacity: 1, y: 0 }}
                     className="flex gap-3 items-start p-3 bg-gradient-to-r from-primary/15 to-secondary/10 border border-primary/25 rounded-[18px] text-[11px] font-semibold text-white"
                   >
-                    <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                    <SparkleIcon className="w-4 h-4 shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]" variant="purple" />
                     <div>
                       <span className="font-extrabold text-white block">Complete Your Profile</span>
                       <p className="opacity-90 leading-normal mt-0.5 text-[#E2E8F0]">

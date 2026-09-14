@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { AIStyleMixerBannerSkeleton } from './common/Skeleton';
+import { SparkleIcon } from './icons/SparkleIcon';
 
 interface AIStyleMixerBannerProps {
   loading?: boolean;
@@ -127,13 +128,13 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                   {/* Feature Pills */}
                   <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] xl:text-[10.5px] font-bold bg-purple-500/10 dark:bg-purple-400/20 text-purple-700 dark:text-purple-300 border border-purple-500/20">
-                      ✦ ChatGPT & Gemini
+                      <SparkleIcon className="w-2.5 h-2.5 shrink-0" variant="purple" /> ChatGPT & Gemini
                     </span>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] xl:text-[10.5px] font-bold bg-pink-500/10 dark:bg-pink-400/20 text-pink-700 dark:text-pink-300 border border-pink-500/20">
-                      ✦ Smart Prompt Writer
+                      <SparkleIcon className="w-2.5 h-2.5 shrink-0" variant="purple" /> Smart Prompt Writer
                     </span>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] xl:text-[10.5px] font-bold bg-amber-500/10 dark:bg-amber-400/20 text-amber-700 dark:text-amber-300 border border-amber-500/20">
-                      ✦ Instant 1-Click Copy
+                      <SparkleIcon className="w-2.5 h-2.5 shrink-0" variant="amber" /> Instant 1-Click Copy
                     </span>
                   </div>
                 </div>
@@ -168,11 +169,7 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                   </span>
                   
                   {/* Professional Sparkles SVG Icon */}
-                  <svg className="relative z-10 w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500 dark:text-amber-300 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(251,191,36,0.85)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-                    <path d="M5 3v4" />
-                    <path d="M19 17v4" />
-                  </svg>
+                  <SparkleIcon className="relative z-10 w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_8px_rgba(251,191,36,0.85)]" variant="amber" />
                 </button>
 
               </div>
@@ -183,7 +180,7 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                 <div className="flex items-center justify-between w-full px-1">
                   <div className="flex items-center gap-1.5 text-[11.5px] xl:text-[12.5px] font-semibold italic text-purple-700 dark:text-purple-300 tracking-wide">
                     <span>Combine. Create. Imagine.</span>
-                    <span className="text-amber-400 not-italic text-sm drop-shadow-sm">✦</span>
+                    <SparkleIcon className="w-3 h-3 shrink-0 inline-block drop-shadow-sm" variant="amber" />
                   </div>
                   <span className="text-[10px] xl:text-[11px] italic font-medium text-[#524a66] dark:text-white/80">
                     Click any style to start ⤵
@@ -314,11 +311,7 @@ export default function AIStyleMixerBanner({ loading }: AIStyleMixerBannerProps)
                     <span className="font-black text-[13.5px] xl:text-[14.5px] bg-gradient-to-r from-purple-800 via-pink-700 to-amber-700 bg-clip-text text-transparent dark:bg-none dark:text-white dark:drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
                       Mix Your Style
                     </span>
-                    <svg className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-amber-500 dark:text-amber-300 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_10px_rgba(251,191,36,0.9)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-                      <path d="M5 3v4" />
-                      <path d="M19 17v4" />
-                    </svg>
+                    <SparkleIcon className="w-3.5 h-3.5 xl:w-4 xl:h-4 shrink-0 drop-shadow-sm dark:drop-shadow-[0_0_10px_rgba(251,191,36,0.9)]" variant="amber" />
                     <span className="text-[11px] xl:text-[12.5px] font-bold text-purple-950/70 dark:text-purple-100 ml-1 inline-flex items-center gap-1 group-hover:text-purple-950 dark:group-hover:text-white transition-colors">
                       Open AI Mixer Engine <span className="inline-block group-hover:translate-x-1.5 transition-transform duration-300">→</span>
                     </span>

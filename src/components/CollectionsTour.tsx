@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Layers, ChevronRight, X, FolderPlus, Heart, Share2, Sparkles } from 'lucide-react';
+import { Layers, ChevronRight, X, FolderPlus, Heart, Share2 } from 'lucide-react';
+import { SparkleIcon } from './icons/SparkleIcon';
 import { AnimatePresence, motion } from 'framer-motion';
 import { readLocalActivity, writeLocalActivity, saveUserActivity } from '../lib/activity';
 import { auth } from '../lib/firebase';
@@ -214,7 +215,7 @@ export default function CollectionsTour({ show = true }: CollectionsTourProps) {
                   </div>
                   <div className="min-w-0">
                     <h4 className="text-xs font-black text-primary dark:text-[#ff6a3d] uppercase tracking-wider flex items-center gap-1.5">
-                      New Feature <Sparkles className="h-3 w-3 text-[#ff6a3d] animate-pulse" />
+                      New Feature <SparkleIcon className="h-3.5 w-3.5 shrink-0 animate-pulse" variant="purple" />
                     </h4>
                     <p className="text-sm font-black text-[#171421] dark:text-white mt-0.5 leading-snug">
                       Introduce Board Collections

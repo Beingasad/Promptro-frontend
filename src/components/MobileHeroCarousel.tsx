@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { ChevronRight, Sparkles, Flame, Zap, Star, X } from 'lucide-react';
+import { ChevronRight, Flame, Zap, X } from 'lucide-react';
+import { SparkleIcon } from './icons/SparkleIcon';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../utils/cn';
 import { MobileHeroCarouselSkeleton } from './common/Skeleton';
@@ -50,10 +51,10 @@ const getDarkGradient = (lightGrad: string = '') => {
 
 const getIcon = (iconName: string | null | undefined) => {
   switch (iconName?.toLowerCase()) {
-    case 'sparkles': return <Sparkles className="w-3.5 h-3.5" />;
+    case 'sparkles': return <SparkleIcon className="w-3.5 h-3.5 shrink-0" variant="purple" />;
     case 'flame': return <Flame className="w-3.5 h-3.5" />;
     case 'zap': return <Zap className="w-3.5 h-3.5" />;
-    case 'star': return <Star className="w-3.5 h-3.5" />;
+    case 'star': return <SparkleIcon className="w-3.5 h-3.5 shrink-0" variant="amber" />;
     default: return null;
   }
 };

@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
-import { ArrowLeft, Bookmark, Share2, Heart, Eye, Sparkles, GalleryVerticalEnd, Download } from 'lucide-react';
+import { ArrowLeft, Bookmark, Share2, Heart, Eye, GalleryVerticalEnd, Download } from 'lucide-react';
+import { SparkleIcon } from '../icons/SparkleIcon';
 
 interface CardSkeletonProps {
   isHome?: boolean;
@@ -168,7 +169,7 @@ export function DetailSkeleton({
         <div className="shrink-0 flex flex-col gap-3">
           <div className="flex items-center justify-between gap-3 px-1">
             <div className="flex items-center gap-3 text-primary opacity-60">
-              <Sparkles className="h-6 w-6" />
+              <SparkleIcon className="h-6 w-6 shrink-0" variant="purple" />
               <div className="h-5 w-20 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur-md animate-pulse border border-white/50 dark:border-white/10" />
             </div>
             <div className="h-8 w-28 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/50 dark:border-white/10 animate-pulse" />

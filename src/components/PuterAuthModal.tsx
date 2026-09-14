@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ShieldCheck, X, ArrowRight, Loader2 } from 'lucide-react';
+import { ShieldCheck, X, ArrowRight, Loader2 } from 'lucide-react';
+import { SparkleIcon } from './icons/SparkleIcon';
 
 interface PuterAuthModalProps {
   isOpen: boolean;
@@ -77,7 +78,7 @@ export default function PuterAuthModal({
             {/* Sparkle Icon Badge & Heading */}
             <div className="flex items-center gap-3.5 pr-6">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-purple-500/25 via-fuchsia-500/20 to-orange-500/20 border border-purple-400/35 text-purple-600 dark:text-purple-300 shadow-[0_4px_16px_rgba(168,85,247,0.22)] backdrop-blur-md">
-                <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-300 drop-shadow-sm" />
+                <SparkleIcon className="w-6 h-6 shrink-0 drop-shadow-[0_0_12px_rgba(168,85,247,0.8)]" variant="purple" />
               </div>
               <div className="min-w-0">
                 <h3

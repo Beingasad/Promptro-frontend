@@ -17,7 +17,6 @@ import {
   Bookmark,
   Camera,
   CircleUserRound,
-  Sparkles,
   Share2,
   Download,
   Instagram,
@@ -44,6 +43,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import ImageCard, { Prompt } from './ImageCard';
+import { AdminTour } from './common/AdminTour';
+import { SparkleIcon } from './icons/SparkleIcon';
 import SEOMeta from './common/SEOMeta';
 import { auth } from '../lib/firebase';
 import { clearLocalActivity, onActivityUpdated, readLocalActivity, syncUserActivity } from '../lib/activity';
@@ -829,7 +830,7 @@ export default function TopNavbar() {
 
   const mainDrawerItems = [
     {
-      icon: Sparkles,
+      icon: SparkleIcon,
       title: 'Showcase Creator',
       description: 'Generate beautiful posters of your favourite prompts',
       action: 'showcase',
@@ -2354,7 +2355,7 @@ export default function TopNavbar() {
                           : "opacity-50 text-white/70 cursor-not-allowed"
                           }`}
                       >
-                        {isGeneratingShowcase ? <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <><Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Create Poster</>}
+                        {isGeneratingShowcase ? <SparkleIcon className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" variant="purple" /> : <><Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Create Poster</>}
                       </button>
                     </div>
                   </div>

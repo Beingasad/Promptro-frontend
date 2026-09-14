@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import SEOMeta from '../components/common/SEOMeta';
 import PuterAuthModal from '../components/PuterAuthModal';
 import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter } from '../lib/puter';
+import { SparkleIcon } from '../components/icons/SparkleIcon';
 
 // Compact options matching user requirements
 const STYLE_OPTIONS: string[] = [
@@ -453,17 +454,7 @@ export default function StyleMixer() {
                 className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl text-[10.5px] sm:text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 transition-all cursor-pointer shadow-xs whitespace-nowrap"
                 title="Load a creative example prompt and styles"
               >
-                <svg
-                  className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-purple-600 dark:text-purple-400 shrink-0"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
-                </svg>
+                <SparkleIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" variant="purple" />
                 <span>Try example</span>
               </button>
             </div>
@@ -686,10 +677,7 @@ export default function StyleMixer() {
                 </>
               ) : (
                 <>
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 shrink-0 drop-shadow-[0_0_8px_rgba(252,211,77,0.85)]" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L14.4 8.6L21 11L14.4 13.4L12 20L9.6 13.4L3 11L9.6 8.6L12 2Z" />
-                    <path d="M19 16L20.2 19.3L23.5 20.5L20.2 21.7L19 25L17.8 21.7L14.5 20.5L17.8 19.3L19 16Z" opacity="0.85" />
-                  </svg>
+                  <SparkleIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 drop-shadow-[0_0_8px_rgba(252,211,77,0.85)]" variant="amber" />
                   <span>Generate My Prompt</span>
                 </>
               )}
@@ -741,29 +729,7 @@ export default function StyleMixer() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#1f1738] dark:text-white min-w-0">
-                    <svg
-                      className="w-4 h-4 shrink-0 drop-shadow-[0_0_10px_rgba(168,85,247,0.75)]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <defs>
-                        <linearGradient id="premiumPurpleSparkle" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#e9d5ff" />
-                          <stop offset="45%" stopColor="#c084fc" />
-                          <stop offset="100%" stopColor="#9333ea" />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        d="M12 2.5L14.2 8.8C14.6 9.9 15.5 10.8 16.6 11.2L22.9 13.4L16.6 15.6C15.5 16 14.6 16.9 14.2 18L12 24.3L9.8 18C9.4 16.9 8.5 16 7.4 15.6L1.1 13.4L7.4 11.2C8.5 10.8 9.4 9.9 9.8 8.8L12 2.5Z"
-                        fill="url(#premiumPurpleSparkle)"
-                      />
-                      <circle cx="12" cy="13.4" r="1.5" fill="#ffffff" />
-                      <path
-                        d="M19 3L19.8 5.2C20 5.7 20.4 6.1 20.9 6.3L23.1 7.1L20.9 7.9C20.4 8.1 20 8.5 19.8 9L19 11.2L18.2 9C18 8.5 17.6 8.1 17.1 7.9L14.9 7.1L17.1 6.3C17.6 6.1 18 5.7 18.2 5.2L19 3Z"
-                        fill="url(#premiumPurpleSparkle)"
-                        opacity="0.9"
-                      />
-                    </svg>
+                    <SparkleIcon className="w-4 h-4 shrink-0 drop-shadow-[0_0_10px_rgba(168,85,247,0.75)]" variant="purple" />
                     <span className="truncate">Midjourney, ChatGPT & Google Gemini</span>
                   </div>
                   <span className="whitespace-nowrap shrink-0 text-[10px] sm:text-[10.5px] font-bold text-purple-600 dark:text-purple-300 bg-purple-100/80 dark:bg-purple-900/40 px-2.5 py-0.5 rounded-full border border-purple-200 dark:border-purple-800/50">
@@ -865,17 +831,7 @@ export default function StyleMixer() {
             ) : (
               <div className="rounded-2xl bg-white/40 dark:bg-white/[0.02] border border-dashed border-white/60 dark:border-white/10 p-6 sm:p-8 text-center text-xs text-[#82799c] dark:text-[#a097b8] flex flex-col items-center justify-center gap-2 h-full">
                 <div className="w-10 h-10 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/40 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-1">
-                  <svg
-                    className="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
-                  </svg>
+                  <SparkleIcon className="w-5 h-5 shrink-0" variant="purple" />
                 </div>
                 <span className="text-sm font-extrabold text-[#1f1738] dark:text-white">
                   Generate your AI prompt
