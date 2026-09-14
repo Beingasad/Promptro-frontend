@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SEOMeta from '../components/common/SEOMeta';
-import PuterAuthModal from '../components/PuterAuthModal';
-import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter } from '../lib/puter';
+import { generateStyleMixerPrompt } from '../lib/puter';
 import { SparkleIcon } from '../components/icons/SparkleIcon';
 
 // Compact options matching user requirements
@@ -109,8 +108,6 @@ export default function StyleMixer() {
   const [copied, setCopied] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [exampleIndex, setExampleIndex] = useState(0);
-  const [showPuterModal, setShowPuterModal] = useState(false);
-  const [pendingAction, setPendingAction] = useState<'generate' | 'improve'>('generate');
 
   // Check URL params for remix or idea queries
   useEffect(() => {
@@ -132,23 +129,6 @@ export default function StyleMixer() {
       if (navState.mood) setMood(navState.mood);
     } else if (remixParam) {
       setIdea(decodeURIComponent(remixParam));
-    }
-
-    // Handle redirect from Remix Modal for Puter login
-    const isPuterAuth = searchParams.get('action') === 'puter_login' || searchParams.get('auth') === 'puter';
-    const returnUrl = searchParams.get('returnUrl') || sessionStorage.getItem('promptro_remix_return_url');
-
-    if (isPuterAuth) {
-      isPuterSignedIn().then(async (signedIn) => {
-        if (signedIn) {
-          if (returnUrl) {
-            sessionStorage.removeItem('promptro_remix_return_url');
-            window.location.href = returnUrl;
-          }
-          return;
-        }
-        setShowPuterModal(true);
-      });
     }
   }, [location]);
 
@@ -234,14 +214,7 @@ export default function StyleMixer() {
     }
 
     setErrorMsg(null);
-    setPendingAction('generate');
-
-    const signedIn = await isPuterSignedIn();
-    if (signedIn) {
-      await executePromptGeneration(false);
-    } else {
-      setShowPuterModal(true);
-    }
+    await executePromptGeneration(false);
   };
 
   // Flow: User clicks "↻ Improve Prompt"
@@ -249,54 +222,7 @@ export default function StyleMixer() {
     if (!generatedPrompt) return;
 
     setErrorMsg(null);
-    setPendingAction('improve');
-
-    const signedIn = await isPuterSignedIn();
-    if (signedIn) {
-      await executePromptGeneration(true);
-    } else {
-      setShowPuterModal(true);
-    }
-  };
-
-  const handlePuterModalContinue = async () => {
-    const searchParams = new URLSearchParams(location.search);
-    const returnUrl = searchParams.get('returnUrl') || sessionStorage.getItem('promptro_remix_return_url');
-
-    const alreadySignedIn = await isPuterSignedIn();
-    if (alreadySignedIn) {
-      setShowPuterModal(false);
-      if (returnUrl) {
-        sessionStorage.removeItem('promptro_remix_return_url');
-        window.location.href = returnUrl;
-        return;
-      }
-      await executePromptGeneration(pendingAction === 'improve');
-      return;
-    }
-
-    const success = await signInWithPuter();
-    setShowPuterModal(false);
-
-    if (success || (await isPuterSignedIn())) {
-      localStorage.setItem('promptro_puter_signed_in', 'true');
-      if (returnUrl) {
-        sessionStorage.removeItem('promptro_remix_return_url');
-        window.location.href = returnUrl;
-        return;
-      }
-      await executePromptGeneration(pendingAction === 'improve');
-    }
-  };
-
-  const handlePuterModalCancel = () => {
-    setShowPuterModal(false);
-    const searchParams = new URLSearchParams(location.search);
-    const returnUrl = searchParams.get('returnUrl') || sessionStorage.getItem('promptro_remix_return_url');
-    if (returnUrl) {
-      sessionStorage.removeItem('promptro_remix_return_url');
-      window.location.href = returnUrl;
-    }
+    await executePromptGeneration(true);
   };
 
   const handleCopyPrompt = async () => {
@@ -911,12 +837,6 @@ export default function StyleMixer() {
 
       </div>
 
-      {/* Puter Authentication Confirmation Modal */}
-      <PuterAuthModal
-        isOpen={showPuterModal}
-        onContinue={handlePuterModalContinue}
-        onCancel={handlePuterModalCancel}
-      />
     </motion.div>
   );
 }

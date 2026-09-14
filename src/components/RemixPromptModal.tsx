@@ -3,8 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown, Minus, Sparkles } from 'lucide-react';
 import { SparkleIcon } from './icons/SparkleIcon';
-import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter, loadPuterSdk } from '../lib/puter';
-import PuterAuthModal from './PuterAuthModal';
+import { generateStyleMixerPrompt, loadPuterSdk } from '../lib/puter';
 
 interface RemixPromptModalProps {
   isOpen: boolean;
@@ -103,7 +102,6 @@ export default function RemixPromptModal({
   const [copied, setCopied] = useState(false);
   const [copiedNegative, setCopiedNegative] = useState(false);
   const [generating, setGenerating] = useState(false);
-  const [showPuterModal, setShowPuterModal] = useState(false);
 
   // Reset/sync state when modal opens or originalPrompt changes
   useEffect(() => {
@@ -253,40 +251,7 @@ export default function RemixPromptModal({
   };
 
   const handleMixAndGenerate = async () => {
-    // Check if user is already signed into Puter (e.g. from StyleMixer page or past session)
-    const signedIn = await isPuterSignedIn();
-    if (signedIn) {
-      // Direct generation with Puter AI, no modal prompt needed!
-      await executeGeneration();
-    } else {
-      // Prompt user with PuterAuthModal
-      setShowPuterModal(true);
-    }
-  };
-
-  const handlePuterModalContinue = async () => {
-    // Check if user is already signed into Puter
-    const signedIn = await isPuterSignedIn();
-    if (signedIn) {
-      setShowPuterModal(false);
-      await executeGeneration();
-      return;
-    }
-
-    // Save return URL with openRemix=true flag so user returns straight to the remix modal
-    const currentPath = window.location.pathname;
-    const currentSearch = window.location.search;
-    const returnUrl = `${currentPath}${currentSearch ? (currentSearch.includes('openRemix') ? currentSearch : `${currentSearch}&openRemix=true`) : '?openRemix=true'}`;
-    sessionStorage.setItem('promptro_remix_return_url', returnUrl);
-
-    // Redirect to StyleMixer page with puter_login action
-    window.location.href = `/style-mixer?action=puter_login&returnUrl=${encodeURIComponent(returnUrl)}`;
-  };
-
-  const handlePuterModalCancel = () => {
-    setShowPuterModal(false);
-    // User cancelled PuterAuthModal -> synthesize locally immediately (NO Puter login popup will appear)
-    executeLocalSynthesis();
+    await executeGeneration();
   };
 
   const activeAdvancedCount = [selectedLighting, selectedCamera, selectedMood].filter(Boolean).length;
@@ -831,12 +796,6 @@ export default function RemixPromptModal({
 
         </motion.div>
 
-        {/* Puter Auth Modal if needed */}
-        <PuterAuthModal
-          isOpen={showPuterModal}
-          onContinue={handlePuterModalContinue}
-          onCancel={handlePuterModalCancel}
-        />
       </div>
     </AnimatePresence>,
     document.body
