@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, SlidersHorizontal, RotateCcw, ChevronDown, Minus, Sparkles } from 'lucide-react';
 import { SparkleIcon } from './icons/SparkleIcon';
-import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter } from '../lib/puter';
+import { generateStyleMixerPrompt, isPuterSignedIn, signInWithPuter, loadPuterSdk } from '../lib/puter';
 import PuterAuthModal from './PuterAuthModal';
 
 interface RemixPromptModalProps {
@@ -108,6 +108,8 @@ export default function RemixPromptModal({
   // Reset/sync state when modal opens or originalPrompt changes
   useEffect(() => {
     if (isOpen) {
+      // Preload Puter SDK so auth popups trigger synchronously without delay
+      loadPuterSdk().catch(() => undefined);
       setDisplayedPrompt(originalPrompt);
       setRemixedPrompt('');
       setActivePromptTab('original');
@@ -262,14 +264,16 @@ export default function RemixPromptModal({
   };
 
   const handlePuterModalContinue = async () => {
-    setShowPuterModal(false);
     const alreadySignedIn = await isPuterSignedIn();
     if (alreadySignedIn) {
+      setShowPuterModal(false);
       await executeGeneration();
       return;
     }
 
     const success = await signInWithPuter();
+    setShowPuterModal(false);
+
     if (success) {
       await executeGeneration();
     } else {
