@@ -367,10 +367,10 @@ export default function RemixPromptModal({
                     <button
                       type="button"
                       onClick={handleRestoreOriginal}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100/80 border border-amber-200 text-[11px] font-semibold text-amber-700 dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-amber-300 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f0e9f8] hover:bg-[#e8def3] border border-[#dfd4ed] text-[11px] font-semibold text-[#6b21a8] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] dark:border-white/10 dark:text-purple-200 dark:hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                       title="Restore original prompt"
                     >
-                      <RotateCcw className="w-3 h-3 text-amber-600 dark:text-amber-300" />
+                      <RotateCcw className="w-3 h-3 text-purple-600 dark:text-purple-300" />
                       <span>Original</span>
                     </button>
                   )}
@@ -396,12 +396,8 @@ export default function RemixPromptModal({
                 </div>
               </div>
 
-              {/* Main Prompt Content Box */}
-              <div className={`rounded-2xl border px-3.5 py-2.5 sm:py-3 text-xs sm:text-[13px] leading-normal sm:leading-relaxed max-h-[140px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300 ${
-                isRemixed 
-                  ? 'border-purple-300 dark:border-purple-400/50 shadow-[0_0_15px_rgba(168,85,247,0.12)] bg-purple-50/90 dark:bg-purple-950/20 text-[#171124] dark:text-white/90' 
-                  : 'border-[#e5dcf2] dark:border-white/8 bg-[#f4effa] dark:bg-white/[0.03] text-[#282138] dark:text-white/90'
-              }`}>
+              {/* Main Prompt Content Box (Consistent clean style for both original & remixed prompt) */}
+              <div className="rounded-2xl border border-[#e5dcf2] dark:border-white/8 bg-[#f4effa] dark:bg-white/[0.03] text-[#282138] dark:text-white/90 px-3.5 py-2.5 sm:py-3 text-xs sm:text-[13px] leading-normal sm:leading-relaxed max-h-[140px] overflow-y-auto overscroll-contain hide-scrollbar select-text font-normal shadow-inner backdrop-blur-sm transition-all duration-300">
                 <div>{displayedPrompt}</div>
 
                 {/* If image prompt has Negative Prompt, display it clearly inside Box 1 */}
