@@ -265,21 +265,22 @@ export default function RemixPromptModal({
   };
 
   const handlePuterModalContinue = async () => {
-    try {
-      const success = await signInWithPuter();
+    // Check if user is already signed into Puter
+    const signedIn = await isPuterSignedIn();
+    if (signedIn) {
       setShowPuterModal(false);
-
-      if (success) {
-        await executeGeneration();
-      } else {
-        // User cancelled Puter popup or closed it -> synthesize locally with rich creative styling
-        executeLocalSynthesis();
-      }
-    } catch (err) {
-      setShowPuterModal(false);
-      console.warn('Puter sign in error, using fallback:', err);
-      executeLocalSynthesis();
+      await executeGeneration();
+      return;
     }
+
+    // Save return URL with openRemix=true flag so user returns straight to the remix modal
+    const currentPath = window.location.pathname;
+    const currentSearch = window.location.search;
+    const returnUrl = `${currentPath}${currentSearch ? (currentSearch.includes('openRemix') ? currentSearch : `${currentSearch}&openRemix=true`) : '?openRemix=true'}`;
+    sessionStorage.setItem('promptro_remix_return_url', returnUrl);
+
+    // Redirect to StyleMixer page with puter_login action
+    window.location.href = `/style-mixer?action=puter_login&returnUrl=${encodeURIComponent(returnUrl)}`;
   };
 
   const handlePuterModalCancel = () => {

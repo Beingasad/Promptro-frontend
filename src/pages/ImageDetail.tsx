@@ -130,6 +130,14 @@ export default function ImageDetail() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeVersion, setActiveVersion] = useState<'Basic' | 'Advanced' | 'Professional'>('Basic');
 
+  // Auto-open remix modal when returning from Puter login redirect
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('openRemix') === 'true' || params.get('action') === 'remix') {
+      setRemixModalOpen(true);
+    }
+  }, [location.search]);
+
 
   const hasMultipleVersions = Boolean(prompt?.advanced_prompt || prompt?.professional_prompt);
   

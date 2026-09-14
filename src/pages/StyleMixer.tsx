@@ -133,6 +133,23 @@ export default function StyleMixer() {
     } else if (remixParam) {
       setIdea(decodeURIComponent(remixParam));
     }
+
+    // Handle redirect from Remix Modal for Puter login
+    const isPuterAuth = searchParams.get('action') === 'puter_login' || searchParams.get('auth') === 'puter';
+    const returnUrl = searchParams.get('returnUrl') || sessionStorage.getItem('promptro_remix_return_url');
+
+    if (isPuterAuth) {
+      isPuterSignedIn().then(async (signedIn) => {
+        if (signedIn) {
+          if (returnUrl) {
+            sessionStorage.removeItem('promptro_remix_return_url');
+            window.location.href = returnUrl;
+          }
+          return;
+        }
+        setShowPuterModal(true);
+      });
+    }
   }, [location]);
 
   const toggleChip = (current: string, val: string, setter: (val: string) => void) => {
@@ -243,9 +260,17 @@ export default function StyleMixer() {
   };
 
   const handlePuterModalContinue = async () => {
+    const searchParams = new URLSearchParams(location.search);
+    const returnUrl = searchParams.get('returnUrl') || sessionStorage.getItem('promptro_remix_return_url');
+
     const alreadySignedIn = await isPuterSignedIn();
     if (alreadySignedIn) {
       setShowPuterModal(false);
+      if (returnUrl) {
+        sessionStorage.removeItem('promptro_remix_return_url');
+        window.location.href = returnUrl;
+        return;
+      }
       await executePromptGeneration(pendingAction === 'improve');
       return;
     }
@@ -253,13 +278,25 @@ export default function StyleMixer() {
     const success = await signInWithPuter();
     setShowPuterModal(false);
 
-    if (success) {
+    if (success || (await isPuterSignedIn())) {
+      localStorage.setItem('promptro_puter_signed_in', 'true');
+      if (returnUrl) {
+        sessionStorage.removeItem('promptro_remix_return_url');
+        window.location.href = returnUrl;
+        return;
+      }
       await executePromptGeneration(pendingAction === 'improve');
     }
   };
 
   const handlePuterModalCancel = () => {
     setShowPuterModal(false);
+    const searchParams = new URLSearchParams(location.search);
+    const returnUrl = searchParams.get('returnUrl') || sessionStorage.getItem('promptro_remix_return_url');
+    if (returnUrl) {
+      sessionStorage.removeItem('promptro_remix_return_url');
+      window.location.href = returnUrl;
+    }
   };
 
   const handleCopyPrompt = async () => {
